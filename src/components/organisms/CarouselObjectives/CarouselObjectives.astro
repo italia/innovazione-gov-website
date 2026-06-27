@@ -1,0 +1,59 @@
+---
+import CarouselObjectivesSlide from "./CarouselObjectivesSlide.astro";
+import type { CarouselObjectivesProps } from "./types";
+
+type Props = CarouselObjectivesProps;
+
+const { slides } = Astro.props;
+---
+
+<style is:global>
+  @import "./style.scss";
+</style>
+
+<section class="carousel-objectives pt-5 pb-4" aria-label="Missioni PNRR">
+  <div class="container">
+    <div class="splide carousel-objectives__splide">
+      <div class="splide__track">
+        <ul class="splide__list">
+          {
+            slides.map((slide, index) => (
+              <CarouselObjectivesSlide {...slide} index={index} />
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import Splide from "@splidejs/splide";
+
+  document
+    .querySelectorAll<HTMLElement>(".carousel-objectives__splide")
+    .forEach((el) => {
+      new Splide(el, {
+        type: "loop",
+        perPage: 1,
+        perMove: 1,
+        keyboard: true,
+        arrows: true,
+        pagination: true,
+        gap: 0,
+        autoplay: false,
+        speed: 400,
+        i18n: {
+          prev: "Slide precedente",
+          next: "Slide successiva",
+          first: "Vai alla prima slide",
+          last: "Vai all'ultima slide",
+          slideX: "Vai alla slide %s",
+          pageX: "Vai a pagina %s",
+          carousel: "Carosello",
+          slide: "slide",
+          slideLabel: "%s di %s",
+        },
+      }).mount();
+    });
+</script>

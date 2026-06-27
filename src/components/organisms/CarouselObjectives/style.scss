@@ -1,0 +1,172 @@
+@import "@styles/palette";
+
+.carousel-objectives {
+  background-color: #eaf2fb;
+  overflow: visible;
+
+  .container {
+    overflow: visible;
+  }
+
+  &__splide {
+    position: relative;
+    padding-bottom: 2.5rem; // spazio per i dots
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
+
+    .splide__arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: $primary;
+      border: none;
+      border-radius: 4px;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 1;
+      z-index: 1;
+      transition: background 0.2s;
+
+      svg {
+        fill: $white;
+        width: 0.75rem;
+        height: 0.75rem;
+      }
+
+      &:hover {
+        background: $primary-dark;
+      }
+
+      &--prev {
+        left: 0.75rem;
+
+        svg {
+          transform: scaleX(-1);
+        }
+      }
+
+      &--next {
+        right: 0.75rem;
+      }
+    }
+
+    .splide__pagination {
+      position: absolute;
+      bottom: 0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      gap: 6px;
+
+      &__page {
+        display: block;
+        background: rgba(0, 102, 204, 0.3);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.2s;
+
+        &.is-active {
+          background: $primary;
+          transform: scale(1.3);
+        }
+      }
+    }
+  }
+
+  &__slide-inner {
+    background: $white;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 2px 16px rgba(0, 43, 85, 0.1);
+    min-height: 340px;
+    height: 100%;
+  }
+
+  &__content {
+    padding: 2rem 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    @media (min-width: 992px) {
+      padding: 2.5rem 2rem 2.5rem 2.5rem;
+    }
+  }
+
+  &__title {
+    font-size: 1.125rem;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+
+    @media (min-width: 992px) {
+      font-size: 1.375rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__body {
+    line-height: 1.6;
+
+    p {
+      margin-bottom: 0.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    strong {
+      display: block;
+      font-weight: 700;
+      margin-top: 1rem;
+      margin-bottom: 0.25rem;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    background-color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    min-height: 200px;
+
+    @media (min-width: 992px) {
+      min-height: unset;
+    }
+
+    img {
+      max-width: 100%;
+      max-height: 200px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      object-position: center;
+
+      @media (min-width: 992px) {
+        max-height: 300px;
+      }
+    }
+  }
+}

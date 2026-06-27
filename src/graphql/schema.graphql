@@ -211,15 +211,15 @@ input ArticleModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   _locales: LocalesFilter
-  title: StringFilter
-  seo: SeoFilter
-  parentPage: LinkFilter
+  content: StructuredTextFilter
+  description: TextFilter
+  descriptionTitle: StringFilter
   image: FileFilter
   paragraph: TextFilter
-  descriptionTitle: StringFilter
-  description: TextFilter
-  content: StructuredTextFilter
+  parentPage: LinkFilter
+  seo: SeoFilter
   slug: SlugFilter
+  title: StringFilter
   OR: [ArticleModelFilter]
   AND: [ArticleModelFilter]
 }
@@ -245,10 +245,10 @@ enum ArticleModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
-  title_ASC
-  title_DESC
   descriptionTitle_ASC
   descriptionTitle_DESC
+  title_ASC
+  title_DESC
 }
 
 """Block of type Article navigation (article_navigation)"""
@@ -839,6 +839,59 @@ type CardServiceRecord implements RecordInterface {
   id: ItemId!
 }
 
+"""Block of type Carousel (carousel)"""
+type CarouselRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  id: ItemId!
+  slides: [CarouselSlideRecord!]!
+}
+
+"""Block of type Carousel Slide (carousel_slide)"""
+type CarouselSlideRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  body(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+  id: ItemId!
+  image: FileField
+  title: String
+}
+
 """Block of type Cards hub with filter (catalogue_feed)"""
 type CatalogueFeedRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -882,10 +935,10 @@ input CatalogueModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   _locales: LocalesFilter
-  title: StringFilter
-  seo: SeoFilter
   parentPage: LinkFilter
+  seo: SeoFilter
   slug: SlugFilter
+  title: StringFilter
   OR: [CatalogueModelFilter]
   AND: [CatalogueModelFilter]
 }
@@ -1417,6 +1470,72 @@ type FeatureListRecord implements RecordInterface {
   items: [ListItemRecord!]!
 }
 
+input FetchItemModelFilter {
+  _createdAt: CreatedAtFilter
+  id: ItemIdFilter
+  _firstPublishedAt: PublishedAtFilter
+  _publicationScheduledAt: PublishedAtFilter
+  _unpublishingScheduledAt: PublishedAtFilter
+  _publishedAt: PublishedAtFilter
+  _status: StatusFilter
+  _updatedAt: UpdatedAtFilter
+  _isValid: BooleanFilter
+  friendlyName: StringFilter
+  myFetchValue: StringFilter
+  OR: [FetchItemModelFilter]
+  AND: [FetchItemModelFilter]
+}
+
+enum FetchItemModelOrderBy {
+  _createdAt_ASC
+  _createdAt_DESC
+  id_ASC
+  id_DESC
+  _firstPublishedAt_ASC
+  _firstPublishedAt_DESC
+  _publicationScheduledAt_ASC
+  _publicationScheduledAt_DESC
+  _unpublishingScheduledAt_ASC
+  _unpublishingScheduledAt_DESC
+  _publishedAt_ASC
+  _publishedAt_DESC
+  _status_ASC
+  _status_DESC
+  _updatedAt_ASC
+  _updatedAt_DESC
+  _isValid_ASC
+  _isValid_DESC
+  friendlyName_ASC
+  friendlyName_DESC
+  myFetchValue_ASC
+  myFetchValue_DESC
+}
+
+"""Record of type fetch item (fetch_item)"""
+type FetchItemRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  friendlyName: String
+  id: ItemId!
+  myFetchValue: String
+}
+
 type FileField implements FileFieldInterface {
   _createdAt: DateTime!
 
@@ -1440,7 +1559,7 @@ type FileField implements FileFieldInterface {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1
+    punch: Float! = 1.0
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24
@@ -1539,7 +1658,7 @@ interface FileFieldInterface {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1
+    punch: Float! = 1.0
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24
@@ -1869,7 +1988,7 @@ type HighlightRecord implements RecordInterface {
   title: String
 }
 
-union HomepageModelContentField = CardLinkListRecord | HeroRecord | NewsFeedRecord | SupportChannelsSectionRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | TextUseCaseRecord
+union HomepageModelContentField = CardLinkListRecord | CarouselRecord | HeroRecord | NewsFeedRecord | SupportChannelsSectionRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | TextUseCaseRecord
 
 type HomepageModelContentFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
@@ -4034,13 +4153,13 @@ input InsightModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   _locales: LocalesFilter
-  title: StringFilter
-  image: FileFilter
   abstract: TextFilter
+  image: FileFilter
   parentPage: LinkFilter
   seo: SeoFilter
-  topic: LinkFilter
   slug: SlugFilter
+  title: StringFilter
+  topic: LinkFilter
   OR: [InsightModelFilter]
   AND: [InsightModelFilter]
 }
@@ -4406,18 +4525,18 @@ input KpiElementModelFilter {
   _status: StatusFilter
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
+  backgroundColor: StringFilter
+  flowDetail: StringFilter
+  flowDirection: StringFilter
+  flowValue: StringFilter
+  footerText: StringFilter
+  openDataPath: StringFilter
+  percentage: StringFilter
+  showFlow: BooleanFilter
   title: StringFilter
   value: StringFilter
-  backgroundColor: StringFilter
   valuePrefix: StringFilter
-  flowDirection: StringFilter
-  showFlow: BooleanFilter
-  flowValue: StringFilter
-  flowDetail: StringFilter
-  footerText: StringFilter
-  percentage: StringFilter
   valueSuffix: StringFilter
-  openDataPath: StringFilter
   OR: [KpiElementModelFilter]
   AND: [KpiElementModelFilter]
 }
@@ -4441,30 +4560,30 @@ enum KpiElementModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
+  backgroundColor_ASC
+  backgroundColor_DESC
+  flowDetail_ASC
+  flowDetail_DESC
+  flowDirection_ASC
+  flowDirection_DESC
+  flowValue_ASC
+  flowValue_DESC
+  footerText_ASC
+  footerText_DESC
+  openDataPath_ASC
+  openDataPath_DESC
+  percentage_ASC
+  percentage_DESC
+  showFlow_ASC
+  showFlow_DESC
   title_ASC
   title_DESC
   value_ASC
   value_DESC
-  backgroundColor_ASC
-  backgroundColor_DESC
   valuePrefix_ASC
   valuePrefix_DESC
-  flowDirection_ASC
-  flowDirection_DESC
-  showFlow_ASC
-  showFlow_DESC
-  flowValue_ASC
-  flowValue_DESC
-  flowDetail_ASC
-  flowDetail_DESC
-  footerText_ASC
-  footerText_DESC
-  percentage_ASC
-  percentage_DESC
   valueSuffix_ASC
   valueSuffix_DESC
-  openDataPath_ASC
-  openDataPath_DESC
 }
 
 """Record of type Kpi element (kpi_element)"""
@@ -5333,11 +5452,11 @@ input NewsItemModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   _locales: LocalesFilter
-  title: StringFilter
-  paragraph: TextFilter
   dateOfPublication: DateFilter
   image: FileFilter
   link: StringFilter
+  paragraph: TextFilter
+  title: StringFilter
   topic: LinkFilter
   OR: [NewsItemModelFilter]
   AND: [NewsItemModelFilter]
@@ -5362,12 +5481,12 @@ enum NewsItemModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
-  title_ASC
-  title_DESC
   dateOfPublication_ASC
   dateOfPublication_DESC
   link_ASC
   link_DESC
+  title_ASC
+  title_DESC
 }
 
 """Record of type Contenuto esterno (news_item)"""
@@ -5619,7 +5738,7 @@ input OrientationFilter {
   neq: UploadOrientation
 }
 
-union PageModelContentField = CardLinkListRecord | DataSectionRecord | FaqSectionRecord | GraphitaliaDashboardRecord | HeroRecord | NewsFeedRecord | StructuredTextRecord | SupportChannelsSectionRecord | SupportCtaSectionRecord | TextAccordionRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | ThirdPartyCookieRecord | TopicFilterRecord | UseCaseContainerRecord
+union PageModelContentField = CardLinkListRecord | CarouselRecord | DataSectionRecord | FaqSectionRecord | GraphitaliaDashboardRecord | HeroRecord | NewsFeedRecord | StructuredTextRecord | SupportChannelsSectionRecord | SupportCtaSectionRecord | TextAccordionRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | ThirdPartyCookieRecord | TopicFilterRecord | UseCaseContainerRecord
 
 type PageModelContentFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
@@ -5639,9 +5758,9 @@ input PageModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   _locales: LocalesFilter
-  title: StringFilter
   seo: SeoFilter
   slug: SlugFilter
+  title: StringFilter
   OR: [PageModelFilter]
   AND: [PageModelFilter]
 }
@@ -5900,6 +6019,13 @@ type Query {
   ): CollectionMetadata!
 
   """Returns meta information regarding a record collection"""
+  _allFetchItemsMeta(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+    filter: FetchItemModelFilter
+  ): CollectionMetadata!
+
+  """Returns meta information regarding a record collection"""
   _allInsightTopicsMeta(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -6104,6 +6230,25 @@ type Query {
     filter: ChartElementModelFilter
     orderBy: [ChartElementModelOrderBy] = [_updatedAt_DESC]
   ): [ChartElementRecord!]!
+
+  """Returns a collection of records"""
+  allFetchItems(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+
+    """Skip the first results"""
+    skip: IntType
+
+    """Limit the number of results"""
+    first: IntType = 20
+    filter: FetchItemModelFilter
+    orderBy: [FetchItemModelOrderBy] = [_updatedAt_DESC]
+  ): [FetchItemRecord!]!
 
   """Returns a collection of records"""
   allInsightTopics(
@@ -6479,6 +6624,19 @@ type Query {
     filter: ChartElementModelFilter
     orderBy: [ChartElementModelOrderBy] = [_updatedAt_DESC]
   ): ChartElementRecord
+
+  """Returns a specific record"""
+  fetchItem(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+    filter: FetchItemModelFilter
+    orderBy: [FetchItemModelOrderBy] = [_updatedAt_DESC]
+  ): FetchItemRecord
 
   """Returns the single instance record"""
   globalSetting(
@@ -7731,16 +7889,16 @@ input StoryItemModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   _locales: LocalesFilter
-  title: StringFilter
-  parentPage: LinkFilter
-  dateOfPublication: DateFilter
-  paragraph: TextFilter
   articleClassification: LinkFilter
-  slug: SlugFilter
+  dateOfPublication: DateFilter
   image: FileFilter
-  topic: LinkFilter
+  paragraph: TextFilter
+  parentPage: LinkFilter
   seo: SeoFilter
+  slug: SlugFilter
   storyType: StringFilter
+  title: StringFilter
+  topic: LinkFilter
   OR: [StoryItemModelFilter]
   AND: [StoryItemModelFilter]
 }
@@ -7764,12 +7922,12 @@ enum StoryItemModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
-  title_ASC
-  title_DESC
   dateOfPublication_ASC
   dateOfPublication_DESC
   storyType_ASC
   storyType_DESC
+  title_ASC
+  title_DESC
 }
 
 union StoryItemModelParentPageField = CatalogueRecord | PageRecord
@@ -9017,7 +9175,7 @@ type UploadVideoField {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1
+    punch: Float! = 1.0
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24
@@ -9295,15 +9453,15 @@ input WebinarItemModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   _locales: LocalesFilter
-  seo: SeoFilter
-  eventBody: TextFilter
   date: DateFilter
+  eventBody: TextFilter
   image: FileFilter
   paragraph: TextFilter
+  parentPage: LinkFilter
+  seo: SeoFilter
+  slug: SlugFilter
   title: StringFilter
   topic: LinkFilter
-  parentPage: LinkFilter
-  slug: SlugFilter
   OR: [WebinarItemModelFilter]
   AND: [WebinarItemModelFilter]
 }

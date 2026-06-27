@@ -1,4 +1,9 @@
 import {
+  ExternalLinkFragment,
+  ImageFragment,
+  InternalLinkFragment,
+} from "@graphql/fragment/commonFragments";
+import {
   CardLinkListFragment,
   HeroFragment,
   NewsFeedFragment,
@@ -42,6 +47,17 @@ export const HomepageModelContentFragment = graphql(
       ... on CardLinkListRecord {
         ...CardLinkListFragment
       }
+      ... on CarouselRecord {
+        id
+        slides {
+          id
+          title
+          body(markdown: true)
+          image {
+            ...ImageFragment
+          }
+        }
+      }
     }
   `,
   [
@@ -53,6 +69,9 @@ export const HomepageModelContentFragment = graphql(
     TextAndUseCasesFragment,
     TextOnlyFragment,
     CardLinkListFragment,
+    ImageFragment,
+    InternalLinkFragment,
+    ExternalLinkFragment,
   ],
 );
 

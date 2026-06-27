@@ -1,0 +1,40 @@
+---
+import { Image } from "@components/atoms/Image";
+import type { CarouselObjectivesSlideData } from "./types";
+
+type Props = CarouselObjectivesSlideData & {
+  index: number;
+};
+
+const { title, body, image, index } = Astro.props;
+---
+
+<li class="splide__slide" aria-label={title ?? undefined}>
+  <div class="it-single-slide-wrapper h-100 p-2">
+    <div class="carousel-objectives__slide-inner">
+      <div class="row g-0 h-100">
+        <div class="col-12 col-lg-6">
+          <div class="carousel-objectives__content">
+            <h3 class="text-primary fw-semibold text-decoration-underline">{title}</h3>
+            {body && <div set:html={body} />}
+          </div>
+        </div>
+        {
+          image && (
+            <div class="col-12 col-lg-6 d-flex align-items-stretch">
+              <div class="carousel-objectives__image">
+                <Image
+                  url={image.url}
+                  alt={image.alt ?? ""}
+                  width={image.width ?? 480}
+                  height={image.height ?? 360}
+                  loading={index === 0 ? "eager" : "lazy"}
+                />
+              </div>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</li>

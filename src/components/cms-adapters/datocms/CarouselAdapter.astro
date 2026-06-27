@@ -1,0 +1,24 @@
+---
+import { CarouselObjectives } from "@components/organisms/CarouselObjectives";
+import type { HomepageModelContentFragmentType } from "@graphql/fragment/homepage";
+import type { PageContentFragmentType } from "@graphql/fragment/page";
+
+type CarouselBlock = Extract<
+  PageContentFragmentType | HomepageModelContentFragmentType,
+  { componentName: "CarouselRecord" }
+>;
+
+type Props = {
+  block: CarouselBlock;
+};
+
+const { block } = Astro.props;
+
+const slides = block.slides.map((slide) => ({
+  title: slide.title,
+  body: slide.body,
+  image: slide.image,
+}));
+---
+
+<CarouselObjectives slides={slides} />

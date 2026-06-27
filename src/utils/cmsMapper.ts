@@ -52,6 +52,7 @@ export enum DatoBlockModel {
   SupportingBrand = "SupportingBrandRecord",
   MenuArticleItem = "MenuArticleItemRecord",
   AccordionMenu = "AccordionMenuRecord",
+  Carousel = "CarouselRecord",
 }
 
 export type DatoBlockModelType =

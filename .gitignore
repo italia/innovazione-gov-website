@@ -26,3 +26,6 @@ pnpm-debug.log*
 .vercel
 
 src/data/*
+
+# Local work plan (not versioned)
+WORKPLAN.md
