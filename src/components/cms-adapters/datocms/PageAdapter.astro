@@ -19,6 +19,7 @@ import SupportCTASectionAdapter from "@components/cms-adapters/datocms/SupportCT
 import TextAndAccordionAdapter from "@components/cms-adapters/datocms/TextAndAccordionAdapter.astro";
 import TextAndImageAdapter from "@components/cms-adapters/datocms/TextAndImageAdapter.astro";
 import TextAndStatisticsAdapter from "@components/cms-adapters/datocms/TextAndStatisticsAdapter.astro";
+import TextDonutAdapter from "@components/cms-adapters/datocms/TextDonutAdapter.astro";
 import TextAndUseCasesAdapter from "@components/cms-adapters/datocms/TextAndUseCasesAdapter.astro";
 import TextOnlyAdapter from "@components/cms-adapters/datocms/TextOnlyAdapter.astro";
 import ThirdPartyCookieAdapter from "@components/cms-adapters/datocms/ThirdPartyCookieAdapter.astro";
@@ -108,6 +109,8 @@ const { content, isFontSerif = false } = Astro.props;
         return <CardLinkListAdapter block={block} />;
       case DatoBlockModel.Carousel:
         return <CarouselAdapter block={block} />;
+      case DatoBlockModel.TextDonut:
+        return <TextDonutAdapter block={block} />;
       default:
         return null;
     }

@@ -48,6 +48,17 @@ if (schemaResult.status !== 0) {
   );
 }
 
+// Keep graphql-env.d.ts in sync with schema.graphql so TS type narrowing stays accurate
+const outputResult = spawnSync("bun", ["x", "gql.tada", "generate-output"], {
+  stdio: "inherit",
+  env: process.env,
+});
+if (outputResult.status !== 0) {
+  console.warn(
+    `⚠ gql.tada generate-output exited ${outputResult.status} — types may be stale`,
+  );
+}
+
 const linksResult = spawnSync("bun", ["./scripts/generate-link-map.ts"], {
   stdio: "inherit",
   env: process.env,

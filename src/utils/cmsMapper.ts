@@ -53,6 +53,7 @@ export enum DatoBlockModel {
   MenuArticleItem = "MenuArticleItemRecord",
   AccordionMenu = "AccordionMenuRecord",
   Carousel = "CarouselRecord",
+  TextDonut = "TextDonutRecord",
 }
 
 export type DatoBlockModelType =

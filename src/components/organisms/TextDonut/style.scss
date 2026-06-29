@@ -1,0 +1,77 @@
+@import "@styles/palette";
+
+.text-donut {
+  &__donut-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2rem 2.5rem;
+    background: $white;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0, 43, 85, 0.1);
+    min-width: 220px;
+  }
+
+  &__heading {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $primary;
+    margin: 0;
+  }
+
+  &__svg {
+    width: 160px;
+    height: 160px;
+  }
+
+  &__track {
+    stroke: #d9dde1;
+  }
+
+  &__progress {
+    stroke: $primary;
+    // start at 12 o'clock, fill counter-clockwise
+    transform: rotate(-90deg) scaleX(-1);
+    transform-origin: center;
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &__center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  &__svg-wrapper {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    flex-shrink: 0;
+  }
+
+  &__percentage {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    color: $primary;
+    margin: 0;
+  }
+
+  &__description {
+    font-size: 0.875rem;
+    color: #5b7083;
+    text-align: center;
+    margin: 0;
+  }
+}

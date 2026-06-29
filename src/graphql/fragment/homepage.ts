@@ -11,6 +11,7 @@ import {
   TextAndImageFragment,
   TextAndStatisticsFragment,
   TextAndUseCasesFragment,
+  TextDonutFragment,
   TextOnlyFragment,
 } from "@graphql/fragment/sectionFragments";
 import { graphql, type FragmentOf } from "@graphql/graphql";
@@ -47,6 +48,9 @@ export const HomepageModelContentFragment = graphql(
       ... on CardLinkListRecord {
         ...CardLinkListFragment
       }
+      ... on TextDonutRecord {
+        ...TextDonutFragment
+      }
       ... on CarouselRecord {
         id
         slides {
@@ -69,6 +73,7 @@ export const HomepageModelContentFragment = graphql(
     TextAndUseCasesFragment,
     TextOnlyFragment,
     CardLinkListFragment,
+    TextDonutFragment,
     ImageFragment,
     InternalLinkFragment,
     ExternalLinkFragment,

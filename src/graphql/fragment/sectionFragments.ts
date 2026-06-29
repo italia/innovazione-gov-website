@@ -556,6 +556,25 @@ export type TextAndStatisticsFragmentType = FragmentOf<
   typeof TextAndStatisticsFragment
 >;
 
+export const TextDonutFragment = graphql(
+  `
+    fragment TextDonutFragment on TextDonutRecord @_unmask {
+      id
+      backgroundColor
+      heading
+      percentage
+      description
+      label
+      text {
+        ...TextBlockFragment
+      }
+    }
+  `,
+  [TextBlockFragment],
+);
+
+export type TextDonutFragmentType = FragmentOf<typeof TextDonutFragment>;
+
 export const TextAndUseCasesFragment = graphql(
   `
     fragment TextAndUseCasesFragment on TextUseCaseRecord @_unmask {
@@ -675,4 +694,3 @@ export const ThirdPartyCookieFragment = graphql(`
 export type ThirdPartyCookieFragmentType = FragmentOf<
   typeof ThirdPartyCookieFragment
 >;
-

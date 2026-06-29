@@ -1,0 +1,115 @@
+---
+import { SplitContent } from "@components/layout/SplitContent";
+import type { TextDonutProps } from "./types";
+
+type Props = TextDonutProps;
+
+const {
+  heading,
+  percentage,
+  description,
+  background = "default",
+  sectionTitleId,
+} = Astro.props;
+
+const radius = 40;
+const circumference = 2 * Math.PI * radius;
+---
+
+<style>
+  @import "./style.scss";
+</style>
+
+<SplitContent
+  leftColumns={7}
+  rightColumns={4}
+  alignItems="center"
+  background={background}
+  sectionTitleId={sectionTitleId}
+>
+  <slot name="text" slot="left" />
+
+  <div slot="right" class="text-donut__donut-col">
+    <div class="text-donut__card">
+      {heading && <p class="text-donut__heading">{heading}</p>}
+
+      <div
+        class="text-donut__svg-wrapper"
+        data-donut
+        data-percentage={percentage}
+      >
+        <svg class="text-donut__svg" viewBox="0 0 100 100" aria-hidden="true">
+          <circle
+            class="text-donut__track"
+            cx="50"
+            cy="50"
+            r={radius}
+            fill="none"
+            stroke-width="8"></circle>
+          <circle
+            class="text-donut__progress"
+            cx="50"
+            cy="50"
+            r={radius}
+            fill="none"
+            stroke-width="8"
+            stroke-linecap="round"
+            stroke-dasharray={circumference}
+            stroke-dashoffset={circumference}></circle>
+        </svg>
+
+        <div class="text-donut__center">
+          <span class="text-donut__percentage" data-counter>0%</span>
+        </div>
+      </div>
+
+      {description && <p class="text-donut__description">{description}</p>}
+    </div>
+  </div>
+</SplitContent>
+
+<script>
+  function initDonut(wrapper: HTMLElement) {
+    const pct = parseInt(wrapper.dataset.percentage ?? "0", 10);
+    const radius = 40;
+    const circumference = 2 * Math.PI * radius;
+    const progress = wrapper.querySelector<SVGCircleElement>(
+      ".text-donut__progress",
+    );
+    const counter = wrapper.querySelector<HTMLElement>("[data-counter]");
+
+    if (!progress || !counter) return;
+
+    const targetOffset = circumference * (1 - pct / 100);
+    const duration = 1500;
+    let start: number | null = null;
+
+    const tick = (now: number) => {
+      if (!start) start = now;
+      const elapsed = now - start;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+
+      progress.style.strokeDashoffset = String(
+        circumference - eased * (circumference - targetOffset),
+      );
+      counter.textContent = Math.round(eased * pct) + "%";
+
+      if (t < 1) requestAnimationFrame(tick);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          requestAnimationFrame(tick);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 },
+    );
+
+    observer.observe(wrapper);
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-donut]").forEach(initDonut);
+</script>

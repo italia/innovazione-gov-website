@@ -1,0 +1,33 @@
+---
+import TextContainerAdapter from "@components/cms-adapters/datocms/TextContainerAdapter.astro";
+import { TextDonut } from "@components/organisms/TextDonut";
+import type { TextDonutFragmentType } from "@graphql/fragment/sectionFragments";
+import type { SectionBackground } from "@utils/background";
+
+type Props = {
+  block: TextDonutFragmentType;
+};
+
+const { block } = Astro.props;
+
+const variantTextContainer =
+  block.backgroundColor === "dark"
+    ? "dark"
+    : block.backgroundColor === "primary"
+      ? "primary"
+      : "light";
+---
+
+<TextDonut
+  heading={block.heading || undefined}
+  percentage={block.percentage}
+  description={block.description || undefined}
+  background={block.backgroundColor as SectionBackground}
+  sectionTitleId={block.text.title}
+>
+  <TextContainerAdapter
+    slot="text"
+    block={block.text}
+    variant={variantTextContainer}
+  />
+</TextDonut>
