@@ -5,7 +5,6 @@ import {
   ArticleCardPreviewFragment,
   AuthorListFragment,
   CalloutFragment,
-  CardLinkFragment,
   ChannelFragment,
   ChartFragment,
   DownloadLinkFragment,
@@ -327,32 +326,11 @@ export const TopicFilterFragment = graphql(
 
 export type TopicFilterFragmentType = FragmentOf<typeof TopicFilterFragment>;
 
-export const SupportCTASectionFragment = graphql(
-  `
-    fragment SupportCTASectionFragment on SupportCtaSectionRecord @_unmask {
-      id
-      title
-      paragraph
-      backgroundColor
-      image {
-        ...ImageFragment
-      }
-      cta {
-        ... on RecordInterface {
-          id
-          componentName: __typename
-        }
-        ... on ExternalLinkRecord {
-          ...ExternalLinkFragment
-        }
-        ... on InternalLinkRecord {
-          ...InternalLinkFragment
-        }
-      }
-    }
-  `,
-  [ImageFragment, ExternalLinkFragment, InternalLinkFragment],
-);
+export const SupportCTASectionFragment = graphql(`
+  fragment SupportCTASectionFragment on SupportCtaSectionRecord @_unmask {
+    id
+  }
+`);
 
 export type SupportCTASectionFragmentType = FragmentOf<
   typeof SupportCTASectionFragment
@@ -452,7 +430,6 @@ export const CatalogueFeedFragment = graphql(`
         id
       }
       elementPerPage
-      sortMode
     }
   }
 `);
@@ -664,21 +641,11 @@ export const TextOnlyFragment = graphql(
 
 export type TextOnlyFragmentType = FragmentOf<typeof TextOnlyFragment>;
 
-export const CardLinkListFragment = graphql(
-  `
-    fragment CardLinkListFragment on CardLinkListRecord @_unmask {
-      id
-      backgroundColor
-      title
-      paragraph
-      showInlineCard
-      listContent {
-        ...CardLinkFragment
-      }
-    }
-  `,
-  [TextBlockFragment, ImageFragment, CardLinkFragment],
-);
+export const CardLinkListFragment = graphql(`
+  fragment CardLinkListFragment on CardLinkListRecord @_unmask {
+    id
+  }
+`);
 
 export type CardLinkListFragmentType = FragmentOf<typeof CardLinkListFragment>;
 
