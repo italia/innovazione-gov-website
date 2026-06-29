@@ -5,7 +5,7 @@ import type { TextDonutProps } from "./types";
 type Props = TextDonutProps;
 
 const {
-  heading,
+  label,
   percentage,
   description,
   background = "default",
@@ -30,41 +30,39 @@ const circumference = 2 * Math.PI * radius;
   <slot name="text" slot="left" />
 
   <div slot="right" class="text-donut__donut-col">
-    <div class="text-donut__card">
-      {heading && <p class="text-donut__heading">{heading}</p>}
+    {label && <p class="text-donut__label">{label}</p>}
 
-      <div
-        class="text-donut__svg-wrapper"
-        data-donut
-        data-percentage={percentage}
-      >
-        <svg class="text-donut__svg" viewBox="0 0 100 100" aria-hidden="true">
-          <circle
-            class="text-donut__track"
-            cx="50"
-            cy="50"
-            r={radius}
-            fill="none"
-            stroke-width="8"></circle>
-          <circle
-            class="text-donut__progress"
-            cx="50"
-            cy="50"
-            r={radius}
-            fill="none"
-            stroke-width="8"
-            stroke-linecap="round"
-            stroke-dasharray={circumference}
-            stroke-dashoffset={circumference}></circle>
-        </svg>
+    <div
+      class="text-donut__svg-wrapper"
+      data-donut
+      data-percentage={percentage}
+    >
+      <svg class="text-donut__svg" viewBox="0 0 100 100" aria-hidden="true">
+        <circle
+          class="text-donut__track"
+          cx="50"
+          cy="50"
+          r={radius}
+          fill="none"
+          stroke-width="8"></circle>
+        <circle
+          class="text-donut__progress"
+          cx="50"
+          cy="50"
+          r={radius}
+          fill="none"
+          stroke-width="8"
+          stroke-linecap="butt"
+          stroke-dasharray={circumference}
+          stroke-dashoffset={circumference}></circle>
+      </svg>
 
-        <div class="text-donut__center">
-          <span class="text-donut__percentage" data-counter>0%</span>
-        </div>
+      <div class="text-donut__center">
+        <span class="text-donut__percentage" data-counter>0%</span>
       </div>
-
-      {description && <p class="text-donut__description">{description}</p>}
     </div>
+
+    {description && <p class="text-donut__description">{description}</p>}
   </div>
 </SplitContent>
 
@@ -88,7 +86,7 @@ const circumference = 2 * Math.PI * radius;
       if (!start) start = now;
       const elapsed = now - start;
       const t = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
+      const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
 
       progress.style.strokeDashoffset = String(
         circumference - eased * (circumference - targetOffset),

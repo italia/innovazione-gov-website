@@ -1,5 +1,6 @@
 ---
 import TextContainerAdapter from "@components/cms-adapters/datocms/TextContainerAdapter.astro";
+import type { HeadingTag } from "@components/molecules/TextContainer/types";
 import { TextDonut } from "@components/organisms/TextDonut";
 import type { TextDonutFragmentType } from "@graphql/fragment/sectionFragments";
 import type { SectionBackground } from "@utils/background";
@@ -19,7 +20,7 @@ const variantTextContainer =
 ---
 
 <TextDonut
-  heading={block.heading || undefined}
+  label={block.label || undefined}
   percentage={block.percentage}
   description={block.description || undefined}
   background={block.backgroundColor as SectionBackground}
@@ -29,5 +30,6 @@ const variantTextContainer =
     slot="text"
     block={block.text}
     variant={variantTextContainer}
+    heading={(block.heading as HeadingTag) || undefined}
   />
 </TextDonut>

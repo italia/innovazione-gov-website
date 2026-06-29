@@ -3,32 +3,28 @@
 .text-donut {
   &__donut-col {
     display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  &__card {
-    display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
-    padding: 2rem 2.5rem;
-    background: $white;
-    border-radius: 12px;
-    box-shadow: 0 2px 16px rgba(0, 43, 85, 0.1);
-    min-width: 220px;
+    gap: 0.75rem;
   }
 
-  &__heading {
+  &__label {
     font-size: 1rem;
     font-weight: 600;
     color: $primary;
     margin: 0;
   }
 
+  &__svg-wrapper {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    flex-shrink: 0;
+  }
+
   &__svg {
-    width: 160px;
-    height: 160px;
+    width: 220px;
+    height: 220px;
   }
 
   &__track {
@@ -36,11 +32,12 @@
   }
 
   &__progress {
-    stroke: $primary;
+    stroke: #004d99;
     // start at 12 o'clock, fill counter-clockwise
-    transform: rotate(-90deg) scaleX(-1);
+    transform-box: fill-box;
     transform-origin: center;
-    transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: rotate(-90deg) scaleX(-1);
+    // no CSS transition — JS requestAnimationFrame drives both arc and counter in sync
   }
 
   &__center {
@@ -53,15 +50,8 @@
     pointer-events: none;
   }
 
-  &__svg-wrapper {
-    position: relative;
-    width: 160px;
-    height: 160px;
-    flex-shrink: 0;
-  }
-
   &__percentage {
-    font-size: 2rem;
+    font-size: 2.25rem;
     font-weight: 700;
     line-height: 1;
     color: $primary;

@@ -1,7 +1,7 @@
 import type { SectionBackground } from "@utils/background";
 
 export type TextDonutProps = {
-  heading?: string;
+  label?: string;
   percentage: number;
   description?: string;
   background?: SectionBackground;
