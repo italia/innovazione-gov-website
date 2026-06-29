@@ -12,8 +12,25 @@ type Props = {
 const { block } = Astro.props;
 const { lang } = Astro.locals;
 
-const items: CardEditorialNewsProps[] = block.listContent.map((item) => {
-  const url = item.link.externalUrl;
+// Fields may be absent when staging DatoCMS schema is behind main
+const fullBlock = block as typeof block & {
+  listContent?: Array<{
+    id: string;
+    title?: string | null;
+    paragraph?: string | null;
+    image?: { url: string; alt?: string | null; width?: number | null; height?: number | null } | null;
+    link?: { link?: { id: string } | null; externalUrl?: string | null } | null;
+  }> | null;
+  title?: string | null;
+  paragraph?: string | null;
+  backgroundColor?: string | null;
+  showInlineCard?: boolean | null;
+};
+
+if (!fullBlock.listContent?.length) return;
+
+const items: CardEditorialNewsProps[] = fullBlock.listContent.map((item) => {
+  const url = item.link?.externalUrl;
   const linkTo = item.link?.link?.id
     ? linkResolver(item.link.link.id, lang)
     : null;
@@ -31,9 +48,9 @@ const items: CardEditorialNewsProps[] = block.listContent.map((item) => {
 ---
 
 <ListCollection
-  title={block.title}
+  title={fullBlock.title}
   items={items}
-  paragraph={block.paragraph || undefined}
-  background={block.backgroundColor as SectionBackground}
-  showInline={block.showInlineCard}
+  paragraph={fullBlock.paragraph || undefined}
+  background={fullBlock.backgroundColor as SectionBackground}
+  showInline={fullBlock.showInlineCard}
 />

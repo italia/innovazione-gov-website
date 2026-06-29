@@ -20,15 +20,26 @@ type Props = {
 const { block, size = "small" } = Astro.props;
 const { lang } = Astro.locals;
 
-const { labelButton, linkTo, openInNewTab } = getCtaFields(block.cta, lang);
+// Fields may be absent when staging DatoCMS schema is behind main
+const fullBlock = block as typeof block & {
+  title?: string | null;
+  paragraph?: string | null;
+  backgroundColor?: string | null;
+  image?: { url: string; alt?: string | null; width?: number | null; height?: number | null } | null;
+  cta?: unknown;
+};
+
+if (!fullBlock.title && !fullBlock.paragraph) return;
+
+const { labelButton, linkTo, openInNewTab } = getCtaFields(fullBlock.cta, lang);
 ---
 
 <SupportCTASection
-  title={block.title}
-  paragraph={block.paragraph}
-  image={block.image}
+  title={fullBlock.title}
+  paragraph={fullBlock.paragraph}
+  image={fullBlock.image}
   size={size}
-  background={block.backgroundColor as SupportCTASectionBackgroundProps}
+  background={fullBlock.backgroundColor as SupportCTASectionBackgroundProps}
   labelButton={labelButton}
   linkTo={linkTo}
   openInNewTab={openInNewTab}
