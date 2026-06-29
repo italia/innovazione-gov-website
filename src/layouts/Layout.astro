@@ -1,11 +1,11 @@
 ---
-import Loader from "@components/Loader.astro";
+// import Loader from "@components/Loader.astro";
 import PreviewBar from "@components/PreviewBar.astro";
 import type { LinkProps } from "@components/atoms/Link/types";
 import FooterAdapter from "@components/cms-adapters/datocms/FooterAdapter.astro";
 import HeaderAdapter from "@components/cms-adapters/datocms/HeaderAdapter.astro";
 import { LastUpdate } from "@components/molecules/LastUpdate";
-import Feedback from "@components/react/Feedback/Feedback";
+// import Feedback from "@components/react/Feedback/Feedback";
 import { Seo, type TitleMetaLinkTag } from "@datocms/astro";
 import type {
   FooterFragmentType,
@@ -142,11 +142,11 @@ const isProd = import.meta.env.PROD;
         />
       )
     }
-    <Feedback client:visible lang={lang}>
+    <!-- <Feedback client:visible lang={lang}>
       <div slot="fallback">
         <Loader />
       </div>
-    </Feedback>
+    </Feedback> -->
     <FooterAdapter {...footerLayout} />
   </body>
 </html>
