@@ -34,7 +34,6 @@ const { slides } = Astro.props;
     .querySelectorAll<HTMLElement>(".carousel-objectives__splide")
     .forEach((el) => {
       new Splide(el, {
-        type: "loop",
         perPage: 1,
         perMove: 1,
         keyboard: true,

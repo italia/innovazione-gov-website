@@ -1,7 +1,7 @@
 @import "@styles/palette";
 
 .carousel-objectives {
-  background-color: #eaf2fb;
+  background-color: #f3f7fc;
   overflow: visible;
 
   .container {
@@ -37,8 +37,17 @@
         height: 0.75rem;
       }
 
-      &:hover {
+      &:hover:not([disabled]) {
         background: $primary-dark;
+      }
+
+      &[disabled] {
+        background: #d9dde1;
+        cursor: default;
+
+        svg {
+          fill: #5b7083;
+        }
       }
 
       &--prev {
@@ -75,7 +84,9 @@
         border: none;
         padding: 0;
         cursor: pointer;
-        transition: background 0.2s, transform 0.2s;
+        transition:
+          background 0.2s,
+          transform 0.2s;
 
         &.is-active {
           background: $primary;
