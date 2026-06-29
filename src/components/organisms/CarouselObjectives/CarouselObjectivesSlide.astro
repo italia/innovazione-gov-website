@@ -15,7 +15,9 @@ const { title, body, image, index } = Astro.props;
       <div class="row g-0 h-100">
         <div class="col-12 col-lg-6">
           <div class="carousel-objectives__content">
-            <h3 class="text-primary fw-semibold text-decoration-underline">{title}</h3>
+            <h3 class="text-primary fw-semibold text-decoration-underline">
+              {title}
+            </h3>
             {body && <div set:html={body} />}
           </div>
         </div>

@@ -40,13 +40,7 @@ export default async function (client: Client): Promise<void> {
       addons: [],
       editor: "markdown",
       parameters: {
-        toolbar: [
-          "bold",
-          "italic",
-          "link",
-          "unordered_list",
-          "fullscreen",
-        ],
+        toolbar: ["bold", "italic", "link", "unordered_list", "fullscreen"],
       },
     },
     default_value: null,
