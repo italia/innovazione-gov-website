@@ -1,0 +1,16 @@
+---
+import Chart from "@components/charts/Chart";
+import type { ChartFragmentType } from "@graphql/fragment/commonFragments";
+
+type Props = {
+  block: ChartFragmentType;
+};
+
+const { block } = Astro.props;
+---
+
+<section>
+  <div class="container py-5">
+    <Chart client:only="react" data={block} />
+  </div>
+</section>

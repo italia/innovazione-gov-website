@@ -2,3 +2,4 @@
 .astro
 src/graphql/graphql-env.d.ts
 schema.graphql
+.history

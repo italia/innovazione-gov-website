@@ -11,6 +11,8 @@ type ChartProps = {
 };
 
 const Chart = ({ data }: ChartProps) => {
+  if (!data.selectChart?.chartData) return null;
+
   const info: InfosType = {
     text: data.info ?? "",
     title: data.title ?? undefined,
@@ -29,7 +31,6 @@ const Chart = ({ data }: ChartProps) => {
         }
       : {}),
   };
-
   return (
     <div className="d-flex align-items-center justify-content-center">
       <ChartWrapper

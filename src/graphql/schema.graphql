@@ -1997,7 +1997,7 @@ type HighlightRecord implements RecordInterface {
   title: String!
 }
 
-union HomepageModelContentField = CardLinkListRecord | CarouselRecord | HeroRecord | NewsFeedRecord | SupportChannelsSectionRecord | TextDonutRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | TextUseCaseRecord
+union HomepageModelContentField = CardLinkListRecord | CarouselRecord | HeroRecord | NewsFeedRecord | SettingsChartRecord | SupportChannelsSectionRecord | TextDonutRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | TextUseCaseRecord
 
 type HomepageModelContentFieldListListNonNullMultiLocaleField {
   locale: SiteLocale

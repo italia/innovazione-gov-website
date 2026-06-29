@@ -1,4 +1,5 @@
 import {
+  ChartFragment,
   ExternalLinkFragment,
   ImageFragment,
   InternalLinkFragment,
@@ -51,6 +52,9 @@ export const HomepageModelContentFragment = graphql(
       ... on TextDonutRecord {
         ...TextDonutFragment
       }
+      ... on SettingsChartRecord {
+        ...ChartFragment
+      }
       ... on CarouselRecord {
         id
         slides {
@@ -74,6 +78,7 @@ export const HomepageModelContentFragment = graphql(
     TextOnlyFragment,
     CardLinkListFragment,
     TextDonutFragment,
+    ChartFragment,
     ImageFragment,
     InternalLinkFragment,
     ExternalLinkFragment,
