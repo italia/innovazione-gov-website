@@ -1,6 +1,6 @@
 import type { SectionBackground } from "@utils/background";
 
-export type SectionAlignItems = "top" | "center";
+export type SectionAlignItems = "top" | "center" | "stretch";
 
 export type SplitContentProps = {
   leftColumns?: number;

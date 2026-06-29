@@ -1997,7 +1997,7 @@ type HighlightRecord implements RecordInterface {
   title: String!
 }
 
-union HomepageModelContentField = CardLinkListRecord | CarouselRecord | HeroRecord | NewsFeedRecord | SupportChannelsSectionRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | TextUseCaseRecord
+union HomepageModelContentField = CardLinkListRecord | CarouselRecord | HeroRecord | NewsFeedRecord | SupportChannelsSectionRecord | TextDonutRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | TextUseCaseRecord
 
 type HomepageModelContentFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
@@ -8480,6 +8480,35 @@ type TextBlockRecord implements RecordInterface {
     markdown: Boolean
   ): String!
   title: String!
+}
+
+"""Block of type Text + donut (text_donut)"""
+type TextDonutRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  backgroundColor: String!
+  description: String
+  heading: String
+  id: ItemId!
+  label: String
+  percentage: IntType!
+  text: TextBlockRecord!
 }
 
 """Specifies how to filter text fields"""

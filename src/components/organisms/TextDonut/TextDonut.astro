@@ -23,15 +23,13 @@ const circumference = 2 * Math.PI * radius;
 <SplitContent
   leftColumns={7}
   rightColumns={4}
-  alignItems="center"
+  alignItems="stretch"
   background={background}
   sectionTitleId={sectionTitleId}
 >
   <slot name="text" slot="left" />
 
   <div slot="right" class="text-donut__donut-col">
-    {label && <p class="text-donut__label">{label}</p>}
-
     <div
       class="text-donut__svg-wrapper"
       data-donut
@@ -57,12 +55,12 @@ const circumference = 2 * Math.PI * radius;
           stroke-dashoffset={circumference}></circle>
       </svg>
 
+      {label && <p class="text-donut__label">{label}</p>}
       <div class="text-donut__center">
         <span class="text-donut__percentage" data-counter>0%</span>
+        {description && <p class="text-donut__description">{description}</p>}
       </div>
     </div>
-
-    {description && <p class="text-donut__description">{description}</p>}
   </div>
 </SplitContent>
 

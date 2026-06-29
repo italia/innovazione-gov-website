@@ -5,26 +5,33 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
-  }
-
-  &__label {
-    font-size: 1rem;
-    font-weight: 600;
-    color: $primary;
-    margin: 0;
+    justify-content: center;
   }
 
   &__svg-wrapper {
     position: relative;
-    width: 220px;
-    height: 220px;
-    flex-shrink: 0;
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    aspect-ratio: 1;
+    container-type: size;
+  }
+
+  @media (min-width: 992px) {
+    &__donut-col {
+      height: 100%;
+    }
+
+    &__svg-wrapper {
+      width: auto;
+      height: 100%;
+      max-width: 100%;
+    }
   }
 
   &__svg {
-    width: 220px;
-    height: 220px;
+    width: 100%;
+    height: 100%;
   }
 
   &__track {
@@ -36,7 +43,7 @@
     // start at 12 o'clock, fill counter-clockwise
     transform-box: fill-box;
     transform-origin: center;
-    transform: rotate(-90deg) scaleX(-1);
+    transform: scaleX(-1) rotate(-90deg);
     // no CSS transition — JS requestAnimationFrame drives both arc and counter in sync
   }
 
@@ -47,21 +54,36 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 1cqmin;
+    padding: 0 16cqmin;
+    pointer-events: none;
+    text-align: center;
+  }
+
+  &__label {
+    position: absolute;
+    top: 20cqmin;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 5.5cqmin;
+    font-weight: 600;
+    color: #0066cc;
+    white-space: nowrap;
+    margin: 0;
     pointer-events: none;
   }
 
   &__percentage {
-    font-size: 2.25rem;
+    font-size: 16cqmin;
     font-weight: 700;
     line-height: 1;
-    color: $primary;
+    color: #004d99;
     margin: 0;
   }
 
   &__description {
-    font-size: 0.875rem;
-    color: #5b7083;
-    text-align: center;
+    font-size: 5.5cqmin;
+    color: #004d99;
     margin: 0;
   }
 }
