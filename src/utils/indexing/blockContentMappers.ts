@@ -269,8 +269,13 @@ const flattenSupportCtaSection = (
   record: SupportCTASectionFragmentType,
 ): string => {
   const parts: string[] = [];
+  const full = record as typeof record & {
+    title?: string | null;
+    paragraph?: string | null;
+  };
 
-  parts.push(record.title, record.paragraph);
+  if (full.title) parts.push(full.title);
+  if (full.paragraph) parts.push(full.paragraph);
 
   return cleanJoin(parts);
 };

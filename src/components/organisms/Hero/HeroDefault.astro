@@ -26,37 +26,12 @@ const sizeClass = variant === "small" ? "small-size" : "default-size";
 </style>
 
 <section
-  class={`it-hero-wrapper ${sizeClass} ${bgClass}`}
+  class={`it-hero-wrapper it-hero-wrapper--split ${sizeClass} ${bgClass}`}
   aria-labelledby={title}
 >
-  {
-    image && (
-      <div
-        class={`img-responsive-wrapper ${imageMobile ? "d-none d-lg-block" : ""}`}
-      >
-        <div class="img-responsive">
-          <div class="img-wrapper">
-            <Image {...image} loading="eager" />
-          </div>
-        </div>
-      </div>
-    )
-  }
-  {
-    imageMobile && (
-      <div class="img-responsive-wrapper d-block d-lg-none">
-        <div class="img-responsive">
-          <div class="img-wrapper">
-            <Image {...imageMobile} loading="eager" />
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  <div class="container">
-    <div class="row">
-      <div class="col-12 col-lg-7">
+  <div class="container h-100">
+    <div class="row align-items-center h-100">
+      <div class="col-12 col-lg-6">
         <div class="it-hero-text-wrapper px-0">
           {showBreadcrumb && <slot name="breadcrumb" />}
           <h1 id={title}>{title}</h1>
@@ -76,6 +51,25 @@ const sizeClass = variant === "small" ? "small-size" : "default-size";
           }
         </div>
       </div>
+
+      {
+        (image || imageMobile) && (
+          <div class="col-12 col-lg-6">
+            {imageMobile && (
+              <div class="hero-split__image d-block d-lg-none">
+                <Image {...imageMobile} loading="eager" />
+              </div>
+            )}
+            {image && (
+              <div
+                class={`hero-split__image${imageMobile ? " d-none d-lg-block" : ""}`}
+              >
+                <Image {...image} loading="eager" />
+              </div>
+            )}
+          </div>
+        )
+      }
     </div>
   </div>
 </section>

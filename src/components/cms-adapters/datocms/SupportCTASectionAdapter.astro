@@ -25,19 +25,27 @@ const fullBlock = block as typeof block & {
   title?: string | null;
   paragraph?: string | null;
   backgroundColor?: string | null;
-  image?: { url: string; alt?: string | null; width?: number | null; height?: number | null } | null;
+  image?: {
+    url: string;
+    alt?: string | null;
+    width: number | null;
+    height: number | null;
+  } | null;
   cta?: unknown;
 };
 
-if (!fullBlock.title && !fullBlock.paragraph) return;
+if (!fullBlock.title || !fullBlock.paragraph || !fullBlock.image) return;
 
-const { labelButton, linkTo, openInNewTab } = getCtaFields(fullBlock.cta, lang);
+const { labelButton, linkTo, openInNewTab } = getCtaFields(
+  (fullBlock.cta as Parameters<typeof getCtaFields>[0]) ?? null,
+  lang,
+);
 ---
 
 <SupportCTASection
-  title={fullBlock.title}
-  paragraph={fullBlock.paragraph}
-  image={fullBlock.image}
+  title={fullBlock.title!}
+  paragraph={fullBlock.paragraph!}
+  image={fullBlock.image!}
   size={size}
   background={fullBlock.backgroundColor as SupportCTASectionBackgroundProps}
   labelButton={labelButton}

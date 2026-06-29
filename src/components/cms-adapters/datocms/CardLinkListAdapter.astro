@@ -18,7 +18,12 @@ const fullBlock = block as typeof block & {
     id: string;
     title?: string | null;
     paragraph?: string | null;
-    image?: { url: string; alt?: string | null; width?: number | null; height?: number | null } | null;
+    image?: {
+      url: string;
+      alt?: string | null;
+      width: number | null;
+      height: number | null;
+    } | null;
     link?: { link?: { id: string } | null; externalUrl?: string | null } | null;
   }> | null;
   title?: string | null;
@@ -37,9 +42,9 @@ const items: CardEditorialNewsProps[] = fullBlock.listContent.map((item) => {
 
   return {
     id: item.id,
-    title: item.title,
+    title: item.title ?? "",
     description: item.paragraph || "",
-    image: item.image,
+    image: item.image ?? undefined,
     linkTo: url || linkTo || "#",
     action: url ? new URL(url).host : undefined,
     isExternal: !!url,
@@ -48,9 +53,9 @@ const items: CardEditorialNewsProps[] = fullBlock.listContent.map((item) => {
 ---
 
 <ListCollection
-  title={fullBlock.title}
+  title={fullBlock.title ?? ""}
   items={items}
   paragraph={fullBlock.paragraph || undefined}
   background={fullBlock.backgroundColor as SectionBackground}
-  showInline={fullBlock.showInlineCard}
+  showInline={fullBlock.showInlineCard ?? undefined}
 />

@@ -19,6 +19,29 @@
   }
 }
 
+.it-hero-wrapper--split {
+  .hero-split__image {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+
+    & :global(img) {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .hero-split__image {
+      & :global(img) {
+        max-height: 420px;
+      }
+    }
+  }
+}
+
 .it-hero-wrapper.dark {
   .it-hero-text-wrapper h1,
   .it-hero-text-wrapper p {

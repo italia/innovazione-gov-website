@@ -20,10 +20,7 @@ const {
   openInNewTab = false,
 } = Astro.props;
 
-const classBackground =
-  image && (variant === "default" || variant === "small")
-    ? getHeroBgClass("primary")
-    : getHeroBgClass(backgroundColor);
+const classBackground = getHeroBgClass(backgroundColor);
 
 const variantButton = backgroundColor === "primary" ? "dark" : "light";
 ---
