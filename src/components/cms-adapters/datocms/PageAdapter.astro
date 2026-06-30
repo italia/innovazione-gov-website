@@ -22,6 +22,7 @@ import TextAndImageAdapter from "@components/cms-adapters/datocms/TextAndImageAd
 import TextAndStatisticsAdapter from "@components/cms-adapters/datocms/TextAndStatisticsAdapter.astro";
 import TextDonutAdapter from "@components/cms-adapters/datocms/TextDonutAdapter.astro";
 import SettingsChartAdapter from "@components/cms-adapters/datocms/SettingsChartAdapter.astro";
+import SettingsKpiAdapter from "@components/cms-adapters/datocms/SettingsKpiAdapter.astro";
 import TextAndUseCasesAdapter from "@components/cms-adapters/datocms/TextAndUseCasesAdapter.astro";
 import TextOnlyAdapter from "@components/cms-adapters/datocms/TextOnlyAdapter.astro";
 import ThirdPartyCookieAdapter from "@components/cms-adapters/datocms/ThirdPartyCookieAdapter.astro";
@@ -117,6 +118,8 @@ const { content, isFontSerif = false } = Astro.props;
         return <SettingsChartAdapter block={block} />;
       case DatoBlockModel.ListCardEditorialWithIconWrapper:
         return <ListCardEditorialWithIconWrapperAdapter block={block} />;
+      case DatoBlockModel.SettingsKpi:
+        return <SettingsKpiAdapter block={block} />;
       default:
         return null;
     }

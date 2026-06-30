@@ -1,0 +1,16 @@
+---
+import { Kpi } from "@components/charts/Kpi";
+import type { KpiFragmentType } from "@graphql/fragment/commonFragments";
+
+type Props = {
+  block: KpiFragmentType;
+};
+
+const { block } = Astro.props;
+---
+
+<section>
+  <div class="container py-5">
+    <Kpi client:only="react" data={block} />
+  </div>
+</section>

@@ -3,6 +3,7 @@ import {
   ExternalLinkFragment,
   ImageFragment,
   InternalLinkFragment,
+  KpiFragment,
   ListCardEditorialWithIconWrapperFragment,
 } from "@graphql/fragment/commonFragments";
 import {
@@ -56,6 +57,9 @@ export const HomepageModelContentFragment = graphql(
       ... on SettingsChartRecord {
         ...ChartFragment
       }
+      ... on SettingsKpiRecord {
+        ...KpiFragment
+      }
       ... on ListCardEditorialWithIconWrapperRecord {
         ...ListCardEditorialWithIconWrapperFragment
       }
@@ -83,6 +87,7 @@ export const HomepageModelContentFragment = graphql(
     CardLinkListFragment,
     TextDonutFragment,
     ChartFragment,
+    KpiFragment,
     ImageFragment,
     InternalLinkFragment,
     ExternalLinkFragment,
