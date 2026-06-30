@@ -1,0 +1,56 @@
+---
+import { CardEditorialWithIcon } from "@components/molecules/CardEditorialWithIcon";
+import type { ListCardEditorialWithIconWrapperFragmentType } from "@graphql/fragment/commonFragments";
+import { getSectionBgClass } from "@utils/background";
+import type { SectionBackground } from "@utils/background";
+
+type DatoRecord = ListCardEditorialWithIconWrapperFragmentType & {
+  __typename?: string;
+  id: string;
+};
+
+type Props = {
+  block: DatoRecord;
+};
+
+const { block } = Astro.props;
+
+const background = (block.backgroundColor as SectionBackground) ?? "dark";
+const bgClass = getSectionBgClass(background);
+const isDark = background === "dark" || background === "primary";
+const textClass = isDark ? "text-white" : "";
+---
+
+<section class={`it-section py-5 ${bgClass}`}>
+  <div class="container">
+    {
+      (block.title || block.paragraph) && (
+        <div class="row mb-5">
+          <div class="col-12 col-lg-8">
+            {block.title && (
+              <h2 class={`mb-3 fw-bold ${textClass}`}>{block.title}</h2>
+            )}
+            {block.paragraph && (
+              <div class={textClass} set:html={block.paragraph} />
+            )}
+          </div>
+        </div>
+      )
+    }
+    {
+      block.items?.length > 0 && (
+        <ul class="it-card-list row list-unstyled">
+          {block.items.map((item) => (
+            <li class="col-12 col-lg-4 mb-3 mb-md-4">
+              <CardEditorialWithIcon
+                title={item.title}
+                description={item.description}
+                icon={item.iconSelect}
+              />
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</section>

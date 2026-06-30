@@ -9,6 +9,7 @@ import FAQSectionAdapter from "@components/cms-adapters/datocms/FAQSectionAdapte
 import GraphitaliaDashboardAdapter from "@components/cms-adapters/datocms/GraphitaliaDashboardAdapter.astro";
 import HeroAdapter from "@components/cms-adapters/datocms/HeroAdapter.astro";
 import IntroArticleAdapter from "@components/cms-adapters/datocms/IntroArticleAdapter.astro";
+import ListCardEditorialWithIconWrapperAdapter from "@components/cms-adapters/datocms/ListCardEditorialWithIconWrapperAdapter.astro";
 import ListCollectionAdapter from "@components/cms-adapters/datocms/ListCollectionAdapter.astro";
 import NewsFeedAdapter from "@components/cms-adapters/datocms/NewsFeedAdapter.astro";
 import SearchBarAdapter from "@components/cms-adapters/datocms/SearchBarAdapter.astro";
@@ -114,6 +115,8 @@ const { content, isFontSerif = false } = Astro.props;
         return <TextDonutAdapter block={block} />;
       case DatoBlockModel.SettingsChart:
         return <SettingsChartAdapter block={block} />;
+      case DatoBlockModel.ListCardEditorialWithIconWrapper:
+        return <ListCardEditorialWithIconWrapperAdapter block={block} />;
       default:
         return null;
     }

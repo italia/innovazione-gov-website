@@ -55,6 +55,7 @@ export enum DatoBlockModel {
   Carousel = "CarouselRecord",
   TextDonut = "TextDonutRecord",
   SettingsChart = "SettingsChartRecord",
+  ListCardEditorialWithIconWrapper = "ListCardEditorialWithIconWrapperRecord",
 }
 
 export type DatoBlockModelType =

@@ -672,6 +672,25 @@ export type ListCardEditorialWithIconFragmentType = FragmentOf<
   typeof ListCardEditorialWithIconFragment
 >;
 
+export const ListCardEditorialWithIconWrapperFragment = graphql(
+  `
+    fragment ListCardEditorialWithIconWrapperFragment on ListCardEditorialWithIconWrapperRecord
+    @_unmask {
+      title
+      paragraph(markdown: true)
+      backgroundColor
+      items {
+        ...CardEditorialWithIconFragment
+      }
+    }
+  `,
+  [CardEditorialWithIconFragment],
+);
+
+export type ListCardEditorialWithIconWrapperFragmentType = FragmentOf<
+  typeof ListCardEditorialWithIconWrapperFragment
+>;
+
 export const CalloutFragment = graphql(`
   fragment CalloutFragment on CalloutRecord @_unmask {
     id

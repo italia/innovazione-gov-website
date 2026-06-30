@@ -3,6 +3,7 @@ import {
   ExternalLinkFragment,
   ImageFragment,
   InternalLinkFragment,
+  ListCardEditorialWithIconWrapperFragment,
 } from "@graphql/fragment/commonFragments";
 import {
   CardLinkListFragment,
@@ -55,6 +56,9 @@ export const HomepageModelContentFragment = graphql(
       ... on SettingsChartRecord {
         ...ChartFragment
       }
+      ... on ListCardEditorialWithIconWrapperRecord {
+        ...ListCardEditorialWithIconWrapperFragment
+      }
       ... on CarouselRecord {
         id
         slides {
@@ -82,6 +86,7 @@ export const HomepageModelContentFragment = graphql(
     ImageFragment,
     InternalLinkFragment,
     ExternalLinkFragment,
+    ListCardEditorialWithIconWrapperFragment,
   ],
 );
 
