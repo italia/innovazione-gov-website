@@ -199,7 +199,12 @@ import { AdditionalContent } from "./organisms/AdditionalContent";
           brandTagLine="Il cloud della Pubblica Amministrazione"
           menuItems={menuItems}
           locales={["it", "en"]}
-          logo="https://randomuser.me/api/portraits/women/14.jpg"
+          logo={{
+            url: "https://randomuser.me/api/portraits/women/14.jpg",
+            width: 120,
+            height: 60,
+            alt: "Cloud Italia",
+          }}
         />
       </td>
     </tr>

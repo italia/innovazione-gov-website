@@ -45,7 +45,24 @@ export const HeaderFragment = graphql(
           }
         }
       }
-      logoSelect
+      _allOrganizationsLocales {
+        locale
+        value {
+          ...BrandFragment
+        }
+      }
+      _allUtilityLocales {
+        locale
+        value {
+          ... on RecordInterface {
+            id
+            componentName: __typename
+          }
+          ... on SupportingBrandRecord {
+            ...SupportingBrandFragment
+          }
+        }
+      }
       _allTaglineLocales {
         locale
         value
@@ -61,7 +78,13 @@ export const HeaderFragment = graphql(
       siteName
     }
   `,
-  [MenuItemFragment, ExternalLinkFragment, MegaMenuItemFragment],
+  [
+    MenuItemFragment,
+    ExternalLinkFragment,
+    MegaMenuItemFragment,
+    BrandFragment,
+    SupportingBrandFragment,
+  ],
 );
 
 export type HeaderFragmentType = FragmentOf<typeof HeaderFragment>;

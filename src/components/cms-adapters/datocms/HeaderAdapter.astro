@@ -1,8 +1,10 @@
 ---
 import { Header } from "@components/organisms/Header";
 import type { VariantHeaderProps } from "@components/organisms/Header/types";
+import type { SocialLink } from "@components/organisms/Header/types";
 import type { HeaderFragmentType } from "@graphql/fragment/layout";
 import type { SearchMenuFragmentType } from "@graphql/fragment/sectionFragments";
+import { DatoBlockModel } from "@utils/cmsMapper";
 import { createMenu, createMetaMenu } from "@utils/createMenuHelper";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { linkResolver } from "@utils/linkResolver";
@@ -20,7 +22,8 @@ const {
   allSecondaryNavigation,
   locales,
   homeRecordId,
-  logoSelect,
+  _allOrganizationsLocales,
+  _allUtilityLocales,
   search,
   allMetaNavigation,
   variant = "light",
@@ -30,8 +33,17 @@ const { lang } = Astro.locals;
 const currentUrl = Astro.url.pathname;
 const currentSite = Astro.url.origin;
 
-const tagline = getLocaleValue(_allTaglineLocales, lang, "");
+const tagline = getLocaleValue(_allTaglineLocales, lang, "") ?? "";
 const organizations = getLocaleValue(_allListNavbarBrandLocales, lang, []);
+const logo = getLocaleValue(_allOrganizationsLocales, lang, [])[0]?.logo;
+
+const social: SocialLink[] = getLocaleValue(_allUtilityLocales, lang, [])
+  .filter((util) => util.componentName === DatoBlockModel.SupportingBrand)
+  .map((util) => ({
+    icon: util.brandLogo,
+    label: util.label,
+    url: util.url,
+  }));
 
 const mainNavigation = getLocaleValue(allMainNavigation, lang, []);
 const secondaryNavigation = getLocaleValue(allSecondaryNavigation, lang, []);
@@ -55,7 +67,8 @@ const metaMenuItems = createMetaMenu(metaNavigation, currentSite);
   metaNav={metaMenuItems}
   menuItems={menuItems}
   locales={locales}
-  logo={logoSelect}
+  logo={logo}
+  social={social}
   search={search && {
     isEnabled: search.isSearchEnabled,
     label: getLocaleValue(search._allSearchLabelLocales, lang, ""),

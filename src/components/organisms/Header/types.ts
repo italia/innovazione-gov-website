@@ -9,8 +9,15 @@ export type HeaderCentralProps = HeaderBase & {
   brandTitle: string;
   brandTagLine?: string;
   menuItems: HeaderNavbarProps;
-  logo: string;
+  logo?: ImageProps;
   search?: SearchConfig;
+  social?: SocialLink[];
+};
+
+export type SocialLink = {
+  icon?: string;
+  label: string;
+  url: string;
 };
 
 export type HeaderSlimProps = HeaderBase & {
