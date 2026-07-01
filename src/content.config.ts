@@ -10,6 +10,7 @@ import {
   insightContentLoader,
   layoutLoader,
   localesLoader,
+  measuresLoader,
   newsLoader,
   pagesLoader,
   resourcesLoader,
@@ -33,6 +34,7 @@ import {
   insightSchema,
   layoutSchema,
   localesSchema,
+  measureSchema,
   newsSchema,
   pageSchema,
   resourceSchema,
@@ -62,6 +64,10 @@ export const collections = {
   resource: defineCollection({
     schema: resourceSchema,
     loader: resourcesLoader,
+  }),
+  measure: defineCollection({
+    schema: measureSchema,
+    loader: measuresLoader,
   }),
   global_settings: defineCollection({
     schema: globalSettingsSchema,

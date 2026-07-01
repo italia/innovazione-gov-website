@@ -17,6 +17,7 @@ import {
 } from "@graphql/query/indexing";
 import { AllInsightsContentQuery } from "@graphql/query/insight";
 import { LayoutQuery, SidebarQuery } from "@graphql/query/layout";
+import { AllMeasuresQuery } from "@graphql/query/measure";
 import { AllNewsQuery } from "@graphql/query/news";
 import { AllPagesContentQuery } from "@graphql/query/page";
 import { AllResourcesQuery } from "@graphql/query/resource";
@@ -62,6 +63,11 @@ export const newsLoader = async () => {
 export const storiesLoader = async () => {
   const response = await executeAutoPagingQuery(AllStoryCardQuery);
   return response?.allStoryItems || [];
+};
+
+export const measuresLoader = async () => {
+  const response = await executeAutoPagingQuery(AllMeasuresQuery);
+  return response?.allMeasures || [];
 };
 
 export const webinarsLoader = async () => {

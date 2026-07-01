@@ -20,6 +20,7 @@ import type {
   WebinarIndexingFragmentType,
 } from "@graphql/fragment/indexing";
 import type { AllInsightsRecordFragmentType } from "@graphql/fragment/insight";
+import type { MeasureFragmentType } from "@graphql/fragment/measure";
 import type {
   FooterFragmentType,
   HeaderFragmentType,
@@ -41,6 +42,8 @@ export const storySchema = z.custom<StoryCardFragmentType>();
 export const webinarSchema = z.custom<WebinarItemFragmentType>();
 
 export const resourceSchema = z.custom<ResourceFragmentType>();
+
+export const measureSchema = z.custom<MeasureFragmentType>();
 
 export const pageSchema = z.custom<PageFragmentType>();
 

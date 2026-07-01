@@ -570,6 +570,42 @@ type AuthorListRecord implements RecordInterface {
   title: String
 }
 
+input BenefitModelFilter {
+  id: ItemIdFilter
+  benefitLabel: StringFilter
+  OR: [BenefitModelFilter]
+  AND: [BenefitModelFilter]
+}
+
+"""Block of type Beneficio (benefit)"""
+type BenefitRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  benefitLabel: String
+  id: ItemId!
+}
+
+type BenefitRecordListListNonNullMultiLocaleField {
+  locale: SiteLocale
+  value: [BenefitRecord!]!
+}
+
 """Block of type Blockquote (blockquote)"""
 type BlockquoteRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -1087,6 +1123,7 @@ type CatalogueTabRecord implements RecordInterface {
   _updatedAt: DateTime!
   elementPerPage: IntType
   filterStory: StoryClassRecord
+  filterStyle: JsonField!
   filterTitle: String!
   id: ItemId!
   labelForAll: String!
@@ -1563,7 +1600,7 @@ type FileField implements FileFieldInterface {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1.0
+    punch: Float! = 1
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24
@@ -1662,7 +1699,7 @@ interface FileFieldInterface {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1.0
+    punch: Float! = 1
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24
@@ -1904,6 +1941,72 @@ type GlobalSettingRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): String!
+}
+
+input GoalsAchivedModelFilter {
+  _createdAt: CreatedAtFilter
+  id: ItemIdFilter
+  _firstPublishedAt: PublishedAtFilter
+  _publicationScheduledAt: PublishedAtFilter
+  _unpublishingScheduledAt: PublishedAtFilter
+  _publishedAt: PublishedAtFilter
+  _status: StatusFilter
+  _updatedAt: UpdatedAtFilter
+  _isValid: BooleanFilter
+  goalAchieved: IntegerFilter
+  totalGoal: IntegerFilter
+  OR: [GoalsAchivedModelFilter]
+  AND: [GoalsAchivedModelFilter]
+}
+
+enum GoalsAchivedModelOrderBy {
+  _createdAt_ASC
+  _createdAt_DESC
+  id_ASC
+  id_DESC
+  _firstPublishedAt_ASC
+  _firstPublishedAt_DESC
+  _publicationScheduledAt_ASC
+  _publicationScheduledAt_DESC
+  _unpublishingScheduledAt_ASC
+  _unpublishingScheduledAt_DESC
+  _publishedAt_ASC
+  _publishedAt_DESC
+  _status_ASC
+  _status_DESC
+  _updatedAt_ASC
+  _updatedAt_DESC
+  _isValid_ASC
+  _isValid_DESC
+  goalAchieved_ASC
+  goalAchieved_DESC
+  totalGoal_ASC
+  totalGoal_DESC
+}
+
+"""Record of type Obiettivi raggiunti (goals_achived)"""
+type GoalsAchivedRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  goalAchieved: IntType
+  id: ItemId!
+  totalGoal: IntType
 }
 
 """Block of type GraphItalia Dashboard (graphitalia_dashboard)"""
@@ -4434,6 +4537,38 @@ Represents non-fractional signed whole numeric values. Int can represent values 
 """
 scalar IntType
 
+"""Specifies how to filter Integer fields"""
+input IntegerFilter {
+  """
+  Filter records with a value that's strictly greater than the one specified
+  """
+  gt: IntType
+
+  """Filter records with a value that's less than the one specified"""
+  lt: IntType
+
+  """
+  Filter records with a value that's greater than or equal to the one specified
+  """
+  gte: IntType
+
+  """
+  Filter records with a value that's less or equal than the one specified
+  """
+  lte: IntType
+
+  """
+  Filter records with the specified field defined (i.e. with any value) or not
+  """
+  exists: BooleanType
+
+  """Search for records with an exact match"""
+  eq: IntType
+
+  """Exclude records with an exact match"""
+  neq: IntType
+}
+
 union InternalLinkModelLinkToField = ArticleRecord | CatalogueRecord | InsightRecord | PageRecord | StoryItemRecord
 
 """Block of type Internal link (internal_link)"""
@@ -5336,6 +5471,237 @@ type MailingListSignupBlockRecordMultiLocaleField {
   value: MailingListSignupBlockRecord
 }
 
+input MeasureCatModelFilter {
+  _createdAt: CreatedAtFilter
+  id: ItemIdFilter
+  _firstPublishedAt: PublishedAtFilter
+  _publicationScheduledAt: PublishedAtFilter
+  _unpublishingScheduledAt: PublishedAtFilter
+  _publishedAt: PublishedAtFilter
+  _status: StatusFilter
+  _updatedAt: UpdatedAtFilter
+  _isValid: BooleanFilter
+  label: StringFilter
+  OR: [MeasureCatModelFilter]
+  AND: [MeasureCatModelFilter]
+}
+
+enum MeasureCatModelOrderBy {
+  _createdAt_ASC
+  _createdAt_DESC
+  id_ASC
+  id_DESC
+  _firstPublishedAt_ASC
+  _firstPublishedAt_DESC
+  _publicationScheduledAt_ASC
+  _publicationScheduledAt_DESC
+  _unpublishingScheduledAt_ASC
+  _unpublishingScheduledAt_DESC
+  _publishedAt_ASC
+  _publishedAt_DESC
+  _status_ASC
+  _status_DESC
+  _updatedAt_ASC
+  _updatedAt_DESC
+  _isValid_ASC
+  _isValid_DESC
+  label_ASC
+  label_DESC
+}
+
+"""Record of type Categoria misure (measure_cat)"""
+type MeasureCatRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  id: ItemId!
+  label: String
+}
+
+type MeasureCatRecordListListNonNullMultiLocaleField {
+  locale: SiteLocale
+  value: [MeasureCatRecord!]!
+}
+
+"""Specify nested blocks fields conditions"""
+input MeasureModelBeneficiRaggiuntiFieldBlocksConditions {
+  benefit: BenefitModelFilter
+}
+
+"""Specify nested blocks types presence"""
+input MeasureModelBeneficiRaggiuntiFieldBlocksPresence {
+  benefit: BooleanType
+}
+
+"""Specify how to filter this specific Modular Content field instance"""
+input MeasureModelBeneficiRaggiuntiFieldFilter {
+  """
+  Filter records containing at least one block matching the specified conditions
+  """
+  any: MeasureModelBeneficiRaggiuntiFieldBlocksConditions
+
+  """Filter records containing at least one block of any kind or not"""
+  exists: BooleanType
+
+  """Filter records containing at least one block of specified type or not"""
+  containsAny: MeasureModelBeneficiRaggiuntiFieldBlocksPresence
+}
+
+input MeasureModelFilter {
+  _createdAt: CreatedAtFilter
+  id: ItemIdFilter
+  _firstPublishedAt: PublishedAtFilter
+  _publicationScheduledAt: PublishedAtFilter
+  _unpublishingScheduledAt: PublishedAtFilter
+  _publishedAt: PublishedAtFilter
+  _status: StatusFilter
+  _updatedAt: UpdatedAtFilter
+  _isValid: BooleanFilter
+  _locales: LocalesFilter
+  beneficiRaggiunti: MeasureModelBeneficiRaggiuntiFieldFilter
+  category: LinksFilter
+  description: TextFilter
+  goalAchieved: IntegerFilter
+  title: StringFilter
+  totalGoal: IntegerFilter
+  OR: [MeasureModelFilter]
+  AND: [MeasureModelFilter]
+}
+
+enum MeasureModelOrderBy {
+  _createdAt_ASC
+  _createdAt_DESC
+  id_ASC
+  id_DESC
+  _firstPublishedAt_ASC
+  _firstPublishedAt_DESC
+  _publicationScheduledAt_ASC
+  _publicationScheduledAt_DESC
+  _unpublishingScheduledAt_ASC
+  _unpublishingScheduledAt_DESC
+  _publishedAt_ASC
+  _publishedAt_DESC
+  _status_ASC
+  _status_DESC
+  _updatedAt_ASC
+  _updatedAt_DESC
+  _isValid_ASC
+  _isValid_DESC
+  goalAchieved_ASC
+  goalAchieved_DESC
+  title_ASC
+  title_DESC
+  totalGoal_ASC
+  totalGoal_DESC
+}
+
+"""Record of type Misure (measure)"""
+type MeasureRecord implements RecordInterface {
+  _allBeneficiRaggiuntiLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [BenefitRecordListListNonNullMultiLocaleField!]
+  _allCategoryLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [MeasureCatRecordListListNonNullMultiLocaleField!]
+  _allDescriptionLocales(
+    """Process content as markdown"""
+    markdown: Boolean
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringMultiLocaleField!]
+  _allTitleLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringMultiLocaleField!]
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _locales: [SiteLocale!]!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  beneficiRaggiunti(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [BenefitRecord!]!
+  category(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [MeasureCatRecord!]!
+  description(
+    """Process content as markdown"""
+    markdown: Boolean
+
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String
+  goalAchieved: IntType
+  id: ItemId!
+  title(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String
+  totalGoal: IntType
+}
+
 union MegaMenuItemModelPointsToField = CatalogueRecord | PageRecord
 
 """Block of type Mega menu item (mega_menu_item)"""
@@ -6067,6 +6433,13 @@ type Query {
   ): CollectionMetadata!
 
   """Returns meta information regarding a record collection"""
+  _allGoalsAchivedsMeta(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+    filter: GoalsAchivedModelFilter
+  ): CollectionMetadata!
+
+  """Returns meta information regarding a record collection"""
   _allInsightTopicsMeta(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -6092,6 +6465,20 @@ type Query {
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
     filter: MacroTopicModelFilter
+  ): CollectionMetadata!
+
+  """Returns meta information regarding a record collection"""
+  _allMeasureCatsMeta(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+    filter: MeasureCatModelFilter
+  ): CollectionMetadata!
+
+  """Returns meta information regarding a record collection"""
+  _allMeasuresMeta(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+    filter: MeasureModelFilter
   ): CollectionMetadata!
 
   """Returns meta information regarding a record collection"""
@@ -6292,6 +6679,25 @@ type Query {
   ): [FetchItemRecord!]!
 
   """Returns a collection of records"""
+  allGoalsAchiveds(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+
+    """Skip the first results"""
+    skip: IntType
+
+    """Limit the number of results"""
+    first: IntType = 20
+    filter: GoalsAchivedModelFilter
+    orderBy: [GoalsAchivedModelOrderBy] = [_updatedAt_DESC]
+  ): [GoalsAchivedRecord!]!
+
+  """Returns a collection of records"""
   allInsightTopics(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -6366,6 +6772,44 @@ type Query {
     filter: MacroTopicModelFilter
     orderBy: [MacroTopicModelOrderBy] = [_updatedAt_DESC]
   ): [MacroTopicRecord!]!
+
+  """Returns a collection of records"""
+  allMeasureCats(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+
+    """Skip the first results"""
+    skip: IntType
+
+    """Limit the number of results"""
+    first: IntType = 20
+    filter: MeasureCatModelFilter
+    orderBy: [MeasureCatModelOrderBy] = [_updatedAt_DESC]
+  ): [MeasureCatRecord!]!
+
+  """Returns a collection of records"""
+  allMeasures(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+
+    """Skip the first results"""
+    skip: IntType
+
+    """Limit the number of results"""
+    first: IntType = 20
+    filter: MeasureModelFilter
+    orderBy: [MeasureModelOrderBy] = [_updatedAt_DESC]
+  ): [MeasureRecord!]!
 
   """Returns a collection of records"""
   allNewsItems(
@@ -6690,6 +7134,19 @@ type Query {
     fallbackLocales: [SiteLocale!]
   ): GlobalSettingRecord
 
+  """Returns a specific record"""
+  goalsAchived(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+    filter: GoalsAchivedModelFilter
+    orderBy: [GoalsAchivedModelOrderBy] = [_updatedAt_DESC]
+  ): GoalsAchivedRecord
+
   """Returns the single instance record"""
   homepage(
     """The locale to use to fetch the field's content"""
@@ -6763,6 +7220,32 @@ type Query {
     filter: MacroTopicModelFilter
     orderBy: [MacroTopicModelOrderBy] = [_updatedAt_DESC]
   ): MacroTopicRecord
+
+  """Returns a specific record"""
+  measure(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+    filter: MeasureModelFilter
+    orderBy: [MeasureModelOrderBy] = [_updatedAt_DESC]
+  ): MeasureRecord
+
+  """Returns a specific record"""
+  measureCat(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+    filter: MeasureCatModelFilter
+    orderBy: [MeasureCatModelOrderBy] = [_updatedAt_DESC]
+  ): MeasureCatRecord
 
   """Returns a specific record"""
   newsItem(
@@ -9250,7 +9733,7 @@ type UploadVideoField {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1.0
+    punch: Float! = 1
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24

@@ -6,9 +6,13 @@ import {
   CardEditorialStory,
   type CardEditorialStoryProps,
 } from "@components/react/CardEditorialStory";
+import {
+  CardMeasure,
+  type CardMeasureProps,
+} from "@components/react/CardMeasure";
+import { FilterPills } from "@components/react/FilterPills";
 import { Pagination } from "@components/react/Pagination";
 import type { SiteLocale } from "@graphql/types";
-import { getI18n } from "@i18n/microcopy";
 import { useState } from "react";
 import { Resource, type ResourceProps } from "../Resource";
 import { Select } from "../Select";
@@ -18,6 +22,7 @@ type PaginatedCollectionCommonProps = {
   filterTitle: string;
   labelForAll: string;
   lang: SiteLocale;
+  filterStyle?: string[];
   perPage?: number;
 };
 
@@ -37,6 +42,10 @@ type PaginatedCollectionProps =
   | (PaginatedCollectionCommonProps & {
       items: ResourceProps[];
       newsPageTabType: "resource";
+    })
+  | (PaginatedCollectionCommonProps & {
+      items: CardMeasureProps[];
+      newsPageTabType: "measures";
     });
 
 export function PaginatedCollection({
@@ -47,10 +56,9 @@ export function PaginatedCollection({
   filterTitle,
   labelForAll,
   newsPageTabType,
+  filterStyle,
   lang,
 }: PaginatedCollectionProps) {
-  const t = getI18n(lang);
-
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(labelForAll);
 
@@ -79,6 +87,9 @@ export function PaginatedCollection({
     setPage(1);
   };
 
+  const isPills = filterStyle?.includes("pills") ?? false;
+  const isMeasures = newsPageTabType === "measures";
+
   return (
     <div className="container">
       <div className="d-flex flex-lg-row flex-column justify-content-between align-items-top">
@@ -89,44 +100,63 @@ export function PaginatedCollection({
           </div>
         </div>
         <div className="col-lg-4 col-12">
-          <Select
-            filterTitle={filterTitle}
-            selectedCategory={selectedCategory}
-            categories={categories}
-            onCategoryChange={handleCategoryChange}
-          />
+          {isPills ? (
+            <FilterPills
+              filterTitle={filterTitle}
+              selectedCategory={selectedCategory}
+              categories={categories}
+              onCategoryChange={handleCategoryChange}
+            />
+          ) : (
+            <Select
+              filterTitle={filterTitle}
+              selectedCategory={selectedCategory}
+              categories={categories}
+              onCategoryChange={handleCategoryChange}
+            />
+          )}
         </div>
       </div>
-      <ul className="it-card-list row pt-4">
-        {paginatedItems.map((n) => {
-          const isResource = newsPageTabType === "resource";
-          const colClass = isResource
-            ? "col-12 col-lg-7 mb-3"
-            : "col-12 col-lg-4 mb-5";
 
-          const itemKey = n.title;
+      {isMeasures ? (
+        <div className="accordion pt-4">
+          {paginatedItems.map((n) => (
+            <CardMeasure key={n.title} {...(n as CardMeasureProps)} />
+          ))}
+        </div>
+      ) : (
+        <ul className="it-card-list row pt-4">
+          {paginatedItems.map((n) => {
+            const isResource = newsPageTabType === "resource";
+            const colClass = isResource
+              ? "col-12 col-lg-7 mb-3"
+              : "col-12 col-lg-4 mb-5";
 
-          return (
-            <li className={colClass} key={itemKey}>
-              {newsPageTabType === "news_item" && (
-                <CardEditorialNews {...(n as CardEditorialNewsProps)} />
-              )}
+            const itemKey = n.title;
 
-              {newsPageTabType === "story_item" && (
-                <CardEditorialStory {...(n as CardEditorialStoryProps)} />
-              )}
+            return (
+              <li className={colClass} key={itemKey}>
+                {newsPageTabType === "news_item" && (
+                  <CardEditorialNews {...(n as CardEditorialNewsProps)} />
+                )}
 
-              {newsPageTabType === "webinar_item" && (
-                <CardEditorialNews {...(n as CardEditorialNewsProps)} />
-              )}
+                {newsPageTabType === "story_item" && (
+                  <CardEditorialStory {...(n as CardEditorialStoryProps)} />
+                )}
 
-              {newsPageTabType === "resource" && (
-                <Resource {...(n as ResourceProps)} />
-              )}
-            </li>
-          );
-        })}
-      </ul>
+                {newsPageTabType === "webinar_item" && (
+                  <CardEditorialNews {...(n as CardEditorialNewsProps)} />
+                )}
+
+                {newsPageTabType === "resource" && (
+                  <Resource {...(n as ResourceProps)} />
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
       <Pagination
         lang={lang}
         currentPage={page}

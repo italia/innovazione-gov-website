@@ -423,6 +423,8 @@ export const CatalogueFeedFragment = graphql(`
       title
       paragraph
       newsPageTabType
+      storyType
+      filterStyle
       labelForAll
       id
       filterTitle

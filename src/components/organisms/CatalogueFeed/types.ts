@@ -7,6 +7,7 @@ export type PageNewsTab = {
   labelForAll: string;
   filterStory?: string;
   newsPageTabType: string;
+  filterStyle?: string[];
   perPage?: number;
   sortMode?: string;
 };
@@ -18,4 +19,8 @@ export type UpdateTabSectionProps = {
 };
 
 export type ElementType =
-  "news_item" | "story_item" | "webinar_item" | "resource";
+  | "news_item"
+  | "story_item"
+  | "webinar_item"
+  | "resource"
+  | "measures";

@@ -1,5 +1,6 @@
 import type { CardEditorialNewsProps } from "@components/react/CardEditorialNews";
 import type { CardEditorialStoryProps } from "@components/react/CardEditorialStory";
+import type { CardMeasureProps } from "@components/react/CardMeasure/types";
 import type { ResourceProps } from "@components/react/Resource";
 import type {
   NewsItemFragmentType,
@@ -7,6 +8,7 @@ import type {
   StoryCardFragmentType,
   WebinarItemFragmentType,
 } from "@graphql/fragment/commonFragments";
+import type { MeasureFragmentType } from "@graphql/fragment/measure";
 import type { SiteLocale } from "@graphql/types";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { linkResolver } from "@utils/linkResolver";
@@ -103,6 +105,28 @@ export const mapResourceToResourceProps = (
     url: url,
     download: isDownload,
     type: getLocaleValue(type?._allLabelLocales, lang, ""),
+    lang: lang,
+  };
+};
+
+export const mapMeasureToCardMeasureProps = (
+  measure: MeasureFragmentType,
+  lang: SiteLocale,
+): CardMeasureProps => {
+  const categories = getLocaleValue(measure.allCategoryLocales, lang, []);
+  const benefits = getLocaleValue(
+    measure.allBeneficiRaggiuntiLocales,
+    lang,
+    [],
+  );
+
+  return {
+    title: getLocaleValue(measure.allTitleLocales, lang, "") ?? "",
+    description: getLocaleValue(measure.allDescriptionLocales, lang, "") ?? "",
+    category: categories.map((c) => c.label ?? ""),
+    benefits: benefits.map((b) => b.benefitLabel ?? ""),
+    goalAchieved: measure.goalAchieved ?? 0,
+    totalGoal: measure.totalGoal ?? 0,
     lang: lang,
   };
 };

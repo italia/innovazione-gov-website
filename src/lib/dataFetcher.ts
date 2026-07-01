@@ -1,49 +1,60 @@
 import { LayoutQuery } from "@graphql/query/layout";
+import { AllMeasuresQuery } from "@graphql/query/measure";
 import { AllNewsQuery } from "@graphql/query/news";
 import { AllResourcesQuery } from "@graphql/query/resource";
 import { AllStoryCardQuery } from "@graphql/query/story";
 import { AllWebinarQuery } from "@graphql/query/webinar";
-import { executeQuery } from "@lib/datocms";
+import { executeAutoPagingQuery, executeQuery } from "@lib/datocms";
 import { getCollection, getEntry } from "astro:content";
 
 const wrap = <T>(items: T[]) => items.map((item) => ({ data: item }));
 
 export const getNews = async (isPreview: boolean) => {
   if (isPreview) {
-    const res = await executeQuery(AllNewsQuery, {
+    const res = await executeAutoPagingQuery(AllNewsQuery, {
       includeDrafts: true,
     });
-    return wrap(res.allNewsItems);
+    return wrap(res?.allNewsItems ?? []);
   }
   return await getCollection("news_item");
 };
 
 export const getStories = async (isPreview: boolean) => {
   if (isPreview) {
-    const res = await executeQuery(AllStoryCardQuery, {
+    const res = await executeAutoPagingQuery(AllStoryCardQuery, {
       includeDrafts: true,
     });
-    return wrap(res.allStoryItems);
+    return wrap(res?.allStoryItems ?? []);
   }
   return await getCollection("story_item");
 };
 
 export const getWebinars = async (isPreview: boolean) => {
   if (isPreview) {
-    const res = await executeQuery(AllWebinarQuery, {
+    const res = await executeAutoPagingQuery(AllWebinarQuery, {
       includeDrafts: true,
     });
-    return wrap(res.allWebinarItems);
+    return wrap(res?.allWebinarItems ?? []);
   }
   return await getCollection("webinar_item");
 };
 
-export const getResources = async (isPreview: boolean) => {
+export const getMeasures = async (isPreview: boolean) => {
   if (isPreview) {
-    const res = await executeQuery(AllResourcesQuery, {
+    const res = await executeAutoPagingQuery(AllMeasuresQuery, {
       includeDrafts: true,
     });
-    return wrap(res.allResources);
+    return wrap(res?.allMeasures ?? []);
+  }
+  return await getCollection("measure");
+};
+
+export const getResources = async (isPreview: boolean) => {
+  if (isPreview) {
+    const res = await executeAutoPagingQuery(AllResourcesQuery, {
+      includeDrafts: true,
+    });
+    return wrap(res?.allResources ?? []);
   }
   return await getCollection("resource");
 };

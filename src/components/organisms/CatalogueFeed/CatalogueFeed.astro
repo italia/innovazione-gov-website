@@ -5,6 +5,7 @@ import { TabContent, Tabs } from "@components/molecules/Tabs";
 import { NewsArchiveList } from "@components/organisms/NewsArchiveList";
 import { PaginatedCollection } from "@components/react/PaginatedCollection/PaginatedCollection";
 import {
+  getMeasures,
   getNews,
   getResources,
   getStories,
@@ -12,6 +13,7 @@ import {
 } from "@lib/dataFetcher";
 import { isDraftModeEnabled } from "@lib/draftMode";
 import {
+  mapMeasureToCardMeasureProps,
   mapNewsToCardEditorialNewsProps,
   mapResourceToResourceProps,
   mapStoryToCardEditorialStoryProps,
@@ -39,13 +41,15 @@ const news = await getNews(isPreview);
 const stories = await getStories(isPreview);
 const webinars = await getWebinars(isPreview);
 const resources = await getResources(isPreview);
+const measures = await getMeasures(isPreview);
 
 function isValidTabType(val: string): val is ElementType {
   return (
     val === "news_item" ||
     val === "story_item" ||
     val === "webinar_item" ||
-    val === "resource"
+    val === "resource" ||
+    val === "measures"
   );
 }
 
@@ -100,6 +104,13 @@ function getFilteredItems(
     case "resource":
       return sortFeedItems(
         resources.map((r) => mapResourceToResourceProps(r.data, lang)),
+        sortMode,
+        lang,
+      );
+
+    case "measures":
+      return sortFeedItems(
+        measures.map((m) => mapMeasureToCardMeasureProps(m.data, lang)),
         sortMode,
         lang,
       );

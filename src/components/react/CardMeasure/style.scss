@@ -1,0 +1,42 @@
+@import "@styles/palette";
+
+$measure-green: #12793f;
+$measure-gray: #5a6772;
+
+.measure-item {
+  .measure-button {
+    &:not(.collapsed) {
+      box-shadow: none;
+    }
+  }
+
+  .measure-heading-content {
+    flex-wrap: wrap;
+  }
+
+  .measure-badge {
+    white-space: nowrap;
+    font-weight: 600;
+
+    &--complete {
+      background-color: $measure-green;
+      color: $white;
+    }
+
+    &--partial {
+      background-color: $gray-100;
+      color: $measure-gray;
+    }
+  }
+
+  .measure-benefits {
+    background-color: $gray-100;
+    border-radius: 4px;
+
+    &__title {
+      color: $color-text-secondary;
+      font-size: 0.875rem;
+      letter-spacing: 0.5px;
+    }
+  }
+}
