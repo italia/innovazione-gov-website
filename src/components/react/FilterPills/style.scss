@@ -1,0 +1,28 @@
+.filter-pills {
+  .chip {
+    // più padding interno + corpo font come da Figma
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    min-height: 0;
+    border-radius: 100px;
+
+    // .chip-simple di bootstrap-italia forza padding-right:8px (stessa
+    // specificità) scentrando il testo: vinciamo alzando la specificità.
+    &.chip-simple {
+      padding: 0.5rem 1.25rem;
+    }
+
+    .chip-label {
+      color: #06c; // --color-text-primary (stato non selezionato)
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 24px;
+      padding-inline: 0;
+      // reset degli hack di bootstrap-italia che scentrano il testo
+      height: auto;
+      transform: none;
+    }
+  }
+}

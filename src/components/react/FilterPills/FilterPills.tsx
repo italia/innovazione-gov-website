@@ -1,4 +1,5 @@
 import { Chip } from "@components/react/Chip";
+import "./style.scss";
 
 type FilterPillsProps = {
   categories: string[];
@@ -14,7 +15,7 @@ export function FilterPills({
   onCategoryChange,
 }: FilterPillsProps) {
   return (
-    <div className="it-list-wrapper d-flex flex-column">
+    <div className="it-list-wrapper filter-pills d-flex flex-column">
       <p
         id="filterPagination"
         className="it-label text-dark mt-1 fw-semibold text-uppercase"

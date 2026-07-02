@@ -1,7 +1,12 @@
 @import "@styles/palette";
 
-$measure-green: #12793f;
-$measure-gray: #5a6772;
+// Figma tokens
+$measure-title-color: #036; // --color-text-primary-active
+$measure-success: #008055; // --color-background-success
+$measure-secondary: #5c6f82; // --color-background-secondary
+$measure-benefits-bg: #f2f7fc; // --color-background-primary-lighter
+$measure-benefits-title: #2f475e; // --color-text-secondary
+$measure-check: #000; // icona spunta nera
 
 .measure-item {
   .measure-button {
@@ -14,29 +19,48 @@ $measure-gray: #5a6772;
     flex-wrap: wrap;
   }
 
+  // link/sans-bold-lg
+  .measure-title {
+    color: $measure-title-color;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 28px;
+  }
+
   .measure-badge {
     white-space: nowrap;
-    font-weight: 600;
+    border-radius: 4px;
+    // corpo del font uguale al titolo ma senza grassetto
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+    color: $white;
+    padding: 0.125rem 0.5rem;
 
     &--complete {
-      background-color: $measure-green;
-      color: $white;
+      background-color: $measure-success;
     }
 
     &--partial {
-      background-color: $gray-100;
-      color: $measure-gray;
+      background-color: $measure-secondary;
     }
   }
 
   .measure-benefits {
-    background-color: $gray-100;
+    background-color: $measure-benefits-bg;
     border-radius: 4px;
 
+    // caption
     &__title {
-      color: $color-text-secondary;
-      font-size: 0.875rem;
+      color: $measure-benefits-title;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 24px;
       letter-spacing: 0.5px;
+    }
+
+    &__icon {
+      fill: $measure-check;
     }
   }
 }

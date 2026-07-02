@@ -27,7 +27,7 @@ export function Pagination({
             aria-label={t["nav.prev"]}
             className="page-link"
           >
-            &laquo;
+            &lsaquo;
           </button>
         </li>
         {Array.from({ length: totalPages }, (_, idx) => (
@@ -48,7 +48,7 @@ export function Pagination({
             aria-label={t["nav.next"]}
             className="page-link"
           >
-            &raquo;
+            &rsaquo;
           </button>
         </li>
       </ul>

@@ -120,13 +120,21 @@ export const mapMeasureToCardMeasureProps = (
     [],
   );
 
+  // I dati CMS possono contenere refusi (es. 3 obiettivi su 2): normalizziamo
+  // gli obiettivi raggiunti nell'intervallo [0, totalGoal] così "3/2" → "2/2".
+  const totalGoal = Math.max(measure.totalGoal ?? 0, 0);
+  const goalAchieved = Math.min(
+    Math.max(measure.goalAchieved ?? 0, 0),
+    totalGoal,
+  );
+
   return {
     title: getLocaleValue(measure.allTitleLocales, lang, "") ?? "",
     description: getLocaleValue(measure.allDescriptionLocales, lang, "") ?? "",
     category: categories.map((c) => c.label ?? ""),
     benefits: benefits.map((b) => b.benefitLabel ?? ""),
-    goalAchieved: measure.goalAchieved ?? 0,
-    totalGoal: measure.totalGoal ?? 0,
+    goalAchieved,
+    totalGoal,
     lang: lang,
   };
 };
