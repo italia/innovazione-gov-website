@@ -41,7 +41,7 @@
     "datocms-structured-text-to-plain-text": "^5.1.16",
     "dotenv": "^17.4.2",
     "gql.tada": "^1.9.2",
-    "graph-italia-components": "^0.3.25",
+    "graph-italia-components": "^0.3.27",
     "jsonwebtoken": "^9.0.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
@@ -71,8 +71,5 @@
       "eslint --fix",
       "prettier . --write --ignore-unknown"
     ]
-  },
-  "patchedDependencies": {
-    "graph-italia-components@0.3.25": "patches/graph-italia-components@0.3.25.patch"
   }
 }
