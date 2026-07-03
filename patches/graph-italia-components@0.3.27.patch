@@ -1,0 +1,62 @@
+diff --git a/dist/index.esm.js b/dist/index.esm.js
+index 4938397d468109c991895434991d7b6757988d0a..e7dbbb4ef84a42fcf770ea4ed57249982c87bb98 100644
+--- a/dist/index.esm.js
++++ b/dist/index.esm.js
+@@ -1005,7 +1005,7 @@ function BasicChart({ data, setEchartInstance, rowHeight, isMobile = false, hFac
+         const colorOpt = ((_d = config.colors) === null || _d === void 0 ? void 0 : _d.length) ? { color: config.colors } : {};
+         const aria = {
+             enabled: true,
+-            decal: { show: true },
++            decal: { show: false },
+             label: { enabled: true, description: config.title || config.description || "" },
+         };
+         let options = Object.assign(Object.assign(Object.assign(Object.assign({}, colorOpt), axis), { grid,
+@@ -1100,7 +1100,7 @@ function GeoMapChart({ data, id, setEchartInstance, hFactor = 1, rowHeight, }) {
+             },
+             aria: {
+                 enabled: true,
+-                decal: { show: true },
++                decal: { show: false },
+                 label: { enabled: true, description: (config === null || config === void 0 ? void 0 : config.title) || (config === null || config === void 0 ? void 0 : config.description) || "" },
+             },
+             tooltip,
+@@ -1286,7 +1286,7 @@ function PieChart({ id, data, setEchartInstance, isMobile = false, rowHeight, hF
+                 },
+             } }, colorOpt), { aria: {
+                 enabled: true,
+-                decal: { show: true },
++                decal: { show: false },
+                 label: { enabled: true, description: config.title || config.description || "" },
+             }, series: Object.assign(Object.assign({}, dataSource.series), { labelLine: {
+                     show: showLabels && config.labeLine,
+diff --git a/dist/index.js b/dist/index.js
+index f1cf308ea67e969bcde9ad1fda21b5aa260230d5..c465aac2759b11888f60b4d6166b35d09c46fd2b 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -1026,7 +1026,7 @@ function BasicChart({ data, setEchartInstance, rowHeight, isMobile = false, hFac
+         const colorOpt = ((_d = config.colors) === null || _d === void 0 ? void 0 : _d.length) ? { color: config.colors } : {};
+         const aria = {
+             enabled: true,
+-            decal: { show: true },
++            decal: { show: false },
+             label: { enabled: true, description: config.title || config.description || "" },
+         };
+         let options = Object.assign(Object.assign(Object.assign(Object.assign({}, colorOpt), axis), { grid,
+@@ -1121,7 +1121,7 @@ function GeoMapChart({ data, id, setEchartInstance, hFactor = 1, rowHeight, }) {
+             },
+             aria: {
+                 enabled: true,
+-                decal: { show: true },
++                decal: { show: false },
+                 label: { enabled: true, description: (config === null || config === void 0 ? void 0 : config.title) || (config === null || config === void 0 ? void 0 : config.description) || "" },
+             },
+             tooltip,
+@@ -1307,7 +1307,7 @@ function PieChart({ id, data, setEchartInstance, isMobile = false, rowHeight, hF
+                 },
+             } }, colorOpt), { aria: {
+                 enabled: true,
+-                decal: { show: true },
++                decal: { show: false },
+                 label: { enabled: true, description: config.title || config.description || "" },
+             }, series: Object.assign(Object.assign({}, dataSource.series), { labelLine: {
+                     show: showLabels && config.labeLine,
