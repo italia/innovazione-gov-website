@@ -2,6 +2,7 @@
 import { CarouselObjectives } from "@components/organisms/CarouselObjectives";
 import type { HomepageModelContentFragmentType } from "@graphql/fragment/homepage";
 import type { PageContentFragmentType } from "@graphql/fragment/page";
+import { linkResolver } from "@utils/linkResolver";
 
 type CarouselBlock = Extract<
   PageContentFragmentType | HomepageModelContentFragmentType,
@@ -13,6 +14,7 @@ type Props = {
 };
 
 const { block } = Astro.props;
+const { lang } = Astro.locals;
 
 // Nel CMS le etichette (es. "I VANTAGGI") sono separate dal testo con lunghe
 // sequenze di spazi/tab/nbsp, che vengono preservate e creano righe vuote: le
@@ -23,6 +25,7 @@ const normalizeBody = (html: string | null | undefined) =>
 
 const slides = block.slides.map((slide) => ({
   title: slide.title,
+  href: slide.link?.id ? linkResolver(slide.link.id, lang) : null,
   body: normalizeBody(slide.body),
   image: slide.image,
 }));

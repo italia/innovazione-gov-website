@@ -1,5 +1,6 @@
 export type CarouselObjectivesSlideData = {
   title?: string | null;
+  href?: string | null;
   body?: string | null;
   image?: {
     url: string;

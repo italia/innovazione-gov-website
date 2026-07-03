@@ -115,6 +115,18 @@
     @media (min-width: 992px) {
       padding: 2.5rem 2rem 2.5rem 2.5rem;
     }
+
+    // Se la slide ha un link, il titolo diventa cliccabile ma mantiene
+    // l'aspetto del titolo (colore e sottolineatura dell'h3).
+    h3 a {
+      color: inherit;
+      text-decoration: inherit;
+
+      &:hover,
+      &:focus {
+        color: $primary-dark;
+      }
+    }
   }
 
   &__title {
@@ -169,13 +181,12 @@
 
     img {
       max-width: 100%;
-      max-height: 200px;
       width: auto;
       height: auto;
       object-fit: contain;
       object-position: center;
 
-      @media (min-width: 992px) {
+      @media (max-width: 768px) {
         max-height: 300px;
       }
     }
@@ -184,6 +195,17 @@
   // Mobile: la slide è alta quanto il contenuto (niente altezze fisse/stretch
   // che generano lo spazio bianco tra testo e immagine).
   @media (max-width: 991.98px) {
+    // Da tablet in giù: niente frecce (restano solo i bullet) e la slide
+    // occupa tutta la larghezza (rimuoviamo i gutter laterali per le frecce).
+    &__splide {
+      padding-left: 0;
+      padding-right: 0;
+
+      .splide__arrow {
+        display: none;
+      }
+    }
+
     .splide__list {
       align-items: flex-start;
     }

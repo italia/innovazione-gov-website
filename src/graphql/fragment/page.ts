@@ -87,6 +87,14 @@ export const PageContentFragment = graphql(
           image {
             ...ImageFragment
           }
+          link {
+            ... on CatalogueRecord {
+              id
+            }
+            ... on PageRecord {
+              id
+            }
+          }
         }
       }
     }
