@@ -71,6 +71,33 @@
     white-space: nowrap;
     margin: 0;
     pointer-events: none;
+    text-align: center;
+
+    // La label arriva come markdown renderizzato (es. "2026" + "# Oltre"):
+    // paragrafi e heading impilati senza margini, heading più grande.
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin: 0;
+      line-height: 1;
+      color: inherit;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-size: 9cqmin;
+      font-weight: 700;
+      // avvicina la riga grande a quella sopra
+      margin-top: -1cqmin;
+    }
   }
 
   &__percentage {

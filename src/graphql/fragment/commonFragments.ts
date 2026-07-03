@@ -534,21 +534,14 @@ export const MenuItemFragment = graphql(`
       ... on PageRecord {
         id
       }
+      ... on HomepageRecord {
+        id
+      }
     }
   }
 `);
 
 export type MenuItemFragmentType = FragmentOf<typeof MenuItemFragment>;
-
-export const AnchorLinkFragment = graphql(`
-  fragment AnchorLinkFragment on AnchorLinkRecord @_unmask {
-    id
-    label
-    anchor
-  }
-`);
-
-export type AnchorLinkFragmentType = FragmentOf<typeof AnchorLinkFragment>;
 
 export const MegaMenuItemFragment = graphql(
   `
@@ -689,7 +682,6 @@ export const ListCardEditorialWithIconWrapperFragment = graphql(
       title
       paragraph(markdown: true)
       backgroundColor
-      anchorId
       items {
         ...CardEditorialWithIconFragment
       }

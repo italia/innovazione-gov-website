@@ -57,92 +57,71 @@ const { content, isFontSerif = false } = Astro.props;
 
 {
   content.map((block) => {
-    const anchorId =
-      "anchorId" in block && block.anchorId ? block.anchorId : undefined;
-    const rendered = (() => {
-      switch (block.componentName) {
-        case DatoBlockModel.GraphitaliaDashboard:
-          return <GraphitaliaDashboardAdapter block={block} />;
-        case DatoBlockModel.Hero:
-          return <HeroAdapter block={block} />;
-        case DatoBlockModel.NewsFeed:
-          return <NewsFeedAdapter block={block} />;
-        case DatoBlockModel.SupportChannels:
-          return <SupportChannelsSectionAdapter block={block} />;
-        case DatoBlockModel.FaqSection:
-          return <FAQSectionAdapter block={block} />;
-        case DatoBlockModel.DataSection:
-          return <DataSectionAdapter block={block} />;
-        case DatoBlockModel.UseCaseContainer:
-          return <UseCaseContainerAdapter block={block} />;
-        case DatoBlockModel.TopicFilter:
-          return <TopicFilterAdapter block={block} />;
-        case DatoBlockModel.ThirdPartyCookie:
-          return <ThirdPartyCookieAdapter block={block} />;
-        case DatoBlockModel.SupportCta:
-          return <SupportCTASectionAdapter block={block} size="default" />;
-        case DatoBlockModel.StructuredText:
-          return (
-            <StructuredTextBlockAdapter
-              block={block}
-              isFontSerif={isFontSerif}
-            />
-          );
-        case DatoBlockModel.ListCollection:
-          return <ListCollectionAdapter block={block} />;
-        case DatoBlockModel.CatalogueFeed:
-          return <CatalogueFeedAdapter block={block} />;
-        case DatoBlockModel.ActionCard:
-          return <ActionCardSectionAdapter block={block} />;
-        case DatoBlockModel.SearchBar:
-          return <SearchBarAdapter block={block} />;
-        case DatoBlockModel.TextImage:
-          return <TextAndImageAdapter block={block} />;
-        case DatoBlockModel.TextStatistic:
-          return <TextAndStatisticsAdapter block={block} />;
-        case DatoBlockModel.TextUseCase:
-          return <TextAndUseCasesAdapter block={block} />;
-        case DatoBlockModel.TextAccordion:
-          return <TextAndAccordionAdapter block={block} />;
-        case DatoBlockModel.WebinarDescription:
-          return <WebinarDescriptionAdapter block={block} />;
-        case DatoBlockModel.Speaker:
-          return <SpeakerAdapter block={block} />;
-        case DatoBlockModel.IntroArticle:
-          return <IntroArticleAdapter block={block} />;
-        case DatoBlockModel.CalloutLink:
-          return <CalloutLinkAdapter block={block} />;
-        case DatoBlockModel.TextOnly:
-          return <TextOnlyAdapter block={block} />;
-        case DatoBlockModel.CardLinkList:
-          return <CardLinkListAdapter block={block} />;
-        case DatoBlockModel.Carousel:
-          return <CarouselAdapter block={block} />;
-        case DatoBlockModel.TextDonut:
-          return <TextDonutAdapter block={block} />;
-        case DatoBlockModel.SettingsChart:
-          return <SettingsChartAdapter block={block} />;
-        case DatoBlockModel.ListCardEditorialWithIconWrapper:
-          return <ListCardEditorialWithIconWrapperAdapter block={block} />;
-        case DatoBlockModel.SettingsKpi:
-          return <SettingsKpiAdapter block={block} />;
-        default:
-          return null;
-      }
-    })();
-    return anchorId ? (
-      <div id={anchorId} class="anchor-section">
-        {rendered}
-      </div>
-    ) : (
-      rendered
-    );
+    switch (block.componentName) {
+      case DatoBlockModel.GraphitaliaDashboard:
+        return <GraphitaliaDashboardAdapter block={block} />;
+      case DatoBlockModel.Hero:
+        return <HeroAdapter block={block} />;
+      case DatoBlockModel.NewsFeed:
+        return <NewsFeedAdapter block={block} />;
+      case DatoBlockModel.SupportChannels:
+        return <SupportChannelsSectionAdapter block={block} />;
+      case DatoBlockModel.FaqSection:
+        return <FAQSectionAdapter block={block} />;
+      case DatoBlockModel.DataSection:
+        return <DataSectionAdapter block={block} />;
+      case DatoBlockModel.UseCaseContainer:
+        return <UseCaseContainerAdapter block={block} />;
+      case DatoBlockModel.TopicFilter:
+        return <TopicFilterAdapter block={block} />;
+      case DatoBlockModel.ThirdPartyCookie:
+        return <ThirdPartyCookieAdapter block={block} />;
+      case DatoBlockModel.SupportCta:
+        return <SupportCTASectionAdapter block={block} size="default" />;
+      case DatoBlockModel.StructuredText:
+        return (
+          <StructuredTextBlockAdapter block={block} isFontSerif={isFontSerif} />
+        );
+      case DatoBlockModel.ListCollection:
+        return <ListCollectionAdapter block={block} />;
+      case DatoBlockModel.CatalogueFeed:
+        return <CatalogueFeedAdapter block={block} />;
+      case DatoBlockModel.ActionCard:
+        return <ActionCardSectionAdapter block={block} />;
+      case DatoBlockModel.SearchBar:
+        return <SearchBarAdapter block={block} />;
+      case DatoBlockModel.TextImage:
+        return <TextAndImageAdapter block={block} />;
+      case DatoBlockModel.TextStatistic:
+        return <TextAndStatisticsAdapter block={block} />;
+      case DatoBlockModel.TextUseCase:
+        return <TextAndUseCasesAdapter block={block} />;
+      case DatoBlockModel.TextAccordion:
+        return <TextAndAccordionAdapter block={block} />;
+      case DatoBlockModel.WebinarDescription:
+        return <WebinarDescriptionAdapter block={block} />;
+      case DatoBlockModel.Speaker:
+        return <SpeakerAdapter block={block} />;
+      case DatoBlockModel.IntroArticle:
+        return <IntroArticleAdapter block={block} />;
+      case DatoBlockModel.CalloutLink:
+        return <CalloutLinkAdapter block={block} />;
+      case DatoBlockModel.TextOnly:
+        return <TextOnlyAdapter block={block} />;
+      case DatoBlockModel.CardLinkList:
+        return <CardLinkListAdapter block={block} />;
+      case DatoBlockModel.Carousel:
+        return <CarouselAdapter block={block} />;
+      case DatoBlockModel.TextDonut:
+        return <TextDonutAdapter block={block} />;
+      case DatoBlockModel.SettingsChart:
+        return <SettingsChartAdapter block={block} />;
+      case DatoBlockModel.ListCardEditorialWithIconWrapper:
+        return <ListCardEditorialWithIconWrapperAdapter block={block} />;
+      case DatoBlockModel.SettingsKpi:
+        return <SettingsKpiAdapter block={block} />;
+      default:
+        return null;
+    }
   })
 }
-
-<style>
-  .anchor-section {
-    /* compensa l'header sticky quando si salta all'ancora */
-    scroll-margin-top: 120px;
-  }
-</style>

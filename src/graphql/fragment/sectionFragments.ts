@@ -531,7 +531,6 @@ export const TextAndImageFragment = graphql(
       additionalContent {
         ...AdditionalContentFragment
       }
-      anchorId
     }
   `,
   [TextBlockFragment, ImageFragment, AdditionalContentFragment],
@@ -567,7 +566,7 @@ export const TextDonutFragment = graphql(
       heading
       percentage
       description
-      label
+      label(markdown: true)
       text {
         ...TextBlockFragment
       }
@@ -656,7 +655,6 @@ export const TextOnlyFragment = graphql(
         ...TextBlockFragment
       }
       backgroundColor
-      anchorId
     }
   `,
   [TextBlockFragment],

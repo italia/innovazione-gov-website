@@ -22,7 +22,7 @@ const {
   allSecondaryNavigation,
   locales,
   homeRecordId,
-  _allOrganizationsLocales,
+  logoSelect,
   _allUtilityLocales,
   search,
   allMetaNavigation,
@@ -35,7 +35,12 @@ const currentSite = Astro.url.origin;
 
 const tagline = getLocaleValue(_allTaglineLocales, lang, "") ?? "";
 const organizations = getLocaleValue(_allListNavbarBrandLocales, lang, []);
-const logo = getLocaleValue(_allOrganizationsLocales, lang, [])[0]?.logo;
+
+// Il logo dell'header viene dal campo dedicato `logo_select` (visual select,
+// contiene direttamente l'URL dell'asset); `organizations` resta al footer.
+const logo = logoSelect
+  ? { url: logoSelect, width: null, height: null }
+  : undefined;
 
 const social: SocialLink[] = getLocaleValue(_allUtilityLocales, lang, [])
   .filter((util) => util.componentName === DatoBlockModel.SupportingBrand)
@@ -55,7 +60,6 @@ const menuItems = createMenu(
   secondaryNavigation,
   currentUrl,
   lang,
-  homeRecordId,
 );
 const metaMenuItems = createMetaMenu(metaNavigation, currentSite);
 ---

@@ -1,5 +1,4 @@
 import {
-  AnchorLinkFragment,
   BrandFragment,
   ExternalLinkFragment,
   InternalLinkFragment,
@@ -25,9 +24,6 @@ export const HeaderFragment = graphql(
           ... on MegaMenuItemRecord {
             ...MegaMenuItemFragment
           }
-          ... on AnchorLinkRecord {
-            ...AnchorLinkFragment
-          }
         }
       }
       allSecondaryNavigation: _allNavigationBarSecondaryLocales {
@@ -52,12 +48,7 @@ export const HeaderFragment = graphql(
           }
         }
       }
-      _allOrganizationsLocales {
-        locale
-        value {
-          ...BrandFragment
-        }
-      }
+      logoSelect
       _allUtilityLocales {
         locale
         value {
@@ -87,10 +78,8 @@ export const HeaderFragment = graphql(
   `,
   [
     MenuItemFragment,
-    AnchorLinkFragment,
     ExternalLinkFragment,
     MegaMenuItemFragment,
-    BrandFragment,
     SupportingBrandFragment,
   ],
 );

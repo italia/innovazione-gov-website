@@ -924,6 +924,8 @@ type CarouselRecord implements RecordInterface {
   slides: [CarouselSlideRecord!]!
 }
 
+union CarouselSlideModelLinkField = CatalogueRecord | PageRecord
+
 """Block of type Carousel Slide (carousel_slide)"""
 type CarouselSlideRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -950,6 +952,7 @@ type CarouselSlideRecord implements RecordInterface {
   ): String
   id: ItemId!
   image: FileField!
+  link: CarouselSlideModelLinkField
   title: String!
 }
 
@@ -4790,7 +4793,7 @@ type KpiElementRecord implements RecordInterface {
   valueSuffix: String
 }
 
-union LayoutModelNavigationBarField = AnchorLinkRecord | MegaMenuItemRecord | MenuItemRecord
+union LayoutModelNavigationBarField = MegaMenuItemRecord | MenuItemRecord
 
 type LayoutModelNavigationBarFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
@@ -5198,7 +5201,6 @@ type ListCardEditorialWithIconWrapperRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
-  anchorId: String
   backgroundColor: String
   id: ItemId!
   items: [CardEditorialWithIconRecord!]!
@@ -5787,7 +5789,7 @@ type MenuArticleItemRecord implements RecordInterface {
   pointsTo: ArticleRecord!
 }
 
-union MenuItemModelPointsToField = CatalogueRecord | PageRecord
+union MenuItemModelPointsToField = CatalogueRecord | HomepageRecord | PageRecord
 
 """Block of type Menu item (menu_item)"""
 type MenuItemRecord implements RecordInterface {
@@ -9047,7 +9049,10 @@ type TextDonutRecord implements RecordInterface {
   description: String
   heading: String
   id: ItemId!
-  label: String
+  label(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
   percentage: IntType!
   text: TextBlockRecord!
 }
@@ -9097,7 +9102,6 @@ type TextImageRecord implements RecordInterface {
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
   additionalContent: AdditionalContentRecord
-  anchorId: String
   backgroundColor: String!
   heading: String
   id: ItemId!
@@ -9126,7 +9130,6 @@ type TextOnlyRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
-  anchorId: String
   backgroundColor: String!
   heading: String
   id: ItemId!

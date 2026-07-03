@@ -1,6 +1,7 @@
 ---
 import { getI18n } from "@i18n/microcopy";
-import LanguageSelector from "./LanguageSelector.astro";
+// Selettore lingua nascosto temporaneamente (vedi it-header-slim-right-zone)
+// import LanguageSelector from "./LanguageSelector.astro";
 import type { HeaderSlimProps } from "./types";
 
 type Props = HeaderSlimProps;
@@ -93,7 +94,8 @@ const classVariant = variant === "light" ? "theme-light" : "";
             )
           }
           <div class="it-header-slim-right-zone">
-            <LanguageSelector locales={locales} />
+            <!-- Selettore lingua nascosto temporaneamente -->
+            <!-- <LanguageSelector locales={locales} /> -->
           </div>
         </div>
       </div>

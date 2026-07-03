@@ -3,7 +3,6 @@ import type {
   MenuItemProps,
 } from "@components/organisms/Header/types";
 import type {
-  AnchorLinkFragmentType,
   ExternalLinkFragmentType,
   MegaMenuItemFragmentType,
   MenuItemFragmentType,
@@ -22,10 +21,14 @@ function menuItemAdapter(
   const normalizedCurrent = currentPath.replace(/\/$/, "") || "/";
   const normalizedMenu = finalHref.replace(/\/$/, "") || "/";
 
-  const isActive =
-    normalizedMenu === "/"
-      ? normalizedCurrent === "/"
-      : normalizedCurrent.startsWith(normalizedMenu);
+  // La home ("/" o la root di lingua, es. "/it") è attiva solo con match
+  // esatto, altrimenti resterebbe attiva su ogni pagina del sito.
+  const isRoot = normalizedMenu === "/" || normalizedMenu === `/${locale}`;
+
+  const isActive = isRoot
+    ? normalizedCurrent === normalizedMenu
+    : normalizedCurrent === normalizedMenu ||
+      normalizedCurrent.startsWith(`${normalizedMenu}/`);
 
   const result: MenuItemProps = {
     id: item.id,
@@ -89,54 +92,15 @@ function secondaryItemAdapter(
   return menuItemAdapter(item, currentPath, locale);
 }
 
-type MainItem =
-  | MegaMenuItemFragmentType
-  | MenuItemFragmentType
-  | AnchorLinkFragmentType;
-
-// Gli AnchorLinkRecord hanno `anchor`; Menu/MegaMenu hanno `pointsTo`.
-function isAnchorLink(item: MainItem): item is AnchorLinkFragmentType {
-  return "anchor" in item;
-}
-
-// Ancora verso una sezione della homepage: es. `/it#misure`.
-function anchorLinkAdapter(
-  item: AnchorLinkFragmentType,
-  homePath: string,
-): MenuItemProps {
-  const anchor = item.anchor ?? "";
-  const base = homePath && homePath !== "#" ? homePath : "/";
-  return {
-    id: item.id,
-    title: item.label ?? "",
-    url: anchor ? `${base}#${anchor}` : base,
-    active: false,
-  };
-}
-
-function mainItemAdapter(
-  item: MainItem,
-  currentPath: string,
-  locale: SiteLocale,
-  homePath: string,
-): MenuItemProps {
-  if (isAnchorLink(item)) {
-    return anchorLinkAdapter(item, homePath);
-  }
-  return menuItemAdapter(item, currentPath, locale);
-}
-
 export function createMenu(
-  mainItems: MainItem[] = [],
+  mainItems: (MegaMenuItemFragmentType | MenuItemFragmentType)[] = [],
   secondaryItems: SecondaryItem[] = [],
   currentPathname: string,
   currentLocale: SiteLocale,
-  homeRecordId?: string,
 ): HeaderNavbarProps {
-  const homePath = linkResolver(homeRecordId, currentLocale);
   return {
     left: mainItems.map((item) =>
-      mainItemAdapter(item, currentPathname, currentLocale, homePath),
+      menuItemAdapter(item, currentPathname, currentLocale),
     ),
     right: secondaryItems.map((item) =>
       secondaryItemAdapter(item, currentPathname, currentLocale),

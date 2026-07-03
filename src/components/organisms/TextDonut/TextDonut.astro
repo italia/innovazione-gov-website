@@ -55,7 +55,7 @@ const circumference = 2 * Math.PI * radius;
           stroke-dashoffset={circumference}></circle>
       </svg>
 
-      {label && <p class="text-donut__label">{label}</p>}
+      {label && <div class="text-donut__label" set:html={label} />}
       <div class="text-donut__center">
         <span class="text-donut__percentage" data-counter>0%</span>
         {description && <p class="text-donut__description">{description}</p>}
