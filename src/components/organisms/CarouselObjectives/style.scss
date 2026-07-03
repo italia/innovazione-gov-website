@@ -110,7 +110,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
 
     @media (min-width: 992px) {
       padding: 2.5rem 2rem 2.5rem 2.5rem;
@@ -178,6 +178,35 @@
       @media (min-width: 992px) {
         max-height: 300px;
       }
+    }
+  }
+
+  // Mobile: la slide è alta quanto il contenuto (niente altezze fisse/stretch
+  // che generano lo spazio bianco tra testo e immagine).
+  @media (max-width: 991.98px) {
+    .splide__list {
+      align-items: flex-start;
+    }
+
+    .it-single-slide-wrapper,
+    .row {
+      height: auto !important;
+    }
+
+    &__slide-inner {
+      min-height: 0;
+      height: auto;
+    }
+
+    &__content {
+      height: auto;
+      padding-bottom: 1rem;
+    }
+
+    &__image {
+      height: auto;
+      min-height: 0;
+      padding-top: 0;
     }
   }
 }

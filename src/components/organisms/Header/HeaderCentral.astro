@@ -1,7 +1,5 @@
 ---
-import { Icon } from "@components/atoms/Icon";
 import { getI18n } from "@i18n/microcopy";
-import ItSearch from "@static/assets/ItSearch.astro";
 import HeaderNavbar from "./HeaderNavbar.astro";
 import type { HeaderCentralProps } from "./types";
 
@@ -57,7 +55,7 @@ const classVariantNav = variant === "light" ? "theme-light-desk" : "";
                 </div>
               </a>
             </div>
-            {
+            <!-- {
               (social.length > 0 || search?.isEnabled) && (
                 <div class="it-right-zone">
                   {social.length > 0 && (
@@ -97,7 +95,7 @@ const classVariantNav = variant === "light" ? "theme-light-desk" : "";
                   )}
                 </div>
               )
-            }
+            } -->
           </div>
         </div>
       </div>

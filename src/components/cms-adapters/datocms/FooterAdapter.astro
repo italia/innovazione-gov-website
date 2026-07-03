@@ -29,7 +29,7 @@ const {
 const { lang } = Astro.locals;
 const heading = getLocaleValue(_allHeadingLocales, lang, "");
 const organizations = getLocaleValue(_allOrganizationsLocales, lang, null);
-const topicTitle = getLocaleValue(_allTopicTitleLocales, lang, "");
+const topicTitle = getLocaleValue(_allTopicTitleLocales, lang, "") ?? "";
 const topicLink = getLocaleValue(_allTopicLinkLocales, lang, null);
 const utilityTitle = getLocaleValue(_allUtilityTitleLocales, lang, "");
 const utility = getLocaleValue(_allUtilityLocales, lang, null);

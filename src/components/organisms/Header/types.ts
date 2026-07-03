@@ -43,6 +43,7 @@ export type MenuItemProps = {
   caption?: string;
   subtitle?: string;
   subMenuItems?: MenuItemProps[];
+  isExternal?: boolean;
 };
 
 export type HeaderNavbarProps = {

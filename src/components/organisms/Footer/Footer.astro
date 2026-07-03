@@ -1,4 +1,5 @@
 ---
+import FooterBrand from "./FooterBrand.astro";
 import FooterMain from "./FooterMain.astro";
 import FooterSmallPrints from "./FooterSmallPrints.astro";
 import type { FooterProps } from "./types";
@@ -9,7 +10,7 @@ const { brand, utilities, topics, smallPrints, mailingListForm } = Astro.props;
 ---
 
 <footer class="it-footer">
-  <!-- <FooterBrand {...brand} /> -->
+  <FooterBrand {...brand} />
   <FooterMain
     topics={topics}
     utilities={utilities}

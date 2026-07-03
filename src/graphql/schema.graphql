@@ -160,6 +160,31 @@ type AdditionalContentRecord implements RecordInterface {
   title: String
 }
 
+"""Block of type Link ancora (anchor_link)"""
+type AnchorLinkRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  anchor: String
+  id: ItemId!
+  label: String
+}
+
 """Block of type Article list (article_list)"""
 type ArticleListRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -4765,14 +4790,14 @@ type KpiElementRecord implements RecordInterface {
   valueSuffix: String
 }
 
-union LayoutModelNavigationBarField = MegaMenuItemRecord | MenuItemRecord
+union LayoutModelNavigationBarField = AnchorLinkRecord | MegaMenuItemRecord | MenuItemRecord
 
 type LayoutModelNavigationBarFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
   value: [LayoutModelNavigationBarField!]!
 }
 
-union LayoutModelNavigationBarSecondaryField = MegaMenuItemRecord | MenuItemRecord
+union LayoutModelNavigationBarSecondaryField = ExternalLinkRecord | MegaMenuItemRecord | MenuItemRecord
 
 type LayoutModelNavigationBarSecondaryFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
@@ -4863,7 +4888,7 @@ type LayoutRecord implements RecordInterface {
     If you want to fallback to a default translation when a translation has not been found
     """
     fallbackLocales: [SiteLocale!]
-  ): [StringNonNullMultiLocaleField!]
+  ): [StringMultiLocaleField!]
   _allUtilityLocales(
     """
     If you want to fallback to a default translation when a translation has not been found
@@ -5000,7 +5025,7 @@ type LayoutRecord implements RecordInterface {
     If you want to fallback to a default translation when a translation has not been found
     """
     fallbackLocales: [SiteLocale!]
-  ): String!
+  ): String
   utility(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -5173,6 +5198,7 @@ type ListCardEditorialWithIconWrapperRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  anchorId: String
   backgroundColor: String
   id: ItemId!
   items: [CardEditorialWithIconRecord!]!
@@ -9071,6 +9097,7 @@ type TextImageRecord implements RecordInterface {
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
   additionalContent: AdditionalContentRecord
+  anchorId: String
   backgroundColor: String!
   heading: String
   id: ItemId!
@@ -9099,6 +9126,7 @@ type TextOnlyRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  anchorId: String
   backgroundColor: String!
   heading: String
   id: ItemId!

@@ -3,6 +3,7 @@ import type {
   MenuItemProps,
 } from "@components/organisms/Header/types";
 import type {
+  AnchorLinkFragmentType,
   ExternalLinkFragmentType,
   MegaMenuItemFragmentType,
   MenuItemFragmentType,
@@ -67,18 +68,78 @@ function metaMenuItemAdapter(
   };
 }
 
+type SecondaryItem =
+  | MegaMenuItemFragmentType
+  | MenuItemFragmentType
+  | ExternalLinkFragmentType;
+
+// I record interni (Menu/MegaMenu) hanno `pointsTo`; gli ExternalLinkRecord no.
+function isExternalLink(item: SecondaryItem): item is ExternalLinkFragmentType {
+  return !("pointsTo" in item);
+}
+
+function secondaryItemAdapter(
+  item: SecondaryItem,
+  currentPath: string,
+  locale: SiteLocale,
+): MenuItemProps {
+  if (isExternalLink(item)) {
+    return { ...metaMenuItemAdapter(item, currentPath), isExternal: true };
+  }
+  return menuItemAdapter(item, currentPath, locale);
+}
+
+type MainItem =
+  | MegaMenuItemFragmentType
+  | MenuItemFragmentType
+  | AnchorLinkFragmentType;
+
+// Gli AnchorLinkRecord hanno `anchor`; Menu/MegaMenu hanno `pointsTo`.
+function isAnchorLink(item: MainItem): item is AnchorLinkFragmentType {
+  return "anchor" in item;
+}
+
+// Ancora verso una sezione della homepage: es. `/it#misure`.
+function anchorLinkAdapter(
+  item: AnchorLinkFragmentType,
+  homePath: string,
+): MenuItemProps {
+  const anchor = item.anchor ?? "";
+  const base = homePath && homePath !== "#" ? homePath : "/";
+  return {
+    id: item.id,
+    title: item.label ?? "",
+    url: anchor ? `${base}#${anchor}` : base,
+    active: false,
+  };
+}
+
+function mainItemAdapter(
+  item: MainItem,
+  currentPath: string,
+  locale: SiteLocale,
+  homePath: string,
+): MenuItemProps {
+  if (isAnchorLink(item)) {
+    return anchorLinkAdapter(item, homePath);
+  }
+  return menuItemAdapter(item, currentPath, locale);
+}
+
 export function createMenu(
-  mainItems: (MegaMenuItemFragmentType | MenuItemFragmentType)[] = [],
-  secondaryItems: (MegaMenuItemFragmentType | MenuItemFragmentType)[] = [],
+  mainItems: MainItem[] = [],
+  secondaryItems: SecondaryItem[] = [],
   currentPathname: string,
   currentLocale: SiteLocale,
+  homeRecordId?: string,
 ): HeaderNavbarProps {
+  const homePath = linkResolver(homeRecordId, currentLocale);
   return {
     left: mainItems.map((item) =>
-      menuItemAdapter(item, currentPathname, currentLocale),
+      mainItemAdapter(item, currentPathname, currentLocale, homePath),
     ),
     right: secondaryItems.map((item) =>
-      menuItemAdapter(item, currentPathname, currentLocale),
+      secondaryItemAdapter(item, currentPathname, currentLocale),
     ),
   };
 }

@@ -24,7 +24,7 @@ const targetHeight = Math.round(targetWidth * aspect);
     url={logo.url}
     width={targetWidth}
     height={targetHeight}
-    alt={`${logo.alt} - ${t["link.external"]}`}
+    alt={logo.alt ? `${logo.alt} - ${t["link.external"]}` : t["link.external"]}
     loading="lazy"
   />
 </a>

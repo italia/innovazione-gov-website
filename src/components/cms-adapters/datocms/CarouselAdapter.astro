@@ -14,9 +14,16 @@ type Props = {
 
 const { block } = Astro.props;
 
+// Nel CMS le etichette (es. "I VANTAGGI") sono separate dal testo con lunghe
+// sequenze di spazi/tab/nbsp, che vengono preservate e creano righe vuote: le
+// normalizziamo in un singolo a-capo così l'etichetta resta su riga propria e
+// il testo segue subito sotto, senza vuoti.
+const normalizeBody = (html: string | null | undefined) =>
+  (html ?? "").replace(/[ \t\u00a0]{2,}/g, "<br>");
+
 const slides = block.slides.map((slide) => ({
   title: slide.title,
-  body: slide.body,
+  body: normalizeBody(slide.body),
   image: slide.image,
 }));
 ---

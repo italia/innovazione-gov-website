@@ -13,6 +13,7 @@ const {
   subtitle,
   image,
   caption,
+  isExternal = false,
 } = Astro.props;
 
 const midIndex = 3;
@@ -112,9 +113,31 @@ const ariaCurrent = active ? "page" : undefined;
     </li>
   ) : (
     <li class={`nav-item ${active ? "active" : ""}`} id={id}>
-      <a class={`nav-link ${active ? "active" : ""}`} href={url}>
-        {title}
+      <a
+        class={`nav-link ${active ? "active" : ""}`}
+        href={url}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+      >
+        <span>{title}</span>
+        {isExternal && (
+          <svg
+            role="img"
+            class="icon icon-white ms-2 nav-external-icon"
+            aria-hidden="true"
+          >
+            <use href="/bsi-svg/sprites.svg#it-external-link" />
+          </svg>
+        )}
       </a>
     </li>
   )
 }
+
+<style>
+  /* icona link esterno nella secondary nav: poco più grande di icon-xs */
+  .nav-external-icon {
+    width: 20px;
+    height: 20px;
+  }
+</style>

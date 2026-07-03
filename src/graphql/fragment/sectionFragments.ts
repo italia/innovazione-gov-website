@@ -531,6 +531,7 @@ export const TextAndImageFragment = graphql(
       additionalContent {
         ...AdditionalContentFragment
       }
+      anchorId
     }
   `,
   [TextBlockFragment, ImageFragment, AdditionalContentFragment],
@@ -655,6 +656,7 @@ export const TextOnlyFragment = graphql(
         ...TextBlockFragment
       }
       backgroundColor
+      anchorId
     }
   `,
   [TextBlockFragment],

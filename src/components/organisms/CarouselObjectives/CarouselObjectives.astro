@@ -42,6 +42,14 @@ const { slides } = Astro.props;
         gap: 0,
         autoplay: false,
         speed: 400,
+        // su mobile la track si adatta all'altezza della slide attiva
+        // (niente slide tutte alte quanto la più alta → niente spazio bianco)
+        mediaQuery: "max",
+        breakpoints: {
+          991: {
+            autoHeight: true,
+          },
+        },
         i18n: {
           prev: "Slide precedente",
           next: "Slide successiva",
