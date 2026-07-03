@@ -17,7 +17,7 @@ export const Kpi = ({ data }: KpiProps) => {
       <div className="row">
         {data.selectKpi?.map((item, index) => {
           return (
-            <div key={index} className="col">
+            <div key={index} className="col-lg-4 mb-3 mb-lg-0">
               {/* poweredByLabel="" nasconde il footer "Generato con Graph Italia" */}
               <KpiItem data={item as KpiItemType} poweredByLabel="" />
             </div>
