@@ -18,6 +18,8 @@ const Chart = ({ data }: ChartProps) => {
     title: data.title ?? undefined,
     subTitle: data.subtitle ?? undefined,
     chartFooterText: data.footerText ?? undefined,
+    // stringa vuota = nasconde "Generato con Graph Italia" (tab Tabella dati)
+    poweredByLabel: "",
   };
 
   const extra = {

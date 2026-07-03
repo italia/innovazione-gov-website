@@ -18,7 +18,8 @@ export const Kpi = ({ data }: KpiProps) => {
         {data.selectKpi?.map((item, index) => {
           return (
             <div key={index} className="col">
-              <KpiItem data={item as KpiItemType} />
+              {/* poweredByLabel="" nasconde il footer "Generato con Graph Italia" */}
+              <KpiItem data={item as KpiItemType} poweredByLabel="" />
             </div>
           );
         })}
