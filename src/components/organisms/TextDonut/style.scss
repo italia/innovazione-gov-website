@@ -14,7 +14,11 @@
     max-width: 320px;
     height: auto;
     aspect-ratio: 1;
-    container-type: size;
+    // Dimensione reale (lato) del donut in px, impostata via JS.
+    // Sostituisce le unità cqmin (non riconosciute dai validatori W3/CSS)
+    // mantenendo lo stesso scaling proporzionale: Ncqmin === var(--donut-size) * N / 100.
+    // Il fallback (= max-width) copre il caso in cui il JS non sia ancora eseguito.
+    --donut-size: 320px;
   }
 
   @media (min-width: 992px) {
@@ -54,18 +58,18 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1cqmin;
-    padding: 0 16cqmin;
+    gap: calc(var(--donut-size) * 0.01);
+    padding: 0 calc(var(--donut-size) * 0.16);
     pointer-events: none;
     text-align: center;
   }
 
   &__label {
     position: absolute;
-    top: 20cqmin;
+    top: calc(var(--donut-size) * 0.2);
     left: 50%;
     transform: translateX(-50%);
-    font-size: 5.5cqmin;
+    font-size: calc(var(--donut-size) * 0.055);
     font-weight: 600;
     color: #0066cc;
     white-space: nowrap;
@@ -93,23 +97,23 @@
     h4,
     h5,
     h6 {
-      font-size: 9cqmin;
+      font-size: calc(var(--donut-size) * 0.09);
       font-weight: 700;
       // avvicina la riga grande a quella sopra
-      margin-top: -1cqmin;
+      margin-top: calc(var(--donut-size) * -0.01);
     }
   }
 
   &__percentage {
-    font-size: 16cqmin;
+    font-size: calc(var(--donut-size) * 0.16);
     font-weight: 700;
-    line-height: 1;
+    line-height: 0.85;
     color: #004d99;
-    margin: 0;
+    margin: 25px 0 0;
   }
 
   &__description {
-    font-size: 5.5cqmin;
+    font-size: calc(var(--donut-size) * 0.055);
     color: #004d99;
     margin: 0;
   }
