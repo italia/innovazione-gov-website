@@ -13,7 +13,8 @@ import {
 import { FilterPills } from "@components/react/FilterPills";
 import { Pagination } from "@components/react/Pagination";
 import type { SiteLocale } from "@graphql/types";
-import { useState } from "react";
+import { slugify } from "@utils/slugify";
+import { useEffect, useState } from "react";
 import { Resource, type ResourceProps } from "../Resource";
 import { Select } from "../Select";
 type PaginatedCollectionCommonProps = {
@@ -72,6 +73,16 @@ export function PaginatedCollection({
       ),
     ),
   ];
+
+  // Deep-link del filtro: ?filter=<slug della categoria> (es. arrivando
+  // dalle slide del carosello). Il match è sullo slug della label, così non
+  // serve nessuna mappa manuale slug → categoria.
+  useEffect(() => {
+    const param = new URLSearchParams(window.location.search).get("filter");
+    if (!param) return;
+    const match = categories.find((c) => slugify(c) === param);
+    if (match) setSelectedCategory(match);
+  }, []);
 
   const filteredItems =
     selectedCategory === labelForAll

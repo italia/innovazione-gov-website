@@ -80,6 +80,9 @@ export const HomepageModelContentFragment = graphql(
               id
             }
           }
+          filterCategory {
+            label
+          }
         }
       }
     }

@@ -109,11 +109,11 @@ function getFilteredItems(
       );
 
     case "measures":
-      return sortFeedItems(
-        measures.map((m) => mapMeasureToCardMeasureProps(m.data, lang)),
-        sortMode,
-        lang,
-      );
+      // Le misure sono ordinate per numero totale di obiettivi crescente
+      // (non per obiettivi raggiunti); a parità resta l'ordine del CMS.
+      return measures
+        .map((m) => mapMeasureToCardMeasureProps(m.data, lang))
+        .sort((a, b) => a.totalGoal - b.totalGoal);
     default:
       return [];
   }

@@ -95,6 +95,9 @@ export const PageContentFragment = graphql(
               id
             }
           }
+          filterCategory {
+            label
+          }
         }
       }
     }

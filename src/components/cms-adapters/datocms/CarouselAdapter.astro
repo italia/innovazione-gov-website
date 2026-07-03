@@ -3,6 +3,7 @@ import { CarouselObjectives } from "@components/organisms/CarouselObjectives";
 import type { HomepageModelContentFragmentType } from "@graphql/fragment/homepage";
 import type { PageContentFragmentType } from "@graphql/fragment/page";
 import { linkResolver } from "@utils/linkResolver";
+import { slugify } from "@utils/slugify";
 
 type CarouselBlock = Extract<
   PageContentFragmentType | HomepageModelContentFragmentType,
@@ -23,9 +24,20 @@ const { lang } = Astro.locals;
 const normalizeBody = (html: string | null | undefined) =>
   (html ?? "").replace(/[ \t\u00a0]{2,}/g, "<br>");
 
+// Compone il link della slide; se c'è una filterCategory viene appesa come
+// ?filter=<slug label> (letta da PaginatedCollection all'atterraggio).
+// Senza link, filterCategory viene ignorata: nessun href.
+const slideHref = (slide: CarouselBlock["slides"][number]) => {
+  if (!slide.link?.id) return null;
+  const path = linkResolver(slide.link.id, lang);
+  if (path === "#") return null;
+  const label = slide.filterCategory?.label;
+  return label ? `${path}?filter=${slugify(label)}` : path;
+};
+
 const slides = block.slides.map((slide) => ({
   title: slide.title,
-  href: slide.link?.id ? linkResolver(slide.link.id, lang) : null,
+  href: slideHref(slide),
   body: normalizeBody(slide.body),
   image: slide.image,
 }));
