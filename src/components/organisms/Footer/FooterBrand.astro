@@ -11,9 +11,7 @@ const { heading, logos } = Astro.props;
   <div class="container">
     <div class="row">
       <div class="col-12 text-center text-md-start">
-        <div class="small mb-4">
-          <p set:html={heading} />
-        </div>
+        <div class="small mb-4" set:html={heading} />
       </div>
     </div>
     <div class="row">

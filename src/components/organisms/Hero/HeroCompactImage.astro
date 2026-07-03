@@ -1,6 +1,7 @@
 ---
 import { ButtonLink } from "@components/atoms/Button";
 import { Image } from "@components/atoms/Image";
+import { slugify } from "@utils/slugify";
 import type { HeroProps } from "./types";
 type Props = HeroProps;
 
@@ -20,13 +21,16 @@ const {
 <style>
   @import "./style.scss";
 </style>
-<section class=`it-hero-wrapper xsmall-size ${bgClass}` aria-labelledby={title}>
+<section
+  class=`it-hero-wrapper xsmall-size ${bgClass}`
+  aria-labelledby={slugify(title)}
+>
   <div class="container">
     <div class="row align-items-center">
       <div class="col-12 col-lg-8">
         <div class="it-hero-text-wrapper px-0">
           {showBreadcrumb && <slot name="breadcrumb" />}
-          <h1 id={title}>{title}</h1>
+          <h1 id={slugify(title)}>{title}</h1>
           {paragraph && <p class="font-sans-serif">{paragraph}</p>}
           {
             labelButton && linkTo && (

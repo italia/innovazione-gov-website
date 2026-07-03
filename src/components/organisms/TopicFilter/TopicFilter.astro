@@ -5,6 +5,9 @@ import { CardEditorialNews } from "@components/molecules/CardEditorialNews";
 import { Carousel, CarouselItem } from "@components/molecules/Carousel";
 import { getI18n } from "@i18n/microcopy";
 import { SelectTopics } from "@components/molecules/SelectTopics";
+// slugify canonico per l'id dell'heading, allineato all'aria-labelledby di
+// SectionContainer. Lo slugify locale sotto resta per i data-topic dei filtri.
+import { slugify as slugifyId } from "@utils/slugify";
 
 type Props = TopicFilterProps;
 
@@ -28,7 +31,7 @@ const t = getI18n(lang);
   >
     <div class=`col-lg-5 col-12`>
       <div class=`text-container mb-4 mb-lg-0`>
-        <h2 class="mb-3" id={title}>
+        <h2 class="mb-3" id={slugifyId(title)}>
           {title}
         </h2>
         <p>{paragraph}</p>

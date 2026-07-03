@@ -1,13 +1,18 @@
 ---
+import { slugify } from "@utils/slugify";
+
 type Props = {
   className?: string;
   sectionTitleId?: string;
 };
 
 const { className, sectionTitleId } = Astro.props;
+// slugify per garantire un id valido (senza spazi/accenti); l'heading interno
+// usa lo stesso slugify sullo stesso titolo, così l'aria-labelledby risolve.
+const labelledById = sectionTitleId ? slugify(sectionTitleId) : undefined;
 ---
 
-<section class={className} aria-labelledby={sectionTitleId}>
+<section class={className} aria-labelledby={labelledById}>
   <div class="container py-5 py-lg-80">
     <slot />
   </div>
