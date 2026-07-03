@@ -69,6 +69,16 @@ const circumference = 2 * Math.PI * radius;
     const pct = parseInt(wrapper.dataset.percentage ?? "0", 10);
     const radius = 40;
     const circumference = 2 * Math.PI * radius;
+
+    // Il testo interno scala con la dimensione reale del donut tramite la
+    // custom property --donut-size (vedi style.scss), che rimpiazza le unità
+    // cqmin. Il wrapper è quadrato, quindi il lato = clientWidth.
+    const syncSize = () =>
+      wrapper.style.setProperty("--donut-size", `${wrapper.clientWidth}px`);
+    syncSize();
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(syncSize).observe(wrapper);
+    }
     const progress = wrapper.querySelector<SVGCircleElement>(
       ".text-donut__progress",
     );
