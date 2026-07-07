@@ -138,3 +138,25 @@ export const mapMeasureToCardMeasureProps = (
     lang: lang,
   };
 };
+
+/**
+ * Estrae le label delle categorie misura (uniche) ordinate secondo la
+ * `position` impostata su DatoCMS col riordino drag & drop del modello
+ * Measure category. Usata per l'ordine di pills/dropdown del filtro.
+ */
+export const getOrderedMeasureCategories = (
+  measures: MeasureFragmentType[],
+  lang: SiteLocale,
+): string[] => {
+  const byLabel = new Map<string, number>();
+  for (const measure of measures) {
+    for (const cat of getLocaleValue(measure.allCategoryLocales, lang, [])) {
+      if (cat.label && !byLabel.has(cat.label)) {
+        byLabel.set(cat.label, cat.position ?? Number.MAX_SAFE_INTEGER);
+      }
+    }
+  }
+  return [...byLabel.entries()]
+    .sort((a, b) => a[1] - b[1])
+    .map(([label]) => label);
+};
