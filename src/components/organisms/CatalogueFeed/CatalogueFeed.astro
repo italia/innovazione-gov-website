@@ -109,11 +109,17 @@ function getFilteredItems(
       );
 
     case "measures":
-      // Le misure sono ordinate per numero totale di obiettivi crescente
-      // (non per obiettivi raggiunti); a parità resta l'ordine del CMS.
+      // Le misure sono ordinate per titolo crescente: fa fede il codice
+      // misura (es. "M1C1 I 1.2"). `numeric: true` confronta le cifre come
+      // numeri, così "1.10" viene dopo "1.2".
       return measures
         .map((m) => mapMeasureToCardMeasureProps(m.data, lang))
-        .sort((a, b) => a.totalGoal - b.totalGoal);
+        .sort((a, b) =>
+          a.title.localeCompare(b.title, lang, {
+            numeric: true,
+            sensitivity: "base",
+          }),
+        );
     default:
       return [];
   }
