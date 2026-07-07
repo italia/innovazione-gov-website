@@ -5504,6 +5504,7 @@ input MeasureCatModelFilter {
   _createdAt: CreatedAtFilter
   id: ItemIdFilter
   _firstPublishedAt: PublishedAtFilter
+  position: PositionFilter
   _publicationScheduledAt: PublishedAtFilter
   _unpublishingScheduledAt: PublishedAtFilter
   _publishedAt: PublishedAtFilter
@@ -5522,6 +5523,8 @@ enum MeasureCatModelOrderBy {
   id_DESC
   _firstPublishedAt_ASC
   _firstPublishedAt_DESC
+  position_ASC
+  position_DESC
   _publicationScheduledAt_ASC
   _publicationScheduledAt_DESC
   _unpublishingScheduledAt_ASC
@@ -5560,6 +5563,7 @@ type MeasureCatRecord implements RecordInterface {
   _updatedAt: DateTime!
   id: ItemId!
   label: String
+  position: IntType
 }
 
 type MeasureCatRecordListListNonNullMultiLocaleField {
@@ -6818,7 +6822,7 @@ type Query {
     """Limit the number of results"""
     first: IntType = 20
     filter: MeasureCatModelFilter
-    orderBy: [MeasureCatModelOrderBy] = [_updatedAt_DESC]
+    orderBy: [MeasureCatModelOrderBy] = [position_ASC]
   ): [MeasureCatRecord!]!
 
   """Returns a collection of records"""
@@ -7273,7 +7277,7 @@ type Query {
     """
     fallbackLocales: [SiteLocale!]
     filter: MeasureCatModelFilter
-    orderBy: [MeasureCatModelOrderBy] = [_updatedAt_DESC]
+    orderBy: [MeasureCatModelOrderBy] = [position_ASC]
   ): MeasureCatRecord
 
   """Returns a specific record"""

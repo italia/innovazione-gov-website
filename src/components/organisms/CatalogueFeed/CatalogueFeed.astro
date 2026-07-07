@@ -13,6 +13,7 @@ import {
 } from "@lib/dataFetcher";
 import { isDraftModeEnabled } from "@lib/draftMode";
 import {
+  getOrderedMeasureCategories,
   mapMeasureToCardMeasureProps,
   mapNewsToCardEditorialNewsProps,
   mapResourceToResourceProps,
@@ -164,6 +165,14 @@ const newsArchiveTab =
               tab.sortMode,
             );
 
+            const categoriesOrder =
+              tabType === "measures"
+                ? getOrderedMeasureCategories(
+                    measures.map((m) => m.data),
+                    lang,
+                  )
+                : undefined;
+
             return (
               <TabContent tab={tabsItems[index]}>
                 <PaginatedCollection
@@ -171,6 +180,7 @@ const newsArchiveTab =
                   {...tab}
                   items={items as any}
                   newsPageTabType={tabType}
+                  categoriesOrder={categoriesOrder}
                   lang={lang}
                 />
               </TabContent>

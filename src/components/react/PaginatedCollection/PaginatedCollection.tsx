@@ -24,6 +24,8 @@ type PaginatedCollectionCommonProps = {
   labelForAll: string;
   lang: SiteLocale;
   filterStyle?: string[];
+  /** Ordine editoriale delle categorie (label); le assenti finiscono in coda. */
+  categoriesOrder?: string[];
   perPage?: number;
 };
 
@@ -58,21 +60,30 @@ export function PaginatedCollection({
   labelForAll,
   newsPageTabType,
   filterStyle,
+  categoriesOrder,
   lang,
 }: PaginatedCollectionProps) {
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(labelForAll);
 
-  const categories: string[] = [
-    labelForAll,
-    ...Array.from(
-      new Set(
-        items
-          .flatMap((item) => item.category)
-          .filter((c): c is string => typeof c === "string"),
-      ),
+  const derivedCategories = Array.from(
+    new Set(
+      items
+        .flatMap((item) => item.category)
+        .filter((c): c is string => typeof c === "string"),
     ),
-  ];
+  );
+
+  // Con un ordine editoriale (position su DatoCMS) le categorie lo seguono;
+  // quelle non previste finiscono in coda mantenendo l'ordine di apparizione.
+  if (categoriesOrder?.length) {
+    const rank = new Map(categoriesOrder.map((label, i) => [label, i]));
+    derivedCategories.sort(
+      (a, b) => (rank.get(a) ?? Infinity) - (rank.get(b) ?? Infinity),
+    );
+  }
+
+  const categories: string[] = [labelForAll, ...derivedCategories];
 
   // Deep-link del filtro: ?filter=<slug della categoria> (es. arrivando
   // dalle slide del carosello). Il match è sullo slug della label, così non

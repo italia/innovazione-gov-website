@@ -18,6 +18,7 @@ export const MeasureFragment = graphql(`
       value {
         id
         label
+        position
       }
     }
     allBeneficiRaggiuntiLocales: _allBeneficiRaggiuntiLocales {
