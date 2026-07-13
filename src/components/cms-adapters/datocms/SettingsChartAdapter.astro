@@ -10,7 +10,7 @@ const { block } = Astro.props;
 ---
 
 <section>
-  <div class="container py-5">
+  <div class="container">
     <Chart client:only="react" data={block} />
   </div>
 </section>
