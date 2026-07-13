@@ -1,22 +1,20 @@
 ---
-import { SplitContent } from "@components/layout/SplitContent";
+import { SectionContainer } from "@components/organisms/SectionContainer";
+import { getSectionBgClass } from "@utils/background";
 import type { TextOnlyProps } from "./types";
 
 type Props = TextOnlyProps;
 
 const { background = "default", sectionTitleId } = Astro.props;
-const columnLeftSize = 6;
-const columnRightSize = 6;
-
-const alignItems = "top";
 ---
 
-<SplitContent
-  leftColumns={columnLeftSize}
-  rightColumns={columnRightSize}
-  alignItems={alignItems}
-  background={background}
+<SectionContainer
+  className={getSectionBgClass(background)}
   sectionTitleId={sectionTitleId}
 >
-  <slot name="text" slot="left" />
-</SplitContent>
+  <div class="row">
+    <div class="col-12 col-lg-8">
+      <slot name="text" />
+    </div>
+  </div>
+</SectionContainer>

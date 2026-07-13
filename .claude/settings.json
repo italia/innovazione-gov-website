@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ' *)",
+      "Bash(NODE_TLS_REJECT_UNAUTHORIZED=0 bun x dotenv -e .env.staging -- bun ./scripts/generate-link-map.ts)"
+    ]
+  }
+}
