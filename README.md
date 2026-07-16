@@ -55,6 +55,7 @@ Create a .env file in the root of your project and fill in the following values.
 
 ```
 SITE_URL: The full URL of your production site (e.g., https://your-site.com).
+SHOW_ALL_PAGES: "true" publishes every DatoCMS page; anything else builds only the allowlist in src/config/publishedRecords.ts (provisional landing). When unset, scripts/run-env.ts derives it from the build mode: staging → "true", production → "false".
 SECRET_API_TOKEN: A secure random string for protecting internal API routes.
 DATOCMS_ENVIRONMENT: The name of your DatoCMS environment (usually main).
 DATOCMS_API_TOKEN: Your read-only API token for production content.

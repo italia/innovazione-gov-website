@@ -24,8 +24,8 @@ export async function getStaticPaths() {
 
   const response = await getCollection("search");
 
-  const page = response[0].data;
-  if (!page) return;
+  const page = response[0]?.data;
+  if (!page) return [];
 
   const pathsPromises =
     page?.locales.map(async (lang) => {

@@ -46,7 +46,13 @@ import {
   AllWebinarQuery,
   AllWebinarsContentQuery,
 } from "@graphql/query/webinar";
+import { isRecordPublished, showAllPages } from "@config/publishedRecords";
 import { executeAutoPagingQuery, executeQuery } from "@lib/datocms";
+
+// Landing mode: routable records outside the allowlist are dropped here, so
+// no route generates their pages (see src/config/publishedRecords.ts).
+const publishedOnly = <T extends { id: string }>(items: T[]): T[] =>
+  items.filter((item) => isRecordPublished(item.id));
 
 export const newsLoader = async () => {
   const oneYearAgo = new Date();
@@ -132,7 +138,7 @@ export const globalSettingsLoader = async () => {
 
 export const pagesLoader = async () => {
   const response = await executeAutoPagingQuery(AllPagesContentQuery);
-  return response?.allPages || [];
+  return publishedOnly(response?.allPages || []);
 };
 
 export const homepageLoader = async () => {
@@ -141,6 +147,7 @@ export const homepageLoader = async () => {
 };
 
 export const searchLoader = async () => {
+  if (!showAllPages()) return [];
   const response = await executeQuery(SearchPageContentQuery);
   return response?.search ? [response.search] : [];
 };
@@ -157,42 +164,46 @@ export const cataloguesLoader = async () => {
     resource: updatesData?.lastResource?.[0]?.publishedAt,
   };
 
-  return (
-    cataloguesData?.allCatalogues.map((cat: any) => ({
-      ...cat,
-      datesRegistry: datesRegistry,
-    })) || []
-  );
+  return publishedOnly(cataloguesData?.allCatalogues || []).map((cat: any) => ({
+    ...cat,
+    datesRegistry: datesRegistry,
+  }));
 };
 
 export const webinarContentLoader = async () => {
   const response = await executeAutoPagingQuery(AllWebinarsContentQuery);
-  return response?.allWebinarItems || [];
+  return publishedOnly(response?.allWebinarItems || []);
 };
 
 export const storyContentLoader = async () => {
   const response = await executeAutoPagingQuery(AllStoriesContentQuery);
-  return response?.allStoryItems || [];
+  return publishedOnly(response?.allStoryItems || []);
 };
 
 export const insightContentLoader = async () => {
   const response = await executeAutoPagingQuery(AllInsightsContentQuery);
-  return response?.allInsights || [];
+  return publishedOnly(response?.allInsights || []);
 };
 
 export const articleContentLoader = async () => {
   const response = await executeAutoPagingQuery(AllArticlesContentQuery);
-  return response?.allArticles || [];
+  return publishedOnly(response?.allArticles || []);
 };
 
 export const layoutLoader = async () => {
   const response = await executeQuery(LayoutQuery);
   if (!response?.homepage?.id) return [];
+  // Landing mode: the search page is not generated, so the header search
+  // UI must stay hidden regardless of the DatoCMS toggle.
+  const search =
+    response?.search && !showAllPages()
+      ? { ...response.search, isSearchEnabled: false }
+      : response?.search;
   return [
     {
       id: "layout",
       layout: response?.layout,
-      search: response?.search,
+      search: search,
       homepageId: response?.homepage?.id,
     },
   ];
@@ -322,17 +333,21 @@ export const allDocumentsLoader = async () => {
     executeAutoPagingQuery(PagesIdxQuery),
   ]);
 
+  // Filtered with the same allowlist as the routes: this collection feeds the
+  // public /indexing/[lang].json files and the OpenSearch index.
   return [
     {
       id: "all-documents",
-      allArticles: articlesRes.allArticles || [],
-      allInsights: insightsRes.allInsights || [],
-      allStoryItems: storiesRes.allStoryItems || [],
-      allNewsItems: newsRes.allNewsItems || [],
-      allWebinarItems: webinarsRes.allWebinarItems || [],
-      allResources: resourcesRes.allResources || [],
+      allArticles: publishedOnly(articlesRes.allArticles || []),
+      allInsights: publishedOnly(insightsRes.allInsights || []),
+      allStoryItems: publishedOnly(storiesRes.allStoryItems || []),
+      allNewsItems: publishedOnly(newsRes.allNewsItems || []),
+      allWebinarItems: publishedOnly(webinarsRes.allWebinarItems || []),
+      allResources: publishedOnly(resourcesRes.allResources || []),
+      // Not filtered: catalogues are never emitted as documents, they only
+      // provide category labels for the (already filtered) documents above.
       allCatalogues: cataloguesRes.allCatalogues || [],
-      allPages: pagesRes.allPages || [],
+      allPages: publishedOnly(pagesRes.allPages || []),
     },
   ];
 };
