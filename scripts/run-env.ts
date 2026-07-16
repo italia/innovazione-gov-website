@@ -13,6 +13,11 @@ const envFile = `.env.${mode}`;
 
 dotenv.config({ path: envFile, override: true });
 
+// Provisional landing: production builds only publish the allowlist in
+// src/config/publishedRecords.ts, staging keeps every page visible.
+// An explicit SHOW_ALL_PAGES from the env file or the shell wins.
+process.env.SHOW_ALL_PAGES ??= mode === "staging" ? "true" : "false";
+
 const envName = process.env.DATOCMS_ENVIRONMENT || "main";
 const apiUrl = `https://graphql.datocms.com/environments/${envName}`;
 

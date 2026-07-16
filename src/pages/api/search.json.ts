@@ -1,3 +1,4 @@
+import { showAllPages } from "@config/publishedRecords";
 import type { SearchResult } from "@graphql/types";
 import { Client } from "@opensearch-project/opensearch";
 import type { Search_RequestBody } from "@opensearch-project/opensearch/api/index.js";
@@ -30,6 +31,12 @@ const client = new Client({
 });
 
 export const GET: APIRoute = async ({ url }) => {
+  // Landing mode: the search page is not published, keep the endpoint mute
+  // even if the OpenSearch index still holds previously indexed content.
+  if (!showAllPages()) {
+    return new Response(JSON.stringify([]), { status: 200 });
+  }
+
   const query = url.searchParams.get("query");
   const lang = url.searchParams.get("lang");
   const INDEX_NAME = INDEX_NAME_PREFIX + lang;

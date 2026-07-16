@@ -38,8 +38,19 @@ export default defineConfig({
       status: 301,
       destination: "/it",
     },
+    // @astrojs/sitemap only emits sitemap-index.xml; keep the conventional
+    // URL working for humans and tools that expect it.
+    "/sitemap.xml": {
+      status: 301,
+      destination: "/sitemap-index.xml",
+    },
   },
   vite: {
+    define: {
+      // Bakes the landing/full-site mode into every bundle, including the
+      // serverless routes where runtime env vars are not configurable.
+      __SHOW_ALL_PAGES__: JSON.stringify(process.env.SHOW_ALL_PAGES === "true"),
+    },
     ssr: {
       noExternal: ["graph-italia-components"],
     },

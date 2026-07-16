@@ -18,10 +18,17 @@ import {
   type SiteMap,
 } from "@utils/linkMap/processItems";
 
+import { isRecordPublished, showAllPages } from "@config/publishedRecords";
+
 import fs from "fs";
 import path from "path";
 
 const outputPath = `src/data/linkMap.json`;
+
+// Landing mode: records outside the allowlist stay out of the map, so any
+// internal link pointing to them resolves to "#" instead of a 404 URL.
+const publishedOnly = <T extends { id: string }>(items: T[]): T[] =>
+  items.filter((item) => isRecordPublished(item.id));
 
 async function generateLinkMap() {
   console.log(`Generating link map...`);
@@ -57,7 +64,7 @@ async function generateLinkMap() {
     });
   }
 
-  const search = singletonsRes.search;
+  const search = showAllPages() ? singletonsRes.search : null;
 
   if (search) {
     linkMap[search.id] = {} as LocaleMap;
@@ -79,39 +86,36 @@ async function generateLinkMap() {
     });
   }
 
-  const collectionPages = [pagesRes.allPages];
+  const allowedCatalogues = publishedOnly(cataloguesRes.allCatalogues);
+
+  const collectionPages = [publishedOnly(pagesRes.allPages)];
 
   collectionPages.forEach((collection) =>
     processItemsPages(collection, linkMap, home),
   );
 
   const collectionNestedPages = [
-    articlesRes.allArticles,
-    cataloguesRes.allCatalogues,
+    publishedOnly(articlesRes.allArticles),
+    allowedCatalogues,
   ];
 
   collectionNestedPages.forEach((collection) =>
     processItemsNestedPages(collection, linkMap, home),
   );
 
-  const collectionCategoryPages = [insightsRes.allInsights];
+  const collectionCategoryPages = [publishedOnly(insightsRes.allInsights)];
 
   collectionCategoryPages.forEach((collection) =>
     processItemsCategoryPages(collection, linkMap, home),
   );
 
   const collectionTabPages = [
-    storiesRes.allStoryItems,
-    webinarsRes.allWebinarItems,
+    publishedOnly(storiesRes.allStoryItems),
+    publishedOnly(webinarsRes.allWebinarItems),
   ];
 
   collectionTabPages.forEach((collection) =>
-    processItemsTabPages(
-      collection,
-      linkMap,
-      home,
-      cataloguesRes.allCatalogues,
-    ),
+    processItemsTabPages(collection, linkMap, home, allowedCatalogues),
   );
 
   const fullOutputPath = path.resolve(outputPath);
