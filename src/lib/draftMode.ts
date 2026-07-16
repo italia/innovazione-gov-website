@@ -1,6 +1,11 @@
 import type { APIContext, AstroCookieSetOptions, AstroCookies } from "astro";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 
+// The env var only customizes the name; the flow must survive without it.
+const DRAFT_MODE_COOKIE_NAME =
+  (import.meta.env.DRAFT_MODE_COOKIE_NAME as string | undefined) ||
+  "datocms-draft-mode";
+
 function jwtToken() {
   return jwt.sign(
     { enabled: true },
@@ -9,21 +14,17 @@ function jwtToken() {
 }
 
 export function enableDraftMode(context: APIContext) {
-  context.cookies.set(
-    import.meta.env.DRAFT_MODE_COOKIE_NAME as string,
-    jwtToken(),
-    {
-      path: "/",
-      sameSite: "none",
-      httpOnly: false,
-      secure: true,
-      ...({ partitioned: true } as AstroCookieSetOptions),
-    },
-  );
+  context.cookies.set(DRAFT_MODE_COOKIE_NAME, jwtToken(), {
+    path: "/",
+    sameSite: "none",
+    httpOnly: false,
+    secure: true,
+    ...({ partitioned: true } as AstroCookieSetOptions),
+  });
 }
 
 export function disableDraftMode(context: APIContext) {
-  context.cookies.delete(import.meta.env.DRAFT_MODE_COOKIE_NAME as string, {
+  context.cookies.delete(DRAFT_MODE_COOKIE_NAME, {
     path: "/",
     sameSite: "none",
     httpOnly: false,
@@ -38,7 +39,7 @@ export function isDraftModeEnabled(
   const cookies =
     "cookies" in contextOrCookies ? contextOrCookies.cookies : contextOrCookies;
 
-  const cookie = cookies.get(import.meta.env.DRAFT_MODE_COOKIE_NAME as string);
+  const cookie = cookies.get(DRAFT_MODE_COOKIE_NAME);
 
   if (!cookie) {
     return false;
