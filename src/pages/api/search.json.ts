@@ -13,22 +13,35 @@ const PASSWORD = import.meta.env.OPENSEARCH_PASSWORD;
 const INDEX_NAME_PREFIX = import.meta.env.OPENSEARCH_INDEX_NAME;
 const isProduction = import.meta.env.NODE_ENV === "production";
 
-// A missing OpenSearch configuration must not throw at module level: every
-// prerender=false route ships in the same serverless function, so a startup
-// error here would also take down /api/preview-links and the draft-mode flow.
-const client =
-  HOST && USERNAME && PASSWORD && INDEX_NAME_PREFIX
-    ? new Client({
-        node: HOST,
-        auth: {
-          username: USERNAME,
-          password: PASSWORD,
-        },
-        ...(isProduction && {
-          agent: new https.Agent({ rejectUnauthorized: false }),
-        }),
-      })
-    : null;
+// A missing or malformed OpenSearch configuration must not throw at module
+// level: every prerender=false route ships in the same serverless function,
+// so a startup error here would also take down /api/preview-links and the
+// draft-mode flow. The Client constructor throws on invalid node URLs.
+function createClient(): Client | null {
+  if (!HOST || !USERNAME || !PASSWORD || !INDEX_NAME_PREFIX) {
+    return null;
+  }
+  try {
+    return new Client({
+      node: HOST,
+      auth: {
+        username: USERNAME,
+        password: PASSWORD,
+      },
+      ...(isProduction && {
+        agent: new https.Agent({ rejectUnauthorized: false }),
+      }),
+    });
+  } catch (error) {
+    console.error(
+      "OpenSearch client initialization failed:",
+      (error as Error).message,
+    );
+    return null;
+  }
+}
+
+const client = createClient();
 
 export const GET: APIRoute = async ({ url }) => {
   // Landing mode: the search page is not published, keep the endpoint mute
