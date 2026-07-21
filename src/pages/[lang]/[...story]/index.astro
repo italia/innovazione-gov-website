@@ -53,7 +53,9 @@ export async function getStaticPaths() {
             seo: seoRes?.seo || null,
             id: page.id,
             content: getLocaleValue(page.allContentLocales, lang, null),
-            publishedAt: page.publishedAt,
+            // date_of_publication può essere nullo su record legacy: fallback
+            // alla data di ultimo aggiornamento per non perdere datePublished.
+            publishedAt: page.publishedAt ?? page.updatedAt,
             updatedAt: seoRes?.updatedAt || page.updatedAt,
           },
         };
