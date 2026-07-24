@@ -6,8 +6,12 @@ import {
   errorPageLoader,
   globalSeoLoader,
   globalSettingsLoader,
+  focusLoader,
   homepageLoader,
   insightContentLoader,
+  interviewsLoader,
+  participationsLoader,
+  pressReleasesLoader,
   layoutLoader,
   localesLoader,
   measuresLoader,
@@ -30,8 +34,12 @@ import {
   errorPageSchema,
   globalSeoSchema,
   globalSettingsSchema,
+  focusSchema,
   homepageSchema,
   insightSchema,
+  interviewSchema,
+  participationSchema,
+  pressReleaseSchema,
   layoutSchema,
   localesSchema,
   measureSchema,
@@ -56,6 +64,22 @@ export const collections = {
   story_item: defineCollection({
     schema: storySchema,
     loader: storiesLoader,
+  }),
+  interview: defineCollection({
+    schema: interviewSchema,
+    loader: interviewsLoader,
+  }),
+  participation: defineCollection({
+    schema: participationSchema,
+    loader: participationsLoader,
+  }),
+  press_release: defineCollection({
+    schema: pressReleaseSchema,
+    loader: pressReleasesLoader,
+  }),
+  focus_page: defineCollection({
+    schema: focusSchema,
+    loader: focusLoader,
   }),
   webinar_item: defineCollection({
     schema: webinarSchema,

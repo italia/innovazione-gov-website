@@ -27,7 +27,7 @@ export const InternalLinkFragment = graphql(`
   fragment InternalLinkFragment on InternalLinkRecord @_unmask {
     label
     linkTo {
-      ... on CatalogueRecord {
+      ... on IndexPageRecord {
         id
       }
       ... on PageRecord {
@@ -64,7 +64,7 @@ export const LinkBlockFragment = graphql(`
       ... on ArticleRecord {
         id
       }
-      ... on CatalogueRecord {
+      ... on IndexPageRecord {
         id
       }
       ... on StoryItemRecord {
@@ -314,6 +314,9 @@ export const StoryCardFragment = graphql(
       articleClassification {
         id
       }
+      owners {
+        id
+      }
       allTitleLocales: _allTitleLocales {
         locale
         value
@@ -342,6 +345,151 @@ export const StoryCardFragment = graphql(
 );
 
 export type StoryCardFragmentType = FragmentOf<typeof StoryCardFragment>;
+
+// Card per i modelli distinti (Interviste): stessa struttura di StoryCardFragment
+// ma senza articleClassification (il modello stesso è il tipo).
+export const InterviewCardFragment = graphql(
+  `
+    fragment InterviewCardFragment on InterviewRecord @_unmask {
+      id
+      owners {
+        id
+      }
+      allTitleLocales: _allTitleLocales {
+        locale
+        value
+      }
+      allParagraphLocales: _allParagraphLocales {
+        locale
+        value
+      }
+      allTopicLocales: _allTopicLocales {
+        value {
+          id
+          _allLabelLocales {
+            locale
+            value
+          }
+        }
+        locale
+      }
+      publishedAt: dateOfPublication
+      image {
+        ...ImageFragment
+      }
+    }
+  `,
+  [ImageFragment],
+);
+
+export type InterviewCardFragmentType = FragmentOf<typeof InterviewCardFragment>;
+
+export const ParticipationCardFragment = graphql(
+  `
+    fragment ParticipationCardFragment on ParticipationRecord @_unmask {
+      id
+      owners {
+        id
+      }
+      allTitleLocales: _allTitleLocales {
+        locale
+        value
+      }
+      allParagraphLocales: _allParagraphLocales {
+        locale
+        value
+      }
+      allTopicLocales: _allTopicLocales {
+        value {
+          id
+          _allLabelLocales {
+            locale
+            value
+          }
+        }
+        locale
+      }
+      publishedAt: dateOfPublication
+      image {
+        ...ImageFragment
+      }
+    }
+  `,
+  [ImageFragment],
+);
+export type ParticipationCardFragmentType = FragmentOf<
+  typeof ParticipationCardFragment
+>;
+
+export const PressReleaseCardFragment = graphql(
+  `
+    fragment PressReleaseCardFragment on PressReleaseRecord @_unmask {
+      id
+      owners {
+        id
+      }
+      allTitleLocales: _allTitleLocales {
+        locale
+        value
+      }
+      allParagraphLocales: _allParagraphLocales {
+        locale
+        value
+      }
+      allTopicLocales: _allTopicLocales {
+        value {
+          id
+          _allLabelLocales {
+            locale
+            value
+          }
+        }
+        locale
+      }
+      publishedAt: dateOfPublication
+      image {
+        ...ImageFragment
+      }
+    }
+  `,
+  [ImageFragment],
+);
+export type PressReleaseCardFragmentType = FragmentOf<
+  typeof PressReleaseCardFragment
+>;
+
+// Focus: come gli altri ma SENZA owners (assente nel sorgente).
+export const FocusCardFragment = graphql(
+  `
+    fragment FocusCardFragment on FocusPageRecord @_unmask {
+      id
+      allTitleLocales: _allTitleLocales {
+        locale
+        value
+      }
+      allParagraphLocales: _allParagraphLocales {
+        locale
+        value
+      }
+      allTopicLocales: _allTopicLocales {
+        value {
+          id
+          _allLabelLocales {
+            locale
+            value
+          }
+        }
+        locale
+      }
+      publishedAt: dateOfPublication
+      image {
+        ...ImageFragment
+      }
+    }
+  `,
+  [ImageFragment],
+);
+export type FocusCardFragmentType = FragmentOf<typeof FocusCardFragment>;
 
 export const InsightCardFragment = graphql(
   `
@@ -395,6 +543,18 @@ export const StoryTabFragment = graphql(
         ... on ArticleRecord {
           ...ArticleCardPreviewFragment
         }
+        ... on InterviewRecord {
+          ...InterviewCardFragment
+        }
+        ... on ParticipationRecord {
+          ...ParticipationCardFragment
+        }
+        ... on PressReleaseRecord {
+          ...PressReleaseCardFragment
+        }
+        ... on FocusPageRecord {
+          ...FocusCardFragment
+        }
       }
     }
   `,
@@ -403,6 +563,10 @@ export const StoryTabFragment = graphql(
     WebinarItemFragment,
     InsightCardFragment,
     ArticleCardPreviewFragment,
+    InterviewCardFragment,
+    ParticipationCardFragment,
+    PressReleaseCardFragment,
+    FocusCardFragment,
     InternalLinkFragment,
   ],
 );
@@ -528,7 +692,7 @@ export const MenuItemFragment = graphql(`
     id
     title
     pointsTo {
-      ... on CatalogueRecord {
+      ... on IndexPageRecord {
         id
       }
       ... on PageRecord {
@@ -550,7 +714,7 @@ export const MegaMenuItemFragment = graphql(
       title
       subtitle
       pointsTo {
-        ... on CatalogueRecord {
+        ... on IndexPageRecord {
           id
         }
         ... on PageRecord {

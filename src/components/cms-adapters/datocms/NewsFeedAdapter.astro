@@ -33,7 +33,7 @@ const buttonLabel = block.cta?.label;
         return {
           componentName: "CardEditorialNews",
           title: tab.title,
-          news: tab.news.map((n) => {
+          news: tab.news.filter(Boolean).map((n) => {
             const link = getLocaleValue(n.allLinkLocales, lang, "");
             const topic = getLocaleValue(n.allTopicLocales, lang, null);
             return {
@@ -53,7 +53,7 @@ const buttonLabel = block.cta?.label;
         return {
           componentName: "CardEditorialStory",
           title: tab.title,
-          news: tab.news.map((n) => {
+          news: tab.news.filter(Boolean).map((n) => {
             let allTopicLocales =
               "allTopicLocales" in n ? n.allTopicLocales : [];
             const topic = getLocaleValue(allTopicLocales, lang, null);

@@ -14,8 +14,12 @@ const { lang } = Astro.locals;
 
 const contentCollection: ContentCollectionProps[] = block.content.map(
   (content) => {
+    // Un list_collection può avere lista vuota o insight non pubblicati (null
+    // nell'array in build published): filtriamo e usiamo optional chaining per
+    // non crashare sul primo elemento.
+    const collectionItems = (content.content ?? []).filter(Boolean);
     const topicSlug = getLocaleValue(
-      content.content[0].allTopicLocales,
+      collectionItems[0]?.allTopicLocales,
       lang,
       null,
     );
@@ -23,7 +27,7 @@ const contentCollection: ContentCollectionProps[] = block.content.map(
       title: content.title,
       topicSlug: getLocaleValue(topicSlug?._allLabelLocales, lang, ""),
       paragraph: content.paragraph || undefined,
-      items: content.content.map((item) => {
+      items: collectionItems.map((item) => {
         const topicRecord = getLocaleValue(item.allTopicLocales, lang, null);
         return {
           id: item.id,

@@ -74,7 +74,7 @@ export const AllStoryItemsSlugFragment = graphql(
         ... on RecordInterface {
           id
         }
-        ... on CatalogueRecord {
+        ... on IndexPageRecord {
           ...CatalogueLocalesFragment
           parentPage {
             id
@@ -105,7 +105,7 @@ export const AllWebinarItemsSlugFragment = graphql(
         ... on RecordInterface {
           id
         }
-        ... on CatalogueRecord {
+        ... on IndexPageRecord {
           ...CatalogueLocalesFragment
           parentPage {
             id
@@ -127,7 +127,7 @@ export type AllWebinarItemsSlugFragmentType = FragmentOf<
 
 export const AllCataloguesSlugFragment = graphql(
   `
-    fragment AllCataloguesSlugFragment on CatalogueRecord @_unmask {
+    fragment AllCataloguesSlugFragment on IndexPageRecord @_unmask {
       id
       locales: _locales
       ...CatalogueLocalesFragment

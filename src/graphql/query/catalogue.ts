@@ -4,7 +4,7 @@ import { graphql } from "@graphql/graphql";
 export const AllCataloguesContentQuery = graphql(
   `
     query AllCataloguesContentQuery {
-      allCatalogues(first: 2500) {
+      allCatalogues: allIndexPages(first: 2500) {
         ...AllCataloguesRecordFragment
       }
     }

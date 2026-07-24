@@ -188,7 +188,7 @@ export type ResourseIndexingFragmentType = FragmentOf<
 >;
 
 export const CatalogueIndexingFragment = graphql(`
-  fragment CatalogueIndexingFragment on CatalogueRecord @_unmask {
+  fragment CatalogueIndexingFragment on IndexPageRecord @_unmask {
     allTitleLocales: _allTitleLocales {
       locale
       value
