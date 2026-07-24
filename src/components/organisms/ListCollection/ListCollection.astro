@@ -1,4 +1,5 @@
 ---
+import ButtonLink from "@components/atoms/Button/ButtonLink.astro";
 import { CardEditorialNews } from "@components/molecules/CardEditorialNews";
 import { CardInlineMini } from "@components/molecules/CardInlineMini";
 import { Carousel, CarouselItem } from "@components/molecules/Carousel";
@@ -15,10 +16,16 @@ const {
   paragraph,
   background = "lighter",
   showInline = false,
+  labelButton,
+  linkTo,
+  openInNewTab = false,
 } = Astro.props;
 
 const textColorClass =
   background === "primary" || background === "dark" ? "text-white" : "";
+
+const buttonVariant =
+  background === "primary" || background === "dark" ? "dark" : "light";
 ---
 
 <SectionContainer
@@ -60,6 +67,20 @@ const textColorClass =
             </CarouselItem>
           ))}
         </Carousel>
+      )
+    }
+
+    {
+      labelButton && linkTo && (
+        <div class="mt-5 d-flex justify-content-center">
+          <ButtonLink
+            size="small"
+            variant={buttonVariant}
+            label={labelButton}
+            linkTo={linkTo}
+            openInNewTab={openInNewTab}
+          />
+        </div>
       )
     }
   </div>

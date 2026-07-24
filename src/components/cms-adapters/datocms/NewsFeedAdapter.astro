@@ -63,7 +63,7 @@ const buttonLabel = block.cta?.label;
 
             return {
               id: n.id,
-              title: getLocaleValue(n.allTitleLocales, lang, ""),
+              title: getLocaleValue(n.allTitleLocales, lang, "") ?? "",
               image: n.image || undefined,
               linkTo: linkResolver(n.id, lang),
               category: getLocaleValue(

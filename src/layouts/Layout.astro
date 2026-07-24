@@ -28,7 +28,7 @@ type Props = {
   jsonLd?: JsonLdPageData;
 };
 
-const isPreview = isDraftModeEnabled(Astro.cookies);
+const isPreview = import.meta.env.DEV && isDraftModeEnabled(Astro.cookies);
 const { pageSeo = [], redirectUrl, datePublished, jsonLd } = Astro.props;
 
 const { lang } = Astro.locals;

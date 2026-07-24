@@ -1,4 +1,5 @@
 import type { ImageProps } from "@components/atoms/Image/types";
+import type { SectionBackground } from "@utils/background";
 
 export type SupportCTASectionProps = {
   title: string;
@@ -11,5 +12,5 @@ export type SupportCTASectionProps = {
   openInNewTab?: boolean;
 };
 
-export type SupportCTASectionBackgroundProps = "lighter" | "default";
+export type SupportCTASectionBackgroundProps = SectionBackground;
 export type SupportCTASectionSizeProps = "default" | "small";

@@ -7,4 +7,7 @@ export type ListCollectionProps = {
   items: CardEditorialNewsProps[];
   paragraph?: string;
   showInline?: boolean;
+  labelButton?: string;
+  linkTo?: string;
+  openInNewTab?: boolean;
 };

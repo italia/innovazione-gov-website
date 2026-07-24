@@ -2,7 +2,11 @@
 import type { CardEditorialNewsProps } from "@components/molecules/CardEditorialNews/types";
 import { ListCollection } from "@components/organisms/ListCollection";
 import type { CardLinkListFragmentType } from "@graphql/fragment/sectionFragments";
+import type { SiteLocale } from "@graphql/types";
+import { isDraftModeEnabled } from "@lib/draftMode";
+import { getLastItems } from "@lib/lastItems";
 import type { SectionBackground } from "@utils/background";
+import { getCtaFields } from "@utils/getCtaFields";
 import { linkResolver } from "@utils/linkResolver";
 
 type Props = {
@@ -12,50 +16,49 @@ type Props = {
 const { block } = Astro.props;
 const { lang } = Astro.locals;
 
-// Fields may be absent when staging DatoCMS schema is behind main
-const fullBlock = block as typeof block & {
-  listContent?: Array<{
-    id: string;
-    title?: string | null;
-    paragraph?: string | null;
-    image?: {
-      url: string;
-      alt?: string | null;
-      width: number | null;
-      height: number | null;
-    } | null;
-    link?: { link?: { id: string } | null; externalUrl?: string | null } | null;
-  }> | null;
-  title?: string | null;
-  paragraph?: string | null;
-  backgroundColor?: string | null;
-  showInlineCard?: boolean | null;
-};
+const isPreview = import.meta.env.DEV && isDraftModeEnabled(Astro.cookies);
 
-if (!fullBlock.listContent?.length) return;
+let items: CardEditorialNewsProps[];
 
-const items: CardEditorialNewsProps[] = fullBlock.listContent.map((item) => {
-  const url = item.link?.externalUrl;
-  const linkTo = item.link?.link?.id
-    ? linkResolver(item.link.link.id, lang)
-    : null;
+if (block.lastItems) {
+  items = await getLastItems(block.lastItems, {
+    locale: lang as SiteLocale,
+    includeDrafts: isPreview,
+  });
+} else {
+  items = (block.listContent ?? []).map((item) => {
+    const url = item.link?.externalUrl;
+    const linkTo = item.link?.link?.id
+      ? linkResolver(item.link.link.id, lang)
+      : null;
 
-  return {
-    id: item.id,
-    title: item.title ?? "",
-    description: item.paragraph || "",
-    image: item.image ?? undefined,
-    linkTo: url || linkTo || "#",
-    action: url ? new URL(url).host : undefined,
-    isExternal: !!url,
-  };
-});
+    return {
+      id: item.id,
+      title: item.title ?? "",
+      description: item.paragraph || "",
+      image: item.image ?? undefined,
+      linkTo: url || linkTo || "#",
+      action: url ? new URL(url).host : undefined,
+      isExternal: !!url,
+    };
+  });
+}
+
+if (!items.length) return;
+
+const { labelButton, linkTo, openInNewTab } = getCtaFields(
+  (block.cta as Parameters<typeof getCtaFields>[0]) ?? null,
+  lang as SiteLocale,
+);
 ---
 
 <ListCollection
-  title={fullBlock.title ?? ""}
+  title={block.title ?? ""}
   items={items}
-  paragraph={fullBlock.paragraph || undefined}
-  background={fullBlock.backgroundColor as SectionBackground}
-  showInline={fullBlock.showInlineCard ?? undefined}
+  paragraph={block.paragraph || undefined}
+  background={block.backgroundColor as SectionBackground}
+  showInline={block.showInlineCard ?? undefined}
+  labelButton={labelButton}
+  linkTo={linkTo}
+  openInNewTab={openInNewTab}
 />

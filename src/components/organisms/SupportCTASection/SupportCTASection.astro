@@ -2,10 +2,8 @@
 import { ButtonLink } from "@components/atoms/Button";
 import { Image } from "@components/atoms/Image";
 import { slugify } from "@utils/slugify";
-import type {
-  SupportCTASectionBackgroundProps,
-  SupportCTASectionProps,
-} from "./types";
+import { getSectionBgClass } from "@utils/background";
+import type { SupportCTASectionProps } from "./types";
 
 type Props = SupportCTASectionProps;
 
@@ -20,23 +18,21 @@ const {
   openInNewTab = false,
 } = Astro.props;
 
-const backgroundColor: Record<SupportCTASectionBackgroundProps, string> = {
-  default: "it-section-bg-default",
-  lighter: "it-section-bg-light",
-};
-
-const backgroundColorClass = backgroundColor[background];
+const backgroundColorClass = getSectionBgClass(background);
+const isDarkBackground = background === "primary" || background === "dark";
+const textColorClass = isDarkBackground ? "text-white" : "";
+const buttonVariant = isDarkBackground ? "dark" : "light";
 ---
 
 <section
-  class={`${backgroundColorClass} ${size === "small" ? "rounded-2" : ""}`}
+  class={`${backgroundColorClass} ${isDarkBackground ? "cta-blue" : ""} ${size === "small" ? "rounded-2" : ""}`}
   aria-labelledby={slugify(title)}
 >
   <div class={`container py-5  ${size === "small" ? "px-5" : ""}`}>
     <div class={`row align-items-center justify-content-between `}>
       <div class="col-lg-6 col-12">
-        <div class=`text-container mb-4 mb-lg-0`>
-          <h3 class="mb-3" id={slugify(title)}>
+        <div class={`text-container mb-4 mb-lg-0 ${textColorClass}`}>
+          <h3 class={`mb-3 ${textColorClass}`} id={slugify(title)}>
             {title}
           </h3>
           <div class="mb-4" set:html={paragraph} />
@@ -45,6 +41,7 @@ const backgroundColorClass = backgroundColor[background];
               <div class="mt-5">
                 <ButtonLink
                   size="small"
+                  variant={buttonVariant}
                   label={labelButton}
                   linkTo={linkTo}
                   openInNewTab={openInNewTab}
@@ -58,12 +55,18 @@ const backgroundColorClass = backgroundColor[background];
         class={`${size === "small" ? "d-none d-lg-block" : ""} col-lg-5  col-12`}
       >
         <div class="img-container">
-          <div
-            class={`ratio ${size === "small" ? "ratio-1x1 " : "ratio-16x9"}`}
-          >
+          <div class={`ratio ${size === "small" ? "ratio-1x1 " : "ratio-4x3"}`}>
             <Image {...image} />
           </div>
         </div>
+        <style>
+          .cta-blue {
+            background-color: #003366 !important;
+          }
+          .img-container :global(img) {
+            object-fit: cover;
+          }
+        </style>
       </div>
     </div>
   </div>

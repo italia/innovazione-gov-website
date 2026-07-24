@@ -58,6 +58,23 @@ export const getMapInsight = (
   };
 };
 
+const getStoryClassLabel = async (
+  classificationId: string | undefined,
+  lang: SiteLocale,
+): Promise<string> => {
+  if (!classificationId) return "";
+
+  try {
+    const entry = await getEntry(
+      "story_classes",
+      `${classificationId}_${lang}`,
+    );
+    return entry?.data.value || "";
+  } catch {
+    return "";
+  }
+};
+
 export const getMapStory = async (
   story: StoryIndexingFragmentType,
   lang: SiteLocale,
@@ -66,15 +83,15 @@ export const getMapStory = async (
 
   const content = flattenBlocks(contentData ?? []);
 
-  const customCategory = await getEntry(
-    "story_classes",
-    `${story.articleClassification?.id}_${lang}`,
+  const category = await getStoryClassLabel(
+    story.articleClassification?.id,
+    lang,
   );
 
   return {
     type: "story",
     id: story.id,
-    category: customCategory?.data.value || "",
+    category,
     internalLink: linkResolver(story.id, lang),
     title: getLocaleValue(story.allTitleLocales, lang, ""),
     description: "",

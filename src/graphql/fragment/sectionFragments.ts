@@ -5,6 +5,7 @@ import {
   ArticleCardPreviewFragment,
   AuthorListFragment,
   CalloutFragment,
+  CardLinkFragment,
   ChannelFragment,
   ChartFragment,
   DownloadLinkFragment,
@@ -326,11 +327,32 @@ export const TopicFilterFragment = graphql(
 
 export type TopicFilterFragmentType = FragmentOf<typeof TopicFilterFragment>;
 
-export const SupportCTASectionFragment = graphql(`
-  fragment SupportCTASectionFragment on SupportCtaSectionRecord @_unmask {
-    id
-  }
-`);
+export const SupportCTASectionFragment = graphql(
+  `
+    fragment SupportCTASectionFragment on SupportCtaSectionRecord @_unmask {
+      id
+      title
+      paragraph
+      backgroundColor
+      image {
+        ...ImageFragment
+      }
+      cta {
+        ... on RecordInterface {
+          id
+          componentName: __typename
+        }
+        ... on InternalLinkRecord {
+          ...InternalLinkFragment
+        }
+        ... on ExternalLinkRecord {
+          ...ExternalLinkFragment
+        }
+      }
+    }
+  `,
+  [ImageFragment, InternalLinkFragment, ExternalLinkFragment],
+);
 
 export type SupportCTASectionFragmentType = FragmentOf<
   typeof SupportCTASectionFragment
@@ -665,11 +687,34 @@ export const TextOnlyFragment = graphql(
 
 export type TextOnlyFragmentType = FragmentOf<typeof TextOnlyFragment>;
 
-export const CardLinkListFragment = graphql(`
-  fragment CardLinkListFragment on CardLinkListRecord @_unmask {
-    id
-  }
-`);
+export const CardLinkListFragment = graphql(
+  `
+    fragment CardLinkListFragment on CardLinkListRecord @_unmask {
+      id
+      title
+      paragraph
+      backgroundColor
+      showInlineCard
+      lastItems
+      listContent {
+        ...CardLinkFragment
+      }
+      cta {
+        ... on RecordInterface {
+          id
+          componentName: __typename
+        }
+        ... on InternalLinkRecord {
+          ...InternalLinkFragment
+        }
+        ... on ExternalLinkRecord {
+          ...ExternalLinkFragment
+        }
+      }
+    }
+  `,
+  [CardLinkFragment, InternalLinkFragment, ExternalLinkFragment],
+);
 
 export type CardLinkListFragmentType = FragmentOf<typeof CardLinkListFragment>;
 

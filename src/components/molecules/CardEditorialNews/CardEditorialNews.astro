@@ -21,6 +21,7 @@ const {
 } = Astro.props;
 
 const shouldShowFooter = category || dateTime;
+const hasLink = !!linkTo && linkTo !== "#";
 const cardTitleId = `card-title-${id}`;
 const { lang } = Astro.locals;
 const t = getI18n(lang);
@@ -35,11 +36,17 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
   aria-labelledby={cardTitleId}
 >
   <h3 class="it-card-title" id={cardTitleId}>
-    <a href={linkTo} target={target} rel={rel}>
-      {title}
-      <span class="visually-hidden">{ariaLabel}</span>
-      {isExternal && <ItExternalLink color="primary" size="sm" />}
-    </a>
+    {
+      hasLink ? (
+        <a href={linkTo} target={target} rel={rel}>
+          {title}
+          <span class="visually-hidden">{ariaLabel}</span>
+          {isExternal && <ItExternalLink color="primary" size="sm" />}
+        </a>
+      ) : (
+        <span>{title}</span>
+      )
+    }
   </h3>
   {
     image && (

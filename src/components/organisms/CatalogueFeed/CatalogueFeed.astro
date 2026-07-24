@@ -40,7 +40,7 @@ const tabsItems = tabs.map((tab, index) => ({
   filterStory: tab.filterStory,
 }));
 
-const isPreview = isDraftModeEnabled(Astro.cookies);
+const isPreview = import.meta.env.DEV && isDraftModeEnabled(Astro.cookies);
 
 const news = await getNews(isPreview);
 const stories = await getStories(isPreview);
@@ -130,7 +130,9 @@ function getFilteredItems(
             (s.data.owners ?? []).some((o) => o?.id === filterOwner),
         );
       return sortFeedItems(
-        filtered.map((s) => mapStoryToCardEditorialStoryProps(s.data as any, lang)),
+        filtered.map((s) =>
+          mapStoryToCardEditorialStoryProps(s.data as any, lang),
+        ),
         sortMode,
         lang,
       );
@@ -147,7 +149,9 @@ function getFilteredItems(
             (s.data.owners ?? []).some((o) => o?.id === filterOwner),
         );
       return sortFeedItems(
-        filtered.map((s) => mapStoryToCardEditorialStoryProps(s.data as any, lang)),
+        filtered.map((s) =>
+          mapStoryToCardEditorialStoryProps(s.data as any, lang),
+        ),
         sortMode,
         lang,
       );
@@ -159,7 +163,9 @@ function getFilteredItems(
         s.data.allTitleLocales?.some((item) => item.locale === lang),
       );
       return sortFeedItems(
-        filtered.map((s) => mapStoryToCardEditorialStoryProps(s.data as any, lang)),
+        filtered.map((s) =>
+          mapStoryToCardEditorialStoryProps(s.data as any, lang),
+        ),
         sortMode,
         lang,
       );
