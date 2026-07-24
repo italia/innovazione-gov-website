@@ -1,8 +1,11 @@
 import type { AllArticlesRecordFragmentType } from "@graphql/fragment/article";
 import type { AllCataloguesRecordFragmentType } from "@graphql/fragment/catalogue";
 import type {
+  FocusCardFragmentType,
   InterviewCardFragmentType,
   NewsItemFragmentType,
+  ParticipationCardFragmentType,
+  PressReleaseCardFragmentType,
   ResourceFragmentType,
   StoryCardFragmentType,
   TagFragmentType,
@@ -40,6 +43,9 @@ export const newsSchema = z.custom<NewsItemFragmentType>();
 
 export const storySchema = z.custom<StoryCardFragmentType>();
 export const interviewSchema = z.custom<InterviewCardFragmentType>();
+export const participationSchema = z.custom<ParticipationCardFragmentType>();
+export const pressReleaseSchema = z.custom<PressReleaseCardFragmentType>();
+export const focusSchema = z.custom<FocusCardFragmentType>();
 
 export const webinarSchema = z.custom<WebinarItemFragmentType>();
 

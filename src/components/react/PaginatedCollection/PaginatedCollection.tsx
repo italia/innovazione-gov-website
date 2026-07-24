@@ -43,6 +43,18 @@ type PaginatedCollectionProps =
       newsPageTabType: "interview";
     })
   | (PaginatedCollectionCommonProps & {
+      items: CardEditorialStoryProps[];
+      newsPageTabType: "participation";
+    })
+  | (PaginatedCollectionCommonProps & {
+      items: CardEditorialStoryProps[];
+      newsPageTabType: "press_release";
+    })
+  | (PaginatedCollectionCommonProps & {
+      items: CardEditorialStoryProps[];
+      newsPageTabType: "focus_page";
+    })
+  | (PaginatedCollectionCommonProps & {
       items: CardEditorialNewsProps[];
       newsPageTabType: "webinar_item";
     })
@@ -171,6 +183,18 @@ export function PaginatedCollection({
                 )}
 
                 {newsPageTabType === "interview" && (
+                  <CardEditorialStory {...(n as CardEditorialStoryProps)} />
+                )}
+
+                {newsPageTabType === "participation" && (
+                  <CardEditorialStory {...(n as CardEditorialStoryProps)} />
+                )}
+
+                {newsPageTabType === "press_release" && (
+                  <CardEditorialStory {...(n as CardEditorialStoryProps)} />
+                )}
+
+                {newsPageTabType === "focus_page" && (
                   <CardEditorialStory {...(n as CardEditorialStoryProps)} />
                 )}
 

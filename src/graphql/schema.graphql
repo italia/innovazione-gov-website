@@ -1851,6 +1851,12 @@ type FocusPageRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): [FocusPageModelParentPageFieldMultiLocaleField!]
+  _allTitleLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringMultiLocaleField!]
   _allTopicLocales(
     """
     If you want to fallback to a default translation when a translation has not been found
@@ -1934,7 +1940,15 @@ type FocusPageRecord implements RecordInterface {
     markdown: Boolean
   ): String
   targets: [TargetRecord!]!
-  title: String
+  title(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String
   topic(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale

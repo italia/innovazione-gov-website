@@ -44,6 +44,11 @@ import {
 } from "@graphql/query/story";
 import { AllInterviewCardQuery } from "@graphql/query/interview";
 import {
+  AllFocusCardQuery,
+  AllParticipationCardQuery,
+  AllPressReleaseCardQuery,
+} from "@graphql/query/distinctModels";
+import {
   AllWebinarQuery,
   AllWebinarsContentQuery,
 } from "@graphql/query/webinar";
@@ -75,6 +80,21 @@ export const storiesLoader = async () => {
 export const interviewsLoader = async () => {
   const response = await executeAutoPagingQuery(AllInterviewCardQuery);
   return response?.allInterviews || [];
+};
+
+export const participationsLoader = async () => {
+  const response = await executeAutoPagingQuery(AllParticipationCardQuery);
+  return response?.allParticipations || [];
+};
+
+export const pressReleasesLoader = async () => {
+  const response = await executeAutoPagingQuery(AllPressReleaseCardQuery);
+  return response?.allPressReleases || [];
+};
+
+export const focusLoader = async () => {
+  const response = await executeAutoPagingQuery(AllFocusCardQuery);
+  return response?.allFocusPages || [];
 };
 
 export const measuresLoader = async () => {

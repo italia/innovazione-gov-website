@@ -384,6 +384,113 @@ export const InterviewCardFragment = graphql(
 
 export type InterviewCardFragmentType = FragmentOf<typeof InterviewCardFragment>;
 
+export const ParticipationCardFragment = graphql(
+  `
+    fragment ParticipationCardFragment on ParticipationRecord @_unmask {
+      id
+      owners {
+        id
+      }
+      allTitleLocales: _allTitleLocales {
+        locale
+        value
+      }
+      allParagraphLocales: _allParagraphLocales {
+        locale
+        value
+      }
+      allTopicLocales: _allTopicLocales {
+        value {
+          id
+          _allLabelLocales {
+            locale
+            value
+          }
+        }
+        locale
+      }
+      publishedAt: dateOfPublication
+      image {
+        ...ImageFragment
+      }
+    }
+  `,
+  [ImageFragment],
+);
+export type ParticipationCardFragmentType = FragmentOf<
+  typeof ParticipationCardFragment
+>;
+
+export const PressReleaseCardFragment = graphql(
+  `
+    fragment PressReleaseCardFragment on PressReleaseRecord @_unmask {
+      id
+      owners {
+        id
+      }
+      allTitleLocales: _allTitleLocales {
+        locale
+        value
+      }
+      allParagraphLocales: _allParagraphLocales {
+        locale
+        value
+      }
+      allTopicLocales: _allTopicLocales {
+        value {
+          id
+          _allLabelLocales {
+            locale
+            value
+          }
+        }
+        locale
+      }
+      publishedAt: dateOfPublication
+      image {
+        ...ImageFragment
+      }
+    }
+  `,
+  [ImageFragment],
+);
+export type PressReleaseCardFragmentType = FragmentOf<
+  typeof PressReleaseCardFragment
+>;
+
+// Focus: come gli altri ma SENZA owners (assente nel sorgente).
+export const FocusCardFragment = graphql(
+  `
+    fragment FocusCardFragment on FocusPageRecord @_unmask {
+      id
+      allTitleLocales: _allTitleLocales {
+        locale
+        value
+      }
+      allParagraphLocales: _allParagraphLocales {
+        locale
+        value
+      }
+      allTopicLocales: _allTopicLocales {
+        value {
+          id
+          _allLabelLocales {
+            locale
+            value
+          }
+        }
+        locale
+      }
+      publishedAt: dateOfPublication
+      image {
+        ...ImageFragment
+      }
+    }
+  `,
+  [ImageFragment],
+);
+export type FocusCardFragmentType = FragmentOf<typeof FocusCardFragment>;
+
 export const InsightCardFragment = graphql(
   `
     fragment InsightCardFragment on InsightRecord @_unmask {

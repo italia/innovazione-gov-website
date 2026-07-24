@@ -12,9 +12,9 @@ const ENV = "website-astro-2026";
 // archivio slug -> news_page_tab_type
 const MAP = {
   interviste: "interview",
-  // interventi: "participation",       // abilitare dopo aver replicato la pipeline
-  // "comunicati-stampa": "press_release",
-  // focus: "focus_page",
+  interventi: "participation",
+  "comunicati-stampa": "press_release",
+  // focus: "focus_page",  // nessun archivio index_page "focus" nel sottoalbero Sottosegretario
 };
 
 const to = buildClient({ apiToken: process.env.DATOCMS_MANAGEMENT_API_TOKEN, environment: ENV, requestTimeout: 60000 });

@@ -4,6 +4,11 @@ import { AllNewsQuery } from "@graphql/query/news";
 import { AllResourcesQuery } from "@graphql/query/resource";
 import { AllStoryCardQuery } from "@graphql/query/story";
 import { AllInterviewCardQuery } from "@graphql/query/interview";
+import {
+  AllFocusCardQuery,
+  AllParticipationCardQuery,
+  AllPressReleaseCardQuery,
+} from "@graphql/query/distinctModels";
 import { AllWebinarQuery } from "@graphql/query/webinar";
 import { executeAutoPagingQuery, executeQuery } from "@lib/datocms";
 import { getCollection, getEntry } from "astro:content";
@@ -38,6 +43,36 @@ export const getInterviews = async (isPreview: boolean) => {
     return wrap(res?.allInterviews ?? []);
   }
   return await getCollection("interview");
+};
+
+export const getParticipations = async (isPreview: boolean) => {
+  if (isPreview) {
+    const res = await executeAutoPagingQuery(AllParticipationCardQuery, {
+      includeDrafts: true,
+    });
+    return wrap(res?.allParticipations ?? []);
+  }
+  return await getCollection("participation");
+};
+
+export const getPressReleases = async (isPreview: boolean) => {
+  if (isPreview) {
+    const res = await executeAutoPagingQuery(AllPressReleaseCardQuery, {
+      includeDrafts: true,
+    });
+    return wrap(res?.allPressReleases ?? []);
+  }
+  return await getCollection("press_release");
+};
+
+export const getFocus = async (isPreview: boolean) => {
+  if (isPreview) {
+    const res = await executeAutoPagingQuery(AllFocusCardQuery, {
+      includeDrafts: true,
+    });
+    return wrap(res?.allFocusPages ?? []);
+  }
+  return await getCollection("focus_page");
 };
 
 export const getWebinars = async (isPreview: boolean) => {

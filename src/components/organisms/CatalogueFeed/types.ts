@@ -25,4 +25,7 @@ export type ElementType =
   | "webinar_item"
   | "resource"
   | "measures"
-  | "interview";
+  | "interview"
+  | "participation"
+  | "press_release"
+  | "focus_page";
