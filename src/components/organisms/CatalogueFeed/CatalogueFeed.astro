@@ -58,6 +58,7 @@ function getFilteredItems(
   tabType: ElementType,
   tabCategoryReference?: string,
   sortMode?: string,
+  filterOwner?: string,
 ) {
   switch (tabType) {
     case "story_item":
@@ -65,11 +66,17 @@ function getFilteredItems(
         s.data.allTitleLocales?.some((item) => item.locale === lang),
       );
 
-      const filteredStories = tabCategoryReference
-        ? filteredStoryByLang.filter(
-            (s) => s.data.articleClassification?.id === tabCategoryReference,
-          )
-        : filteredStoryByLang;
+      // Filtro per classe (tipo) e per owner (figura). Entrambi opzionali:
+      // se filterOwner è valorizzato, l'archivio è ristretto a quella figura.
+      const filteredStories = filteredStoryByLang.filter((s) => {
+        const classOk =
+          !tabCategoryReference ||
+          s.data.articleClassification?.id === tabCategoryReference;
+        const ownerOk =
+          !filterOwner ||
+          (s.data.owners ?? []).some((o) => o?.id === filterOwner);
+        return classOk && ownerOk;
+      });
 
       return sortFeedItems(
         filteredStories.map((s) =>
@@ -148,6 +155,7 @@ const newsArchiveTab =
           "story_item",
           newsArchiveTab.filterStory,
           newsArchiveTab.sortMode,
+          newsArchiveTab.filterOwner,
         ) as CardEditorialStoryProps[]
       }
     />
@@ -163,6 +171,7 @@ const newsArchiveTab =
               tabType,
               tab.filterStory,
               tab.sortMode,
+              tab.filterOwner,
             );
 
             const categoriesOrder =

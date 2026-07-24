@@ -6,6 +6,7 @@ export type PageNewsTab = {
   filterTitle: string;
   labelForAll: string;
   filterStory?: string;
+  filterOwner?: string;
   newsPageTabType: string;
   filterStyle?: string[];
   perPage?: number;
