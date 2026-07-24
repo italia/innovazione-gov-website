@@ -27,6 +27,21 @@ export default defineConfig({
           en: "en",
         },
       },
+      // Emit slash-less <loc> and hreflang URLs so the sitemap matches the
+      // canonical/hreflang tags (SeoHreflang.astro), which strip the trailing
+      // slash. Never strip the domain root ("https://host/").
+      serialize(item) {
+        const stripTrailingSlash = (url: string) =>
+          url.replace(/([^/])\/$/, "$1");
+        item.url = stripTrailingSlash(item.url);
+        if (item.links) {
+          item.links = item.links.map((link) => ({
+            ...link,
+            url: stripTrailingSlash(link.url),
+          }));
+        }
+        return item;
+      },
     }),
     react(),
   ],

@@ -133,26 +133,41 @@ const normalizeSiteUrl = (siteUrl: string | URL) => {
 const toAbsoluteUrl = (path: string, siteUrl: string | URL) =>
   new URL(path, siteUrl).toString();
 
-export function buildCommonJsonLd(siteUrl: string | URL, siteName: string) {
+export function buildCommonJsonLd(
+  siteUrl: string | URL,
+  siteName: string,
+  options: { logoUrl?: string; sameAs?: string[] } = {},
+) {
   const baseUrl = normalizeSiteUrl(siteUrl);
+  const { logoUrl, sameAs } = options;
+
+  // GovernmentOrganization logo and social profiles are managed in DatoCMS
+  // (layout logo + "Seguici su" utility links). Omit each property when the
+  // CMS has no value rather than emitting a broken placeholder URL, which
+  // Google flags as an invalid logo/sameAs.
+  const organization: Record<string, any> = {
+    "@type": "GovernmentOrganization",
+    "@id": `${baseUrl}/#organization`,
+    name: "Dipartimento per la trasformazione digitale",
+    url: baseUrl,
+  };
+
+  if (logoUrl) {
+    organization.logo = {
+      "@type": "ImageObject",
+      url: toAbsoluteUrl(logoUrl, baseUrl),
+    };
+  }
+
+  const sameAsList = (sameAs ?? []).filter(Boolean);
+  if (sameAsList.length) {
+    organization.sameAs = sameAsList;
+  }
 
   return {
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": "GovernmentOrganization",
-        "@id": `${baseUrl}/#organization`,
-        name: "Dipartimento per la trasformazione digitale",
-        url: baseUrl,
-        logo: {
-          "@type": "ImageObject",
-          url: `${baseUrl}/path/logo.png`,
-        },
-        sameAs: [
-          "https://github.com/italia",
-          "https://www.linkedin.com/company/.../",
-        ],
-      },
+      organization,
       {
         "@type": "WebSite",
         "@id": `${baseUrl}/#website`,

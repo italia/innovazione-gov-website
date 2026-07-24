@@ -1,5 +1,7 @@
 ---
-import { getGlobalSettings } from "@lib/dataFetcher";
+import { getGlobalSettings, getLayout } from "@lib/dataFetcher";
+import { DatoBlockModel } from "@utils/cmsMapper";
+import { getLocaleValue } from "@utils/getLocaleValue";
 import { generateJsonLdScripts } from "@utils/JsonLD/generateScripts";
 import { type JsonLdPageData } from "@utils/JsonLD/seoJsonLd";
 
@@ -18,6 +20,18 @@ const globalSetting = await getGlobalSettings(lang);
 
 const siteName = globalSetting?.siteName || "Developers Italia";
 
+// schema.org Organization logo + sameAs are driven by the same CMS fields as
+// the header: the layout logo (`logoSelect`) and the "Seguici su" utility
+// links (SupportingBrand). No dedicated SEO fields needed on the CMS side.
+const layoutEntry = await getLayout(false);
+const layout = layoutEntry?.data?.layout;
+
+const logoUrl = layout?.logoSelect || undefined;
+const sameAs = getLocaleValue(layout?._allUtilityLocales, lang, [])
+  .filter((util) => util.componentName === DatoBlockModel.SupportingBrand)
+  .map((util) => util.url)
+  .filter((url): url is string => Boolean(url));
+
 const jsonLdScripts = generateJsonLdScripts({
   jsonLd,
   lang,
@@ -25,6 +39,8 @@ const jsonLdScripts = generateJsonLdScripts({
   canonicalUrl,
   recordId,
   siteName,
+  logoUrl,
+  sameAs,
 });
 
 const serializedJsonLdScripts = jsonLdScripts.map((script) =>

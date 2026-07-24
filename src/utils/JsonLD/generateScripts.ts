@@ -20,6 +20,8 @@ export const generateJsonLdScripts = ({
   canonicalUrl,
   recordId,
   siteName,
+  logoUrl,
+  sameAs,
 }: {
   jsonLd?: JsonLdPageData;
   lang: SiteLocale;
@@ -27,11 +29,13 @@ export const generateJsonLdScripts = ({
   canonicalUrl: string;
   recordId: string;
   siteName: string;
+  logoUrl?: string;
+  sameAs?: string[];
 }) => {
   const languageTag = toSchemaLanguage(lang || "it");
 
   const scripts: Array<Record<string, any>> = [
-    buildCommonJsonLd(siteUrl, siteName),
+    buildCommonJsonLd(siteUrl, siteName, { logoUrl, sameAs }),
   ];
 
   if (!jsonLd) {
