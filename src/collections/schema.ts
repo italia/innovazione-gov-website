@@ -1,6 +1,7 @@
 import type { AllArticlesRecordFragmentType } from "@graphql/fragment/article";
 import type { AllCataloguesRecordFragmentType } from "@graphql/fragment/catalogue";
 import type {
+  InterviewCardFragmentType,
   NewsItemFragmentType,
   ResourceFragmentType,
   StoryCardFragmentType,
@@ -38,6 +39,7 @@ import { z } from "astro:content";
 export const newsSchema = z.custom<NewsItemFragmentType>();
 
 export const storySchema = z.custom<StoryCardFragmentType>();
+export const interviewSchema = z.custom<InterviewCardFragmentType>();
 
 export const webinarSchema = z.custom<WebinarItemFragmentType>();
 

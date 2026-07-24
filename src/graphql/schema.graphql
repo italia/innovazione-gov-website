@@ -1524,7 +1524,7 @@ type FileField implements FileFieldInterface {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1
+    punch: Float! = 1.0
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24
@@ -1623,7 +1623,7 @@ interface FileFieldInterface {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1
+    punch: Float! = 1.0
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24
@@ -1738,6 +1738,13 @@ Represents signed double-precision fractional values as specified by [IEEE 754](
 """
 scalar FloatType
 
+union FocusPageModelContentField = HeroRecord | IntroArticleRecord | StructuredTextRecord | SupportCtaSectionRecord
+
+type FocusPageModelContentFieldListListNonNullMultiLocaleField {
+  locale: SiteLocale
+  value: [FocusPageModelContentField!]!
+}
+
 input FocusPageModelFilter {
   _createdAt: CreatedAtFilter
   id: ItemIdFilter
@@ -1748,18 +1755,24 @@ input FocusPageModelFilter {
   _status: StatusFilter
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
+  _locales: LocalesFilter
   contentHasIndex: BooleanFilter
   credits: TextFilter
+  dateOfPublication: DateFilter
   dateShown: DateTimeFilter
   embedDashboard: StringFilter
+  image: FileFilter
   imageCover: FileFilter
   imageCoverDescription: StringFilter
+  paragraph: TextFilter
+  parentPage: LinkFilter
   seo: SeoFilter
   slug: StringFilter
   subtitle: StringFilter
   summary: TextFilter
   targets: LinksFilter
   title: StringFilter
+  topic: LinkFilter
   topics: LinksFilter
   OR: [FocusPageModelFilter]
   AND: [FocusPageModelFilter]
@@ -1786,6 +1799,8 @@ enum FocusPageModelOrderBy {
   _isValid_DESC
   contentHasIndex_ASC
   contentHasIndex_DESC
+  dateOfPublication_ASC
+  dateOfPublication_DESC
   dateShown_ASC
   dateShown_DESC
   embedDashboard_ASC
@@ -1800,14 +1815,55 @@ enum FocusPageModelOrderBy {
   title_DESC
 }
 
-"""Record of type Focus Page (import) (focus_page)"""
+union FocusPageModelParentPageField = IndexPageRecord | PageRecord
+
+type FocusPageModelParentPageFieldMultiLocaleField {
+  locale: SiteLocale
+  value: FocusPageModelParentPageField
+}
+
+"""Record of type Focus Page (focus_page)"""
 type FocusPageRecord implements RecordInterface {
+  _allContentLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [FocusPageModelContentFieldListListNonNullMultiLocaleField!]
+  _allDateOfPublicationLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [DateMultiLocaleField!]
+  _allParagraphLocales(
+    """Process content as markdown"""
+    markdown: Boolean
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringMultiLocaleField!]
+  _allParentPageLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [FocusPageModelParentPageFieldMultiLocaleField!]
+  _allTopicLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StoryTopicRecordMultiLocaleField!]
   _createdAt: DateTime!
 
   """Editing URL"""
   _editingUrl: String
   _firstPublishedAt: DateTime!
   _isValid: BooleanType!
+  _locales: [SiteLocale!]!
   _modelApiKey: String!
   _publicationScheduledAt: DateTime
   _publishedAt: DateTime!
@@ -1820,16 +1876,56 @@ type FocusPageRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  content(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [FocusPageModelContentField!]!
   contentHasIndex: BooleanType!
   credits(
     """Process content as markdown"""
     markdown: Boolean
   ): String
+  dateOfPublication(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): Date
   dateShown: DateTime
   embedDashboard: String
   id: ItemId!
+  image: FileField
   imageCover: FileField
   imageCoverDescription: String
+  paragraph(
+    """Process content as markdown"""
+    markdown: Boolean
+
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String
+  parentPage(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): FocusPageModelParentPageField
   seo: SeoField
   slug: String
   subtitle: String
@@ -1839,6 +1935,15 @@ type FocusPageRecord implements RecordInterface {
   ): String
   targets: [TargetRecord!]!
   title: String
+  topic(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): StoryTopicRecord
   topics: [StoryTopicRecord!]!
 }
 
@@ -4784,6 +4889,13 @@ type InternalLinkRecordListListNonNullMultiLocaleField {
   value: [InternalLinkRecord!]!
 }
 
+union InterviewModelContentField = HeroRecord | IntroArticleRecord | StructuredTextRecord | SupportCtaSectionRecord
+
+type InterviewModelContentFieldListListNonNullMultiLocaleField {
+  locale: SiteLocale
+  value: [InterviewModelContentField!]!
+}
+
 input InterviewModelFilter {
   _createdAt: CreatedAtFilter
   id: ItemIdFilter
@@ -4795,12 +4907,20 @@ input InterviewModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   _locales: LocalesFilter
+  dateOfPublication: DateFilter
   dateShown: DateTimeFilter
+  image: FileFilter
+  owners: LinksFilter
+  paragraph: TextFilter
+  parentPage: LinkFilter
   seo: SeoFilter
   slug: StringFilter
   subtitle: StringFilter
   summary: TextFilter
+  targets: LinksFilter
   title: StringFilter
+  topic: LinkFilter
+  topics: LinksFilter
   OR: [InterviewModelFilter]
   AND: [InterviewModelFilter]
 }
@@ -4824,6 +4944,8 @@ enum InterviewModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
+  dateOfPublication_ASC
+  dateOfPublication_DESC
   dateShown_ASC
   dateShown_DESC
   slug_ASC
@@ -4834,8 +4956,42 @@ enum InterviewModelOrderBy {
   title_DESC
 }
 
-"""Record of type Interviste (import) (interview)"""
+union InterviewModelParentPageField = IndexPageRecord | PageRecord
+
+type InterviewModelParentPageFieldMultiLocaleField {
+  locale: SiteLocale
+  value: InterviewModelParentPageField
+}
+
+"""Record of type Interviste (interview)"""
 type InterviewRecord implements RecordInterface {
+  _allContentLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [InterviewModelContentFieldListListNonNullMultiLocaleField!]
+  _allDateOfPublicationLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [DateMultiLocaleField!]
+  _allParagraphLocales(
+    """Process content as markdown"""
+    markdown: Boolean
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringMultiLocaleField!]
+  _allParentPageLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [InterviewModelParentPageFieldMultiLocaleField!]
   _allSeoLocales(
     """
     If you want to fallback to a default translation when a translation has not been found
@@ -4869,6 +5025,12 @@ type InterviewRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): [StringMultiLocaleField!]
+  _allTopicLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StoryTopicRecordMultiLocaleField!]
   _createdAt: DateTime!
 
   """Editing URL"""
@@ -4888,8 +5050,49 @@ type InterviewRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  content(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [InterviewModelContentField!]!
+  dateOfPublication(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): Date
   dateShown: DateTime
   id: ItemId!
+  image: FileField
+  owners: [OwnerRecord!]!
+  paragraph(
+    """Process content as markdown"""
+    markdown: Boolean
+
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String
+  parentPage(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): InterviewModelParentPageField
   seo(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -4929,6 +5132,7 @@ type InterviewRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): String
+  targets: [TargetRecord!]!
   title(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -4938,6 +5142,16 @@ type InterviewRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): String
+  topic(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): StoryTopicRecord
+  topics: [StoryTopicRecord!]!
 }
 
 """Block of type Intro article (intro_article)"""
@@ -6907,6 +7121,13 @@ input ParentFilter {
   exists: BooleanType
 }
 
+union ParticipationModelContentField = HeroRecord | IntroArticleRecord | StructuredTextRecord | SupportCtaSectionRecord
+
+type ParticipationModelContentFieldListListNonNullMultiLocaleField {
+  locale: SiteLocale
+  value: [ParticipationModelContentField!]!
+}
+
 input ParticipationModelFilter {
   _createdAt: CreatedAtFilter
   id: ItemIdFilter
@@ -6918,12 +7139,20 @@ input ParticipationModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   _locales: LocalesFilter
+  dateOfPublication: DateFilter
   dateShown: DateTimeFilter
+  image: FileFilter
+  owners: LinksFilter
+  paragraph: TextFilter
+  parentPage: LinkFilter
   seo: SeoFilter
   slug: StringFilter
   subtitle: StringFilter
   summary: TextFilter
+  targets: LinksFilter
   title: StringFilter
+  topic: LinkFilter
+  topics: LinksFilter
   OR: [ParticipationModelFilter]
   AND: [ParticipationModelFilter]
 }
@@ -6947,6 +7176,8 @@ enum ParticipationModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
+  dateOfPublication_ASC
+  dateOfPublication_DESC
   dateShown_ASC
   dateShown_DESC
   slug_ASC
@@ -6957,8 +7188,42 @@ enum ParticipationModelOrderBy {
   title_DESC
 }
 
-"""Record of type Interventi (import) (participation)"""
+union ParticipationModelParentPageField = IndexPageRecord | PageRecord
+
+type ParticipationModelParentPageFieldMultiLocaleField {
+  locale: SiteLocale
+  value: ParticipationModelParentPageField
+}
+
+"""Record of type Interventi (participation)"""
 type ParticipationRecord implements RecordInterface {
+  _allContentLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [ParticipationModelContentFieldListListNonNullMultiLocaleField!]
+  _allDateOfPublicationLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [DateMultiLocaleField!]
+  _allParagraphLocales(
+    """Process content as markdown"""
+    markdown: Boolean
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringMultiLocaleField!]
+  _allParentPageLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [ParticipationModelParentPageFieldMultiLocaleField!]
   _allSeoLocales(
     """
     If you want to fallback to a default translation when a translation has not been found
@@ -6992,6 +7257,12 @@ type ParticipationRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): [StringMultiLocaleField!]
+  _allTopicLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StoryTopicRecordMultiLocaleField!]
   _createdAt: DateTime!
 
   """Editing URL"""
@@ -7011,8 +7282,49 @@ type ParticipationRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  content(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [ParticipationModelContentField!]!
+  dateOfPublication(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): Date
   dateShown: DateTime
   id: ItemId!
+  image: FileField
+  owners: [OwnerRecord!]!
+  paragraph(
+    """Process content as markdown"""
+    markdown: Boolean
+
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String
+  parentPage(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): ParticipationModelParentPageField
   seo(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -7052,6 +7364,7 @@ type ParticipationRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): String
+  targets: [TargetRecord!]!
   title(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -7061,6 +7374,16 @@ type ParticipationRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): String
+  topic(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): StoryTopicRecord
+  topics: [StoryTopicRecord!]!
 }
 
 """Specifies how to filter by position (sorted and tree-like collections)"""
@@ -7090,6 +7413,13 @@ input PositionFilter {
   neq: IntType
 }
 
+union PressReleaseModelContentField = HeroRecord | IntroArticleRecord | StructuredTextRecord | SupportCtaSectionRecord
+
+type PressReleaseModelContentFieldListListNonNullMultiLocaleField {
+  locale: SiteLocale
+  value: [PressReleaseModelContentField!]!
+}
+
 input PressReleaseModelFilter {
   _createdAt: CreatedAtFilter
   id: ItemIdFilter
@@ -7101,13 +7431,21 @@ input PressReleaseModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   _locales: LocalesFilter
+  dateOfPublication: DateFilter
   dateShown: DateTimeFilter
+  image: FileFilter
+  owners: LinksFilter
+  paragraph: TextFilter
+  parentPage: LinkFilter
   seo: SeoFilter
   slug: StringFilter
   subtitle: StringFilter
   summary: TextFilter
   tags: LinksFilter
+  targets: LinksFilter
   title: StringFilter
+  topic: LinkFilter
+  topics: LinksFilter
   OR: [PressReleaseModelFilter]
   AND: [PressReleaseModelFilter]
 }
@@ -7131,6 +7469,8 @@ enum PressReleaseModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
+  dateOfPublication_ASC
+  dateOfPublication_DESC
   dateShown_ASC
   dateShown_DESC
   slug_ASC
@@ -7141,8 +7481,42 @@ enum PressReleaseModelOrderBy {
   title_DESC
 }
 
-"""Record of type Press Release (import) (press_release)"""
+union PressReleaseModelParentPageField = IndexPageRecord | PageRecord
+
+type PressReleaseModelParentPageFieldMultiLocaleField {
+  locale: SiteLocale
+  value: PressReleaseModelParentPageField
+}
+
+"""Record of type Press Release (press_release)"""
 type PressReleaseRecord implements RecordInterface {
+  _allContentLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [PressReleaseModelContentFieldListListNonNullMultiLocaleField!]
+  _allDateOfPublicationLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [DateMultiLocaleField!]
+  _allParagraphLocales(
+    """Process content as markdown"""
+    markdown: Boolean
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringMultiLocaleField!]
+  _allParentPageLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [PressReleaseModelParentPageFieldMultiLocaleField!]
   _allSeoLocales(
     """
     If you want to fallback to a default translation when a translation has not been found
@@ -7176,6 +7550,12 @@ type PressReleaseRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): [StringMultiLocaleField!]
+  _allTopicLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StoryTopicRecordMultiLocaleField!]
   _createdAt: DateTime!
 
   """Editing URL"""
@@ -7195,8 +7575,49 @@ type PressReleaseRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  content(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [PressReleaseModelContentField!]!
+  dateOfPublication(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): Date
   dateShown: DateTime
   id: ItemId!
+  image: FileField
+  owners: [OwnerRecord!]!
+  paragraph(
+    """Process content as markdown"""
+    markdown: Boolean
+
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String
+  parentPage(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): PressReleaseModelParentPageField
   seo(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -7237,6 +7658,7 @@ type PressReleaseRecord implements RecordInterface {
     fallbackLocales: [SiteLocale!]
   ): String
   tags: [TagRecord!]!
+  targets: [TargetRecord!]!
   title(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -7246,6 +7668,16 @@ type PressReleaseRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): String
+  topic(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): StoryTopicRecord
+  topics: [StoryTopicRecord!]!
 }
 
 """Specifies how to filter by publication datetime"""
@@ -11089,7 +11521,7 @@ type UploadVideoField {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1
+    punch: Float! = 1.0
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24

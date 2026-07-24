@@ -42,6 +42,7 @@ import {
   AllStoryCardQuery,
   AllStoryClassesQuery,
 } from "@graphql/query/story";
+import { AllInterviewCardQuery } from "@graphql/query/interview";
 import {
   AllWebinarQuery,
   AllWebinarsContentQuery,
@@ -69,6 +70,11 @@ export const newsLoader = async () => {
 export const storiesLoader = async () => {
   const response = await executeAutoPagingQuery(AllStoryCardQuery);
   return response?.allStoryItems || [];
+};
+
+export const interviewsLoader = async () => {
+  const response = await executeAutoPagingQuery(AllInterviewCardQuery);
+  return response?.allInterviews || [];
 };
 
 export const measuresLoader = async () => {

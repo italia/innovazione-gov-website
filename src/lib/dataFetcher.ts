@@ -3,6 +3,7 @@ import { AllMeasuresQuery } from "@graphql/query/measure";
 import { AllNewsQuery } from "@graphql/query/news";
 import { AllResourcesQuery } from "@graphql/query/resource";
 import { AllStoryCardQuery } from "@graphql/query/story";
+import { AllInterviewCardQuery } from "@graphql/query/interview";
 import { AllWebinarQuery } from "@graphql/query/webinar";
 import { executeAutoPagingQuery, executeQuery } from "@lib/datocms";
 import { getCollection, getEntry } from "astro:content";
@@ -27,6 +28,16 @@ export const getStories = async (isPreview: boolean) => {
     return wrap(res?.allStoryItems ?? []);
   }
   return await getCollection("story_item");
+};
+
+export const getInterviews = async (isPreview: boolean) => {
+  if (isPreview) {
+    const res = await executeAutoPagingQuery(AllInterviewCardQuery, {
+      includeDrafts: true,
+    });
+    return wrap(res?.allInterviews ?? []);
+  }
+  return await getCollection("interview");
 };
 
 export const getWebinars = async (isPreview: boolean) => {

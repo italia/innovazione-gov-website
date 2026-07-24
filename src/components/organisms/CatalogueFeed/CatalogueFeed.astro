@@ -5,6 +5,7 @@ import { TabContent, Tabs } from "@components/molecules/Tabs";
 import { NewsArchiveList } from "@components/organisms/NewsArchiveList";
 import { PaginatedCollection } from "@components/react/PaginatedCollection/PaginatedCollection";
 import {
+  getInterviews,
   getMeasures,
   getNews,
   getResources,
@@ -40,6 +41,7 @@ const isPreview = isDraftModeEnabled(Astro.cookies);
 
 const news = await getNews(isPreview);
 const stories = await getStories(isPreview);
+const interviews = await getInterviews(isPreview);
 const webinars = await getWebinars(isPreview);
 const resources = await getResources(isPreview);
 const measures = await getMeasures(isPreview);
@@ -50,7 +52,8 @@ function isValidTabType(val: string): val is ElementType {
     val === "story_item" ||
     val === "webinar_item" ||
     val === "resource" ||
-    val === "measures"
+    val === "measures" ||
+    val === "interview"
   );
 }
 
@@ -85,6 +88,27 @@ function getFilteredItems(
         sortMode,
         lang,
       );
+
+    // Modelli distinti (Interviste): stessa card di story_item, filtro per
+    // owner (niente story_class, il modello è già il tipo).
+    case "interview": {
+      const filteredInterviews = interviews
+        .filter((s) =>
+          s.data.allTitleLocales?.some((item) => item.locale === lang),
+        )
+        .filter(
+          (s) =>
+            !filterOwner ||
+            (s.data.owners ?? []).some((o) => o?.id === filterOwner),
+        );
+      return sortFeedItems(
+        filteredInterviews.map((s) =>
+          mapStoryToCardEditorialStoryProps(s.data as any, lang),
+        ),
+        sortMode,
+        lang,
+      );
+    }
 
     case "news_item":
       const filteredNews = news.filter((n) =>

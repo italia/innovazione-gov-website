@@ -39,6 +39,10 @@ type PaginatedCollectionProps =
       newsPageTabType: "story_item";
     })
   | (PaginatedCollectionCommonProps & {
+      items: CardEditorialStoryProps[];
+      newsPageTabType: "interview";
+    })
+  | (PaginatedCollectionCommonProps & {
       items: CardEditorialNewsProps[];
       newsPageTabType: "webinar_item";
     })
@@ -163,6 +167,10 @@ export function PaginatedCollection({
                 )}
 
                 {newsPageTabType === "story_item" && (
+                  <CardEditorialStory {...(n as CardEditorialStoryProps)} />
+                )}
+
+                {newsPageTabType === "interview" && (
                   <CardEditorialStory {...(n as CardEditorialStoryProps)} />
                 )}
 

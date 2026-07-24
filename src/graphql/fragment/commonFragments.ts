@@ -346,6 +346,44 @@ export const StoryCardFragment = graphql(
 
 export type StoryCardFragmentType = FragmentOf<typeof StoryCardFragment>;
 
+// Card per i modelli distinti (Interviste): stessa struttura di StoryCardFragment
+// ma senza articleClassification (il modello stesso è il tipo).
+export const InterviewCardFragment = graphql(
+  `
+    fragment InterviewCardFragment on InterviewRecord @_unmask {
+      id
+      owners {
+        id
+      }
+      allTitleLocales: _allTitleLocales {
+        locale
+        value
+      }
+      allParagraphLocales: _allParagraphLocales {
+        locale
+        value
+      }
+      allTopicLocales: _allTopicLocales {
+        value {
+          id
+          _allLabelLocales {
+            locale
+            value
+          }
+        }
+        locale
+      }
+      publishedAt: dateOfPublication
+      image {
+        ...ImageFragment
+      }
+    }
+  `,
+  [ImageFragment],
+);
+
+export type InterviewCardFragmentType = FragmentOf<typeof InterviewCardFragment>;
+
 export const InsightCardFragment = graphql(
   `
     fragment InsightCardFragment on InsightRecord @_unmask {

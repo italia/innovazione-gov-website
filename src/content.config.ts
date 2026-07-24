@@ -8,6 +8,7 @@ import {
   globalSettingsLoader,
   homepageLoader,
   insightContentLoader,
+  interviewsLoader,
   layoutLoader,
   localesLoader,
   measuresLoader,
@@ -32,6 +33,7 @@ import {
   globalSettingsSchema,
   homepageSchema,
   insightSchema,
+  interviewSchema,
   layoutSchema,
   localesSchema,
   measureSchema,
@@ -56,6 +58,10 @@ export const collections = {
   story_item: defineCollection({
     schema: storySchema,
     loader: storiesLoader,
+  }),
+  interview: defineCollection({
+    schema: interviewSchema,
+    loader: interviewsLoader,
   }),
   webinar_item: defineCollection({
     schema: webinarSchema,
