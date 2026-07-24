@@ -10283,7 +10283,7 @@ type StoryItemRecord implements RecordInterface {
   topics: [StoryTopicRecord!]!
 }
 
-union StoryTabModelNewsField = ArticleRecord | InsightRecord | StoryItemRecord | WebinarItemRecord
+union StoryTabModelNewsField = ArticleRecord | FocusPageRecord | InsightRecord | InterviewRecord | ParticipationRecord | PressReleaseRecord | StoryItemRecord | WebinarItemRecord
 
 """Block of type Tab contenuto interno (story_tab)"""
 type StoryTabRecord implements RecordInterface {

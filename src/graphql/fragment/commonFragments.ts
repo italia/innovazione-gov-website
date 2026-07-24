@@ -543,6 +543,18 @@ export const StoryTabFragment = graphql(
         ... on ArticleRecord {
           ...ArticleCardPreviewFragment
         }
+        ... on InterviewRecord {
+          ...InterviewCardFragment
+        }
+        ... on ParticipationRecord {
+          ...ParticipationCardFragment
+        }
+        ... on PressReleaseRecord {
+          ...PressReleaseCardFragment
+        }
+        ... on FocusPageRecord {
+          ...FocusCardFragment
+        }
       }
     }
   `,
@@ -551,6 +563,10 @@ export const StoryTabFragment = graphql(
     WebinarItemFragment,
     InsightCardFragment,
     ArticleCardPreviewFragment,
+    InterviewCardFragment,
+    ParticipationCardFragment,
+    PressReleaseCardFragment,
+    FocusCardFragment,
     InternalLinkFragment,
   ],
 );
