@@ -79,7 +79,7 @@ export const ResourcesIdxQuery = graphql(
 export const CataloguesIdxQuery = graphql(
   `
     query CataloguesIdx {
-      allCatalogues(first: 2500) {
+      allCatalogues: allIndexPages(first: 2500) {
         ...CatalogueIndexingFragment
       }
     }

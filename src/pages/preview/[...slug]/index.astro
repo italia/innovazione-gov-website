@@ -49,6 +49,7 @@ const queryMap: Record<string, QueryConfig> = {
   search: { query: SearchPageContentQuery, key: "search" },
   page: { query: PageByIdQuery, key: "page" },
   catalogue: { query: CatalogueByIdQuery, key: "catalogue" },
+  index_page: { query: CatalogueByIdQuery, key: "catalogue" },
   article: { query: ArticleByIdQuery, key: "article" },
   webinar_item: { query: WebinarByIdQuery, key: "webinarItem" },
   insight: { query: InsightByIdQuery, key: "insight" },
@@ -143,7 +144,8 @@ if (slugProduction !== "#") {
     type === "webinar_item" ||
     type === "story_item" ||
     type === "insight" ||
-    type === "catalogue") && (
+    type === "catalogue" ||
+    type === "index_page") && (
     <Layout redirectUrl={redirectUrl} pageSeo={dataRecord?.seo}>
       <PageAdapter content={content as any} />
     </Layout>

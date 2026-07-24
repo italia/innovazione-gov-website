@@ -8,7 +8,7 @@ import { graphql, type FragmentOf } from "@graphql/graphql";
 
 export const CatalogueContentFragment = graphql(
   `
-    fragment CatalogueContentFragment on CatalogueModelContentField @_unmask {
+    fragment CatalogueContentFragment on IndexPageModelContentField @_unmask {
       ... on RecordInterface {
         id
         componentName: __typename
@@ -36,7 +36,7 @@ export type CatalogueContentFragmentType = FragmentOf<
 
 export const AllCataloguesRecordFragment = graphql(
   `
-    fragment AllCataloguesRecordFragment on CatalogueRecord @_unmask {
+    fragment AllCataloguesRecordFragment on IndexPageRecord @_unmask {
       id
       locales: _locales
       publishedAt: _publishedAt

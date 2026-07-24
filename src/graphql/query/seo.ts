@@ -77,7 +77,7 @@ export const InsightsSeoQuery = graphql(
 export const CataloguesSeoQuery = graphql(
   `
     query CataloguesSeo($locale: SiteLocale!) {
-      allCatalogues(locale: $locale, first: 2500) {
+      allCatalogues: allIndexPages(locale: $locale, first: 2500) {
         id
         metaTags: _seoMetaTags {
           ...TagFragment
@@ -169,7 +169,7 @@ export const GlobalSeoQuery = graphql(
         }
         updatedAt: _updatedAt
       }
-      allCatalogues(locale: $locale) {
+      allCatalogues: allIndexPages(locale: $locale) {
         id
         metaTags: _seoMetaTags {
           ...TagFragment

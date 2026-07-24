@@ -27,7 +27,7 @@ export const InternalLinkFragment = graphql(`
   fragment InternalLinkFragment on InternalLinkRecord @_unmask {
     label
     linkTo {
-      ... on CatalogueRecord {
+      ... on IndexPageRecord {
         id
       }
       ... on PageRecord {
@@ -64,7 +64,7 @@ export const LinkBlockFragment = graphql(`
       ... on ArticleRecord {
         id
       }
-      ... on CatalogueRecord {
+      ... on IndexPageRecord {
         id
       }
       ... on StoryItemRecord {
@@ -528,7 +528,7 @@ export const MenuItemFragment = graphql(`
     id
     title
     pointsTo {
-      ... on CatalogueRecord {
+      ... on IndexPageRecord {
         id
       }
       ... on PageRecord {
@@ -550,7 +550,7 @@ export const MegaMenuItemFragment = graphql(
       title
       subtitle
       pointsTo {
-        ... on CatalogueRecord {
+        ... on IndexPageRecord {
           id
         }
         ... on PageRecord {

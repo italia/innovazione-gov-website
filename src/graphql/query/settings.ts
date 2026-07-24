@@ -118,7 +118,7 @@ export const WebinarsLinksQuery = graphql(
 export const CataloguesLinksQuery = graphql(
   `
     query CataloguesLinks {
-      allCatalogues(first: 2500) {
+      allCatalogues: allIndexPages(first: 2500) {
         ...AllCataloguesSlugFragment
         ...CatalogueIndexingFragment
       }

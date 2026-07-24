@@ -32,7 +32,7 @@ export type PageLocalesFragmentType = FragmentOf<typeof PageLocalesFragment>;
 
 export const CatalogueLocalesFragment = graphql(
   `
-    fragment CatalogueLocalesFragment on CatalogueRecord @_unmask {
+    fragment CatalogueLocalesFragment on IndexPageRecord @_unmask {
       allSlugLocales: _allSlugLocales {
         locale
         value

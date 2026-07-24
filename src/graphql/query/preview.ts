@@ -29,7 +29,7 @@ export const PageByIdQuery = graphql(
 export const CatalogueByIdQuery = graphql(
   `
     query CatalogueById($id: ItemId!, $locale: SiteLocale!) {
-      catalogue(filter: { id: { eq: $id } }, locale: $locale) {
+      catalogue: indexPage(filter: { id: { eq: $id } }, locale: $locale) {
         id
         title
         slug

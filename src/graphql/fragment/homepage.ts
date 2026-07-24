@@ -73,7 +73,7 @@ export const HomepageModelContentFragment = graphql(
             ...ImageFragment
           }
           link {
-            ... on CatalogueRecord {
+            ... on IndexPageRecord {
               id
             }
             ... on PageRecord {
