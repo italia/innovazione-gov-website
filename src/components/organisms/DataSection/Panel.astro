@@ -20,7 +20,7 @@ const { title, paragraph, chart, externalLink } = Astro.props;
   <div class="col-12">
     {
       chart && (
-        <Chart client:visible data={chart}>
+        <Chart client:only="react" data={chart}>
           <div slot="fallback">
             <Loader />
           </div>

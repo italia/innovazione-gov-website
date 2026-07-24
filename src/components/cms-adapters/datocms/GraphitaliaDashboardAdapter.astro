@@ -11,6 +11,6 @@ const dashboardId: string = block.dashboardId;
 
 <section>
   <div class="container py-5 py-lg-80">
-    <Dashboard client:visible dashboardId={dashboardId} />
+    <Dashboard client:only="react" dashboardId={dashboardId} />
   </div>
 </section>
