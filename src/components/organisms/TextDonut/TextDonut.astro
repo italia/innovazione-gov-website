@@ -10,6 +10,7 @@ const {
   description,
   background = "default",
   sectionTitleId,
+  altText,
 } = Astro.props;
 
 const radius = 40;
@@ -35,7 +36,13 @@ const circumference = 2 * Math.PI * radius;
       data-donut
       data-percentage={percentage}
     >
-      <svg class="text-donut__svg" viewBox="0 0 100 100" aria-hidden="true">
+      <svg
+        class="text-donut__svg"
+        viewBox="0 0 100 100"
+        {...altText
+          ? { role: "img", "aria-label": altText }
+          : { "aria-hidden": "true" }}
+      >
         <circle
           class="text-donut__track"
           cx="50"
