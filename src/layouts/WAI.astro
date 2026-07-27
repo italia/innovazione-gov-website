@@ -8,7 +8,12 @@ const siteId = import.meta.env.PUBLIC_WAI_SITE_ID;
   _paq.push(["trackPageView"]);
   _paq.push(["enableLinkTracking"]);
   (function () {
-    var u = `//${waiUrl}/`;
+    // `waiUrl` may or may not include the scheme; strip it (and any trailing
+    // slash) so the protocol-relative `//host/` is always well-formed.
+    var host = String(waiUrl)
+      .replace(/^https?:\/\//, "")
+      .replace(/\/$/, "");
+    var u = `//${host}/`;
     _paq.push(["setTrackerUrl", u + "matomo.php"]);
     _paq.push(["setSiteId", siteId]);
     var d = document,
