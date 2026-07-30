@@ -46,7 +46,7 @@ const client = createClient();
 export const GET: APIRoute = async ({ url }) => {
   // Landing mode: the search page is not published, keep the endpoint mute
   // even if the OpenSearch index still holds previously indexed content.
-  // Same response when OpenSearch is not configured for this deployment.
+  // Same response when OpenSearch is not configured for this deployment
   if (!showAllPages() || !client) {
     return new Response(JSON.stringify([]), { status: 200 });
   }
