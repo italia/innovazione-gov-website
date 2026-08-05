@@ -17,7 +17,10 @@ const {
   isExternal = true,
 } = Astro.props;
 
-const shouldShowFooter = category || dateTime;
+const categoryLabel = Array.isArray(category)
+  ? category.filter(Boolean).join(", ")
+  : category;
+const shouldShowFooter = categoryLabel || dateTime;
 const cardTitleId = `card-title-${id}`;
 const { lang } = Astro.locals;
 const t = getI18n(lang);
@@ -54,11 +57,11 @@ const ariaLabel = isExternal ? t["link.external"] : t["link.internal"];
   {
     shouldShowFooter && (
       <footer class="it-card-related it-card-footer">
-        {category && (
+        {categoryLabel && (
           <div class="it-card-taxonomy">
             <ChipLink
               linkTo={""}
-              label={category}
+              label={categoryLabel}
               visuallyHidden={t["card.topic"]}
               disabled
             />

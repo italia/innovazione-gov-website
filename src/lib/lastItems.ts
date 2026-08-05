@@ -49,6 +49,7 @@ const LastPressReleasesQuery = graphql(`
       locale: $locale
     ) {
       id
+      slug
       title
       subtitle
       summary
@@ -96,6 +97,7 @@ export async function getLastItems(
       });
       return records.map((r) => ({
         id: r.id,
+        isExternal: false,
         title: r.title ?? "",
         description: r.summary || r.subtitle || "",
         image: r.imageCover ?? undefined,
@@ -110,6 +112,7 @@ export async function getLastItems(
       });
       return records.map((r) => ({
         id: r.id,
+        isExternal: false,
         title: r.title ?? "",
         description: r.summary || r.subtitle || "",
         dateTime: r.dateShown ?? undefined,
@@ -123,15 +126,14 @@ export async function getLastItems(
       });
       return records.map((r) => ({
         id: r.id,
+        isExternal: false,
         title: r.title ?? "",
         description: r.summary || r.subtitle || "",
-        category:
-          r.tags
-            .map((t) => t.name)
-            .filter((name): name is string => !!name)
-            .join(", ") || undefined,
+        category: r.tags
+          .map((t) => t.name)
+          .filter((name): name is string => !!name),
         dateTime: r.dateShown ?? undefined,
-        linkTo: linkResolver(r.id, locale),
+        linkTo: r.slug ? `/${locale}/notizie/comunicati-stampa/${r.slug}` : "#",
       }));
     }
     case "articles": {
@@ -141,8 +143,9 @@ export async function getLastItems(
       });
       return records.map((r) => ({
         id: r.id,
+        isExternal: false,
         title: r.title ?? "",
-        description: r.description ?? r.paragraph ?? "",
+        description: r.paragraph || r.description || "",
         image: r.image ?? undefined,
         dateTime: r.firstPublishedAt ?? undefined,
         linkTo: linkResolver(r.id, locale),

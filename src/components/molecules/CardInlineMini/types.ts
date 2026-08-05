@@ -5,7 +5,7 @@ export type CardInlineMiniProps = {
   title: string;
   image?: ImageProps;
   linkTo: string;
-  category?: string;
+  category?: string | string[];
   dateTime?: string;
   ariaLabelCardCategory?: string;
   isExternal?: boolean;

@@ -32,10 +32,10 @@ const buttonVariant = isDarkBackground ? "dark" : "light";
     <div class={`row align-items-center justify-content-between `}>
       <div class="col-lg-6 col-12">
         <div class={`text-container mb-4 mb-lg-0 ${textColorClass}`}>
-          <h3 class={`mb-3 ${textColorClass}`} id={slugify(title)}>
+          <h3 class={`mb-3 cta-title ${textColorClass}`} id={slugify(title)}>
             {title}
           </h3>
-          <div class="mb-4" set:html={paragraph} />
+          <div class="mb-4 cta-paragraph" set:html={paragraph} />
           {
             labelButton && linkTo && (
               <div class="mt-5">
@@ -65,6 +65,15 @@ const buttonVariant = isDarkBackground ? "dark" : "light";
           }
           .img-container :global(img) {
             object-fit: cover;
+          }
+          .cta-title {
+            font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+            line-height: 1.15;
+          }
+          .cta-paragraph,
+          .cta-paragraph :global(p) {
+            font-size: 1.25rem;
+            line-height: 1.6;
           }
         </style>
       </div>

@@ -6,7 +6,7 @@ export type CardEditorialNewsProps = {
   description: string;
   image?: ImageProps;
   linkTo: string;
-  category?: string;
+  category?: string | string[];
   dateTime?: string;
   action?: string;
   fullHeight?: boolean;

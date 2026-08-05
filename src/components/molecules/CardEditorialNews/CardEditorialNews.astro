@@ -20,7 +20,12 @@ const {
   isExternal = true,
 } = Astro.props;
 
-const shouldShowFooter = category || dateTime;
+const categories = Array.isArray(category)
+  ? category.filter(Boolean)
+  : category
+    ? [category]
+    : [];
+const shouldShowFooter = categories.length > 0 || dateTime;
 const hasLink = !!linkTo && linkTo !== "#";
 const cardTitleId = `card-title-${id}`;
 const { lang } = Astro.locals;
@@ -65,10 +70,14 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
   {
     shouldShowFooter && (
       <footer class="it-card-related it-card-footer">
-        {category && (
-          <div class="it-card-taxonomy">
+        {categories.length > 0 && (
+          <div class="it-card-taxonomy d-flex flex-wrap gap-2">
             <span class="visually-hidden">{t["card.topic"]}</span>
-            <p class="it-card-category">{category}</p>
+            {categories.map((c) => (
+              <div class="chip chip-simple">
+                <span class="chip-label">{c}</span>
+              </div>
+            ))}
           </div>
         )}
         {dateTime && <DateTime className="it-card-date" value={dateTime} />}
@@ -77,3 +86,9 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
   }
   {action && <div class="it-card-footer">{action}</div>}
 </article>
+
+<style>
+  .it-card-taxonomy .chip {
+    pointer-events: none;
+  }
+</style>
