@@ -5,12 +5,8 @@ import { TabContent, Tabs } from "@components/molecules/Tabs";
 import { NewsArchiveList } from "@components/organisms/NewsArchiveList";
 import { PaginatedCollection } from "@components/react/PaginatedCollection/PaginatedCollection";
 import {
-  getFocus,
-  getInterviews,
   getMeasures,
   getNews,
-  getParticipations,
-  getPressReleases,
   getResources,
   getStories,
   getWebinars,
@@ -44,10 +40,6 @@ const isPreview = import.meta.env.DEV && isDraftModeEnabled(Astro.cookies);
 
 const news = await getNews(isPreview);
 const stories = await getStories(isPreview);
-const interviews = await getInterviews(isPreview);
-const participations = await getParticipations(isPreview);
-const pressReleases = await getPressReleases(isPreview);
-const focus = await getFocus(isPreview);
 const webinars = await getWebinars(isPreview);
 const resources = await getResources(isPreview);
 const measures = await getMeasures(isPreview);
@@ -58,11 +50,7 @@ function isValidTabType(val: string): val is ElementType {
     val === "story_item" ||
     val === "webinar_item" ||
     val === "resource" ||
-    val === "measures" ||
-    val === "interview" ||
-    val === "participation" ||
-    val === "press_release" ||
-    val === "focus_page"
+    val === "measures"
   );
 }
 
@@ -97,79 +85,6 @@ function getFilteredItems(
         sortMode,
         lang,
       );
-
-    // Modelli distinti (Interviste): stessa card di story_item, filtro per
-    // owner (niente story_class, il modello è già il tipo).
-    case "interview": {
-      const filteredInterviews = interviews
-        .filter((s) =>
-          s.data.allTitleLocales?.some((item) => item.locale === lang),
-        )
-        .filter(
-          (s) =>
-            !filterOwner ||
-            (s.data.owners ?? []).some((o) => o?.id === filterOwner),
-        );
-      return sortFeedItems(
-        filteredInterviews.map((s) =>
-          mapStoryToCardEditorialStoryProps(s.data as any, lang),
-        ),
-        sortMode,
-        lang,
-      );
-    }
-
-    case "participation": {
-      const filtered = participations
-        .filter((s) =>
-          s.data.allTitleLocales?.some((item) => item.locale === lang),
-        )
-        .filter(
-          (s) =>
-            !filterOwner ||
-            (s.data.owners ?? []).some((o) => o?.id === filterOwner),
-        );
-      return sortFeedItems(
-        filtered.map((s) =>
-          mapStoryToCardEditorialStoryProps(s.data as any, lang),
-        ),
-        sortMode,
-        lang,
-      );
-    }
-
-    case "press_release": {
-      const filtered = pressReleases
-        .filter((s) =>
-          s.data.allTitleLocales?.some((item) => item.locale === lang),
-        )
-        .filter(
-          (s) =>
-            !filterOwner ||
-            (s.data.owners ?? []).some((o) => o?.id === filterOwner),
-        );
-      return sortFeedItems(
-        filtered.map((s) =>
-          mapStoryToCardEditorialStoryProps(s.data as any, lang),
-        ),
-        sortMode,
-        lang,
-      );
-    }
-
-    // Focus: nessun filtro owner (il modello non ha owners nel sorgente).
-    case "focus_page": {
-      const filtered = focus.filter((s) =>
-        s.data.allTitleLocales?.some((item) => item.locale === lang),
-      );
-      return sortFeedItems(
-        filtered.map((s) =>
-          mapStoryToCardEditorialStoryProps(s.data as any, lang),
-        ),
-        sortMode,
-        lang,
-      );
-    }
 
     case "news_item":
       const filteredNews = news.filter((n) =>
