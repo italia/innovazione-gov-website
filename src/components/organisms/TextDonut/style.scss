@@ -48,7 +48,14 @@
     transform-box: fill-box;
     transform-origin: center;
     transform: scaleX(-1) rotate(-90deg);
-    // no CSS transition — JS requestAnimationFrame drives both arc and counter in sync
+    // nessuna transizione su stroke-dashoffset — l'arco e il counter sono
+    // guidati in sync da requestAnimationFrame; si anima solo il colore
+    transition: stroke 0.3s ease;
+  }
+
+  // A fine animazione, se il donut è completo (100%), l'anello diventa verde.
+  &__svg-wrapper.is-complete &__progress {
+    stroke: #007a52;
   }
 
   &__center {
