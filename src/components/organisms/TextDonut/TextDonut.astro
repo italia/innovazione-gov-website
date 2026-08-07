@@ -109,6 +109,7 @@ const circumference = 2 * Math.PI * radius;
       counter.textContent = Math.round(eased * pct) + "%";
 
       if (t < 1) requestAnimationFrame(tick);
+      else if (pct >= 100) wrapper.classList.add("is-complete");
     };
 
     const observer = new IntersectionObserver(
