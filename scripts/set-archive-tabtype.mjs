@@ -17,8 +17,13 @@ const MAP = {
   // focus: "focus_page",  // nessun archivio index_page "focus" nel sottoalbero Sottosegretario
 };
 
-const to = buildClient({ apiToken: process.env.DATOCMS_MANAGEMENT_API_TOKEN, environment: ENV, requestTimeout: 60000 });
-const val = (f, l) => (f == null ? "" : typeof f === "object" ? (f[l] ?? "") : l === "it" ? f : "");
+const to = buildClient({
+  apiToken: process.env.DATOCMS_MANAGEMENT_API_TOKEN,
+  environment: ENV,
+  requestTimeout: 60000,
+});
+const val = (f, l) =>
+  f == null ? "" : typeof f === "object" ? (f[l] ?? "") : l === "it" ? f : "";
 const its = await to.itemTypes.list();
 const byId = Object.fromEntries(its.map((i) => [i.id, i.api_key]));
 const IP = its.find((i) => i.api_key === "index_page").id;
@@ -26,19 +31,28 @@ const IP = its.find((i) => i.api_key === "index_page").id;
 function rebuild(b, tabType) {
   const key = byId[b.relationships.item_type.data.id];
   const attributes = { ...b.attributes };
-  if (key === "catalogue_feed") attributes.tabs = (b.attributes.tabs || []).map((t) => rebuild(t, tabType));
+  if (key === "catalogue_feed")
+    attributes.tabs = (b.attributes.tabs || []).map((t) => rebuild(t, tabType));
   if (key === "catalogue_tab") attributes.news_page_tab_type = tabType;
   return { type: "item", id: b.id, attributes, relationships: b.relationships };
 }
 
-for await (const p of to.items.listPagedIterator({ filter: { type: IP }, version: "current", nested: true, perPage: 50 })) {
+for await (const p of to.items.listPagedIterator({
+  filter: { type: IP },
+  version: "current",
+  nested: true,
+  perPage: 50,
+})) {
   const slug = val(p.slug, "it");
   const tabType = MAP[slug];
   if (!tabType) continue;
-  console.log(`  ${COMMIT ? "set" : "[dry]"} "${slug}" news_page_tab_type=${tabType}`);
+  console.log(
+    `  ${COMMIT ? "set" : "[dry]"} "${slug}" news_page_tab_type=${tabType}`,
+  );
   if (COMMIT) {
     const content = {};
-    for (const loc of Object.keys(p.content)) content[loc] = (p.content[loc] || []).map((b) => rebuild(b, tabType));
+    for (const loc of Object.keys(p.content))
+      content[loc] = (p.content[loc] || []).map((b) => rebuild(b, tabType));
     await to.items.update(p.id, { content });
     await to.items.publish(p.id);
   }

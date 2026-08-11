@@ -30,22 +30,116 @@ const PER_CATEGORY = 10;
 const CATEGORIES = [
   { name: "Notizie (import)", apiKey: "news", source: "article" },
   { name: "Interviste (import)", apiKey: "interview", source: "interview" },
-  { name: "Interventi (import)", apiKey: "participation", source: "participation" },
+  {
+    name: "Interventi (import)",
+    apiKey: "participation",
+    source: "participation",
+  },
 ];
 
 // Definizione campi: mirroring esatto di press_release ("Comunicati (import)").
 const FIELD_DEFS = [
-  { label: "Title", api_key: "title", field_type: "string", localized: true, validators: {}, appearance: { editor: "single_line", parameters: { heading: false, placeholder: null }, addons: [] } },
-  { label: "Subtitle", api_key: "subtitle", field_type: "string", localized: true, validators: {}, appearance: { editor: "single_line", parameters: { heading: false, placeholder: null }, addons: [] } },
-  { label: "Slug", api_key: "slug", field_type: "string", localized: true, validators: {}, appearance: { editor: "single_line", parameters: { heading: false, placeholder: null }, addons: [] } },
-  { label: "Summary", api_key: "summary", field_type: "text", localized: true, validators: {}, appearance: { editor: "markdown", parameters: { toolbar: ["heading", "bold", "italic", "strikethrough", "code", "unordered_list", "ordered_list", "quote", "link", "image", "fullscreen"] }, addons: [] } },
-  { label: "Date shown", api_key: "date_shown", field_type: "date_time", localized: false, validators: {}, appearance: { editor: "date_time_picker", parameters: {}, addons: [] } },
-  { label: "SEO", api_key: "seo", field_type: "seo", localized: true, validators: {}, appearance: { editor: "seo", parameters: { fields: ["title", "description", "image", "no_index", "twitter_card"], previews: ["google", "twitter", "facebook", "telegram", "whatsapp", "slack", "linkedin"] }, addons: [] } },
+  {
+    label: "Title",
+    api_key: "title",
+    field_type: "string",
+    localized: true,
+    validators: {},
+    appearance: {
+      editor: "single_line",
+      parameters: { heading: false, placeholder: null },
+      addons: [],
+    },
+  },
+  {
+    label: "Subtitle",
+    api_key: "subtitle",
+    field_type: "string",
+    localized: true,
+    validators: {},
+    appearance: {
+      editor: "single_line",
+      parameters: { heading: false, placeholder: null },
+      addons: [],
+    },
+  },
+  {
+    label: "Slug",
+    api_key: "slug",
+    field_type: "string",
+    localized: true,
+    validators: {},
+    appearance: {
+      editor: "single_line",
+      parameters: { heading: false, placeholder: null },
+      addons: [],
+    },
+  },
+  {
+    label: "Summary",
+    api_key: "summary",
+    field_type: "text",
+    localized: true,
+    validators: {},
+    appearance: {
+      editor: "markdown",
+      parameters: {
+        toolbar: [
+          "heading",
+          "bold",
+          "italic",
+          "strikethrough",
+          "code",
+          "unordered_list",
+          "ordered_list",
+          "quote",
+          "link",
+          "image",
+          "fullscreen",
+        ],
+      },
+      addons: [],
+    },
+  },
+  {
+    label: "Date shown",
+    api_key: "date_shown",
+    field_type: "date_time",
+    localized: false,
+    validators: {},
+    appearance: { editor: "date_time_picker", parameters: {}, addons: [] },
+  },
+  {
+    label: "SEO",
+    api_key: "seo",
+    field_type: "seo",
+    localized: true,
+    validators: {},
+    appearance: {
+      editor: "seo",
+      parameters: {
+        fields: ["title", "description", "image", "no_index", "twitter_card"],
+        previews: [
+          "google",
+          "twitter",
+          "facebook",
+          "telegram",
+          "whatsapp",
+          "slack",
+          "linkedin",
+        ],
+      },
+      addons: [],
+    },
+  },
 ];
 
 const LOCALES = ["it", "en"];
 
-const from = buildClient({ apiToken: process.env.DATOCMS_FROM_IMPORT, requestTimeout: 60000 });
+const from = buildClient({
+  apiToken: process.env.DATOCMS_FROM_IMPORT,
+  requestTimeout: 60000,
+});
 const to = buildClient({
   apiToken: process.env.DATOCMS_MANAGEMENT_API_TOKEN,
   environment: TARGET_ENV,
@@ -73,7 +167,13 @@ function buildSeo(titleField, subtitleField) {
   for (const loc of LOCALES) {
     const t = val(titleField, loc);
     out[loc] = nonEmpty(t)
-      ? { title: t, description: val(subtitleField, loc) || null, image: null, no_index: false, twitter_card: null }
+      ? {
+          title: t,
+          description: val(subtitleField, loc) || null,
+          image: null,
+          no_index: false,
+          twitter_card: null,
+        }
       : null;
   }
   return out;
@@ -81,14 +181,18 @@ function buildSeo(titleField, subtitleField) {
 
 // ---- schema (modelli + campi) ---------------------------------------------
 async function ensureModel(cat) {
-  const existing = (await to.itemTypes.list()).find((i) => i.api_key === cat.apiKey);
+  const existing = (await to.itemTypes.list()).find(
+    (i) => i.api_key === cat.apiKey,
+  );
   if (existing) {
     console.log(`  modello "${cat.apiKey}" gia' presente (id ${existing.id})`);
     if (!COMMIT) return existing;
     await ensureFields(existing);
     return existing;
   }
-  console.log(`  modello "${cat.apiKey}" ASSENTE -> ${COMMIT ? "creazione" : "[dry] verrebbe creato"} come "${cat.name}"`);
+  console.log(
+    `  modello "${cat.apiKey}" ASSENTE -> ${COMMIT ? "creazione" : "[dry] verrebbe creato"} come "${cat.name}"`,
+  );
   if (!COMMIT) return null;
   const created = await to.itemTypes.create({
     name: cat.name,
@@ -117,15 +221,22 @@ async function ensureFields(model) {
   // Titolo di presentazione = campo title (best-effort, cosmetico)
   if (titleFieldId) {
     try {
-      await to.itemTypes.update(model.id, { title_field: { type: "field", id: titleFieldId } });
-    } catch { /* non bloccante */ }
+      await to.itemTypes.update(model.id, {
+        title_field: { type: "field", id: titleFieldId },
+      });
+    } catch {
+      /* non bloccante */
+    }
   }
 }
 
 // ---- record ----------------------------------------------------------------
 async function fetchSource(sourceType, undersecretaryId) {
   return from.items.list({
-    filter: { type: sourceType, fields: { owners: { any_in: [undersecretaryId] } } },
+    filter: {
+      type: sourceType,
+      fields: { owners: { any_in: [undersecretaryId] } },
+    },
     order_by: "date_shown_DESC",
     page: { limit: PER_CATEGORY },
     nested: false,
@@ -134,7 +245,10 @@ async function fetchSource(sourceType, undersecretaryId) {
 
 async function existingBySlug(modelId) {
   const map = new Map();
-  for await (const r of to.items.listPagedIterator({ filter: { type: modelId }, perPage: 100 })) {
+  for await (const r of to.items.listPagedIterator({
+    filter: { type: modelId },
+    perPage: 100,
+  })) {
     const slugIt = val(r.slug, "it");
     if (slugIt) map.set(slugIt, r);
   }
@@ -157,17 +271,23 @@ async function importCategory(cat, undersecretaryId) {
   console.log(`\n=== ${cat.name} (sorgente: ${cat.source}) ===`);
   const model = await ensureModel(cat);
   const sources = await fetchSource(cat.source, undersecretaryId);
-  console.log(`  sorgente: ${sources.length} record (top ${PER_CATEGORY} per date_shown desc)`);
+  console.log(
+    `  sorgente: ${sources.length} record (top ${PER_CATEGORY} per date_shown desc)`,
+  );
 
   if (!COMMIT || !model) {
     sources.forEach((s, i) =>
-      console.log(`   [dry] ${String(i + 1).padStart(2)}. ${val(s.slug, "it")}  (${(s.date_shown || "").slice(0, 10)})`),
+      console.log(
+        `   [dry] ${String(i + 1).padStart(2)}. ${val(s.slug, "it")}  (${(s.date_shown || "").slice(0, 10)})`,
+      ),
     );
     return { created: 0, updated: 0, published: 0 };
   }
 
   const bySlug = await existingBySlug(model.id);
-  let created = 0, updated = 0, published = 0;
+  let created = 0,
+    updated = 0,
+    published = 0;
   for (const src of sources) {
     const slugIt = val(src.slug, "it");
     const payload = buildPayload(model, src);
@@ -190,12 +310,21 @@ async function importCategory(cat, undersecretaryId) {
 
 // ---- main ------------------------------------------------------------------
 async function main() {
-  console.log(`Import Sottosegretario -> env ${TARGET_ENV}  [${COMMIT ? "COMMIT" : "DRY-RUN"}]`);
+  console.log(
+    `Import Sottosegretario -> env ${TARGET_ENV}  [${COMMIT ? "COMMIT" : "DRY-RUN"}]`,
+  );
   const site = await to.site.find();
   console.log(`Progetto destinazione: ${site.name}`);
 
-  const under = (await from.items.list({ filter: { type: "undersecretary_page" }, page: { limit: 1 } }))[0];
-  console.log(`Sottosegretario sorgente: ${val(under.title, "it")} (id ${under.id})`);
+  const under = (
+    await from.items.list({
+      filter: { type: "undersecretary_page" },
+      page: { limit: 1 },
+    })
+  )[0];
+  console.log(
+    `Sottosegretario sorgente: ${val(under.title, "it")} (id ${under.id})`,
+  );
 
   const totals = { created: 0, updated: 0, published: 0 };
   for (const cat of CATEGORIES) {
@@ -206,8 +335,13 @@ async function main() {
   }
 
   console.log(`\n==== RIEPILOGO [${COMMIT ? "COMMIT" : "DRY-RUN"}] ====`);
-  console.log(`  creati: ${totals.created} | aggiornati: ${totals.updated} | pubblicati: ${totals.published}`);
-  if (!COMMIT) console.log(`  (nessuna scrittura effettuata; rilancia con --commit per applicare)`);
+  console.log(
+    `  creati: ${totals.created} | aggiornati: ${totals.updated} | pubblicati: ${totals.published}`,
+  );
+  if (!COMMIT)
+    console.log(
+      `  (nessuna scrittura effettuata; rilancia con --commit per applicare)`,
+    );
 }
 
 main().catch((e) => {
