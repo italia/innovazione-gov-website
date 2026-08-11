@@ -1,3 +1,4 @@
+import { AllArticleCardsQuery } from "@graphql/query/articleCards";
 import { LayoutQuery } from "@graphql/query/layout";
 import { AllMeasuresQuery } from "@graphql/query/measure";
 import { AllNewsQuery } from "@graphql/query/news";
@@ -27,6 +28,13 @@ export const getStories = async (isPreview: boolean) => {
     return wrap(res?.allStoryItems ?? []);
   }
   return await getCollection("story_item");
+};
+
+export const getArticles = async (isPreview: boolean) => {
+  const res = await executeQuery(AllArticleCardsQuery, {
+    includeDrafts: isPreview,
+  });
+  return res?.allArticles ?? [];
 };
 
 export const getWebinars = async (isPreview: boolean) => {

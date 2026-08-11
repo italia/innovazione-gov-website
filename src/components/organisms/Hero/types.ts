@@ -3,10 +3,10 @@ import type { ImageProps } from "@components/atoms/Image/types";
 import type { SectionBackgroundHero } from "@utils/background";
 
 export type HeroProps = {
-  title: string;
+  title?: string | null;
   image?: ImageProps;
   imageMobile?: ImageProps;
-  paragraph?: string;
+  paragraph?: string | null;
   showBreadcrumb?: boolean;
   variant?: HeroVariantProps;
   backgroundColor?: SectionBackgroundHero;

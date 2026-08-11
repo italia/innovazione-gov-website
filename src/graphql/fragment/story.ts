@@ -68,9 +68,7 @@ export const AllStoriesRecordFragment = graphql(
     fragment AllStoriesRecordFragment on StoryItemRecord @_unmask {
       id
       locales: _locales
-      # Data di pubblicazione = campo redazionale date_of_publication (coerente
-      # con le card story), non il timestamp CMS _publishedAt.
-      publishedAt: dateOfPublication
+      publishedAt: _firstPublishedAt
       updatedAt: _updatedAt
       allContentLocales: _allContentLocales {
         locale

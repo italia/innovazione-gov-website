@@ -1,0 +1,129 @@
+---
+import { DateTime } from "@components/atoms/DateTime";
+import { Image } from "@components/atoms/Image";
+import type { ImageProps } from "@components/atoms/Image/types";
+import { Breadcrumb } from "@components/molecules/Breadcrumb";
+import { getI18n } from "@i18n/microcopy";
+import { createBreadcrumb } from "@utils/createBreadcrumb";
+
+type Props = {
+  title: string;
+  dateTime?: string | null;
+  topics?: string[];
+  image?: ImageProps | null;
+};
+
+const { title, dateTime, topics = [], image } = Astro.props;
+const { recordId, lang } = Astro.locals;
+const t = getI18n(lang);
+
+const rawBreadcrumb = createBreadcrumb(recordId, lang);
+const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
+  ...item,
+  label:
+    index === 0
+      ? t["breadcrumb.root"]
+      : index === arr.length - 1
+        ? t["article.detail"]
+        : item.label,
+}));
+---
+
+<section class="it-hero-wrapper it-hero-wrapper--split article-hero">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-12 col-lg-6">
+        <div class="it-hero-text-wrapper px-0">
+          <Breadcrumb items={breadcrumbItems} />
+          <h1 class="article-hero__title">{title}</h1>
+          {
+            dateTime && (
+              <DateTime className="article-hero__date" value={dateTime} />
+            )
+          }
+          {
+            topics.length > 0 && (
+              <div class="article-hero__topics">
+                <p class="article-hero__topics-label">{t["article.topics"]}</p>
+                <ul class="article-hero__chips">
+                  {topics.map((topic) => (
+                    <li class="article-hero__tag">{topic}</li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+        </div>
+      </div>
+      {
+        image && (
+          <div class="col-12 col-lg-6">
+            <div class="article-hero__image">
+              <Image {...image} loading="eager" />
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .article-hero {
+    padding-block: 2.5rem;
+    background-color: #f2f7fc;
+  }
+  .article-hero :global(.breadcrumb-container) {
+    margin-bottom: 32px !important;
+  }
+  .article-hero :global(.breadcrumb) {
+    font-size: 1.125rem;
+  }
+  .article-hero__title {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: #1a1a1a !important;
+  }
+  .article-hero :global(.article-hero__date) {
+    display: block;
+    margin-top: 1rem;
+    color: #5b6f82;
+  }
+  .article-hero__topics {
+    margin-top: 1.5rem;
+  }
+  .article-hero__topics-label {
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+    color: #1a1a1a !important;
+  }
+  .article-hero__chips {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .article-hero__tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 1.25rem;
+    border: 1px solid #06c;
+    border-radius: 999px;
+    background: transparent;
+    color: #06c;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+  }
+  .article-hero__image :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+  }
+</style>

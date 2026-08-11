@@ -13,6 +13,7 @@ export const AllArticlesSlugFragment = graphql(
     fragment AllArticlesSlugFragment on ArticleRecord @_unmask {
       id
       locales: _locales
+      articleType
       ...ArticleLocalesFragment
       parent {
         id

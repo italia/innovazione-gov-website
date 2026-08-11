@@ -1,21 +1,15 @@
 ---
 import StructuredTextAdapter from "@components/cms-adapters/datocms/StructuredTextAdapter.astro";
-import { Breadcrumb } from "@components/molecules/Breadcrumb";
 import { SectionContainer } from "@components/organisms/SectionContainer";
 import type { ArticleContentFragmentType } from "@graphql/fragment/article";
-
-import { createBreadcrumb } from "@utils/createBreadcrumb";
 
 type Props = {
   content: ArticleContentFragmentType;
 };
 
 const { content } = Astro.props;
-const { recordId, lang } = Astro.locals;
-const breadcrumbItems = createBreadcrumb(recordId, lang);
 ---
 
 <SectionContainer className="ps-lg-4 structured-text-container">
-  <Breadcrumb items={breadcrumbItems} />
   <StructuredTextAdapter block={content} />
 </SectionContainer>

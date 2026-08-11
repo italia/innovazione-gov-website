@@ -1,3 +1,4 @@
+import { CardArchiveListItem } from "@components/react/CardArchiveListItem";
 import {
   CardEditorialNews,
   type CardEditorialNewsProps,
@@ -27,6 +28,7 @@ type PaginatedCollectionCommonProps = {
   /** Ordine editoriale delle categorie (label); le assenti finiscono in coda. */
   categoriesOrder?: string[];
   perPage?: number;
+  layout?: "grid" | "list";
 };
 
 type PaginatedCollectionProps =
@@ -62,6 +64,7 @@ export function PaginatedCollection({
   filterStyle,
   categoriesOrder,
   lang,
+  layout = "grid",
 }: PaginatedCollectionProps) {
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(labelForAll);
@@ -140,7 +143,26 @@ export function PaginatedCollection({
         </div>
       </div>
 
-      {isMeasures ? (
+      {layout === "list" ? (
+        <div className="it-list-wrapper pt-4">
+          <ul className="it-list mt-4 mt-md-3">
+            {paginatedItems.map((n) => {
+              const item = n as CardEditorialNewsProps;
+              return (
+                <CardArchiveListItem
+                  key={item.id ?? item.title}
+                  id={item.id}
+                  title={item.title}
+                  description={item.description}
+                  dateTime={item.dateTime}
+                  linkTo={item.linkTo}
+                  lang={lang}
+                />
+              );
+            })}
+          </ul>
+        </div>
+      ) : isMeasures ? (
         <div className="accordion pt-4">
           {paginatedItems.map((n) => (
             <CardMeasure key={n.title} {...(n as CardMeasureProps)} />

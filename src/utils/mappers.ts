@@ -9,6 +9,7 @@ import type {
   WebinarItemFragmentType,
 } from "@graphql/fragment/commonFragments";
 import type { MeasureFragmentType } from "@graphql/fragment/measure";
+import type { ArticleCard } from "@graphql/query/articleCards";
 import type { SiteLocale } from "@graphql/types";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { linkResolver } from "@utils/linkResolver";
@@ -37,7 +38,7 @@ export const mapStoryToCardEditorialStoryProps = (
   story: StoryCardFragmentType,
   lang: SiteLocale,
 ): CardEditorialStoryProps => {
-  const topic = getLocaleValue(story.allTopicLocales, lang, null);
+  const topic = story.topics?.[0] ?? null;
   return {
     id: story.id,
     title: getLocaleValue(story.allTitleLocales, lang, ""),
@@ -47,6 +48,29 @@ export const mapStoryToCardEditorialStoryProps = (
     dateTime: story.publishedAt || undefined,
     description: getLocaleValue(story.allParagraphLocales, lang, "") || "",
     lang: lang,
+  };
+};
+
+export const mapArticleToCardEditorialNewsProps = (
+  article: ArticleCard,
+  lang: SiteLocale,
+): CardEditorialNewsProps => {
+  const tags = (article.tags ?? [])
+    .map((t) => t.name)
+    .filter((name): name is string => !!name);
+  return {
+    id: article.id,
+    title: getLocaleValue(article.allTitleLocales, lang, "") ?? "",
+    description:
+      (getLocaleValue(article.allParagraphLocales, lang, "") ||
+        getLocaleValue(article.allDescriptionLocales, lang, "")) ??
+      "",
+    image: article.image ?? undefined,
+    dateTime: article.firstPublishedAt ?? undefined,
+    category: tags,
+    linkTo: linkResolver(article.id, lang),
+    lang: lang,
+    isExternal: false,
   };
 };
 

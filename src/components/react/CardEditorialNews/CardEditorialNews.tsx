@@ -8,9 +8,9 @@ export type CardEditorialNewsProps = {
   id?: string;
   title: string;
   description: string;
-  image: ImageProps;
+  image?: ImageProps;
   linkTo: string;
-  category?: string;
+  category?: string | string[];
   dateTime?: string;
   action?: string;
   fullHeight?: boolean;
@@ -31,7 +31,12 @@ export function CardEditorialNews({
   lang,
   isExternal = true,
 }: CardEditorialNewsProps) {
-  const shouldShowFooter = !!category || !!dateTime;
+  const categories = category
+    ? Array.isArray(category)
+      ? category
+      : [category]
+    : [];
+  const shouldShowFooter = categories.length > 0 || !!dateTime;
   const cardTitleId = `card-title-${id}`;
   const t = getI18n(lang);
   const ariaLabel = isExternal ? t["link.external"] : t["link.internal"];
@@ -49,22 +54,28 @@ export function CardEditorialNews({
           <span className="visually-hidden">{ariaLabel}</span>
         </a>
       </h3>
-      <div className="it-card-image-wrapper">
-        <div className="ratio ratio-16x9">
-          <figure className="figure img-full">
-            <Image {...image} />
-          </figure>
+      {image && (
+        <div className="it-card-image-wrapper">
+          <div className="ratio ratio-16x9">
+            <figure className="figure img-full">
+              <Image {...image} />
+            </figure>
+          </div>
         </div>
-      </div>
+      )}
       <div className="it-card-body">
         <p className="it-card-text">{description}</p>
       </div>
       {shouldShowFooter && (
         <footer className="it-card-related it-card-footer">
-          {category && (
+          {categories.length > 0 && (
             <div className="it-card-taxonomy">
               <span className="visually-hidden">{t["card.topic"]}</span>
-              <p className="it-card-category">{category}</p>
+              {categories.map((cat) => (
+                <p className="it-card-category" key={cat}>
+                  {cat}
+                </p>
+              ))}
             </div>
           )}
           {dateTime && (

@@ -1,5 +1,15 @@
 @import "@styles/palette";
 
+.it-hero-wrapper.only-breadcrumb {
+  min-height: unset !important;
+  padding-top: 1rem !important;
+  padding-bottom: 0 !important;
+
+  .it-hero-text-wrapper {
+    padding-block: 0;
+  }
+}
+
 @media (min-width: 992px) {
   .default-size {
     min-height: 440px !important;
@@ -11,6 +21,11 @@
 
   .xsmall-size {
     min-height: 340px !important;
+  }
+
+  .it-hero-wrapper.only-breadcrumb.default-size,
+  .it-hero-wrapper.only-breadcrumb.small-size {
+    min-height: unset !important;
   }
 
   .it-hero-wrapper-full-height-image .img-responsive-wrapper {

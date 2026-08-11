@@ -1,7 +1,11 @@
 ---
 import SidebarLayoutAdapter from "@components/cms-adapters/datocms/SidebarLayoutAdapter.astro";
+import { ArticleHero } from "@components/organisms/ArticleHero";
 import type { ArticleContentFragmentType } from "@graphql/fragment/article";
-import type { TagFragmentType } from "@graphql/fragment/commonFragments";
+import type {
+  ImageFragmentType,
+  TagFragmentType,
+} from "@graphql/fragment/commonFragments";
 import type { SidebarFragmentType } from "@graphql/fragment/layout";
 import type { SeoFieldFragmentType } from "@graphql/fragment/seoFragments";
 import type { SiteLocale } from "@graphql/types";
@@ -21,9 +25,13 @@ export async function getStaticPaths() {
     props: {
       seoMeta: TagFragmentType[];
       seo: SeoFieldFragmentType | null;
-      content: ArticleContentFragmentType;
+      content: ArticleContentFragmentType | null;
       id: string;
       sidebar: SidebarFragmentType;
+      title: string;
+      dateTime: string | null;
+      topics: string[];
+      image: ImageFragmentType | null;
       publishedAt: string;
       updatedAt: string;
     };
@@ -61,6 +69,12 @@ export async function getStaticPaths() {
             id: page.id,
             sidebar: { ...sidebarForArticle, id: `sidebar_${page.id}` },
             content: getLocaleValue(page.allContentLocales, lang, null),
+            title: getLocaleValue(page.allTitleLocales, lang, ""),
+            dateTime: page.dateShown ?? null,
+            topics: (page.tags ?? [])
+              .map((tag) => tag.name)
+              .filter((name): name is string => !!name),
+            image: getLocaleValue(page.allImageLocales, lang, null),
             publishedAt: page.publishedAt,
             updatedAt: seoRes?.updatedAt || page.updatedAt,
           },
@@ -73,8 +87,19 @@ export async function getStaticPaths() {
   return paths.filter((path): path is PathItem => !!path.params.lang);
 }
 
-const { seo, seoMeta, content, id, sidebar, publishedAt, updatedAt } =
-  Astro.props;
+const {
+  seo,
+  seoMeta,
+  content,
+  id,
+  sidebar,
+  title,
+  dateTime,
+  topics,
+  image,
+  publishedAt,
+  updatedAt,
+} = Astro.props;
 const { lang } = Astro.params;
 
 Astro.locals.lang = lang;
@@ -89,5 +114,11 @@ const jsonLd: JsonLdPageData = {
 ---
 
 <Layout pageSeo={seoMeta} datePublished={publishedAt} jsonLd={jsonLd}>
-  <SidebarLayoutAdapter sidebar={sidebar} content={content} />
+  <ArticleHero
+    title={title}
+    dateTime={dateTime}
+    topics={topics}
+    image={image}
+  />
+  {content && <SidebarLayoutAdapter sidebar={sidebar} content={content} />}
 </Layout>

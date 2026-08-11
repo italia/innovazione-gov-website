@@ -80,9 +80,7 @@ export const StoryIndexingFragment = graphql(
   `
     fragment StoryIndexingFragment on StoryItemRecord @_unmask {
       id
-      articleClassification {
-        id
-      }
+      articleType
       ...AllStoryItemsSlugFragment
       ...StoryItemLocalesFragment
       allContentLocales: _allContentLocales {

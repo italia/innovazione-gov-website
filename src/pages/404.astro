@@ -3,25 +3,28 @@
   <head>
     <meta charset="utf-8" />
     <title>Redirecting...</title>
+    <meta name="robots" content="noindex, nofollow" />
     <script is:inline>
-      const path = window.location.pathname;
-      let lang = "en";
-      if (path.startsWith("/it/")) {
-        lang = "it";
-      } else if (path.startsWith("/en/")) {
-        lang = "en";
-      } else {
-        const userLang = navigator.language || navigator.userLanguage;
-        lang = userLang.startsWith("it") ? "it" : "en";
-      }
-      window.location.href = `/${lang}/404/`;
+      (function () {
+        var path = window.location.pathname;
+        if (/\/(it|en)\/404\/?$/.test(path)) return;
+        var lang = "en";
+        if (path.indexOf("/it/") === 0) {
+          lang = "it";
+        } else if (path.indexOf("/en/") === 0) {
+          lang = "en";
+        } else {
+          var userLang = navigator.language || navigator.userLanguage || "";
+          lang = userLang.indexOf("it") === 0 ? "it" : "en";
+        }
+        window.location.replace("/" + lang + "/404");
+      })();
     </script>
   </head>
   <body>
     <p>
-      Page not found. Redirecting to <a href="/it/404/">Italian</a> or <a
-        href="/en/404/">English</a
-      > version.
+      Page not found. Go to <a href="/it/404">Italian</a> or
+      <a href="/en/404">English</a> version.
     </p>
   </body>
 </html>

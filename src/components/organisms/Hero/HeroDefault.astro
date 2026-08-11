@@ -20,6 +20,14 @@ const {
   openInNewTab = false,
 } = Astro.props;
 const sizeClass = variant === "small" ? "small-size" : "default-size";
+
+const onlyBreadcrumb =
+  showBreadcrumb &&
+  !title &&
+  !paragraph &&
+  !(labelButton && linkTo) &&
+  !image &&
+  !imageMobile;
 ---
 
 <style>
@@ -27,15 +35,15 @@ const sizeClass = variant === "small" ? "small-size" : "default-size";
 </style>
 
 <section
-  class={`it-hero-wrapper it-hero-wrapper--split ${sizeClass} ${bgClass}`}
-  aria-labelledby={slugify(title)}
+  class={`it-hero-wrapper it-hero-wrapper--split ${sizeClass} ${bgClass} ${onlyBreadcrumb ? "only-breadcrumb" : ""}`}
+  aria-labelledby={title ? slugify(title) : undefined}
 >
   <div class="container h-100">
     <div class="row align-items-center h-100">
       <div class="col-12 col-lg-6">
         <div class="it-hero-text-wrapper px-0">
           {showBreadcrumb && <slot name="breadcrumb" />}
-          <h1 id={slugify(title)}>{title}</h1>
+          {title && <h1 id={slugify(title)}>{title}</h1>}
           {paragraph && <p class="font-sans-serif">{paragraph}</p>}
           {
             labelButton && linkTo && (

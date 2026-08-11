@@ -1,0 +1,20 @@
+---
+import { slugify } from "@utils/slugify";
+
+const { node } = Astro.props;
+
+type HeadingChild = { value?: string; children?: HeadingChild[] };
+const nodeText = (n: HeadingChild): string =>
+  typeof n.value === "string"
+    ? n.value
+    : (n.children ?? []).map(nodeText).join("");
+
+const level: number = node.level ?? 2;
+const text = (node.children ?? []).map(nodeText).join("").trim();
+const id = slugify(text);
+const Tag = `h${level}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+---
+
+<Tag id={id}>
+  <slot />
+</Tag>

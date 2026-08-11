@@ -247,7 +247,7 @@ const flattenFaqSection = (record: FaqSectionRecordFragmentType): string => {
 const flattenHeroSection = (record: HeroFragmentType): string => {
   const parts: string[] = [];
 
-  parts.push(record.title);
+  if (record.title) parts.push(record.title);
   if (record.paragraph) parts.push(record.paragraph);
 
   return cleanJoin(parts);

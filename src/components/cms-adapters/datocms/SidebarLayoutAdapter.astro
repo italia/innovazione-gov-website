@@ -1,26 +1,55 @@
 ---
 import ArticleAdapter from "@components/cms-adapters/datocms/ArticleAdapter.astro";
-import SidebarAdapter from "@components/cms-adapters/datocms/SidebarAdapter.astro";
+import { ArticleToc } from "@components/organisms/ArticleToc";
 import type { ArticleContentFragmentType } from "@graphql/fragment/article";
 import type { SidebarFragmentType } from "@graphql/fragment/layout";
+import { getI18n } from "@i18n/microcopy";
+import { extractHeadings } from "@utils/extractHeadings";
 
 type Props = {
   sidebar: SidebarFragmentType;
   content: ArticleContentFragmentType;
 };
 
-const { sidebar, content } = Astro.props;
+const { content } = Astro.props;
+const { lang } = Astro.locals;
+const t = getI18n(lang);
+
+const headings = extractHeadings(content.value, [3]);
+const tocItems = headings.map((heading) => ({
+  id: heading.id,
+  label: heading.text,
+}));
 ---
 
 <div class="container">
   <div class="row">
-    <div
-      class="col-12 col-lg-4 px-lg-0 pb-lg-5 border-end position-sticky menu-column"
-    >
-      <SidebarAdapter sidebar={sidebar} />
+    <div class="col-12 col-lg-4 px-lg-0 pb-lg-5 border-end menu-column">
+      {
+        tocItems.length > 0 && (
+          <ArticleToc header={t["toc.title"]} items={tocItems} />
+        )
+      }
     </div>
     <div class="col-12 col-lg-8 px-lg-0">
       <ArticleAdapter content={content} />
     </div>
   </div>
 </div>
+
+<style>
+  .menu-column {
+    padding-top: 3rem;
+  }
+  @media (min-width: 992px) {
+    .menu-column {
+      padding-top: 5rem;
+    }
+  }
+</style>
+
+<style is:global>
+  .structured-text-container :is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 7rem;
+  }
+</style>

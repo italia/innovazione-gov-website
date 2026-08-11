@@ -5,6 +5,7 @@ import { TabContent, Tabs } from "@components/molecules/Tabs";
 import { NewsArchiveList } from "@components/organisms/NewsArchiveList";
 import { PaginatedCollection } from "@components/react/PaginatedCollection/PaginatedCollection";
 import {
+  getArticles,
   getMeasures,
   getNews,
   getResources,
@@ -14,6 +15,7 @@ import {
 import { isDraftModeEnabled } from "@lib/draftMode";
 import {
   getOrderedMeasureCategories,
+  mapArticleToCardEditorialNewsProps,
   mapMeasureToCardMeasureProps,
   mapNewsToCardEditorialNewsProps,
   mapResourceToResourceProps,
@@ -21,7 +23,12 @@ import {
   mapWebinarToCardEditorialNewsProps,
 } from "@utils/mappers";
 import { sortFeedItems } from "@utils/feedSort";
-import { isNewsStoryClass } from "@utils/storyClassification";
+import {
+  articleTypeForClassLabel,
+  articleTypeForStoryClass,
+  isNewsStoryClass,
+} from "@utils/storyClassification";
+import { getEntry } from "astro:content";
 import type { ElementType, UpdateTabSectionProps } from "./types";
 
 type Props = UpdateTabSectionProps;
@@ -43,6 +50,30 @@ const stories = await getStories(isPreview);
 const webinars = await getWebinars(isPreview);
 const resources = await getResources(isPreview);
 const measures = await getMeasures(isPreview);
+const articles = await getArticles(isPreview);
+
+const resolvedTabs = await Promise.all(
+  tabs.map(async (tab) => {
+    const classEntry = tab.filterStory
+      ? await getEntry("story_classes", `${tab.filterStory}_${lang}`)
+      : null;
+    const articleType = articleTypeForClassLabel(classEntry?.data.value);
+    if (!articleType) return { articleType: null, items: null };
+
+    const items = sortFeedItems(
+      articles
+        .filter(
+          (a) =>
+            a.articleType === articleType &&
+            a.allTitleLocales?.some((t) => t.locale === lang),
+        )
+        .map((a) => mapArticleToCardEditorialNewsProps(a, lang)),
+      tab.sortMode,
+      lang,
+    );
+    return { articleType, items };
+  }),
+);
 
 function isValidTabType(val: string): val is ElementType {
   return (
@@ -58,7 +89,6 @@ function getFilteredItems(
   tabType: ElementType,
   tabCategoryReference?: string,
   sortMode?: string,
-  filterOwner?: string,
 ) {
   switch (tabType) {
     case "story_item":
@@ -66,17 +96,12 @@ function getFilteredItems(
         s.data.allTitleLocales?.some((item) => item.locale === lang),
       );
 
-      // Filtro per classe (tipo) e per owner (figura). Entrambi opzionali:
-      // se filterOwner è valorizzato, l'archivio è ristretto a quella figura.
-      const filteredStories = filteredStoryByLang.filter((s) => {
-        const classOk =
-          !tabCategoryReference ||
-          s.data.articleClassification?.id === tabCategoryReference;
-        const ownerOk =
-          !filterOwner ||
-          (s.data.owners ?? []).some((o) => o?.id === filterOwner);
-        return classOk && ownerOk;
-      });
+      const expectedArticleType =
+        articleTypeForStoryClass(tabCategoryReference);
+      const filteredStories = filteredStoryByLang.filter(
+        (s) =>
+          !expectedArticleType || s.data.articleType === expectedArticleType,
+      );
 
       return sortFeedItems(
         filteredStories.map((s) =>
@@ -155,7 +180,6 @@ const newsArchiveTab =
           "story_item",
           newsArchiveTab.filterStory,
           newsArchiveTab.sortMode,
-          newsArchiveTab.filterOwner,
         ) as CardEditorialStoryProps[]
       }
     />
@@ -165,17 +189,27 @@ const newsArchiveTab =
         <Tabs id={id} items={tabsItems}>
           {tabs.map((tab, index) => {
             const tabType = tab.newsPageTabType;
-            if (!isValidTabType(tabType)) return null;
+            const resolved = resolvedTabs[index];
+            const useArticles = !!resolved.articleType;
 
-            const items = getFilteredItems(
-              tabType,
-              tab.filterStory,
-              tab.sortMode,
-              tab.filterOwner,
-            );
+            if (!useArticles && !isValidTabType(tabType)) return null;
+
+            const items = useArticles
+              ? resolved.items
+              : getFilteredItems(
+                  tabType as ElementType,
+                  tab.filterStory,
+                  tab.sortMode,
+                );
+
+            const renderType: ElementType = useArticles
+              ? "news_item"
+              : (tabType as ElementType);
+
+            const listLayout = resolved.articleType === "press_release";
 
             const categoriesOrder =
-              tabType === "measures"
+              renderType === "measures"
                 ? getOrderedMeasureCategories(
                     measures.map((m) => m.data),
                     lang,
@@ -188,8 +222,9 @@ const newsArchiveTab =
                   client:load
                   {...tab}
                   items={items as any}
-                  newsPageTabType={tabType}
+                  newsPageTabType={renderType}
                   categoriesOrder={categoriesOrder}
+                  layout={listLayout ? "list" : "grid"}
                   lang={lang}
                 />
               </TabContent>

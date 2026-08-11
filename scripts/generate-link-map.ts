@@ -7,6 +7,7 @@ import {
   StoriesLinksQuery,
   WebinarsLinksQuery,
 } from "@graphql/query/settings";
+import type { SiteLocale } from "@graphql/types";
 import { executeAutoPagingQuery, executeQuery } from "@lib/datocms";
 import {
   getTitle,
@@ -102,6 +103,40 @@ async function generateLinkMap() {
   collectionNestedPages.forEach((collection) =>
     processItemsNestedPages(collection, linkMap, home),
   );
+
+  const SECTION_PATH_BY_TYPE: Record<string, string> = {
+    news: "novita/notizie",
+    press_release: "novita/comunicati-stampa",
+    focus: "novita/focus",
+    guida: "novita/guide",
+  };
+
+  const findSectionEntry = (locale: SiteLocale, sectionPath: string) => {
+    const full = `/${locale}/${sectionPath}`;
+    for (const recordId of Object.keys(linkMap)) {
+      const entry = linkMap[recordId][locale];
+      if (entry?.path === full) return entry;
+    }
+    return null;
+  };
+
+  for (const article of publishedOnly(articlesRes.allArticles)) {
+    const sectionPath = SECTION_PATH_BY_TYPE[article.articleType ?? ""];
+    if (!sectionPath) continue;
+    for (const locale of article.locales) {
+      const section = findSectionEntry(locale, sectionPath);
+      const current = linkMap[article.id]?.[locale];
+      if (!section || !current) continue;
+      const articleSlug = current.path.split("/").pop();
+      linkMap[article.id][locale] = {
+        path: `${section.path}/${articleSlug}`,
+        breadcrumb: [
+          ...section.breadcrumb,
+          { title: getTitle(article, locale), id: article.id },
+        ],
+      };
+    }
+  }
 
   const collectionCategoryPages = [publishedOnly(insightsRes.allInsights)];
 

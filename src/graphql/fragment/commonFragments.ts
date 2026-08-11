@@ -311,12 +311,7 @@ export const StoryCardFragment = graphql(
   `
     fragment StoryCardFragment on StoryItemRecord @_unmask {
       id
-      articleClassification {
-        id
-      }
-      owners {
-        id
-      }
+      articleType
       allTitleLocales: _allTitleLocales {
         locale
         value
@@ -325,17 +320,14 @@ export const StoryCardFragment = graphql(
         locale
         value
       }
-      allTopicLocales: _allTopicLocales {
-        value {
-          id
-          _allLabelLocales {
-            locale
-            value
-          }
+      topics {
+        id
+        _allLabelLocales {
+          locale
+          value
         }
-        locale
       }
-      publishedAt: dateOfPublication
+      publishedAt: _firstPublishedAt
       image {
         ...ImageFragment
       }

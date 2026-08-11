@@ -3,6 +3,7 @@ import {
   DownloadLinkFragment,
   ExternalLinkFragment,
   ImageBlockFragment,
+  ImageFragment,
   InternalLinkFragment,
   ListBlockquoteFragment,
   ListCardEditorialWithIconFragment,
@@ -104,6 +105,20 @@ export const AllArticlesRecordFragment = graphql(
       locales: _locales
       updatedAt: _updatedAt
       publishedAt: _publishedAt
+      dateShown
+      allTitleLocales: _allTitleLocales {
+        locale
+        value
+      }
+      allImageLocales: _allImageLocales {
+        locale
+        value {
+          ...ImageFragment
+        }
+      }
+      tags {
+        name
+      }
       allContentLocales: _allContentLocales {
         locale
         value {
@@ -112,7 +127,7 @@ export const AllArticlesRecordFragment = graphql(
       }
     }
   `,
-  [ArticleContentFragment],
+  [ArticleContentFragment, ImageFragment],
 );
 
 export type AllArticlesRecordFragmentType = FragmentOf<
