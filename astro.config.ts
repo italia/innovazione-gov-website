@@ -46,7 +46,13 @@ export default defineConfig({
     react(),
   ],
   adapter: vercel({
-    edgeMiddleware: true,
+    // edgeMiddleware stays OFF: bundling the middleware for Vercel's Edge
+    // Runtime pulls in es-module-lexer, which calls WebAssembly.compile() at
+    // module scope. The Edge Runtime forbids Wasm code generation, so the
+    // middleware crashed ("Wasm code generation disallowed by embedder") and
+    // took down the routes it fronts — /api/preview-links included.
+    // src/middleware.ts only sets locals.lang, so the Node runtime is fine.
+    edgeMiddleware: false,
   }),
   redirects: {
     "/": {

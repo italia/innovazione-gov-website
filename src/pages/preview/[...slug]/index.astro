@@ -67,7 +67,12 @@ const response = await executeQuery(config.query, {
   includeDrafts: true,
 });
 
-let dataRecord = response[config.key];
+const dataRecord = response[config.key];
+
+// Check before dereferencing: an unknown id used to crash here, turning a
+// missing record into an opaque 500 instead of a 404.
+if (!dataRecord) return Astro.redirect("/404");
+
 let content = dataRecord.content;
 if (
   (type === "search" || type === "homepage") &&
@@ -75,8 +80,6 @@ if (
 ) {
   content = getLocaleValue(dataRecord.allContentLocales, lang, null);
 }
-
-if (!dataRecord) return Astro.redirect("/404");
 
 let sidebarData: SidebarFragmentType | null = null;
 if (type === "article" || type === "sidebar_for_article") {
