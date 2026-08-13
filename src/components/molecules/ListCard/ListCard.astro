@@ -4,11 +4,19 @@ import type { CardEditorialWithIconProps } from "@components/molecules/CardEdito
 import { CardInfo } from "@components/molecules/CardInfo";
 import type { CardInfoProps } from "@components/molecules/CardInfo/types";
 
-type Props =
+type Props = (
   | { type: "CardEditorialWithIcon"; cards: CardEditorialWithIconProps[] }
-  | { type: "CardInfo"; cards: CardInfoProps[] };
+  | { type: "CardInfo"; cards: CardInfoProps[] }
+) & {
+  /**
+   * Dentro lo structured text la lista sta in una col-lg-8: con questo flag
+   * esce dalla colonna e occupa tutta la larghezza del container (vedi
+   * `.list-card-full` in global.scss). Da desktop in su, sotto lg non serve.
+   */
+  fullWidth?: boolean;
+};
 
-const { cards, type } = Astro.props;
+const { cards, type, fullWidth = false } = Astro.props;
 
 if (!cards || cards.length === 0) {
   return null;
@@ -26,7 +34,7 @@ const COL_CLASS_BY_COUNT: Record<number, string> = {
 const colClass = `col-12 ${COL_CLASS_BY_COUNT[cards.length] ?? "col-lg-3"} mb-3 mb-md-4`;
 ---
 
-<ul class="it-card-list row">
+<ul class:list={["it-card-list", "row", { "list-card-full": fullWidth }]}>
   {
     type === "CardEditorialWithIcon" &&
       cards.map((card) => {
