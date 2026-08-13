@@ -1,7 +1,10 @@
 ---
 import StructuredTextAdapter from "@components/cms-adapters/datocms/StructuredTextAdapter.astro";
+import { ArticleToc } from "@components/organisms/ArticleToc";
 import type { ArticleSTFragmentType } from "@graphql/fragment/sectionFragments";
+import { getI18n } from "@i18n/microcopy";
 import { getSectionBgClass, type SectionBackground } from "@utils/background";
+import { extractHeadings } from "@utils/extractHeadings";
 
 type Props = {
   block: ArticleSTFragmentType;
@@ -9,21 +12,69 @@ type Props = {
 };
 
 const { block, isFontSerif = false } = Astro.props;
+const { lang } = Astro.locals;
+const t = getI18n(lang);
 
 const background = block.backgroundColor || "default";
 const bgClass = getSectionBgClass(background as SectionBackground);
 
 const fontClass = isFontSerif ? "font-serif-p" : "";
+
+// Indice della pagina: acceso dal redattore sul singolo blocco (campo
+// `show_page_index` su DatoCMS). Le voci sono i titoli di livello 2 di questo
+// blocco; le ancore esistono già perché HeadingAdapter mette id={slugify(testo)}
+// su ogni heading. Gli articoli usano invece l'h3 (vedi SidebarLayoutAdapter).
+const tocItems = block.showPageIndex
+  ? extractHeadings(block.textContent?.value, [2]).map((heading) => ({
+      id: heading.id,
+      label: heading.text,
+    }))
+  : [];
+const hasToc = tocItems.length > 0;
 ---
 
 <section class={bgClass}>
-  <div class=`structured-text-container structured-text-block ${fontClass}`>
+  <div
+    class:list={[
+      "structured-text-container",
+      "structured-text-block",
+      fontClass,
+      { "has-page-index": hasToc },
+    ]}
+  >
     <div class="container py-5 py-lg-80">
       <div class="row">
-        <div class="col-12 col-lg-8">
+        {
+          hasToc && (
+            <div class="col-12 col-lg-4 px-lg-0 pb-lg-5 border-end toc-column">
+              <ArticleToc header={t["toc.title"]} items={tocItems} />
+            </div>
+          )
+        }
+        <div class:list={["col-12", hasToc ? "col-lg-8 px-lg-0" : "col-lg-8"]}>
           <StructuredTextAdapter block={block.textContent} />
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  .toc-column {
+    padding-top: 3rem;
+  }
+  @media (min-width: 992px) {
+    .toc-column {
+      padding-top: 0;
+    }
+  }
+</style>
+
+<style is:global>
+  /* L'header è sticky: senza questo, cliccando una voce dell'indice il titolo
+     finisce sotto la navbar. Sulle pagine articolo lo dichiara
+     SidebarLayoutAdapter, qui serve per pagine e sottopagine. */
+  .structured-text-block :is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 7rem;
+  }
+</style>

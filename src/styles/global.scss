@@ -31,8 +31,11 @@ body {
      Selettore legato a `.structured-text-block` (la sezione standalone di
      StructuredTextBlockAdapter, dove la row non ha altre colonne): nelle
      pagine articolo lo stesso structured text sta accanto a una sidebar
-     col-lg-4 e allargarlo sfonderebbe il container. */
-  .structured-text-block .list-card-full {
+     col-lg-4 e allargarlo sfonderebbe il container.
+     Escluso `.has-page-index`: quando il blocco mostra l'indice della pagina
+     la colonna del testo ha a sinistra la col-lg-4 dell'indice, quindi
+     allargarla sfonderebbe a destra. */
+  .structured-text-block:not(.has-page-index) .list-card-full {
     width: calc(100% / 8 * 12 + var(--bs-gutter-x, 1.5rem) * 1.5);
   }
 }

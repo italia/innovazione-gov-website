@@ -1603,7 +1603,7 @@ type FileField implements FileFieldInterface {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1
+    punch: Float! = 1.0
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24
@@ -1702,7 +1702,7 @@ interface FileFieldInterface {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1
+    punch: Float! = 1.0
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24
@@ -9297,6 +9297,7 @@ type StructuredTextRecord implements RecordInterface {
   backgroundColor: String
   content: StructuredTextModelContentField!
   id: ItemId!
+  showPageIndex: BooleanType!
 }
 
 """Block of type Support channels section (support_channels_section)"""
@@ -10331,7 +10332,7 @@ type UploadVideoField {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1
+    punch: Float! = 1.0
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24

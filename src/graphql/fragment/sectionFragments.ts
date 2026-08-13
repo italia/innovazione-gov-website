@@ -722,6 +722,7 @@ export const ArticleSTFragment = graphql(
   `
     fragment ArticleSTFragment on StructuredTextRecord @_unmask {
       backgroundColor
+      showPageIndex
       textContent: content {
         ...StructuredTextFragment
       }
