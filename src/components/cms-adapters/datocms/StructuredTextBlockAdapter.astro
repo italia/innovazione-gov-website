@@ -51,7 +51,11 @@ const hasToc = tocItems.length > 0;
             </div>
           )
         }
-        <div class:list={["col-12", hasToc ? "col-lg-8 px-lg-0" : "col-lg-8"]}>
+        {
+          /* ps-lg-4 stacca il testo dalla linea verticale dell'indice, come fa
+            ArticleAdapter sulle pagine articolo. */
+        }
+        <div class:list={["col-12", hasToc ? "col-lg-8 ps-lg-4" : "col-lg-8"]}>
           <StructuredTextAdapter block={block.textContent} />
         </div>
       </div>
