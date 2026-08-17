@@ -7,6 +7,7 @@ import {
   StoriesLinksQuery,
   WebinarsLinksQuery,
 } from "@graphql/query/settings";
+import { JobPositionsLinksQuery } from "@graphql/query/jobPosition";
 import type { SiteLocale } from "@graphql/types";
 import { executeAutoPagingQuery, executeQuery } from "@lib/datocms";
 import {
@@ -41,6 +42,7 @@ async function generateLinkMap() {
     storiesRes,
     webinarsRes,
     cataloguesRes,
+    jobPositionsRes,
     singletonsRes,
   ] = await Promise.all([
     executeAutoPagingQuery(PagesLinksQuery),
@@ -49,6 +51,7 @@ async function generateLinkMap() {
     executeAutoPagingQuery(StoriesLinksQuery),
     executeAutoPagingQuery(WebinarsLinksQuery),
     executeAutoPagingQuery(CataloguesLinksQuery),
+    executeAutoPagingQuery(JobPositionsLinksQuery),
     executeQuery(SingletonLinksQuery),
   ]);
 
@@ -137,6 +140,15 @@ async function generateLinkMap() {
       };
     }
   }
+
+  // Le posizioni lavorative stanno sotto la pagina di archivio: resolveRoutePath
+  // risale parentPage (posizione → archivio → pagina), e il breadcrumb tiene
+  // tutti i livelli come per le pagine.
+  processItemsPages(
+    publishedOnly(jobPositionsRes.allJobPositions),
+    linkMap,
+    home,
+  );
 
   const collectionCategoryPages = [publishedOnly(insightsRes.allInsights)];
 

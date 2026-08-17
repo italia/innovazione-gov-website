@@ -23,6 +23,7 @@ export enum DatoBlockModel {
   IntroArticle = "IntroArticleRecord",
   CalloutLink = "CalloutLinkRecord",
   ListCardEditorial = "ListCardEditorialWithIconRecord",
+  JobPositionList = "JobPositionListRecord",
   ExternalLink = "ExternalLinkRecord",
   OrderedList = "OrderedListRecord",
   Callout = "CalloutRecord",

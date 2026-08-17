@@ -9,6 +9,7 @@ import {
   FaqSectionRecordFragment,
   HeroFragment,
   IntroArticleFragment,
+  JobPositionListFragment,
   SupportChannelsSectionFragment,
   SupportCTASectionFragment,
   TextAndAccordionFragment,
@@ -66,6 +67,9 @@ export const InsightContentFragment = graphql(
       ... on IntroArticleRecord {
         ...IntroArticleFragment
       }
+      ... on JobPositionListRecord {
+        ...JobPositionListFragment
+      }
     }
   `,
   [
@@ -83,6 +87,7 @@ export const InsightContentFragment = graphql(
     TextAndUseCasesFragment,
     SupportCTASectionFragment,
     IntroArticleFragment,
+    JobPositionListFragment,
   ],
 );
 

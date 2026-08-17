@@ -16,6 +16,10 @@ import {
   WebinarsIdxQuery,
 } from "@graphql/query/indexing";
 import { AllInsightsContentQuery } from "@graphql/query/insight";
+import {
+  AllJobPositionsContentQuery,
+  JobPositionsSeoQuery,
+} from "@graphql/query/jobPosition";
 import { LayoutQuery, SidebarQuery } from "@graphql/query/layout";
 import { AllMeasuresQuery } from "@graphql/query/measure";
 import { AllNewsQuery } from "@graphql/query/news";
@@ -185,6 +189,11 @@ export const insightContentLoader = async () => {
   return publishedOnly(response?.allInsights || []);
 };
 
+export const jobPositionsLoader = async () => {
+  const response = await executeAutoPagingQuery(AllJobPositionsContentQuery);
+  return publishedOnly(response?.allJobPositions || []);
+};
+
 export const articleContentLoader = async () => {
   const response = await executeAutoPagingQuery(AllArticlesContentQuery);
   return publishedOnly(response?.allArticles || []);
@@ -271,6 +280,7 @@ export const globalSeoLoader = async () => {
         homepageRes,
         articlesRes,
         insightsRes,
+        jobPositionsRes,
         cataloguesRes,
         pagesRes,
         storiesRes,
@@ -280,6 +290,7 @@ export const globalSeoLoader = async () => {
         executeQuery(HomepageSeoQuery, { variables: { locale } }),
         executeAutoPagingQuery(ArticlesSeoQuery, { variables: { locale } }),
         executeAutoPagingQuery(InsightsSeoQuery, { variables: { locale } }),
+        executeAutoPagingQuery(JobPositionsSeoQuery, { variables: { locale } }),
         executeAutoPagingQuery(CataloguesSeoQuery, { variables: { locale } }),
         executeAutoPagingQuery(PagesSeoQuery, { variables: { locale } }),
         executeAutoPagingQuery(StoriesSeoQuery, { variables: { locale } }),
@@ -300,6 +311,7 @@ export const globalSeoLoader = async () => {
         ...(homepageRes?.homepage ? [mapEntry(homepageRes.homepage)] : []),
         ...(articlesRes?.allArticles?.map(mapEntry) || []),
         ...(insightsRes?.allInsights?.map(mapEntry) || []),
+        ...(jobPositionsRes?.allJobPositions?.map(mapEntry) || []),
         ...(cataloguesRes?.allCatalogues?.map(mapEntry) || []),
         ...(pagesRes?.allPages?.map(mapEntry) || []),
         ...(storiesRes?.allStoryItems?.map(mapEntry) || []),

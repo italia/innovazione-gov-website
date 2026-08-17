@@ -1,0 +1,46 @@
+---
+import {
+  JobPositionList,
+  type JobPositionItemProps,
+} from "@components/react/JobPositionList";
+import type { JobPositionListFragmentType } from "@graphql/fragment/sectionFragments";
+import { getLocaleValue } from "@utils/getLocaleValue";
+import { linkResolver } from "@utils/linkResolver";
+import { getCollection } from "astro:content";
+
+type Props = {
+  block: JobPositionListFragmentType & { id: string };
+};
+
+const { block } = Astro.props;
+const { lang } = Astro.locals;
+
+// Le voci arrivano dalla collection, non dal blocco: il redattore configura
+// solo quante mostrarne per pagina. Le posizioni chiuse restano in elenco (è
+// un archivio), ordinate dalla più recente per data di chiusura.
+const positions = await getCollection("job_position");
+
+const items: JobPositionItemProps[] = positions
+  .map((entry) => entry.data)
+  .filter((position) => position.locales.includes(lang))
+  .sort((a, b) => (b.closeDate ?? "").localeCompare(a.closeDate ?? ""))
+  .map((position) => ({
+    id: position.id,
+    title: getLocaleValue(position.allTitleLocales, lang, ""),
+    description: getLocaleValue(position.allAbstractLocales, lang, "") ?? "",
+    status: position.positionStatus,
+    linkTo: linkResolver(position.id, lang),
+  }))
+  .filter((item) => item.title && item.linkTo !== "#");
+---
+
+{
+  items.length > 0 && (
+    <JobPositionList
+      client:load
+      items={items}
+      perPage={block.elementPerPage ?? 5}
+      lang={lang}
+    />
+  )
+}

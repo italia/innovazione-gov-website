@@ -44,12 +44,10 @@
   "feedback.error": "C’è stato un problema nell’invio 😞",
   "feedback.retry": "Ti va di riprovare più tardi? 🙏",
   "modal.close": "Chiudi finestra modale",
-
   "feedback.modal.title": "Grazie per la tua risposta!",
   "feedback.modal.subtitle": "Aiutaci a migliorare dandoci qualche dettaglio in più.",
   "feedback.modal.privacy": "Quanto segue è una raccolta di informazioni anonima, che ci aiuta a capire come migliorare la tua esperienza sul sito senza trattare dati personali. Se sei un developer puoi scoprire come funziona questo meccanismo nella",
   "feedback.modal.privacy.link": "repository GitHub dedicata",
-
   "feedback.who.legend": "Sei:",
   "feedback.who.designer": "Designer",
   "feedback.who.developer": "Developer",
@@ -62,7 +60,6 @@
   "feedback.who.comms": "Specialista comunicazione",
   "feedback.who.student": "Studente",
   "feedback.who.curiosity": "Qui per curiosità / interesse",
-
   "feedback.from.legend": "Hai trovato questa pagina grazie a:",
   "feedback.from.website": "Altro sito web",
   "feedback.from.search_internal": "Funzione Cerca del sito",
@@ -71,24 +68,22 @@
   "feedback.from.navigation": "Navigazione del sito",
   "feedback.from.email": "Posta elettronica",
   "feedback.from.other": "Altro",
-
   "feedback.improve.legend": "Come possiamo migliorare questa pagina?",
   "feedback.improve.label": "Risposta",
   "feedback.improve.helper": "Hai a disposizione 200 caratteri. Per favore non inserire dati personali in questo campo.",
   "feedback.improve.send": "Invia dettagli",
-
   "cookies.title": "Cookie di terze parti",
   "cookies.empty": "Non hai installato cookie di terze parti.",
   "cookies.youtube": "YouTube per la visualizzazione di video",
   "cookies.revoke": "Revoca consenso",
-
   "videoplayer.overlay.title": "Accetta i cookie di YouTube per vedere il video. Puoi gestire le preferenze nella",
   "videoplayer.overlay.cookiePolicy": "cookie policy",
   "videoplayer.accept": "Accetta e visualizza",
   "videoplayer.remember": "Ricorda per tutti i video",
   "videoplayer.transcription": "Trascrizione",
-
   "subscribe.button": "Iscriviti",
   "subscribe.errorText": "Qualcosa è andato storto 😔 Riprova più tardi",
-  "subscribe.successText": "Ti abbiamo mandato un’email, segui il collegamento per confermare la tua iscrizione"
+  "subscribe.successText": "Ti abbiamo mandato un’email, segui il collegamento per confermare la tua iscrizione",
+  "position.open": "Posizione aperta",
+  "position.closed": "Posizione chiusa"
 }
