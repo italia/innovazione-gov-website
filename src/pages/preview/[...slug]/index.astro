@@ -107,7 +107,7 @@ if (slugProduction !== "#") {
 
 {
   type === "layout" && (
-    <Layout redirectUrl={redirectUrl}>
+    <Layout showFeedback={false} redirectUrl={redirectUrl}>
       <div class="container">
         <div class="row">
           <div class="col">CONTENT PAGE</div>
@@ -119,7 +119,7 @@ if (slugProduction !== "#") {
 
 {
   type === "sidebar_for_article" && sidebarData && (
-    <Layout redirectUrl={redirectUrl}>
+    <Layout showFeedback={false} redirectUrl={redirectUrl}>
       <div class="container">
         <div class="row">
           <div class="col-12 col-lg-4 px-lg-0 pb-lg-5 border-end position-sticky">
@@ -134,7 +134,11 @@ if (slugProduction !== "#") {
 
 {
   type === "article" && sidebarData && (
-    <Layout redirectUrl={redirectUrl} pageSeo={dataRecord?.seo}>
+    <Layout
+      showFeedback={false}
+      redirectUrl={redirectUrl}
+      pageSeo={dataRecord?.seo}
+    >
       <SidebarLayoutAdapter sidebar={sidebarData} content={content as any} />
     </Layout>
   )
@@ -149,7 +153,11 @@ if (slugProduction !== "#") {
     type === "insight" ||
     type === "catalogue" ||
     type === "index_page") && (
-    <Layout redirectUrl={redirectUrl} pageSeo={dataRecord?.seo}>
+    <Layout
+      showFeedback={false}
+      redirectUrl={redirectUrl}
+      pageSeo={dataRecord?.seo}
+    >
       <PageAdapter content={content as any} />
     </Layout>
   )
