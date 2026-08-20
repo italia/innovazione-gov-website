@@ -1,0 +1,52 @@
+---
+import { CardEditorialNews } from "@components/molecules/CardEditorialNews";
+import type { CardEditorialNewsProps } from "@components/molecules/CardEditorialNews/types";
+import { getI18n } from "@i18n/microcopy";
+
+type Props = {
+  items: CardEditorialNewsProps[];
+};
+
+const { items } = Astro.props;
+const { lang } = Astro.locals;
+const t = getI18n(lang);
+---
+
+{
+  items.length > 0 && (
+    <section class="article-related">
+      <div class="container">
+        <h2 class="article-related__title">{t["related.title"]}</h2>
+        <p class="article-related__subtitle">{t["related.subtitle"]}</p>
+        <ul class="it-card-list row article-related__grid">
+          {items.map((item) => (
+            <li class="col-12 col-lg-4 mb-4">
+              <CardEditorialNews {...item} isExternal={false} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .article-related {
+    background: #f2f7fc;
+    padding-block: 5rem;
+  }
+  .article-related__title {
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+  }
+  .article-related__subtitle {
+    color: #5b6f82;
+    margin-bottom: 2.5rem;
+  }
+  .article-related__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+</style>

@@ -33,7 +33,7 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
   <div class="container">
     <div class="row align-items-center">
       <div class="col-12 col-lg-6">
-        <div class="it-hero-text-wrapper px-0">
+        <div class="it-hero-text-wrapper px-0 py-0">
           <Breadcrumb items={breadcrumbItems} />
           <h1 class="article-hero__title">{title}</h1>
           {
@@ -81,13 +81,13 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
   }
   .article-hero__title {
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 0.5rem !important;
     color: #1a1a1a !important;
   }
   .article-hero :global(.article-hero__date) {
     display: block;
-    margin-top: 1rem;
     color: #5b6f82;
+    font-size: 0.875rem;
   }
   .article-hero__topics {
     margin-top: 1.5rem;
@@ -96,8 +96,8 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
     text-transform: uppercase;
     font-weight: 600;
     letter-spacing: 0.03em;
-    font-size: 0.875rem;
-    margin-bottom: 0.75rem;
+    font-size: 0.875rem !important;
+    margin-bottom: 0.75rem !important;
     color: #1a1a1a !important;
   }
   .article-hero__chips {
@@ -125,5 +125,6 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
     height: auto;
     display: block;
     object-fit: contain;
+    max-height: 280px;
   }
 </style>

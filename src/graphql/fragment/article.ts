@@ -105,6 +105,7 @@ export const AllArticlesRecordFragment = graphql(
       locales: _locales
       updatedAt: _updatedAt
       publishedAt: _publishedAt
+      articleType
       dateShown
       allTitleLocales: _allTitleLocales {
         locale
@@ -118,6 +119,21 @@ export const AllArticlesRecordFragment = graphql(
       }
       tags {
         name
+      }
+      attachments {
+        id
+        fileTitle
+        file {
+          url
+          filename
+          format
+        }
+      }
+      links {
+        id
+        title
+        link
+        description
       }
       allContentLocales: _allContentLocales {
         locale

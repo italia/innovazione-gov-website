@@ -1,0 +1,90 @@
+---
+import { Link } from "@components/atoms/Link";
+import { getI18n } from "@i18n/microcopy";
+import { createDownloadUrl } from "@utils/createDownloadUrl";
+import { slugify } from "@utils/slugify";
+
+type Attachment = {
+  id: string;
+  fileTitle?: string | null;
+  file?: { url: string; filename: string; format: string } | null;
+};
+
+type Props = {
+  attachments?: Attachment[];
+};
+
+const { attachments = [] } = Astro.props;
+const { lang } = Astro.locals;
+const t = getI18n(lang);
+
+const fileAttachments = attachments.filter((a) => a.file);
+const hasItems = fileAttachments.length > 0;
+---
+
+{
+  hasItems && (
+    <section class="article-resources">
+      <h3 class="article-resources__title" id={slugify(t["resources.title"])}>
+        {t["resources.title"]}
+      </h3>
+      <div class="article-resources__card">
+        <h3 class="article-resources__card-title">
+          {t["resources.attachments"]}
+        </h3>
+        <ul class="article-resources__list">
+          {fileAttachments.map((attachment) => (
+            <li>
+              <Link
+                label={attachment.fileTitle ?? attachment.file!.filename}
+                download={createDownloadUrl(attachment.file!)}
+                variant="dark"
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .article-resources {
+    margin-top: 2.5rem;
+  }
+  .article-resources__title {
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+  .article-resources__card {
+    background: #2b5eb5;
+    color: #fff;
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+  }
+  .article-resources__card-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  .article-resources__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .article-resources__list li {
+    padding: 0.75rem 0;
+  }
+  .article-resources__list :global(a) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    color: #fff;
+  }
+  .article-resources__list :global(a .fw-semibold) {
+    text-decoration: underline;
+  }
+</style>

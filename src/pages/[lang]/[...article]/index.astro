@@ -1,7 +1,10 @@
 ---
 import SidebarLayoutAdapter from "@components/cms-adapters/datocms/SidebarLayoutAdapter.astro";
 import { ArticleHero } from "@components/organisms/ArticleHero";
+import { ArticleRelated } from "@components/organisms/ArticleRelated";
 import type { ArticleContentFragmentType } from "@graphql/fragment/article";
+import { getArticles } from "@lib/dataFetcher";
+import { getRelatedArticles } from "@lib/relatedArticles";
 import type {
   ImageFragmentType,
   TagFragmentType,
@@ -29,9 +32,21 @@ export async function getStaticPaths() {
       id: string;
       sidebar: SidebarFragmentType;
       title: string;
+      articleType: string | null;
       dateTime: string | null;
       topics: string[];
       image: ImageFragmentType | null;
+      attachments: {
+        id: string;
+        fileTitle: string | null;
+        file: { url: string; filename: string; format: string } | null;
+      }[];
+      links: {
+        id: string;
+        title: string | null;
+        link: string | null;
+        description: string | null;
+      }[];
       publishedAt: string;
       updatedAt: string;
     };
@@ -70,11 +85,14 @@ export async function getStaticPaths() {
             sidebar: { ...sidebarForArticle, id: `sidebar_${page.id}` },
             content: getLocaleValue(page.allContentLocales, lang, null),
             title: getLocaleValue(page.allTitleLocales, lang, ""),
+            articleType: page.articleType ?? null,
             dateTime: page.dateShown ?? null,
             topics: (page.tags ?? [])
               .map((tag) => tag.name)
               .filter((name): name is string => !!name),
             image: getLocaleValue(page.allImageLocales, lang, null),
+            attachments: page.attachments ?? [],
+            links: page.links ?? [],
             publishedAt: page.publishedAt,
             updatedAt: seoRes?.updatedAt || page.updatedAt,
           },
@@ -94,9 +112,12 @@ const {
   id,
   sidebar,
   title,
+  articleType,
   dateTime,
   topics,
   image,
+  attachments,
+  links,
   publishedAt,
   updatedAt,
 } = Astro.props;
@@ -104,6 +125,13 @@ const { lang } = Astro.params;
 
 Astro.locals.lang = lang;
 Astro.locals.recordId = id;
+
+const relatedItems = getRelatedArticles(await getArticles(false), {
+  currentId: id,
+  tags: topics,
+  articleType,
+  locale: lang,
+});
 const jsonLd: JsonLdPageData = {
   pageType: ["content"],
   seo: seo || undefined,
@@ -120,5 +148,15 @@ const jsonLd: JsonLdPageData = {
     topics={topics}
     image={image}
   />
-  {content && <SidebarLayoutAdapter sidebar={sidebar} content={content} />}
+  {
+    content && (
+      <SidebarLayoutAdapter
+        sidebar={sidebar}
+        content={content}
+        attachments={attachments}
+        links={links}
+      />
+    )
+  }
+  <ArticleRelated items={relatedItems} />
 </Layout>

@@ -1,0 +1,109 @@
+---
+import { getI18n } from "@i18n/microcopy";
+import ItExternalLink from "@static/assets/ItExternalLink.astro";
+import { slugify } from "@utils/slugify";
+
+type ExternalLink = {
+  id: string;
+  title?: string | null;
+  link?: string | null;
+  description?: string | null;
+};
+
+type Props = {
+  links?: ExternalLink[];
+};
+
+const { links = [] } = Astro.props;
+const { lang } = Astro.locals;
+const t = getI18n(lang);
+
+const items = links.filter((link) => link.link);
+---
+
+{
+  items.length > 0 && (
+    <section class="article-links">
+      <h3 class="article-links__title" id={slugify(t["links.title"])}>
+        {t["links.title"]}
+      </h3>
+      <div class="article-links__grid">
+        {items.map((item) => (
+          <a
+            class="article-links__card"
+            href={item.link!}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="article-links__card-head">
+              <span class="article-links__card-title">
+                {item.title ?? item.link}
+              </span>
+              <ItExternalLink color="primary" size="lg" />
+            </div>
+            {item.description && (
+              <p class="article-links__card-desc">{item.description}</p>
+            )}
+          </a>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .article-links {
+    margin-top: 2.5rem;
+  }
+  .article-links__title {
+    margin-bottom: 1.5rem;
+  }
+  .article-links__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .article-links__card {
+    position: relative;
+    display: block;
+    max-width: 37.5rem;
+    background: #fff;
+    border: 1px solid #d4d8dc;
+    border-radius: 4px;
+    padding: 1.5rem 2rem;
+    text-decoration: none;
+  }
+  .article-links__card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+  .article-links__card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .article-links__card-head :global(.icon) {
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+  }
+  .article-links__card-title {
+    color: #06c;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.25;
+    text-decoration: underline;
+  }
+  .article-links__card-desc {
+    color: #5b6f82;
+    font-size: 0.9375rem;
+    margin: 0.75rem 0 0;
+  }
+  @media (max-width: 767px) {
+    .article-links__card {
+      padding: 1.25rem 1.25rem;
+    }
+    .article-links__card-title {
+      font-size: 1.375rem;
+    }
+  }
+</style>

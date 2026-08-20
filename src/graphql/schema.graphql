@@ -1603,7 +1603,7 @@ type FileField implements FileFieldInterface {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1
+    punch: Float! = 1.0
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24
@@ -1702,7 +1702,7 @@ interface FileFieldInterface {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1
+    punch: Float! = 1.0
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24
@@ -4405,7 +4405,7 @@ type IndexPageRecord implements RecordInterface {
   ): String!
 }
 
-union InsightModelContentField = CardLinkListRecord | FaqSectionRecord | HeroRecord | IntroArticleRecord | ListCollectionRecord | StructuredTextRecord | SupportChannelsSectionRecord | SupportCtaSectionRecord | TextAccordionRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | TextUseCaseRecord
+union InsightModelContentField = CardLinkListRecord | FaqSectionRecord | HeroRecord | IntroArticleRecord | JobPositionListRecord | ListCollectionRecord | StructuredTextRecord | SupportChannelsSectionRecord | SupportCtaSectionRecord | TextAccordionRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | TextUseCaseRecord
 
 type InsightModelContentFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
@@ -4805,6 +4805,237 @@ enum ItemStatus {
   draft
   updated
   published
+}
+
+"""Block of type Elenco posizioni lavorative (job_position_list)"""
+type JobPositionListRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  elementPerPage: IntType
+  id: ItemId!
+}
+
+union JobPositionModelContentField = CardLinkListRecord | FaqSectionRecord | HeroRecord | IntroArticleRecord | ListCollectionRecord | StructuredTextRecord | SupportChannelsSectionRecord | SupportCtaSectionRecord | TextAccordionRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | TextUseCaseRecord
+
+type JobPositionModelContentFieldListListNonNullMultiLocaleField {
+  locale: SiteLocale
+  value: [JobPositionModelContentField!]!
+}
+
+input JobPositionModelFilter {
+  _createdAt: CreatedAtFilter
+  id: ItemIdFilter
+  _firstPublishedAt: PublishedAtFilter
+  _publicationScheduledAt: PublishedAtFilter
+  _unpublishingScheduledAt: PublishedAtFilter
+  _publishedAt: PublishedAtFilter
+  _status: StatusFilter
+  _updatedAt: UpdatedAtFilter
+  _isValid: BooleanFilter
+  _locales: LocalesFilter
+  abstract: TextFilter
+  closeDate: DateFilter
+  compensation: StringFilter
+  openDate: DateFilter
+  parentPage: LinkFilter
+  positionStatus: StringFilter
+  seo: SeoFilter
+  slug: SlugFilter
+  title: StringFilter
+  OR: [JobPositionModelFilter]
+  AND: [JobPositionModelFilter]
+}
+
+enum JobPositionModelOrderBy {
+  _createdAt_ASC
+  _createdAt_DESC
+  id_ASC
+  id_DESC
+  _firstPublishedAt_ASC
+  _firstPublishedAt_DESC
+  _publicationScheduledAt_ASC
+  _publicationScheduledAt_DESC
+  _unpublishingScheduledAt_ASC
+  _unpublishingScheduledAt_DESC
+  _publishedAt_ASC
+  _publishedAt_DESC
+  _status_ASC
+  _status_DESC
+  _updatedAt_ASC
+  _updatedAt_DESC
+  _isValid_ASC
+  _isValid_DESC
+  closeDate_ASC
+  closeDate_DESC
+  compensation_ASC
+  compensation_DESC
+  openDate_ASC
+  openDate_DESC
+  positionStatus_ASC
+  positionStatus_DESC
+  title_ASC
+  title_DESC
+}
+
+union JobPositionModelParentPageField = InsightRecord | PageRecord
+
+type JobPositionModelParentPageFieldNonNullMultiLocaleField {
+  locale: SiteLocale
+  value: JobPositionModelParentPageField!
+}
+
+"""Record of type Posizioni lavorative (job_position)"""
+type JobPositionRecord implements RecordInterface {
+  _allAbstractLocales(
+    """Process content as markdown"""
+    markdown: Boolean
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringMultiLocaleField!]
+  _allCompensationLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringMultiLocaleField!]
+  _allContentLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [JobPositionModelContentFieldListListNonNullMultiLocaleField!]
+  _allParentPageLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [JobPositionModelParentPageFieldNonNullMultiLocaleField!]
+  _allSeoLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [SeoFieldMultiLocaleField!]
+  _allSlugLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringNonNullMultiLocaleField!]
+  _allTitleLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringNonNullMultiLocaleField!]
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _locales: [SiteLocale!]!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  abstract(
+    """Process content as markdown"""
+    markdown: Boolean
+
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String
+  closeDate: Date
+  compensation(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String
+  content(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [JobPositionModelContentField!]!
+  id: ItemId!
+  openDate: Date
+  parentPage(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): JobPositionModelParentPageField!
+  positionStatus: String!
+  seo(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): SeoField
+  slug(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String!
+  title(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String!
 }
 
 scalar JsonField
@@ -6775,6 +7006,13 @@ type Query {
   ): CollectionMetadata!
 
   """Returns meta information regarding a record collection"""
+  _allJobPositionsMeta(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+    filter: JobPositionModelFilter
+  ): CollectionMetadata!
+
+  """Returns meta information regarding a record collection"""
   _allKpiElementsMeta(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -7102,6 +7340,25 @@ type Query {
     filter: InsightModelFilter
     orderBy: [InsightModelOrderBy] = [_updatedAt_DESC]
   ): [InsightRecord!]!
+
+  """Returns a collection of records"""
+  allJobPositions(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+
+    """Skip the first results"""
+    skip: IntType
+
+    """Limit the number of results"""
+    first: IntType = 20
+    filter: JobPositionModelFilter
+    orderBy: [JobPositionModelOrderBy] = [_updatedAt_DESC]
+  ): [JobPositionRecord!]!
 
   """Returns a collection of records"""
   allKpiElements(
@@ -7640,6 +7897,19 @@ type Query {
     filter: InsightTopicModelFilter
     orderBy: [InsightTopicModelOrderBy] = [_updatedAt_DESC]
   ): InsightTopicRecord
+
+  """Returns a specific record"""
+  jobPosition(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+    filter: JobPositionModelFilter
+    orderBy: [JobPositionModelOrderBy] = [_updatedAt_DESC]
+  ): JobPositionRecord
 
   """Returns a specific record"""
   kpiElement(
@@ -9297,6 +9567,7 @@ type StructuredTextRecord implements RecordInterface {
   backgroundColor: String
   content: StructuredTextModelContentField!
   id: ItemId!
+  showPageIndex: BooleanType!
 }
 
 """Block of type Support channels section (support_channels_section)"""
@@ -10331,7 +10602,7 @@ type UploadVideoField {
     """
     Controls the "punch" value (~contrast) of the blurhash decoding algorithm (defaults to 1.0)
     """
-    punch: Float! = 1
+    punch: Float! = 1.0
 
     """Maximum image dimension (defaults to 24px)"""
     size: Int! = 24
