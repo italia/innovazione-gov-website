@@ -103,9 +103,12 @@ const { header, items } = Astro.props;
       .map((link) => document.getElementById(link.dataset.tocLink ?? ""))
       .filter((el): el is HTMLElement => !!el);
 
-    const content = document.querySelector<HTMLElement>(
-      ".structured-text-container",
-    );
+    // Quando l'indice sta dentro il blocco di testo (pagine e sottopagine)
+    // misura il proprio contenitore; sugli articoli l'indice è in un'altra
+    // colonna e closest() non trova nulla, quindi vale il primo del documento.
+    const content =
+      toc.closest<HTMLElement>(".structured-text-container") ??
+      document.querySelector<HTMLElement>(".structured-text-container");
 
     const offset = 120;
 

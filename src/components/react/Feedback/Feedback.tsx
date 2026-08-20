@@ -27,9 +27,17 @@ const ICON_RESULT = {
 
 type Feedback = {
   lang: SiteLocale;
+  /** Id del record DatoCMS della pagina corrente (Astro.locals.recordId). */
+  recordId?: string;
 };
 
-function Feedback({ lang }: Feedback) {
+// Finché l'endpoint non è noto la variabile resta vuota: in quel caso non si
+// chiama nulla e il payload finisce in console, così la banda è già in pagina
+// (come da Figma) senza invii a vuoto. Valorizzando PUBLIC_FEEDBACK_URL negli
+// env il componente inizia a inviare senza altre modifiche al codice.
+const FEEDBACK_URL = import.meta.env.PUBLIC_FEEDBACK_URL;
+
+function Feedback({ lang, recordId }: Feedback) {
   const t = getI18n(lang);
   const [isChecked, setIsChecked] = useState(false);
   const [feedbackState, setFeedbackState] = useState(FeedbackState.Start);
@@ -43,12 +51,27 @@ function Feedback({ lang }: Feedback) {
       setFeedbackState(FeedbackState.Loading);
       const feedback = choiceVal === "1" ? "+" : "-";
 
+      const payload = {
+        feedback,
+        url: window.location.href,
+        path: window.location.pathname,
+        recordId: recordId ?? null,
+        pageTitle: document.title,
+        lang,
+        ...result,
+      };
+
       try {
-        await postRequest(import.meta.env.PUBLIC_FEEDBACK_URL, {
-          feedback,
-          url: window.location.href,
-          ...result,
-        });
+        if (!FEEDBACK_URL) {
+          console.info(
+            "[feedback] endpoint non configurato, payload:",
+            payload,
+          );
+          setFeedbackState(FeedbackState.Success);
+          return true;
+        }
+
+        await postRequest(FEEDBACK_URL, payload);
 
         setFeedbackState(FeedbackState.Success);
         return true;
@@ -60,7 +83,7 @@ function Feedback({ lang }: Feedback) {
         return false;
       }
     },
-    [choiceVal],
+    [choiceVal, lang, recordId],
   );
 
   const onChange = (evt: any) => {

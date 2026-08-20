@@ -8,6 +8,7 @@ import {
   globalSettingsLoader,
   homepageLoader,
   insightContentLoader,
+  jobPositionsLoader,
   layoutLoader,
   localesLoader,
   measuresLoader,
@@ -32,6 +33,7 @@ import {
   globalSettingsSchema,
   homepageSchema,
   insightSchema,
+  jobPositionSchema,
   layoutSchema,
   localesSchema,
   measureSchema,
@@ -100,6 +102,10 @@ export const collections = {
   insight: defineCollection({
     schema: insightSchema,
     loader: insightContentLoader,
+  }),
+  job_position: defineCollection({
+    schema: jobPositionSchema,
+    loader: jobPositionsLoader,
   }),
   article: defineCollection({
     schema: articleSchema,

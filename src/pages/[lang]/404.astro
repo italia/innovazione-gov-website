@@ -59,7 +59,7 @@ const { lang } = Astro.params;
 const { title, paragraph, image, labelCta, homepageId } = Astro.props;
 ---
 
-<Layout>
+<Layout showFeedback={false}>
   <SplitContent leftColumns={6} rightColumns={5}>
     <div slot="left" class=`text-container mb-4 mb-lg-0`>
       <h1 class="mb-3">{title}</h1>

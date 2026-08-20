@@ -1,3 +1,4 @@
+import type { AllJobPositionsSlugFragmentType } from "@graphql/fragment/jobPosition";
 import {
   type AllArticlesSlugFragmentType,
   type AllInsightsSlugFragmentType,
@@ -44,7 +45,8 @@ export type RoutableRecord =
   | AllInsightsSlugFragmentType
   | AllStoryItemsSlugFragmentType
   | AllWebinarItemsSlugFragmentType
-  | AllPagesSlugFragmentType;
+  | AllPagesSlugFragmentType
+  | AllJobPositionsSlugFragmentType;
 
 export function resolveRoutePath(
   record: RoutableRecord,

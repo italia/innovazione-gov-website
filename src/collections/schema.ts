@@ -20,6 +20,7 @@ import type {
   WebinarIndexingFragmentType,
 } from "@graphql/fragment/indexing";
 import type { AllInsightsRecordFragmentType } from "@graphql/fragment/insight";
+import type { AllJobPositionsRecordFragmentType } from "@graphql/fragment/jobPosition";
 import type { MeasureFragmentType } from "@graphql/fragment/measure";
 import type {
   FooterFragmentType,
@@ -58,6 +59,8 @@ export const storyContentSchema = z.custom<AllStoriesRecordFragmentType>();
 export const insightSchema = z.custom<AllInsightsRecordFragmentType>();
 
 export const articleSchema = z.custom<AllArticlesRecordFragmentType>();
+
+export const jobPositionSchema = z.custom<AllJobPositionsRecordFragmentType>();
 
 export const globalSettingsSchema = z.object({
   id: z.string(),

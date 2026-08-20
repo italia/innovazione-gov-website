@@ -718,10 +718,25 @@ export const CardLinkListFragment = graphql(
 
 export type CardLinkListFragmentType = FragmentOf<typeof CardLinkListFragment>;
 
+export const JobPositionListFragment = graphql(
+  `
+    fragment JobPositionListFragment on JobPositionListRecord @_unmask {
+      id
+      elementPerPage
+    }
+  `,
+  [],
+);
+
+export type JobPositionListFragmentType = FragmentOf<
+  typeof JobPositionListFragment
+>;
+
 export const ArticleSTFragment = graphql(
   `
     fragment ArticleSTFragment on StructuredTextRecord @_unmask {
       backgroundColor
+      showPageIndex
       textContent: content {
         ...StructuredTextFragment
       }

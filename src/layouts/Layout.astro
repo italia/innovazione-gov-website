@@ -1,11 +1,10 @@
 ---
-// import Loader from "@components/Loader.astro";
 import PreviewBar from "@components/PreviewBar.astro";
 import type { LinkProps } from "@components/atoms/Link/types";
 import FooterAdapter from "@components/cms-adapters/datocms/FooterAdapter.astro";
 import HeaderAdapter from "@components/cms-adapters/datocms/HeaderAdapter.astro";
 import { LastUpdate } from "@components/molecules/LastUpdate";
-// import Feedback from "@components/react/Feedback/Feedback";
+import Feedback from "@components/react/Feedback/Feedback";
 import { Seo, type TitleMetaLinkTag } from "@datocms/astro";
 import type {
   FooterFragmentType,
@@ -26,12 +25,24 @@ type Props = {
   redirectUrl?: string;
   datePublished?: string;
   jsonLd?: JsonLdPageData;
+  /**
+   * Banda "questa pagina è stata utile?" sopra il footer. Attiva di default su
+   * tutte le pagine di contenuto; va spenta dove la domanda non ha senso (404,
+   * ricerca) o dove falserebbe i dati (anteprime dei redattori).
+   */
+  showFeedback?: boolean;
 };
 
 const isPreview = import.meta.env.DEV && isDraftModeEnabled(Astro.cookies);
-const { pageSeo = [], redirectUrl, datePublished, jsonLd } = Astro.props;
+const {
+  pageSeo = [],
+  redirectUrl,
+  datePublished,
+  jsonLd,
+  showFeedback = true,
+} = Astro.props;
 
-const { lang } = Astro.locals;
+const { lang, recordId } = Astro.locals;
 
 const result = await getCollection("site_meta");
 
@@ -143,11 +154,11 @@ const isProd = import.meta.env.PROD;
         />
       )
     }
-    <!-- <Feedback client:visible lang={lang}>
-      <div slot="fallback">
-        <Loader />
-      </div>
-    </Feedback> -->
+    {
+      showFeedback && (
+        <Feedback client:visible lang={lang} recordId={recordId} />
+      )
+    }
     <FooterAdapter {...footerLayout} />
   </body>
 </html>
