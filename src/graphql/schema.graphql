@@ -735,7 +735,7 @@ type BlockquoteRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
-  author: String!
+  author: String
   id: ItemId!
   paragraph(
     """Process content as markdown"""

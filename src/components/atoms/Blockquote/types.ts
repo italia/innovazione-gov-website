@@ -1,4 +1,4 @@
 export type BlockquoteProps = {
   text: string;
-  author: string;
+  author?: string | null;
 };

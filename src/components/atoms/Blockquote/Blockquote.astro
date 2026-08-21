@@ -12,7 +12,11 @@ const { text, author } = Astro.props;
   <p class="mb-0">
     <em>{text}</em>
   </p>
-  <footer class="blockquote-footer">
-    <cite title={author}>{author}</cite>
-  </footer>
+  {
+    author && (
+      <footer class="blockquote-footer">
+        <cite title={author}>{author}</cite>
+      </footer>
+    )
+  }
 </blockquote>
