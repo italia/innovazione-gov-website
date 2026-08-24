@@ -9,6 +9,8 @@ type Options = { locale: SiteLocale; includeDrafts: boolean };
 
 const ARTICLE_TYPE_BY_SELECTION: Record<string, string> = {
   news: "news",
+  interview: "interview",
+  participation: "participation",
   press_release: "press_release",
   focus: "focus",
   guida: "guida",

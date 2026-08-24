@@ -251,6 +251,7 @@ input ArticleModelFilter {
   tags: LinksFilter
   targets: LinksFilter
   title: StringFilter
+  undersecretary: BooleanFilter
   OR: [ArticleModelFilter]
   AND: [ArticleModelFilter]
 }
@@ -284,6 +285,8 @@ enum ArticleModelOrderBy {
   descriptionTitle_DESC
   title_ASC
   title_DESC
+  undersecretary_ASC
+  undersecretary_DESC
 }
 
 """Block of type Article navigation (article_navigation)"""
@@ -506,6 +509,7 @@ type ArticleRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): TopicsBlockRecord
+  undersecretary: BooleanType!
 }
 
 input ArticleTopicModelFilter {
@@ -4424,7 +4428,9 @@ input InsightModelFilter {
   _isValid: BooleanFilter
   _locales: LocalesFilter
   abstract: TextFilter
+  attachments: LinksFilter
   image: FileFilter
+  links: LinksFilter
   parentPage: LinkFilter
   seo: SeoFilter
   slug: SlugFilter
@@ -4541,6 +4547,7 @@ type InsightRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): String!
+  attachments: [AttachmentRecord!]!
   content(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -4560,6 +4567,7 @@ type InsightRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): FileField!
+  links: [LinkExternalRecord!]!
   parentPage(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale

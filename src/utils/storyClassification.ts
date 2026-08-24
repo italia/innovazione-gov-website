@@ -4,6 +4,8 @@ export const PLATFORMS_STORY_CLASS_ID = "I_yJs25GSZ-PG4kU1EbeqA";
 export const ARTICLE_TYPE_LABELS: Record<string, string> = {
   news: "Notizia",
   press_release: "Comunicato stampa",
+  interview: "Intervista",
+  participation: "Intervento",
   focus: "Focus",
   guida: "Guida",
 };
@@ -27,10 +29,18 @@ export function articleTypeForStoryClass(
 const ARTICLE_TYPE_BY_CLASS_LABEL: Record<string, string> = {
   notizie: "news",
   "comunicati stampa": "press_release",
+  interviste: "interview",
+  interventi: "participation",
   focus: "focus",
   guide: "guida",
   guida: "guida",
 };
+
+const UNDERSECRETARY_OWNER_LABEL = "sottosegretario";
+
+export function isUndersecretaryOwner(label?: string | null): boolean {
+  return label?.trim().toLowerCase() === UNDERSECRETARY_OWNER_LABEL;
+}
 
 export function articleTypeForClassLabel(label?: string | null): string | null {
   if (!label) return null;

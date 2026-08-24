@@ -27,6 +27,7 @@ import {
   articleTypeForClassLabel,
   articleTypeForStoryClass,
   isNewsStoryClass,
+  isUndersecretaryOwner,
 } from "@utils/storyClassification";
 import { getEntry } from "astro:content";
 import type { ElementType, UpdateTabSectionProps } from "./types";
@@ -60,11 +61,14 @@ const resolvedTabs = await Promise.all(
     const articleType = articleTypeForClassLabel(classEntry?.data.value);
     if (!articleType) return { articleType: null, items: null };
 
+    const undersecretaryOnly = isUndersecretaryOwner(tab.filterOwnerLabel);
+
     const items = sortFeedItems(
       articles
         .filter(
           (a) =>
             a.articleType === articleType &&
+            (!undersecretaryOnly || a.undersecretary === true) &&
             a.allTitleLocales?.some((t) => t.locale === lang),
         )
         .map((a) => mapArticleToCardEditorialNewsProps(a, lang)),

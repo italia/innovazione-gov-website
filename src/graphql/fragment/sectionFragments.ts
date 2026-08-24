@@ -455,6 +455,7 @@ export const CatalogueFeedFragment = graphql(`
       }
       filterOwner {
         id
+        label
       }
       elementPerPage
     }

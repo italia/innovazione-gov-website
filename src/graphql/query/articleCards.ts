@@ -7,6 +7,7 @@ export const AllArticleCardsQuery = graphql(
       allArticles(first: 500, orderBy: _firstPublishedAt_DESC) {
         id
         articleType
+        undersecretary
         allTitleLocales: _allTitleLocales {
           locale
           value
