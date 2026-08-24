@@ -1,17 +1,39 @@
 ---
 import StructuredTextAdapter from "@components/cms-adapters/datocms/StructuredTextAdapter.astro";
+import { ArticleAttachments } from "@components/organisms/ArticleAttachments";
 import { ArticleToc } from "@components/organisms/ArticleToc";
+import { ArticleUsefulLinks } from "@components/organisms/ArticleUsefulLinks";
 import type { ArticleSTFragmentType } from "@graphql/fragment/sectionFragments";
 import { getI18n } from "@i18n/microcopy";
 import { getSectionBgClass, type SectionBackground } from "@utils/background";
 import { extractHeadings } from "@utils/extractHeadings";
+import { slugify } from "@utils/slugify";
+
+type Attachment = {
+  id: string;
+  fileTitle?: string | null;
+  file?: { url: string; filename: string; format: string } | null;
+};
+type ExternalLink = {
+  id: string;
+  title?: string | null;
+  link?: string | null;
+  description?: string | null;
+};
 
 type Props = {
   block: ArticleSTFragmentType;
   isFontSerif?: boolean;
+  attachments?: Attachment[];
+  links?: ExternalLink[];
 };
 
-const { block, isFontSerif = false } = Astro.props;
+const {
+  block,
+  isFontSerif = false,
+  attachments = [],
+  links = [],
+} = Astro.props;
 const { lang } = Astro.locals;
 const t = getI18n(lang);
 
@@ -30,6 +52,16 @@ const tocItems = block.showPageIndex
       label: heading.text,
     }))
   : [];
+
+if (tocItems.length && attachments.some((attachment) => attachment.file))
+  tocItems.push({
+    id: slugify(t["resources.title"]),
+    label: t["resources.title"],
+  });
+
+if (tocItems.length && links.some((link) => link.link))
+  tocItems.push({ id: slugify(t["links.title"]), label: t["links.title"] });
+
 const hasToc = tocItems.length > 0;
 ---
 
@@ -57,6 +89,8 @@ const hasToc = tocItems.length > 0;
         }
         <div class:list={["col-12", hasToc ? "col-lg-8 ps-lg-4" : "col-lg-8"]}>
           <StructuredTextAdapter block={block.textContent} />
+          <ArticleAttachments attachments={attachments} />
+          <ArticleUsefulLinks links={links} />
         </div>
       </div>
     </div>

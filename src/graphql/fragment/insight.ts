@@ -126,6 +126,21 @@ export const AllInsightsRecordFragment = graphql(
           ...InsightContentFragment
         }
       }
+      attachments {
+        id
+        fileTitle
+        file {
+          url
+          filename
+          format
+        }
+      }
+      links {
+        id
+        title
+        link
+        description
+      }
     }
   `,
   [InsightContentFragment],

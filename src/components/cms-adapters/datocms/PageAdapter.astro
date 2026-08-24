@@ -48,16 +48,41 @@ type ContentType =
   | WebinarContentFragmentType
   | SearchPageContentFragmentType;
 
+type Attachment = {
+  id: string;
+  fileTitle?: string | null;
+  file?: { url: string; filename: string; format: string } | null;
+};
+type ExternalLink = {
+  id: string;
+  title?: string | null;
+  link?: string | null;
+  description?: string | null;
+};
+
 type Props = {
   content: ContentType[];
   isFontSerif?: boolean;
+  attachments?: Attachment[];
+  links?: ExternalLink[];
 };
 
-const { content, isFontSerif = false } = Astro.props;
+const {
+  content,
+  isFontSerif = false,
+  attachments = [],
+  links = [],
+} = Astro.props;
+
+const lastStructuredTextIndex = content.reduce(
+  (last, block, index) =>
+    block.componentName === DatoBlockModel.StructuredText ? index : last,
+  -1,
+);
 ---
 
 {
-  content.map((block) => {
+  content.map((block, index) => {
     switch (block.componentName) {
       case DatoBlockModel.GraphitaliaDashboard:
         return <GraphitaliaDashboardAdapter block={block} />;
@@ -81,7 +106,12 @@ const { content, isFontSerif = false } = Astro.props;
         return <SupportCTASectionAdapter block={block} size="default" />;
       case DatoBlockModel.StructuredText:
         return (
-          <StructuredTextBlockAdapter block={block} isFontSerif={isFontSerif} />
+          <StructuredTextBlockAdapter
+            block={block}
+            isFontSerif={isFontSerif}
+            attachments={index === lastStructuredTextIndex ? attachments : []}
+            links={index === lastStructuredTextIndex ? links : []}
+          />
         );
       case DatoBlockModel.ListCollection:
         return <ListCollectionAdapter block={block} />;
