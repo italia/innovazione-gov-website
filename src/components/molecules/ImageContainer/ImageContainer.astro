@@ -7,6 +7,13 @@ type Props = ImageContainerProps;
 const { ratio = "4x3", image } = Astro.props;
 ---
 
-<div class=`ratio ratio-${ratio}`>
+<div class:list={["image-container", "ratio", `ratio-${ratio}`]}>
   <Image {...image} />
 </div>
+
+<style>
+  .image-container :global(img) {
+    object-fit: cover;
+    object-position: center;
+  }
+</style>
