@@ -2,6 +2,7 @@ import rawLinkMap from "@data/linkMap.json";
 import type { SeoFieldFragmentType } from "@graphql/fragment/seoFragments";
 import type { SiteLocale } from "@graphql/types";
 import { DatoBlockModel } from "@utils/cmsMapper";
+import { breadcrumbStepLabel } from "@utils/createBreadcrumb";
 import {
   getBreadcrumbs,
   linkResolver,
@@ -199,7 +200,7 @@ export function buildBreadcrumbJsonLd({
       return {
         "@type": "ListItem",
         position: index + 1,
-        name: step.title,
+        name: breadcrumbStepLabel(step, index, locale),
         item: toAbsoluteUrl(path, siteUrl),
       };
     })

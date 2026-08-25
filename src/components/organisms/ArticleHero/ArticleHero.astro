@@ -20,12 +20,7 @@ const t = getI18n(lang);
 const rawBreadcrumb = createBreadcrumb(recordId, lang);
 const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
   ...item,
-  label:
-    index === 0
-      ? t["breadcrumb.root"]
-      : index === arr.length - 1
-        ? t["article.detail"]
-        : item.label,
+  label: index === arr.length - 1 ? t["article.detail"] : item.label,
 }));
 ---
 
