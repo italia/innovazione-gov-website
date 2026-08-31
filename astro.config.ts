@@ -4,6 +4,14 @@ import vercel from "@astrojs/vercel";
 import { defineConfig } from "astro/config";
 import { resolve } from "path";
 
+const SANDBOX_BRANCH = "website-astro-2026";
+const SANDBOX_DATOCMS_ENVIRONMENT = "website-astro-2026";
+
+if (process.env.VERCEL_GIT_COMMIT_REF === SANDBOX_BRANCH) {
+  process.env.DATOCMS_ENVIRONMENT ??= SANDBOX_DATOCMS_ENVIRONMENT;
+  process.env.SHOW_ALL_PAGES ??= "true";
+}
+
 // https://astro.build/config
 export default defineConfig({
   site: process.env.SITE_URL,
