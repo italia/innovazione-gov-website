@@ -88,22 +88,6 @@ export const InsightLocalesFragment = graphql(
   [],
 );
 
-export const StoryItemLocalesFragment = graphql(
-  `
-    fragment StoryItemLocalesFragment on StoryItemRecord @_unmask {
-      allSlugLocales: _allSlugLocales {
-        locale
-        value
-      }
-      allTitleLocales: _allTitleLocales {
-        locale
-        value
-      }
-    }
-  `,
-  [],
-);
-
 export const WebinarItemLocalesFragment = graphql(
   `
     fragment WebinarItemLocalesFragment on WebinarItemRecord @_unmask {

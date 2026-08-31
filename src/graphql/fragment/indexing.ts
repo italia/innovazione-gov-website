@@ -9,7 +9,6 @@ import {
   ArticleLocalesFragment,
   InsightLocalesFragment,
   PageLocalesFragment,
-  StoryItemLocalesFragment,
   WebinarItemLocalesFragment,
 } from "@graphql/fragment/metaFragments";
 import { PageContentFragment } from "@graphql/fragment/page";
@@ -17,10 +16,8 @@ import {
   AllArticlesSlugFragment,
   AllInsightsSlugFragment,
   AllPagesSlugFragment,
-  AllStoryItemsSlugFragment,
   AllWebinarItemsSlugFragment,
 } from "@graphql/fragment/slugFragments";
-import { StoryContentFragment } from "@graphql/fragment/story";
 import { WebinarContentFragment } from "@graphql/fragment/webinar";
 import { graphql, type FragmentOf } from "@graphql/graphql";
 
@@ -74,28 +71,6 @@ export const InsightIndexingFragment = graphql(
 
 export type InsightIndexingFragmentType = FragmentOf<
   typeof InsightIndexingFragment
->;
-
-export const StoryIndexingFragment = graphql(
-  `
-    fragment StoryIndexingFragment on StoryItemRecord @_unmask {
-      id
-      articleType
-      ...AllStoryItemsSlugFragment
-      ...StoryItemLocalesFragment
-      allContentLocales: _allContentLocales {
-        locale
-        value {
-          ...StoryContentFragment
-        }
-      }
-    }
-  `,
-  [AllStoryItemsSlugFragment, StoryItemLocalesFragment, StoryContentFragment],
-);
-
-export type StoryIndexingFragmentType = FragmentOf<
-  typeof StoryIndexingFragment
 >;
 
 export const NewsIndexingFragment = graphql(

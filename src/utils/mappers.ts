@@ -1,11 +1,9 @@
 import type { CardEditorialNewsProps } from "@components/react/CardEditorialNews";
-import type { CardEditorialStoryProps } from "@components/react/CardEditorialStory";
 import type { CardMeasureProps } from "@components/react/CardMeasure/types";
 import type { ResourceProps } from "@components/react/Resource";
 import type {
   NewsItemFragmentType,
   ResourceFragmentType,
-  StoryCardFragmentType,
   WebinarItemFragmentType,
 } from "@graphql/fragment/commonFragments";
 import type { MeasureFragmentType } from "@graphql/fragment/measure";
@@ -31,23 +29,6 @@ export const mapNewsToCardEditorialNewsProps = (
     action: link ? new URL(link).host : "",
     lang: lang,
     isExternal: true,
-  };
-};
-
-export const mapStoryToCardEditorialStoryProps = (
-  story: StoryCardFragmentType,
-  lang: SiteLocale,
-): CardEditorialStoryProps => {
-  const topic = story.topics?.[0] ?? null;
-  return {
-    id: story.id,
-    title: getLocaleValue(story.allTitleLocales, lang, ""),
-    image: story.image || undefined,
-    linkTo: linkResolver(story.id, lang),
-    category: getLocaleValue(topic?._allLabelLocales, lang, ""),
-    dateTime: story.publishedAt || undefined,
-    description: getLocaleValue(story.allParagraphLocales, lang, "") || "",
-    lang: lang,
   };
 };
 

@@ -44,7 +44,6 @@ export const GET: APIRoute = async ({ params }) => {
 
   const articles = response.allArticles;
   const insights = response.allInsights;
-  const stories = response.allStoryItems;
   const newsItems = response.allNewsItems;
   const webinars = response.allWebinarItems;
   const resourses = response.allResources;
@@ -65,10 +64,6 @@ export const GET: APIRoute = async ({ params }) => {
     getTitleByTypeResourse(cataloguesMapCategory, resourses[0]?.modelApiKey) ||
     "";
 
-  const storyPromises = stories.map((item) => Mappers.getMapStory(item, lang));
-
-  const mappedStories = await Promise.all(storyPromises);
-
   const allDocuments = [
     ...pages.map((item) => Mappers.getMapPages(item, lang)),
     ...newsItems.map((item) => Mappers.getMapNews(item, lang, newsCategory)),
@@ -78,7 +73,6 @@ export const GET: APIRoute = async ({ params }) => {
     ...insights.map((item) =>
       Mappers.getMapInsight(item, lang, insightCategory),
     ),
-    ...mappedStories,
     ...webinars.map((item) =>
       Mappers.getMapWebinar(item, lang, webinarCategory),
     ),

@@ -1,15 +1,12 @@
 ---
-import type { CardEditorialStoryProps } from "@components/molecules/CardEditorialStory/types";
 import { SplitContent } from "@components/layout/SplitContent";
 import { TabContent, Tabs } from "@components/molecules/Tabs";
-import { NewsArchiveList } from "@components/organisms/NewsArchiveList";
 import { PaginatedCollection } from "@components/react/PaginatedCollection/PaginatedCollection";
 import {
   getArticles,
   getMeasures,
   getNews,
   getResources,
-  getStories,
   getWebinars,
 } from "@lib/dataFetcher";
 import { isDraftModeEnabled } from "@lib/draftMode";
@@ -19,17 +16,13 @@ import {
   mapMeasureToCardMeasureProps,
   mapNewsToCardEditorialNewsProps,
   mapResourceToResourceProps,
-  mapStoryToCardEditorialStoryProps,
   mapWebinarToCardEditorialNewsProps,
 } from "@utils/mappers";
 import { sortFeedItems } from "@utils/feedSort";
 import {
-  articleTypeForClassLabel,
-  articleTypeForStoryClass,
-  isNewsStoryClass,
+  articleTypeForTabType,
   isUndersecretaryOwner,
 } from "@utils/storyClassification";
-import { getEntry } from "astro:content";
 import type { ElementType, UpdateTabSectionProps } from "./types";
 
 type Props = UpdateTabSectionProps;
@@ -41,80 +34,48 @@ const tabsItems = tabs.map((tab, index) => ({
   id: `tab-${id}-${index}`,
   label: tab.title,
   active: index === 0,
-  filterStory: tab.filterStory,
 }));
 
 const isPreview = import.meta.env.DEV && isDraftModeEnabled(Astro.cookies);
 
 const news = await getNews(isPreview);
-const stories = await getStories(isPreview);
 const webinars = await getWebinars(isPreview);
 const resources = await getResources(isPreview);
 const measures = await getMeasures(isPreview);
 const articles = await getArticles(isPreview);
 
-const resolvedTabs = await Promise.all(
-  tabs.map(async (tab) => {
-    const classEntry = tab.filterStory
-      ? await getEntry("story_classes", `${tab.filterStory}_${lang}`)
-      : null;
-    const articleType = articleTypeForClassLabel(classEntry?.data.value);
-    if (!articleType) return { articleType: null, items: null };
+const resolvedTabs = tabs.map((tab) => {
+  const articleType = articleTypeForTabType(tab.newsPageTabType);
+  if (!articleType) return { articleType: null, items: null };
 
-    const undersecretaryOnly = isUndersecretaryOwner(tab.filterOwnerLabel);
+  const undersecretaryOnly = isUndersecretaryOwner(tab.filterOwnerLabel);
 
-    const items = sortFeedItems(
-      articles
-        .filter(
-          (a) =>
-            a.articleType === articleType &&
-            (!undersecretaryOnly || a.undersecretary === true) &&
-            a.allTitleLocales?.some((t) => t.locale === lang),
-        )
-        .map((a) => mapArticleToCardEditorialNewsProps(a, lang)),
-      tab.sortMode,
-      lang,
-    );
-    return { articleType, items };
-  }),
-);
+  const items = sortFeedItems(
+    articles
+      .filter(
+        (a) =>
+          a.articleType === articleType &&
+          (!undersecretaryOnly || a.undersecretary === true) &&
+          a.allTitleLocales?.some((t) => t.locale === lang),
+      )
+      .map((a) => mapArticleToCardEditorialNewsProps(a, lang)),
+    tab.sortMode,
+    lang,
+  );
+  return { articleType, items };
+});
 
 function isValidTabType(val: string): val is ElementType {
   return (
     val === "news_item" ||
-    val === "story_item" ||
     val === "webinar_item" ||
     val === "resource" ||
     val === "measures"
   );
 }
 
-function getFilteredItems(
-  tabType: ElementType,
-  tabCategoryReference?: string,
-  sortMode?: string,
-) {
+function getFilteredItems(tabType: ElementType, sortMode?: string) {
   switch (tabType) {
-    case "story_item":
-      const filteredStoryByLang = stories.filter((s) =>
-        s.data.allTitleLocales?.some((item) => item.locale === lang),
-      );
-
-      const expectedArticleType =
-        articleTypeForStoryClass(tabCategoryReference);
-      const filteredStories = filteredStoryByLang.filter(
-        (s) =>
-          !expectedArticleType || s.data.articleType === expectedArticleType,
-      );
-
-      return sortFeedItems(
-        filteredStories.map((s) =>
-          mapStoryToCardEditorialStoryProps(s.data, lang),
-        ),
-        sortMode,
-        lang,
-      );
-
     case "news_item":
       const filteredNews = news.filter((n) =>
         n.data.allTitleLocales?.some((item) => item.locale === lang),
@@ -161,81 +122,52 @@ function getFilteredItems(
       return [];
   }
 }
-
-// La pagina Notizie è un CatalogueFeed con un unico tab story_item filtrato
-// sulla classe "Notizie": in quel caso usiamo il layout a lista (NewsArchiveList)
-// al posto della griglia con immagini. La discriminazione passa da
-// `isNewsStoryClass` per essere pronta al futuro switch su `storyType`.
-const newsArchiveTab =
-  tabs.length === 1 &&
-  tabs[0].newsPageTabType === "story_item" &&
-  isNewsStoryClass(tabs[0].filterStory)
-    ? tabs[0]
-    : null;
 ---
 
-{
-  newsArchiveTab ? (
-    <NewsArchiveList
-      id={id}
-      title={newsArchiveTab.title}
-      items={
-        getFilteredItems(
-          "story_item",
-          newsArchiveTab.filterStory,
-          newsArchiveTab.sortMode,
-        ) as CardEditorialStoryProps[]
+<SplitContent leftColumns={5} alignItems="top" background={background}>
+  <div class="row">
+    <Tabs id={id} items={tabsItems}>
+      {
+        tabs.map((tab, index) => {
+          const tabType = tab.newsPageTabType;
+          const resolved = resolvedTabs[index];
+          const useArticles = !!resolved.articleType;
+
+          if (!useArticles && !isValidTabType(tabType)) return null;
+
+          const items = useArticles
+            ? resolved.items
+            : getFilteredItems(tabType as ElementType, tab.sortMode);
+
+          const renderType: ElementType = useArticles
+            ? "news_item"
+            : (tabType as ElementType);
+
+          const listLayout = resolved.articleType === "press_release";
+
+          const categoriesOrder =
+            renderType === "measures"
+              ? getOrderedMeasureCategories(
+                  measures.map((m) => m.data),
+                  lang,
+                )
+              : undefined;
+
+          return (
+            <TabContent tab={tabsItems[index]}>
+              <PaginatedCollection
+                client:load
+                {...tab}
+                items={items as any}
+                newsPageTabType={renderType}
+                categoriesOrder={categoriesOrder}
+                layout={listLayout ? "list" : "grid"}
+                lang={lang}
+              />
+            </TabContent>
+          );
+        })
       }
-    />
-  ) : (
-    <SplitContent leftColumns={5} alignItems="top" background={background}>
-      <div class="row">
-        <Tabs id={id} items={tabsItems}>
-          {tabs.map((tab, index) => {
-            const tabType = tab.newsPageTabType;
-            const resolved = resolvedTabs[index];
-            const useArticles = !!resolved.articleType;
-
-            if (!useArticles && !isValidTabType(tabType)) return null;
-
-            const items = useArticles
-              ? resolved.items
-              : getFilteredItems(
-                  tabType as ElementType,
-                  tab.filterStory,
-                  tab.sortMode,
-                );
-
-            const renderType: ElementType = useArticles
-              ? "news_item"
-              : (tabType as ElementType);
-
-            const listLayout = resolved.articleType === "press_release";
-
-            const categoriesOrder =
-              renderType === "measures"
-                ? getOrderedMeasureCategories(
-                    measures.map((m) => m.data),
-                    lang,
-                  )
-                : undefined;
-
-            return (
-              <TabContent tab={tabsItems[index]}>
-                <PaginatedCollection
-                  client:load
-                  {...tab}
-                  items={items as any}
-                  newsPageTabType={renderType}
-                  categoriesOrder={categoriesOrder}
-                  layout={listLayout ? "list" : "grid"}
-                  lang={lang}
-                />
-              </TabContent>
-            );
-          })}
-        </Tabs>
-      </div>
-    </SplitContent>
-  )
-}
+    </Tabs>
+  </div>
+</SplitContent>

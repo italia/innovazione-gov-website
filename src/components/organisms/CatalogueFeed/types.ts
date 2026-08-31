@@ -5,7 +5,6 @@ export type PageNewsTab = {
   paragraph: string;
   filterTitle: string;
   labelForAll: string;
-  filterStory?: string;
   filterOwner?: string;
   filterOwnerLabel?: string;
   newsPageTabType: string;
@@ -21,4 +20,4 @@ export type UpdateTabSectionProps = {
 };
 
 export type ElementType =
-  "news_item" | "story_item" | "webinar_item" | "resource" | "measures";
+  "news_item" | "webinar_item" | "resource" | "measures";

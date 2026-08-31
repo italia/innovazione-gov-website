@@ -110,24 +110,6 @@ export const PagesSeoQuery = graphql(
   [TagFragment, SeoFieldFragment],
 );
 
-export const StoriesSeoQuery = graphql(
-  `
-    query StoriesSeo($locale: SiteLocale!) {
-      allStoryItems(locale: $locale, first: 2500) {
-        id
-        metaTags: _seoMetaTags {
-          ...TagFragment
-        }
-        seo {
-          ...SeoFieldFragment
-        }
-        updatedAt: _updatedAt
-      }
-    }
-  `,
-  [TagFragment, SeoFieldFragment],
-);
-
 export const WebinarsSeoQuery = graphql(
   `
     query WebinarsSeo($locale: SiteLocale!) {
@@ -190,16 +172,6 @@ export const GlobalSeoQuery = graphql(
         updatedAt: _updatedAt
       }
       allPages(locale: $locale) {
-        id
-        metaTags: _seoMetaTags {
-          ...TagFragment
-        }
-        seo {
-          ...SeoFieldFragment
-        }
-        updatedAt: _updatedAt
-      }
-      allStoryItems(locale: $locale) {
         id
         metaTags: _seoMetaTags {
           ...TagFragment

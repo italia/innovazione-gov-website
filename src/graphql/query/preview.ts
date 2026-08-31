@@ -3,7 +3,6 @@ import { CatalogueContentFragment } from "@graphql/fragment/catalogue";
 import { TagFragment } from "@graphql/fragment/commonFragments";
 import { InsightContentFragment } from "@graphql/fragment/insight";
 import { PageContentFragment } from "@graphql/fragment/page";
-import { StoryContentFragment } from "@graphql/fragment/story";
 import { WebinarContentFragment } from "@graphql/fragment/webinar";
 import { graphql } from "@graphql/graphql";
 
@@ -94,21 +93,4 @@ export const InsightByIdQuery = graphql(
     }
   `,
   [InsightContentFragment, TagFragment],
-);
-
-export const StoryItemByIdQuery = graphql(
-  `
-    query StoryItemByIdQuery($id: ItemId!, $locale: SiteLocale!) {
-      storyItem(filter: { id: { eq: $id } }, locale: $locale) {
-        id
-        seo: _seoMetaTags {
-          ...TagFragment
-        }
-        content {
-          ...StoryContentFragment
-        }
-      }
-    }
-  `,
-  [StoryContentFragment, TagFragment],
 );

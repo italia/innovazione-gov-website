@@ -5,7 +5,6 @@ import {
   NewsIndexingFragment,
   PageIndexingFragment,
   ResourseIndexingFragment,
-  StoryIndexingFragment,
   WebinarIndexingFragment,
 } from "@graphql/fragment/indexing";
 import { graphql } from "@graphql/graphql";
@@ -30,17 +29,6 @@ export const InsightsIdxQuery = graphql(
     }
   `,
   [InsightIndexingFragment],
-);
-
-export const StoriesIdxQuery = graphql(
-  `
-    query StoriesIdx {
-      allStoryItems(first: 2500) {
-        ...StoryIndexingFragment
-      }
-    }
-  `,
-  [StoryIndexingFragment],
 );
 
 export const NewsIdxQuery = graphql(

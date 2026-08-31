@@ -1,6 +1,5 @@
 import {
   allDocumentsLoader,
-  allStoryClassesLoader,
   articleContentLoader,
   cataloguesLoader,
   errorPageLoader,
@@ -18,14 +17,11 @@ import {
   searchLoader,
   sidebarLoader,
   siteMetaTagsLoader,
-  storiesLoader,
-  storyContentLoader,
   webinarContentLoader,
   webinarsLoader,
 } from "@collections/loader";
 import {
   allDocumentsSchema,
-  allStoryClassesSchema,
   articleSchema,
   catalogueSchema,
   errorPageSchema,
@@ -43,8 +39,6 @@ import {
   searchSchema,
   sidebarSchema,
   siteMetaTagsSchema,
-  storyContentSchema,
-  storySchema,
   webinarContentSchema,
   webinarSchema,
 } from "@collections/schema";
@@ -54,10 +48,6 @@ export const collections = {
   news_item: defineCollection({
     schema: newsSchema,
     loader: newsLoader,
-  }),
-  story_item: defineCollection({
-    schema: storySchema,
-    loader: storiesLoader,
   }),
   webinar_item: defineCollection({
     schema: webinarSchema,
@@ -94,10 +84,6 @@ export const collections = {
   webinar_content: defineCollection({
     schema: webinarContentSchema,
     loader: webinarContentLoader,
-  }),
-  story_content: defineCollection({
-    schema: storyContentSchema,
-    loader: storyContentLoader,
   }),
   insight: defineCollection({
     schema: insightSchema,
@@ -138,9 +124,5 @@ export const collections = {
   documents: defineCollection({
     loader: allDocumentsLoader,
     schema: allDocumentsSchema,
-  }),
-  story_classes: defineCollection({
-    loader: allStoryClassesLoader,
-    schema: allStoryClassesSchema,
   }),
 };

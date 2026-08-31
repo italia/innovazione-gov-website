@@ -44,30 +44,6 @@ const LastArticlesQuery = graphql(
   [ImageFragment],
 );
 
-const LastStoriesQuery = graphql(
-  `
-    query LastStories($locale: SiteLocale) {
-      records: allStoryItems(
-        orderBy: _firstPublishedAt_DESC
-        first: 20
-        locale: $locale
-      ) {
-        id
-        title
-        paragraph
-        firstPublishedAt: _firstPublishedAt
-        topics {
-          label
-        }
-        image {
-          ...ImageFragment
-        }
-      }
-    }
-  `,
-  [ImageFragment],
-);
-
 function dedupeSortTop(
   items: CardEditorialNewsProps[],
   n: number,
@@ -88,13 +64,10 @@ export async function getLastItems(
   { locale, includeDrafts }: Options,
 ): Promise<CardEditorialNewsProps[]> {
   if (selection === "articles") {
-    const [articlesRes, storiesRes] = await Promise.all([
-      executeQuery(LastArticlesQuery, {
-        variables: { locale, filter: { articleType: { eq: "news" } } },
-        includeDrafts,
-      }),
-      executeQuery(LastStoriesQuery, { variables: { locale }, includeDrafts }),
-    ]);
+    const articlesRes = await executeQuery(LastArticlesQuery, {
+      variables: { locale, filter: { articleType: { eq: "news" } } },
+      includeDrafts,
+    });
 
     const articleItems: CardEditorialNewsProps[] = articlesRes.records.map(
       (r) => ({
@@ -111,22 +84,7 @@ export async function getLastItems(
       }),
     );
 
-    const storyItems: CardEditorialNewsProps[] = storiesRes.records.map(
-      (r) => ({
-        id: r.id,
-        isExternal: false,
-        title: r.title ?? "",
-        description: r.paragraph ?? "",
-        image: r.image ?? undefined,
-        dateTime: r.firstPublishedAt ?? undefined,
-        category: (r.topics ?? [])
-          .map((t) => t.label)
-          .filter((v): v is string => !!v),
-        linkTo: linkResolver(r.id, locale),
-      }),
-    );
-
-    return dedupeSortTop([...articleItems, ...storyItems], 3);
+    return dedupeSortTop(articleItems, 3);
   }
 
   const articleType = ARTICLE_TYPE_BY_SELECTION[selection];

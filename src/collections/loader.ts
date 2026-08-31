@@ -12,7 +12,6 @@ import {
   NewsIdxQuery,
   PagesIdxQuery,
   ResourcesIdxQuery,
-  StoriesIdxQuery,
   WebinarsIdxQuery,
 } from "@graphql/query/indexing";
 import { AllInsightsContentQuery } from "@graphql/query/insight";
@@ -33,7 +32,6 @@ import {
   InsightsSeoQuery,
   PagesSeoQuery,
   SearchSeoQuery,
-  StoriesSeoQuery,
   WebinarsSeoQuery,
 } from "@graphql/query/seo";
 import {
@@ -41,11 +39,6 @@ import {
   LocalesQuery,
   SiteMetaTagsQuery,
 } from "@graphql/query/settings";
-import {
-  AllStoriesContentQuery,
-  AllStoryCardQuery,
-  AllStoryClassesQuery,
-} from "@graphql/query/story";
 import {
   AllWebinarQuery,
   AllWebinarsContentQuery,
@@ -68,11 +61,6 @@ export const newsLoader = async () => {
     },
   });
   return response?.allNewsItems || [];
-};
-
-export const storiesLoader = async () => {
-  const response = await executeAutoPagingQuery(AllStoryCardQuery);
-  return response?.allStoryItems || [];
 };
 
 export const measuresLoader = async () => {
@@ -163,7 +151,6 @@ export const cataloguesLoader = async () => {
   ]);
   const datesRegistry = {
     news: updatesData?.lastNews?.[0]?.publishedAt,
-    story: updatesData?.lastStory?.[0]?.publishedAt,
     webinar: updatesData?.lastWebinar?.[0]?.publishedAt,
     resource: updatesData?.lastResource?.[0]?.publishedAt,
   };
@@ -177,11 +164,6 @@ export const cataloguesLoader = async () => {
 export const webinarContentLoader = async () => {
   const response = await executeAutoPagingQuery(AllWebinarsContentQuery);
   return publishedOnly(response?.allWebinarItems || []);
-};
-
-export const storyContentLoader = async () => {
-  const response = await executeAutoPagingQuery(AllStoriesContentQuery);
-  return publishedOnly(response?.allStoryItems || []);
 };
 
 export const insightContentLoader = async () => {
@@ -283,7 +265,6 @@ export const globalSeoLoader = async () => {
         jobPositionsRes,
         cataloguesRes,
         pagesRes,
-        storiesRes,
         webinarsRes,
         searchRes,
       ] = await Promise.all([
@@ -293,7 +274,6 @@ export const globalSeoLoader = async () => {
         executeAutoPagingQuery(JobPositionsSeoQuery, { variables: { locale } }),
         executeAutoPagingQuery(CataloguesSeoQuery, { variables: { locale } }),
         executeAutoPagingQuery(PagesSeoQuery, { variables: { locale } }),
-        executeAutoPagingQuery(StoriesSeoQuery, { variables: { locale } }),
         executeAutoPagingQuery(WebinarsSeoQuery, { variables: { locale } }),
         executeAutoPagingQuery(SearchSeoQuery, { variables: { locale } }),
       ]);
@@ -314,7 +294,6 @@ export const globalSeoLoader = async () => {
         ...(jobPositionsRes?.allJobPositions?.map(mapEntry) || []),
         ...(cataloguesRes?.allCatalogues?.map(mapEntry) || []),
         ...(pagesRes?.allPages?.map(mapEntry) || []),
-        ...(storiesRes?.allStoryItems?.map(mapEntry) || []),
         ...(webinarsRes?.allWebinarItems?.map(mapEntry) || []),
         ...(searchRes?.search ? [mapEntry(searchRes.search)] : []),
       ];
@@ -328,7 +307,6 @@ export const allDocumentsLoader = async () => {
   const [
     articlesRes,
     insightsRes,
-    storiesRes,
     newsRes,
     webinarsRes,
     resourcesRes,
@@ -337,7 +315,6 @@ export const allDocumentsLoader = async () => {
   ] = await Promise.all([
     executeAutoPagingQuery(ArticlesIdxQuery),
     executeAutoPagingQuery(InsightsIdxQuery),
-    executeAutoPagingQuery(StoriesIdxQuery),
     executeAutoPagingQuery(NewsIdxQuery),
     executeAutoPagingQuery(WebinarsIdxQuery),
     executeAutoPagingQuery(ResourcesIdxQuery),
@@ -352,7 +329,6 @@ export const allDocumentsLoader = async () => {
       id: "all-documents",
       allArticles: publishedOnly(articlesRes.allArticles || []),
       allInsights: publishedOnly(insightsRes.allInsights || []),
-      allStoryItems: publishedOnly(storiesRes.allStoryItems || []),
       allNewsItems: publishedOnly(newsRes.allNewsItems || []),
       allWebinarItems: publishedOnly(webinarsRes.allWebinarItems || []),
       allResources: publishedOnly(resourcesRes.allResources || []),
@@ -362,19 +338,4 @@ export const allDocumentsLoader = async () => {
       allPages: publishedOnly(pagesRes.allPages || []),
     },
   ];
-};
-
-export const allStoryClassesLoader = async () => {
-  const response = await executeQuery(AllStoryClassesQuery);
-
-  if (!response?.allStoryClasses) return [];
-
-  return response.allStoryClasses.flatMap((item) => {
-    return (
-      item.allLabelsLocales?.map((label) => ({
-        id: `${item.id}_${label.locale}`,
-        value: label.value,
-      })) || []
-    );
-  });
 };

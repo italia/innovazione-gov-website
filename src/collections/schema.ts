@@ -3,7 +3,6 @@ import type { AllCataloguesRecordFragmentType } from "@graphql/fragment/catalogu
 import type {
   NewsItemFragmentType,
   ResourceFragmentType,
-  StoryCardFragmentType,
   TagFragmentType,
   WebinarItemFragmentType,
 } from "@graphql/fragment/commonFragments";
@@ -16,7 +15,6 @@ import type {
   NewsIndexingFragmentType,
   PageIndexingFragmentType,
   ResourseIndexingFragmentType,
-  StoryIndexingFragmentType,
   WebinarIndexingFragmentType,
 } from "@graphql/fragment/indexing";
 import type { AllInsightsRecordFragmentType } from "@graphql/fragment/insight";
@@ -31,14 +29,11 @@ import type { PageFragmentType } from "@graphql/fragment/page";
 import type { SearchRecordFragmentType } from "@graphql/fragment/search";
 import type { SearchMenuFragmentType } from "@graphql/fragment/sectionFragments";
 import type { SeoFieldFragmentType } from "@graphql/fragment/seoFragments";
-import type { AllStoriesRecordFragmentType } from "@graphql/fragment/story";
 import type { AllWebinarRecordFragmentType } from "@graphql/fragment/webinar";
 import type { SiteLocale } from "@graphql/types";
 import { z } from "astro:content";
 
 export const newsSchema = z.custom<NewsItemFragmentType>();
-
-export const storySchema = z.custom<StoryCardFragmentType>();
 
 export const webinarSchema = z.custom<WebinarItemFragmentType>();
 
@@ -53,8 +48,6 @@ export const homepageSchema = z.custom<HomepageRecordFragmentType>();
 export const searchSchema = z.custom<SearchRecordFragmentType>();
 
 export const webinarContentSchema = z.custom<AllWebinarRecordFragmentType>();
-
-export const storyContentSchema = z.custom<AllStoriesRecordFragmentType>();
 
 export const insightSchema = z.custom<AllInsightsRecordFragmentType>();
 
@@ -96,7 +89,6 @@ export const catalogueSchema = z.intersection(
   z.object({
     datesRegistry: z.object({
       news: z.string().optional(),
-      story: z.string().optional(),
       webinar: z.string().optional(),
       resource: z.string().optional(),
     }),
@@ -132,15 +124,9 @@ export const allDocumentsSchema = z.object({
   id: z.string(),
   allArticles: z.array(z.custom<ArticleIndexingFragmentType>()),
   allInsights: z.array(z.custom<InsightIndexingFragmentType>()),
-  allStoryItems: z.array(z.custom<StoryIndexingFragmentType>()),
   allNewsItems: z.array(z.custom<NewsIndexingFragmentType>()),
   allWebinarItems: z.array(z.custom<WebinarIndexingFragmentType>()),
   allResources: z.array(z.custom<ResourseIndexingFragmentType>()),
   allCatalogues: z.array(z.custom<CatalogueIndexingFragmentType>()),
   allPages: z.array(z.custom<PageIndexingFragmentType>()),
-});
-
-export const allStoryClassesSchema = z.object({
-  id: z.string(),
-  value: z.string(),
 });

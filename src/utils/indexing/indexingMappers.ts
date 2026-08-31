@@ -4,7 +4,6 @@ import type {
   NewsIndexingFragmentType,
   PageIndexingFragmentType,
   ResourseIndexingFragmentType,
-  StoryIndexingFragmentType,
   WebinarIndexingFragmentType,
 } from "@graphql/fragment/indexing";
 import type { SiteLocale } from "@graphql/types";
@@ -16,7 +15,6 @@ import {
   getSearchRenderOptions,
 } from "@utils/indexing/blockContentMappers";
 import { linkResolver } from "@utils/linkResolver";
-import { articleTypeLabel } from "@utils/storyClassification";
 import { render } from "datocms-structured-text-to-plain-text";
 
 export const getMapArticle = (
@@ -54,27 +52,6 @@ export const getMapInsight = (
     internalLink: linkResolver(insight.id, lang),
     title: getLocaleValue(insight.allTitleLocales, lang, ""),
     description: getLocaleValue(insight.allAbstractLocales, lang, ""),
-    content: content,
-  };
-};
-
-export const getMapStory = async (
-  story: StoryIndexingFragmentType,
-  lang: SiteLocale,
-) => {
-  const contentData = getLocaleValue(story.allContentLocales, lang, null);
-
-  const content = flattenBlocks(contentData ?? []);
-
-  const category = articleTypeLabel(story.articleType);
-
-  return {
-    type: "story",
-    id: story.id,
-    category,
-    internalLink: linkResolver(story.id, lang),
-    title: getLocaleValue(story.allTitleLocales, lang, ""),
-    description: "",
     content: content,
   };
 };

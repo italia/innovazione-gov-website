@@ -8,7 +8,6 @@ import {
   AllCataloguesSlugFragment,
   AllInsightsSlugFragment,
   AllPagesSlugFragment,
-  AllStoryItemsSlugFragment,
   AllWebinarItemsSlugFragment,
   HomepageFragment,
   SearchFragment,
@@ -91,17 +90,6 @@ export const InsightsLinksQuery = graphql(
     }
   `,
   [AllInsightsSlugFragment],
-);
-
-export const StoriesLinksQuery = graphql(
-  `
-    query StoriesLinks {
-      allStoryItems(first: 2500) {
-        ...AllStoryItemsSlugFragment
-      }
-    }
-  `,
-  [AllStoryItemsSlugFragment],
 );
 
 export const WebinarsLinksQuery = graphql(

@@ -3,7 +3,6 @@ import {
   CatalogueLocalesFragment,
   InsightLocalesFragment,
   PageLocalesFragment,
-  StoryItemLocalesFragment,
   WebinarItemLocalesFragment,
 } from "@graphql/fragment/metaFragments";
 import { graphql, type FragmentOf } from "@graphql/graphql";
@@ -62,37 +61,6 @@ export const AllInsightsSlugFragment = graphql(
 
 export type AllInsightsSlugFragmentType = FragmentOf<
   typeof AllInsightsSlugFragment
->;
-
-export const AllStoryItemsSlugFragment = graphql(
-  `
-    fragment AllStoryItemsSlugFragment on StoryItemRecord @_unmask {
-      id
-      modelApiKey: _modelApiKey
-      locales: _locales
-      ...StoryItemLocalesFragment
-      parentPage {
-        ... on RecordInterface {
-          id
-        }
-        ... on IndexPageRecord {
-          ...CatalogueLocalesFragment
-          parentPage {
-            id
-            ...PageLocalesFragment
-          }
-        }
-        ... on PageRecord {
-          ...PageLocalesFragment
-        }
-      }
-    }
-  `,
-  [PageLocalesFragment, CatalogueLocalesFragment, StoryItemLocalesFragment],
-);
-
-export type AllStoryItemsSlugFragmentType = FragmentOf<
-  typeof AllStoryItemsSlugFragment
 >;
 
 export const AllWebinarItemsSlugFragment = graphql(

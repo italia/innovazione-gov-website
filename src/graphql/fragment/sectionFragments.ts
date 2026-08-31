@@ -1,5 +1,6 @@
 import {
   AccordionBlockFragment,
+  AltImageFragment,
   AccordionFragment,
   AdditionalContentFragment,
   ArticleCardPreviewFragment,
@@ -445,14 +446,10 @@ export const CatalogueFeedFragment = graphql(`
       title
       paragraph
       newsPageTabType
-      storyType
       filterStyle
       labelForAll
       id
       filterTitle
-      filterStory {
-        id
-      }
       filterOwner {
         id
         label
@@ -640,6 +637,51 @@ export const TextAndAccordionFragment = graphql(
 export type TextAndAccordionFragmentType = FragmentOf<
   typeof TextAndAccordionFragment
 >;
+
+export const TimelineItemFragment = graphql(
+  `
+    fragment TimelineItemFragment on TimelineItemRecord @_unmask {
+      id
+      period
+      title
+      paragraph(markdown: true)
+      image {
+        ...AltImageFragment
+      }
+      cta {
+        ... on RecordInterface {
+          id
+          componentName: __typename
+        }
+        ... on InternalLinkRecord {
+          ...InternalLinkFragment
+        }
+        ... on ExternalLinkRecord {
+          ...ExternalLinkFragment
+        }
+      }
+    }
+  `,
+  [AltImageFragment, InternalLinkFragment, ExternalLinkFragment],
+);
+
+export type TimelineItemFragmentType = FragmentOf<typeof TimelineItemFragment>;
+
+export const TimelineFragment = graphql(
+  `
+    fragment TimelineFragment on TimelineRecord @_unmask {
+      id
+      title
+      paragraph(markdown: true)
+      items {
+        ...TimelineItemFragment
+      }
+    }
+  `,
+  [TimelineItemFragment],
+);
+
+export type TimelineFragmentType = FragmentOf<typeof TimelineFragment>;
 
 export const SearchMenuFragment = graphql(
   `

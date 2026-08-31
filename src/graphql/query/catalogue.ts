@@ -17,9 +17,6 @@ export const LastItemsUpdateQuery = graphql(`
     lastNews: allNewsItems(orderBy: _createdAt_DESC, first: 1) {
       publishedAt: _publishedAt
     }
-    lastStory: allStoryItems(orderBy: _createdAt_DESC, first: 1) {
-      publishedAt: _publishedAt
-    }
     lastWebinar: allWebinarItems(orderBy: _createdAt_DESC, first: 1) {
       publishedAt: _publishedAt
     }

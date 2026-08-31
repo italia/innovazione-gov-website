@@ -3,7 +3,6 @@ import {
   type AllArticlesSlugFragmentType,
   type AllInsightsSlugFragmentType,
   type AllPagesSlugFragmentType,
-  type AllStoryItemsSlugFragmentType,
   type AllWebinarItemsSlugFragmentType,
 } from "@graphql/fragment/slugFragments";
 import type { SiteLocale } from "../graphql/types";
@@ -43,7 +42,6 @@ const getCategory = (item: HasLocales, locale: string) =>
 export type RoutableRecord =
   | AllArticlesSlugFragmentType
   | AllInsightsSlugFragmentType
-  | AllStoryItemsSlugFragmentType
   | AllWebinarItemsSlugFragmentType
   | AllPagesSlugFragmentType
   | AllJobPositionsSlugFragmentType;

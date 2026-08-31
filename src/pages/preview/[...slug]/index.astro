@@ -13,7 +13,6 @@ import {
   CatalogueByIdQuery,
   InsightByIdQuery,
   PageByIdQuery,
-  StoryItemByIdQuery,
   WebinarByIdQuery,
 } from "@graphql/query/preview";
 
@@ -53,7 +52,6 @@ const queryMap: Record<string, QueryConfig> = {
   article: { query: ArticleByIdQuery, key: "article" },
   webinar_item: { query: WebinarByIdQuery, key: "webinarItem" },
   insight: { query: InsightByIdQuery, key: "insight" },
-  story_item: { query: StoryItemByIdQuery, key: "storyItem" },
   layout: { query: LayoutQuery, key: "layout" },
   sidebar_for_article: { query: SidebarQuery, key: "sidebarForArticle" },
 };
@@ -149,7 +147,6 @@ if (slugProduction !== "#") {
     type === "page" ||
     type === "search" ||
     type === "webinar_item" ||
-    type === "story_item" ||
     type === "insight" ||
     type === "catalogue" ||
     type === "index_page") && (

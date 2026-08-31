@@ -4,7 +4,6 @@ import {
   InsightsLinksQuery,
   PagesLinksQuery,
   SingletonLinksQuery,
-  StoriesLinksQuery,
   WebinarsLinksQuery,
 } from "@graphql/query/settings";
 import { JobPositionsLinksQuery } from "@graphql/query/jobPosition";
@@ -39,7 +38,6 @@ async function generateLinkMap() {
     pagesRes,
     articlesRes,
     insightsRes,
-    storiesRes,
     webinarsRes,
     cataloguesRes,
     jobPositionsRes,
@@ -48,7 +46,6 @@ async function generateLinkMap() {
     executeAutoPagingQuery(PagesLinksQuery),
     executeAutoPagingQuery(ArticlesLinksQuery),
     executeAutoPagingQuery(InsightsLinksQuery),
-    executeAutoPagingQuery(StoriesLinksQuery),
     executeAutoPagingQuery(WebinarsLinksQuery),
     executeAutoPagingQuery(CataloguesLinksQuery),
     executeAutoPagingQuery(JobPositionsLinksQuery),
@@ -156,10 +153,7 @@ async function generateLinkMap() {
     processItemsCategoryPages(collection, linkMap, home),
   );
 
-  const collectionTabPages = [
-    publishedOnly(storiesRes.allStoryItems),
-    publishedOnly(webinarsRes.allWebinarItems),
-  ];
+  const collectionTabPages = [publishedOnly(webinarsRes.allWebinarItems)];
 
   collectionTabPages.forEach((collection) =>
     processItemsTabPages(collection, linkMap, home, allowedCatalogues),

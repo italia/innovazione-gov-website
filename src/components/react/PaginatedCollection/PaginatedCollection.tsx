@@ -4,10 +4,6 @@ import {
   type CardEditorialNewsProps,
 } from "@components/react/CardEditorialNews";
 import {
-  CardEditorialStory,
-  type CardEditorialStoryProps,
-} from "@components/react/CardEditorialStory";
-import {
   CardMeasure,
   type CardMeasureProps,
 } from "@components/react/CardMeasure";
@@ -35,10 +31,6 @@ type PaginatedCollectionProps =
   | (PaginatedCollectionCommonProps & {
       items: CardEditorialNewsProps[];
       newsPageTabType: "news_item";
-    })
-  | (PaginatedCollectionCommonProps & {
-      items: CardEditorialStoryProps[];
-      newsPageTabType: "story_item";
     })
   | (PaginatedCollectionCommonProps & {
       items: CardEditorialNewsProps[];
@@ -182,10 +174,6 @@ export function PaginatedCollection({
               <li className={colClass} key={itemKey}>
                 {newsPageTabType === "news_item" && (
                   <CardEditorialNews {...(n as CardEditorialNewsProps)} />
-                )}
-
-                {newsPageTabType === "story_item" && (
-                  <CardEditorialStory {...(n as CardEditorialStoryProps)} />
                 )}
 
                 {newsPageTabType === "webinar_item" && (

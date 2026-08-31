@@ -23,6 +23,19 @@ export const ImageFragment = graphql(`
 
 export type ImageFragmentType = FragmentOf<typeof ImageFragment>;
 
+export const AltImageFragment = graphql(`
+  fragment AltImageFragment on AltFileField @_unmask {
+    id
+    url
+    alt
+    title
+    width
+    height
+  }
+`);
+
+export type AltImageFragmentType = FragmentOf<typeof AltImageFragment>;
+
 export const InternalLinkFragment = graphql(`
   fragment InternalLinkFragment on InternalLinkRecord @_unmask {
     label
@@ -37,9 +50,6 @@ export const InternalLinkFragment = graphql(`
         id
       }
       ... on ArticleRecord {
-        id
-      }
-      ... on StoryItemRecord {
         id
       }
     }
@@ -65,9 +75,6 @@ export const LinkBlockFragment = graphql(`
         id
       }
       ... on IndexPageRecord {
-        id
-      }
-      ... on StoryItemRecord {
         id
       }
       ... on PageRecord {
@@ -307,37 +314,6 @@ export const NewsTabFragment = graphql(
 
 export type NewsTabFragmentType = FragmentOf<typeof NewsTabFragment>;
 
-export const StoryCardFragment = graphql(
-  `
-    fragment StoryCardFragment on StoryItemRecord @_unmask {
-      id
-      articleType
-      allTitleLocales: _allTitleLocales {
-        locale
-        value
-      }
-      allParagraphLocales: _allParagraphLocales {
-        locale
-        value
-      }
-      topics {
-        id
-        _allLabelLocales {
-          locale
-          value
-        }
-      }
-      publishedAt: _firstPublishedAt
-      image {
-        ...ImageFragment
-      }
-    }
-  `,
-  [ImageFragment],
-);
-
-export type StoryCardFragmentType = FragmentOf<typeof StoryCardFragment>;
-
 export const InsightCardFragment = graphql(
   `
     fragment InsightCardFragment on InsightRecord @_unmask {
@@ -378,9 +354,6 @@ export const StoryTabFragment = graphql(
       id
       title
       news {
-        ... on StoryItemRecord {
-          ...StoryCardFragment
-        }
         ... on WebinarItemRecord {
           ...WebinarItemFragment
         }
@@ -394,7 +367,6 @@ export const StoryTabFragment = graphql(
     }
   `,
   [
-    StoryCardFragment,
     WebinarItemFragment,
     InsightCardFragment,
     ArticleCardPreviewFragment,
@@ -532,6 +504,12 @@ export const MenuItemFragment = graphql(`
       ... on HomepageRecord {
         id
       }
+      ... on InsightRecord {
+        id
+      }
+      ... on ArticleRecord {
+        id
+      }
     }
   }
 `);
@@ -549,6 +527,15 @@ export const MegaMenuItemFragment = graphql(
           id
         }
         ... on PageRecord {
+          id
+        }
+        ... on HomepageRecord {
+          id
+        }
+        ... on InsightRecord {
+          id
+        }
+        ... on ArticleRecord {
           id
         }
       }
@@ -1023,21 +1010,13 @@ export const UseCaseBlockFragment = graphql(
         ... on InsightRecord {
           ...InsightCardFragment
         }
-        ... on StoryItemRecord {
-          ...StoryCardFragment
-        }
         ... on WebinarItemRecord {
           ...WebinarItemFragment
         }
       }
     }
   `,
-  [
-    ArticleCardPreviewFragment,
-    StoryCardFragment,
-    InsightCardFragment,
-    WebinarItemFragment,
-  ],
+  [ArticleCardPreviewFragment, InsightCardFragment, WebinarItemFragment],
 );
 
 export type UseCaseBlockFragmentType = FragmentOf<typeof UseCaseBlockFragment>;

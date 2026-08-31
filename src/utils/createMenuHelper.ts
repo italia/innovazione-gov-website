@@ -38,8 +38,8 @@ function menuItemAdapter(
   };
 
   if ("subMenu" in item) {
-    result.image = item.image;
-    result.caption = item.caption;
+    result.image = item.image ?? undefined;
+    result.caption = item.caption ?? undefined;
     result.subtitle = item.subtitle;
     result.subMenuItems = item.subMenu?.map((menu) =>
       menuItemAdapter(menu, currentPath, locale),
