@@ -16,21 +16,32 @@ const {
   isExternal = false,
 } = Astro.props;
 
-const midIndex = 3;
+const midIndex = Math.ceil(subMenuItems.length / 2);
 const leftColumn = subMenuItems.slice(0, midIndex);
 const rightColumn = subMenuItems.slice(midIndex);
 const ariaCurrent = active ? "page" : undefined;
+const toggleId = `megamenu-toggle-${id}`;
 ---
 
 {
   subMenuItems.length > 0 ? (
-    <li class="nav-item dropdown megamenu" id={id} aria-current={ariaCurrent}>
+    <li
+      class:list={["nav-item", "dropdown", "megamenu", { active }]}
+      id={id}
+      aria-current={ariaCurrent}
+    >
       <button
         type="button"
-        class="nav-link dropdown-toggle px-lg-2 px-xl-3"
+        class:list={[
+          "nav-link",
+          "dropdown-toggle",
+          "px-lg-2",
+          "px-xl-3",
+          { active },
+        ]}
         data-bs-toggle="dropdown"
         aria-expanded="false"
-        id="megamenu-completo-B"
+        id={toggleId}
         data-focus-mouse="false"
       >
         <>
@@ -43,7 +54,7 @@ const ariaCurrent = active ? "page" : undefined;
       <div
         class="dropdown-menu shadow-lg"
         role="region"
-        aria-labelledby="megamenu-completo-B"
+        aria-labelledby={toggleId}
       >
         <div class="megamenu pb-5 pt-3 py-lg-0">
           <div class="row">
@@ -52,7 +63,7 @@ const ariaCurrent = active ? "page" : undefined;
                 <div class="col-12 it-vertical it-description pb-lg-3">
                   <div class="description-content ps-4 ps-sm-5 ms-3">
                     {image && (
-                      <div class="ratio ratio-21x9 lightgrey-bg-a1 mb-4 rounded">
+                      <div class="ratio ratio-21x9 lightgrey-bg-a1 mb-4 rounded megamenu-image">
                         <Image {...image} />
                       </div>
                     )}
@@ -63,7 +74,7 @@ const ariaCurrent = active ? "page" : undefined;
             </div>
             <div class="col-12 col-lg-8">
               <div class="it-heading-link-wrapper">
-                <a class="it-heading-link" href="#">
+                <a class="it-heading-link" href={url}>
                   <>
                     <svg role="img" class="icon icon-sm me-2 mb-1">
                       <use href="/bsi-svg/sprites.svg#it-arrow-right-triangle" />
@@ -140,4 +151,56 @@ const ariaCurrent = active ? "page" : undefined;
     width: 20px;
     height: 20px;
   }
+
+  .megamenu-image :global(img) {
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .nav-item.megamenu > .nav-link.show,
+  .nav-item.megamenu > .nav-link.active {
+    box-shadow: inset 0 -3px 0 0 currentColor;
+  }
+
+  @media (min-width: 992px) {
+    .nav-item.megamenu > .dropdown-menu {
+      margin-top: calc(1rem + 0.625rem) !important;
+    }
+    .nav-item.megamenu > .dropdown-menu.show::before {
+      content: "";
+      position: absolute;
+      top: -9px;
+      left: var(--megamenu-notch-left, 2rem);
+      width: 16px;
+      height: 16px;
+      background: #fff;
+      transform: rotate(45deg);
+      border-radius: 2px;
+    }
+  }
 </style>
+
+<script>
+  const positionNotch = (item: Element) => {
+    const toggle = item.querySelector<HTMLElement>(".nav-link");
+    const panel = item.querySelector<HTMLElement>(".dropdown-menu");
+    if (!toggle || !panel) return;
+    const label = toggle.querySelector<HTMLElement>("span") ?? toggle;
+    const update = () => {
+      const labelBox = label.getBoundingClientRect();
+      const offset =
+        labelBox.left +
+        labelBox.width / 2 -
+        panel.getBoundingClientRect().left -
+        8;
+      panel.style.setProperty(
+        "--megamenu-notch-left",
+        `${Math.round(offset)}px`,
+      );
+    };
+    item.addEventListener("shown.bs.dropdown", update);
+    window.addEventListener("resize", update, { passive: true });
+  };
+
+  document.querySelectorAll(".nav-item.megamenu").forEach(positionNotch);
+</script>
