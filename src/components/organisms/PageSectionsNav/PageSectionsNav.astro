@@ -1,0 +1,156 @@
+---
+import type { PageSectionsNavProps } from "./types";
+
+type Props = PageSectionsNavProps;
+
+const { header, items } = Astro.props;
+---
+
+{
+  items.length > 1 && (
+    <nav class="page-sections" aria-label={header}>
+      <div class="container">
+        <p class="page-sections__title">{header}</p>
+        <ul class="page-sections__list">
+          {items.map((item) => (
+            <li>
+              <a
+                class="page-sections__link"
+                href={`#${item.id}`}
+                data-section-link={item.id}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+  )
+}
+
+<script>
+  const nav = document.querySelector(".page-sections");
+  if (nav) {
+    const links = Array.from(
+      nav.querySelectorAll<HTMLAnchorElement>("[data-section-link]"),
+    );
+    const sections = links.map((link) =>
+      document.getElementById(link.dataset.sectionLink ?? ""),
+    );
+
+    const setAnchorOffset = () => {
+      const stickyTop = parseFloat(getComputedStyle(nav).top) || 0;
+      const occupied = Math.round(stickyTop + nav.clientHeight + 16);
+      document.documentElement.style.setProperty(
+        "--sections-anchor-offset",
+        `${occupied}px`,
+      );
+    };
+
+    const update = () => {
+      setAnchorOffset();
+      const offset = nav.getBoundingClientRect().bottom + 24;
+      let active = -1;
+      sections.forEach((section, index) => {
+        if (section && section.getBoundingClientRect().top <= offset)
+          active = index;
+      });
+      links.forEach((link, index) => {
+        const isActive = index === active;
+        link.classList.toggle("active", isActive);
+        if (isActive) link.setAttribute("aria-current", "true");
+        else link.removeAttribute("aria-current");
+      });
+    };
+
+    let scheduled = false;
+    const onScroll = () => {
+      if (scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(() => {
+        scheduled = false;
+        update();
+      });
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+  }
+</script>
+
+<style>
+  .page-sections {
+    background: #fff;
+    border-bottom: 1px solid #d4d8dc;
+    padding-block: 2rem 1rem;
+  }
+  .page-sections__title {
+    margin-bottom: 0.75rem;
+    color: var(--color-primary-dark, #17334f);
+    font-weight: 400;
+    font-size: 1.125rem;
+    line-height: 1.3333;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .page-sections__list {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.25rem 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+  .page-sections__list > li {
+    flex: 0 0 auto;
+  }
+  .page-sections__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: #06c;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    white-space: nowrap;
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+  }
+  .page-sections__link:hover {
+    text-decoration: underline;
+  }
+  .page-sections__link:global(.active) {
+    color: var(--color-primary-dark, #17334f);
+    border-bottom-color: var(--color-primary-dark, #17334f);
+  }
+  .page-sections__link:focus-visible {
+    outline: 3px solid #06c;
+    outline-offset: 2px;
+  }
+
+  @media (min-width: 992px) {
+    .page-sections {
+      position: sticky;
+      top: var(--page-sections-top, 3.625rem);
+      z-index: 3;
+    }
+    .page-sections__list {
+      flex-wrap: wrap;
+      overflow-x: visible;
+    }
+    .page-sections__link {
+      white-space: normal;
+    }
+  }
+</style>
+
+<style is:global>
+  main :is(h2, h3)[id] {
+    scroll-margin-top: var(--sections-anchor-offset, 6rem);
+  }
+</style>

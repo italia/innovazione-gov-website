@@ -27,6 +27,7 @@ import SettingsKpiAdapter from "@components/cms-adapters/datocms/SettingsKpiAdap
 import TextAndUseCasesAdapter from "@components/cms-adapters/datocms/TextAndUseCasesAdapter.astro";
 import TextOnlyAdapter from "@components/cms-adapters/datocms/TextOnlyAdapter.astro";
 import ThirdPartyCookieAdapter from "@components/cms-adapters/datocms/ThirdPartyCookieAdapter.astro";
+import TimelineAdapter from "@components/cms-adapters/datocms/TimelineAdapter.astro";
 import TopicFilterAdapter from "@components/cms-adapters/datocms/TopicFilterAdapter.astro";
 import UseCaseContainerAdapter from "@components/cms-adapters/datocms/UseCaseContainerAdapter.astro";
 import WebinarDescriptionAdapter from "@components/cms-adapters/datocms/WebinarDescriptionAdapter.astro";
@@ -35,7 +36,6 @@ import type { HomepageModelContentFragmentType } from "@graphql/fragment/homepag
 import type { InsightContentFragmentType } from "@graphql/fragment/insight";
 import type { PageContentFragmentType } from "@graphql/fragment/page";
 import type { SearchPageContentFragmentType } from "@graphql/fragment/search";
-import type { StoryContentFragmentType } from "@graphql/fragment/story";
 import type { WebinarContentFragmentType } from "@graphql/fragment/webinar";
 import { DatoBlockModel } from "@utils/cmsMapper";
 
@@ -44,7 +44,6 @@ type ContentType =
   | PageContentFragmentType
   | InsightContentFragmentType
   | CatalogueContentFragmentType
-  | StoryContentFragmentType
   | WebinarContentFragmentType
   | SearchPageContentFragmentType;
 
@@ -129,6 +128,8 @@ const lastStructuredTextIndex = content.reduce(
         return <TextAndUseCasesAdapter block={block} />;
       case DatoBlockModel.TextAccordion:
         return <TextAndAccordionAdapter block={block} />;
+      case DatoBlockModel.Timeline:
+        return <TimelineAdapter block={block} />;
       case DatoBlockModel.WebinarDescription:
         return <WebinarDescriptionAdapter block={block} />;
       case DatoBlockModel.Speaker:

@@ -17,6 +17,7 @@ import {
   TextAndStatisticsFragment,
   TextAndUseCasesFragment,
   TextOnlyFragment,
+  TimelineFragment,
 } from "@graphql/fragment/sectionFragments";
 import { AllInsightsSlugFragment } from "@graphql/fragment/slugFragments";
 import { graphql, type FragmentOf } from "@graphql/graphql";
@@ -70,6 +71,9 @@ export const InsightContentFragment = graphql(
       ... on JobPositionListRecord {
         ...JobPositionListFragment
       }
+      ... on TimelineRecord {
+        ...TimelineFragment
+      }
     }
   `,
   [
@@ -88,6 +92,7 @@ export const InsightContentFragment = graphql(
     SupportCTASectionFragment,
     IntroArticleFragment,
     JobPositionListFragment,
+    TimelineFragment,
   ],
 );
 
@@ -120,6 +125,7 @@ export const AllInsightsRecordFragment = graphql(
       locales: _locales
       publishedAt: _publishedAt
       updatedAt: _updatedAt
+      showSectionsNav
       allContentLocales: _allContentLocales {
         locale
         value {

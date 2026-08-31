@@ -58,6 +58,7 @@ export enum DatoBlockModel {
   SettingsChart = "SettingsChartRecord",
   ListCardEditorialWithIconWrapper = "ListCardEditorialWithIconWrapperRecord",
   SettingsKpi = "SettingsKpiRecord",
+  Timeline = "TimelineRecord",
 }
 
 export type DatoBlockModelType =

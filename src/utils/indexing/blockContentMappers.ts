@@ -22,9 +22,9 @@ import type {
   SupportCTASectionFragmentType,
   TextAndAccordionFragmentType,
   TextAndImageFragmentType,
+  TimelineFragmentType,
   WebinarDescriptionFragmentType,
 } from "@graphql/fragment/sectionFragments";
-import type { StoryContentFragmentType } from "@graphql/fragment/story";
 import type { WebinarContentFragmentType } from "@graphql/fragment/webinar";
 import { DatoBlockModel } from "@utils/cmsMapper";
 
@@ -32,7 +32,6 @@ import { render } from "datocms-structured-text-to-plain-text";
 
 type BlockType =
   | InsightContentFragmentType
-  | StoryContentFragmentType
   | WebinarContentFragmentType
   | PageContentFragmentType;
 
@@ -70,6 +69,8 @@ export const flattenBlocks = (blocks: BlockType[] | undefined | null) => {
           return flattenTextAccordionSection(block);
         case DatoBlockModel.TextImage:
           return flattenTextImageSection(block);
+        case DatoBlockModel.Timeline:
+          return flattenTimeline(block);
         default:
           return "";
       }
@@ -149,6 +150,16 @@ const flattenTextAccordionSection = (
 
   record.accordion.accordion.items.forEach((item) => {
     parts.push(item.header, item.body);
+  });
+
+  return cleanJoin(parts);
+};
+
+const flattenTimeline = (record: TimelineFragmentType): string => {
+  const parts: (string | null | undefined)[] = [record.title, record.paragraph];
+
+  record.items.forEach((item) => {
+    parts.push(item.period, item.title, item.paragraph);
   });
 
   return cleanJoin(parts);

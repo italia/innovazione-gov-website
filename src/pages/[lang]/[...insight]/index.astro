@@ -1,5 +1,7 @@
 ---
 import PageAdapter from "@components/cms-adapters/datocms/PageAdapter.astro";
+import { PageSectionsNav } from "@components/organisms/PageSectionsNav";
+import { getI18n } from "@i18n/microcopy";
 import type { TagFragmentType } from "@graphql/fragment/commonFragments";
 import type { InsightContentFragmentType } from "@graphql/fragment/insight";
 import type { SeoFieldFragmentType } from "@graphql/fragment/seoFragments";
@@ -7,6 +9,7 @@ import type { SiteLocale } from "@graphql/types";
 import Layout from "@layouts/Layout.astro";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { extractFaqItems, type JsonLdPageData } from "@utils/JsonLD/seoJsonLd";
+import { extractPageSections } from "@utils/pageSections";
 import { linkResolver } from "@utils/linkResolver";
 import { removeLang } from "@utils/pathHelper";
 import { getCollection, getEntry } from "astro:content";
@@ -22,6 +25,7 @@ export async function getStaticPaths() {
       seo: SeoFieldFragmentType | null;
       content: InsightContentFragmentType[];
       id: string;
+      showSectionsNav: boolean;
       attachments: {
         id: string;
         fileTitle: string | null;
@@ -63,6 +67,7 @@ export async function getStaticPaths() {
             seoMeta: seoRes?.metaTags || [],
             seo: seoRes?.seo ?? null,
             id: page.id,
+            showSectionsNav: page.showSectionsNav ?? false,
             attachments: page.attachments ?? [],
             links: page.links ?? [],
             publishedAt: page.publishedAt,
@@ -85,6 +90,7 @@ const {
   seoMeta,
   attachments,
   links,
+  showSectionsNav,
   publishedAt,
   updatedAt,
 } = Astro.props;
@@ -92,6 +98,10 @@ const { lang } = Astro.params;
 
 Astro.locals.lang = lang;
 Astro.locals.recordId = id;
+
+const t = getI18n(lang);
+const sections = showSectionsNav ? extractPageSections(content) : [];
+const [firstBlock, ...restBlocks] = content ?? [];
 
 const jsonLd: JsonLdPageData = {
   pageType: ["content"],
@@ -104,5 +114,7 @@ const jsonLd: JsonLdPageData = {
 ---
 
 <Layout pageSeo={seoMeta} datePublished={publishedAt} jsonLd={jsonLd}>
-  <PageAdapter content={content} attachments={attachments} links={links} />
+  {firstBlock && <PageAdapter content={[firstBlock]} />}
+  <PageSectionsNav header={t["toc.title"]} items={sections} />
+  <PageAdapter content={restBlocks} attachments={attachments} links={links} />
 </Layout>

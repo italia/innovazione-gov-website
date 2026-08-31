@@ -1,0 +1,38 @@
+---
+import { Timeline } from "@components/organisms/Timeline";
+import type { TimelineItemProps } from "@components/organisms/Timeline/types";
+import type { TimelineFragmentType } from "@graphql/fragment/sectionFragments";
+import type { SiteLocale } from "@graphql/types";
+import { getCtaFields } from "@utils/getCtaFields";
+
+type Props = {
+  block: TimelineFragmentType;
+};
+
+const { block } = Astro.props;
+const { lang } = Astro.locals;
+
+const items: TimelineItemProps[] = block.items.map((item) => {
+  const { labelButton, linkTo, openInNewTab } = getCtaFields(
+    (item.cta as Parameters<typeof getCtaFields>[0]) ?? null,
+    lang as SiteLocale,
+  );
+
+  return {
+    id: item.id,
+    period: item.period,
+    title: item.title,
+    paragraph: item.paragraph || undefined,
+    image: item.image ?? undefined,
+    linkLabel: labelButton,
+    linkTo: linkTo,
+    openInNewTab: openInNewTab,
+  };
+});
+---
+
+<Timeline
+  title={block.title}
+  paragraph={block.paragraph || undefined}
+  items={items}
+/>
