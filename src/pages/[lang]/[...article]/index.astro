@@ -31,6 +31,7 @@ export async function getStaticPaths() {
       content: ArticleContentFragmentType | null;
       id: string;
       sidebar: SidebarFragmentType;
+      showSidebar: boolean;
       title: string;
       articleType: string | null;
       dateTime: string | null;
@@ -83,6 +84,7 @@ export async function getStaticPaths() {
             seo: seoRes?.seo ?? null,
             id: page.id,
             sidebar: { ...sidebarForArticle, id: `sidebar_${page.id}` },
+            showSidebar: page.showSidebar ?? true,
             content: getLocaleValue(page.allContentLocales, lang, null),
             title: getLocaleValue(page.allTitleLocales, lang, ""),
             articleType: page.articleType ?? null,
@@ -111,6 +113,7 @@ const {
   content,
   id,
   sidebar,
+  showSidebar,
   title,
   articleType,
   dateTime,
@@ -152,6 +155,7 @@ const jsonLd: JsonLdPageData = {
     content && (
       <SidebarLayoutAdapter
         sidebar={sidebar}
+        showSidebar={showSidebar}
         content={content}
         attachments={attachments}
         links={links}

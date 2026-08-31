@@ -106,6 +106,7 @@ export const AllArticlesRecordFragment = graphql(
       updatedAt: _updatedAt
       publishedAt: _publishedAt
       articleType
+      showSidebar
       dateShown
       allTitleLocales: _allTitleLocales {
         locale

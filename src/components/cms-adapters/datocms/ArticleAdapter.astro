@@ -21,12 +21,20 @@ type Props = {
   content: ArticleContentFragmentType;
   attachments?: Attachment[];
   links?: ExternalLink[];
+  fullWidth?: boolean;
 };
 
-const { content, attachments = [], links = [] } = Astro.props;
+const {
+  content,
+  attachments = [],
+  links = [],
+  fullWidth = false,
+} = Astro.props;
 ---
 
-<SectionContainer className="ps-lg-4 structured-text-container">
+<SectionContainer
+  className={`structured-text-container${fullWidth ? "" : " ps-lg-4"}`}
+>
   <StructuredTextAdapter block={content} />
   <ArticleAttachments attachments={attachments} />
   <ArticleUsefulLinks links={links} />

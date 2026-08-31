@@ -24,9 +24,15 @@ type Props = {
   content: ArticleContentFragmentType;
   attachments?: Attachment[];
   links?: ExternalLink[];
+  showSidebar?: boolean;
 };
 
-const { content, attachments = [], links = [] } = Astro.props;
+const {
+  content,
+  attachments = [],
+  links = [],
+  showSidebar = true,
+} = Astro.props;
 const { lang } = Astro.locals;
 const t = getI18n(lang);
 
@@ -51,24 +57,33 @@ if (links.some((externalLink) => externalLink.link)) {
 }
 ---
 
-<div class="container">
-  <div class="row">
-    <div class="col-12 col-lg-4 px-lg-0 pb-lg-5 border-end menu-column">
-      {
-        tocItems.length > 0 && (
-          <ArticleToc header={t["toc.title"]} items={tocItems} />
-        )
-      }
+{
+  showSidebar ? (
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-lg-4 px-lg-0 pb-lg-5 border-end menu-column">
+          {tocItems.length > 0 && (
+            <ArticleToc header={t["toc.title"]} items={tocItems} />
+          )}
+        </div>
+        <div class="col-12 col-lg-8 px-lg-0">
+          <ArticleAdapter
+            content={content}
+            attachments={attachments}
+            links={links}
+          />
+        </div>
+      </div>
     </div>
-    <div class="col-12 col-lg-8 px-lg-0">
-      <ArticleAdapter
-        content={content}
-        attachments={attachments}
-        links={links}
-      />
-    </div>
-  </div>
-</div>
+  ) : (
+    <ArticleAdapter
+      content={content}
+      attachments={attachments}
+      links={links}
+      fullWidth
+    />
+  )
+}
 
 <style>
   .menu-column {
