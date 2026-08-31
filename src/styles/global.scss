@@ -2,6 +2,11 @@
 @use "./palette.scss" as col;
 @use "./fonts.scss";
 
+:root {
+  --color-secondary: #{col.$secondary};
+  --color-primary-dark: #{col.$primary-dark};
+}
+
 html,
 body {
   margin: 0;
@@ -36,7 +41,7 @@ body {
      la colonna del testo ha a sinistra la col-lg-4 dell'indice, quindi
      allargarla sfonderebbe a destra. */
   .structured-text-block:not(.has-page-index) .list-card-full {
-    width: calc(100% / 8 * 12 + var(--bs-gutter-x, 1.5rem) * 1.5);
+    width: calc(100% / 8 * 12 + var(--bs-gutter-x, 1.5rem) * 2);
   }
 }
 

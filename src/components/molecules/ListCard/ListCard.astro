@@ -31,10 +31,17 @@ const COL_CLASS_BY_COUNT: Record<number, string> = {
   3: "col-lg-4",
   4: "col-lg-3",
 };
-const colClass = `col-12 ${COL_CLASS_BY_COUNT[cards.length] ?? "col-lg-3"} mb-3 mb-md-4`;
+const colClass = `col-12 ${COL_CLASS_BY_COUNT[cards.length] ?? "col-lg-3"}`;
 ---
 
-<ul class:list={["it-card-list", "row", { "list-card-full": fullWidth }]}>
+<ul
+  class:list={[
+    "it-card-list",
+    "row",
+    "cards-grid",
+    { "list-card-full": fullWidth },
+  ]}
+>
   {
     type === "CardEditorialWithIcon" &&
       cards.map((card) => {
@@ -56,3 +63,10 @@ const colClass = `col-12 ${COL_CLASS_BY_COUNT[cards.length] ?? "col-lg-3"} mb-3 
       })
   }
 </ul>
+
+<style>
+  .cards-grid {
+    margin-inline: calc(-0.5 * var(--bs-gutter-x)) !important;
+    row-gap: var(--bs-gutter-x);
+  }
+</style>
