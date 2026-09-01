@@ -32,13 +32,7 @@ const toggleId = `megamenu-toggle-${id}`;
     >
       <button
         type="button"
-        class:list={[
-          "nav-link",
-          "dropdown-toggle",
-          "px-lg-2",
-          "px-xl-3",
-          { active },
-        ]}
+        class:list={["nav-link", "dropdown-toggle", { active }]}
         data-bs-toggle="dropdown"
         aria-expanded="false"
         id={toggleId}
@@ -46,9 +40,6 @@ const toggleId = `megamenu-toggle-${id}`;
       >
         <>
           <span>{title}</span>
-          <svg role="img" class="icon icon-xs ms-1">
-            <use href="/bsi-svg/sprites.svg#it-expand" />
-          </svg>
         </>
       </button>
       <div
@@ -146,7 +137,6 @@ const toggleId = `megamenu-toggle-${id}`;
 }
 
 <style>
-  /* icona link esterno nella secondary nav: poco più grande di icon-xs */
   .nav-external-icon {
     width: 20px;
     height: 20px;
@@ -157,50 +147,30 @@ const toggleId = `megamenu-toggle-${id}`;
     object-position: center;
   }
 
-  .nav-item.megamenu > .nav-link.show,
-  .nav-item.megamenu > .nav-link.active {
-    box-shadow: inset 0 -3px 0 0 currentColor;
-  }
-
   @media (min-width: 992px) {
-    .nav-item.megamenu > .dropdown-menu {
-      margin-top: calc(1rem + 0.625rem) !important;
+    :global(.navbar .navbar-collapsable .navbar-nav) .nav-item > .nav-link {
+      padding: 15px 24px 10px;
+      font-size: 1.125rem;
+      line-height: 1.75rem;
     }
-    .nav-item.megamenu > .dropdown-menu.show::before {
-      content: "";
-      position: absolute;
-      top: -9px;
-      left: var(--megamenu-notch-left, 2rem);
-      width: 16px;
-      height: 16px;
-      background: #fff;
-      transform: rotate(45deg);
-      border-radius: 2px;
+    :global(.navbar .navbar-collapsable .navbar-nav)
+      .nav-item
+      > .nav-link:hover,
+    :global(.navbar .navbar-collapsable .navbar-nav)
+      .nav-item
+      > .nav-link:focus-visible,
+    :global(.navbar .navbar-collapsable .navbar-nav) .nav-item > .nav-link.show,
+    :global(.navbar .navbar-collapsable .navbar-nav)
+      .nav-item
+      > .nav-link.active {
+      border-bottom-color: currentColor !important;
+      text-decoration: none;
+    }
+    .nav-item.megamenu > .dropdown-menu {
+      margin-top: 3rem !important;
+    }
+    .nav-item.megamenu > button.dropdown-toggle::before {
+      bottom: -2.8rem !important;
     }
   }
 </style>
-
-<script>
-  const positionNotch = (item: Element) => {
-    const toggle = item.querySelector<HTMLElement>(".nav-link");
-    const panel = item.querySelector<HTMLElement>(".dropdown-menu");
-    if (!toggle || !panel) return;
-    const label = toggle.querySelector<HTMLElement>("span") ?? toggle;
-    const update = () => {
-      const labelBox = label.getBoundingClientRect();
-      const offset =
-        labelBox.left +
-        labelBox.width / 2 -
-        panel.getBoundingClientRect().left -
-        8;
-      panel.style.setProperty(
-        "--megamenu-notch-left",
-        `${Math.round(offset)}px`,
-      );
-    };
-    item.addEventListener("shown.bs.dropdown", update);
-    window.addEventListener("resize", update, { passive: true });
-  };
-
-  document.querySelectorAll(".nav-item.megamenu").forEach(positionNotch);
-</script>

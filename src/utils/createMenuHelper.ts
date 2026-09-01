@@ -87,7 +87,7 @@ function secondaryItemAdapter(
   if (isExternalLink(item)) {
     return { ...metaMenuItemAdapter(item, currentPath), isExternal: true };
   }
-  return menuItemAdapter(item, currentPath, locale);
+  return { ...menuItemAdapter(item, currentPath, locale), active: false };
 }
 
 export function createMenu(
