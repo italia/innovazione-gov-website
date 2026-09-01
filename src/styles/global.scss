@@ -157,11 +157,37 @@ body {
   }
 }
 
+// WCAG 2.4.7 (focus visibile): bootstrap-italia applica `display: block` ai
+// link degli skiplink (components/_skiplinks.scss), così l'anello di focus
+// (un box-shadow, vedi utilities/focus.scss) viene disegnato ai bordi della
+// pagina invece che attorno al link e non è percepibile. Con `inline-block`
+// l'indicatore aderisce al testo del link.
+.skiplinks a {
+  display: inline-block;
+}
+
+// Ogni lista della navbar ha il proprio landmark <nav> (vedi
+// Header/HeaderNavbar.astro): i wrapper prendono il posto dei <ul> come figli
+// flex di .menu-wrapper e ne replicano il comportamento, a colonna così che su
+// mobile la lista continui a occupare tutta la larghezza.
+// La catena di selettori replica quella di bootstrap-italia
+// (components/_header.scss), che dà 18px di padding orizzontale a ogni `nav`
+// dell'header: sui wrapper va azzerato, il gutter resta sul <nav> esterno.
+.it-header-wrapper
+  .it-nav-wrapper
+  .it-header-navbar-wrapper
+  .menu-wrapper
+  > nav {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
 @media (min-width: 992px) {
   .it-header-wrapper.it-header-sticky.is-sticky
     .it-header-navbar-wrapper
     .menu-wrapper
-    .navbar-nav {
+    :is(nav, .navbar-nav) {
     flex: none;
   }
 }

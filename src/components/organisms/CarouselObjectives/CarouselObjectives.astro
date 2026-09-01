@@ -56,6 +56,9 @@ const { slides } = Astro.props;
           first: "Vai alla prima slide",
           last: "Vai all'ultima slide",
           slideX: "Vai alla slide %s",
+          // Chiave usata da Splide per l'aria-label della paginazione
+          // (role="tablist"): senza override resta in inglese (WCAG 2.4.6).
+          select: "Seleziona una slide da mostrare",
           pageX: "Vai a pagina %s",
           carousel: "Carosello",
           slide: "slide",
