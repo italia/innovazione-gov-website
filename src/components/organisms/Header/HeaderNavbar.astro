@@ -16,10 +16,14 @@ const lang = Astro.locals.lang || "it";
 const t = getI18n(lang);
 ---
 
-<nav
-  class="navbar navbar-expand-lg has-megamenu"
-  aria-label={t["header.mainNav"]}
->
+<!--
+  Il <nav> esterno resta un elemento `nav` perché gli stili di bootstrap-italia
+  agganciano `.navbar-collapsable` e `.menu-wrapper` al selettore di elemento
+  (scss/components/_headernavbar.scss), ma role="presentation" gli toglie il
+  landmark: così i due menu sono due landmark di navigazione distinti e lo
+  screen reader non li legge come un gruppo unico (WCAG 1.3.1).
+-->
+<nav class="navbar navbar-expand-lg has-megamenu" role="presentation">
   <button
     class="custom-navbar-toggler"
     type="button"
@@ -38,16 +42,20 @@ const t = getI18n(lang);
       </button>
     </div>
     <div class="menu-wrapper justify-content-lg-between">
-      <ul class="navbar-nav">
-        {menuItems.left.map((menuItem) => <MenuItem {...menuItem} />)}
-      </ul>
+      <nav aria-label={t["header.mainNav"]}>
+        <ul class="navbar-nav">
+          {menuItems.left.map((menuItem) => <MenuItem {...menuItem} />)}
+        </ul>
+      </nav>
       {
-        menuItems.right && (
-          <ul class="navbar-nav">
-            {menuItems.right.map((menuItem) => (
-              <MenuItem {...menuItem} />
-            ))}
-          </ul>
+        menuItems.right && menuItems.right.length > 0 && (
+          <nav aria-label={t["header.secondaryNav"]}>
+            <ul class="navbar-nav">
+              {menuItems.right.map((menuItem) => (
+                <MenuItem {...menuItem} />
+              ))}
+            </ul>
+          </nav>
         )
       }
     </div>

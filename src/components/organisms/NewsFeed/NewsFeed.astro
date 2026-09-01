@@ -156,7 +156,11 @@ const variantButtonLink =
   document.addEventListener("shown.bs.tab", refreshTabCarousels);
 </script>
 <style is:global>
-  .splide__pagination__page.is-active {
+  /* Limitato ai caroselli di bootstrap-italia (.it-carousel-wrapper): senza
+     questo vincolo la regola colorava di bianco il dot attivo di qualsiasi
+     splide della pagina, incluso quello di CarouselObjectives, dove il
+     contrasto con lo sfondo scendeva a 1,05:1 (WCAG 1.4.11 e 1.4.1). */
+  .it-carousel-wrapper .splide__pagination__page.is-active {
     background-color: white !important;
   }
 </style>
