@@ -31,6 +31,7 @@ const t = getI18n(lang);
     <ItBurger />
   </button>
   <div class="navbar-collapsable" id="navC2" tabindex="-1">
+    <div class="overlay"></div>
     <div class="close-div">
       <button class="btn close-menu" type="button">
         <span class="visually-hidden">Nascondi la navigazione</span>
@@ -53,3 +54,9 @@ const t = getI18n(lang);
     </div>
   </div>
 </nav>
+
+<style>
+  .navbar-collapsable:global(.expanded) .overlay {
+    display: block;
+  }
+</style>

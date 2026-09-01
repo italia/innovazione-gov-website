@@ -129,6 +129,21 @@ body {
   margin-bottom: 0.5rem;
 }
 
+@media (max-width: 991.98px) {
+  .it-brand-logo {
+    height: 2.5rem;
+  }
+
+  .it-header-center-wrapper
+    .it-header-center-content-wrapper
+    .it-brand-wrapper
+    a
+    .it-brand-title {
+    font-size: 0.9375rem;
+    line-height: 1.2;
+  }
+}
+
 .it-header-center-content-wrapper {
   .it-right-zone {
     gap: 1.5rem;
