@@ -23,24 +23,18 @@ type ExternalLink = {
 
 type Props = {
   block: ArticleSTFragmentType;
-  isFontSerif?: boolean;
   attachments?: Attachment[];
   links?: ExternalLink[];
 };
 
-const {
-  block,
-  isFontSerif = false,
-  attachments = [],
-  links = [],
-} = Astro.props;
+const { block, attachments = [], links = [] } = Astro.props;
 const { lang } = Astro.locals;
 const t = getI18n(lang);
 
 const background = block.backgroundColor || "default";
 const bgClass = getSectionBgClass(background as SectionBackground);
 
-const fontClass = isFontSerif ? "font-serif-p" : "";
+const fontClass = block.fontSerif ? "font-serif-p" : "";
 
 // Indice della pagina: acceso dal redattore sul singolo blocco (campo
 // `show_page_index` su DatoCMS). Le voci sono i titoli di livello 2 di questo
@@ -74,11 +68,11 @@ const hasToc = tocItems.length > 0;
       { "has-page-index": hasToc },
     ]}
   >
-    <div class="container py-5 py-lg-80">
+    <div class:list={["container", { "py-5 py-lg-80": !hasToc }]}>
       <div class="row">
         {
           hasToc && (
-            <div class="col-12 col-lg-4 px-lg-0 pb-lg-5 border-end toc-column">
+            <div class="col-12 col-lg-4 px-lg-0 py-5 py-lg-80 border-end">
               <ArticleToc header={t["toc.title"]} items={tocItems} />
             </div>
           )
@@ -87,7 +81,12 @@ const hasToc = tocItems.length > 0;
           /* ps-lg-4 stacca il testo dalla linea verticale dell'indice, come fa
             ArticleAdapter sulle pagine articolo. */
         }
-        <div class:list={["col-12", hasToc ? "col-lg-8 ps-lg-4" : "col-lg-8"]}>
+        <div
+          class:list={[
+            "col-12",
+            hasToc ? "col-lg-8 ps-lg-4 py-5 py-lg-80" : "col-lg-8",
+          ]}
+        >
           <StructuredTextAdapter block={block.textContent} />
           <ArticleAttachments attachments={attachments} />
           <ArticleUsefulLinks links={links} />
@@ -96,17 +95,6 @@ const hasToc = tocItems.length > 0;
     </div>
   </div>
 </section>
-
-<style>
-  .toc-column {
-    padding-top: 3rem;
-  }
-  @media (min-width: 992px) {
-    .toc-column {
-      padding-top: 0;
-    }
-  }
-</style>
 
 <style is:global>
   /* L'header è sticky: senza questo, cliccando una voce dell'indice il titolo

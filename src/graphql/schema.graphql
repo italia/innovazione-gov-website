@@ -9217,6 +9217,7 @@ type StructuredTextRecord implements RecordInterface {
   _updatedAt: DateTime!
   backgroundColor: String
   content: StructuredTextModelContentField!
+  fontSerif: BooleanType!
   id: ItemId!
   showPageIndex: BooleanType!
 }

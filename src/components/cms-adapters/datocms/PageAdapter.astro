@@ -61,17 +61,11 @@ type ExternalLink = {
 
 type Props = {
   content: ContentType[];
-  isFontSerif?: boolean;
   attachments?: Attachment[];
   links?: ExternalLink[];
 };
 
-const {
-  content,
-  isFontSerif = false,
-  attachments = [],
-  links = [],
-} = Astro.props;
+const { content, attachments = [], links = [] } = Astro.props;
 
 const lastStructuredTextIndex = content.reduce(
   (last, block, index) =>
@@ -107,7 +101,6 @@ const lastStructuredTextIndex = content.reduce(
         return (
           <StructuredTextBlockAdapter
             block={block}
-            isFontSerif={isFontSerif}
             attachments={index === lastStructuredTextIndex ? attachments : []}
             links={index === lastStructuredTextIndex ? links : []}
           />
