@@ -1,5 +1,6 @@
 ---
 import { getI18n } from "@i18n/microcopy";
+import ItIcon from "@static/assets/ItIcon.astro";
 import ButtonBase from "./ButtonBase.astro";
 import { getButtonClasses } from "./helper";
 import type { ButtonLinkProps } from "./types";
@@ -16,7 +17,12 @@ const {
   icon,
 } = Astro.props;
 
-const { className, colorIcon } = getButtonClasses(variant, size, !!icon);
+const showsExternalIcon = openInNewTab && !icon;
+const { className, colorIcon } = getButtonClasses(
+  variant,
+  size,
+  !!icon || showsExternalIcon,
+);
 
 const target = openInNewTab ? "_blank" : "_self";
 const rel = openInNewTab ? "noopener noreferrer" : undefined;
@@ -32,6 +38,10 @@ const ariaLabel = download
 
 <style>
   @import "./style.scss";
+
+  :global(.btn-external-icon) {
+    fill: currentColor;
+  }
 </style>
 <a
   class={className}
@@ -41,5 +51,14 @@ const ariaLabel = download
   target={target}
 >
   <ButtonBase label={label} icon={icon} colorIcon={colorIcon} />
+  {
+    showsExternalIcon && (
+      <ItIcon
+        name="it-external-link"
+        size="xs"
+        class="btn-external-icon ms-2"
+      />
+    )
+  }
   <span class="visually-hidden">{ariaLabel}</span>
 </a>

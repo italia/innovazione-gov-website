@@ -53,10 +53,41 @@ body {
   }
 }
 
-.structured-text-container.font-serif-p .container p,
-.structured-text-container.font-serif-p .container ul > li > p,
+.structured-text-container.font-serif-p .container p:not(.article-toc__title),
+.structured-text-container.font-serif-p .container > .row > div > ul > li,
+.structured-text-container.font-serif-p .container > .row > div > ol > li,
 .structured-text-container.font-serif-p .container .it-list li .item-text p {
   font-family: "Lora", Georgia, serif !important;
+}
+
+.structured-text-container .container > .row > div > ul > li > p,
+.structured-text-container .container > .row > div > ol > li > p {
+  margin-bottom: 0;
+}
+
+.structured-text-container .container > .row > div > p a,
+.structured-text-container
+  .container
+  > .row
+  > div
+  > ul:not(.it-card-list)
+  > li
+  a,
+.structured-text-container .container > .row > div > ol > li a {
+  color: inherit;
+}
+
+.structured-text-container .container h3,
+.text-container h3 {
+  color: var(--color-primary-dark, #17334f);
+}
+
+.structured-text-container .container :is(h1, h2, h3, h4, h5, h6) {
+  margin-bottom: 1rem;
+}
+
+.structured-text-container .container > .row > div > p {
+  margin-block: 1.5rem;
 }
 
 .structured-text-container .container * + :is(h2, h3, h4, h5, h6) {

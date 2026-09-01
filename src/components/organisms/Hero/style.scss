@@ -10,7 +10,16 @@
   }
 }
 
+.it-hero-wrapper .it-hero-text-wrapper p {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
 @media (min-width: 992px) {
+  .it-hero-wrapper .it-hero-text-wrapper {
+    max-width: 60vw;
+  }
+
   .default-size {
     min-height: 440px !important;
   }
