@@ -130,6 +130,10 @@ body {
 }
 
 @media (max-width: 991.98px) {
+  .it-header-slim-wrapper {
+    display: none;
+  }
+
   .it-brand-logo {
     height: 2.5rem;
   }
