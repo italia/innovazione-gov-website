@@ -40,7 +40,7 @@ const onlyBreadcrumb =
 >
   <div class="container h-100">
     <div class="row align-items-center h-100">
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-7">
         <div class="it-hero-text-wrapper px-0">
           {showBreadcrumb && <slot name="breadcrumb" />}
           {title && <h1 id={slugify(title)}>{title}</h1>}
@@ -63,7 +63,7 @@ const onlyBreadcrumb =
 
       {
         (image || imageMobile) && (
-          <div class="col-12 col-lg-6">
+          <div class="col-12 col-lg-5">
             {imageMobile && (
               <div class="hero-split__image d-block d-lg-none">
                 <Image {...imageMobile} loading="eager" />
