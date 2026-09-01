@@ -166,8 +166,17 @@ const isProd = import.meta.env.PROD;
 <script is:inline>
   document.addEventListener("DOMContentLoaded", () => {
     const header = document.getElementsByTagName("header")[0];
-    if (header && window.bootstrap && window.bootstrap.HeaderSticky) {
-      window.bootstrap.HeaderSticky.getOrCreateInstance(header);
-    }
+    if (!header || !window.bootstrap || !window.bootstrap.HeaderSticky) return;
+    const desktop = window.matchMedia("(min-width: 992px)");
+    const sync = () => {
+      if (desktop.matches) {
+        window.bootstrap.HeaderSticky.getOrCreateInstance(header);
+        return;
+      }
+      const instance = window.bootstrap.HeaderSticky.getInstance(header);
+      if (instance) instance.dispose();
+    };
+    sync();
+    desktop.addEventListener("change", sync);
   });
 </script>

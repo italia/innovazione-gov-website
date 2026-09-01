@@ -121,15 +121,13 @@ body {
     margin 0.2s ease;
 }
 
-// Quando la header diventa sticky il logo si rimpicciolisce e guadagna
-// un po' di spazio sopra e sotto
-.it-header-wrapper.it-header-sticky.is-sticky .it-brand-logo {
-  height: 2.6rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
 @media (max-width: 991.98px) {
+  .it-header-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+  }
+
   .it-header-slim-wrapper {
     display: none;
   }
