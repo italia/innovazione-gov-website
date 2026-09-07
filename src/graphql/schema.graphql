@@ -308,7 +308,7 @@ type ArticleListRecord implements RecordInterface {
   relatedArticles: [MenuArticleItemRecord!]!
 }
 
-union ArticleModelContentBlocksField = CalloutRecord | CardServiceRecord | DownloadLinkRecord | ExternalLinkRecord | ImageBlockRecord | InternalLinkRecord | ListBlockquoteRecord | ListCardEditorialWithIconRecord | ListCardInfoRecord | ListExternalLinkRecord | OrderedListRecord | QuickLinkCardRecord | RelatedArticleRecord | SupportCtaSectionRecord | TopicsBlockRecord
+union ArticleModelContentBlocksField = AttachmentsBoxRecord | CalloutRecord | CardServiceRecord | DownloadLinkRecord | ExternalLinkRecord | ImageBlockRecord | InternalLinkRecord | ListBlockquoteRecord | ListCardEditorialWithIconRecord | ListCardInfoRecord | ListExternalLinkRecord | OrderedListRecord | QuickLinkCardRecord | RelatedArticleRecord | SupportCtaSectionRecord | TopicsBlockRecord | WideLinkCardRecord
 
 type ArticleModelContentField {
   blocks: [ArticleModelContentBlocksField!]!
@@ -391,6 +391,13 @@ enum ArticleModelOrderBy {
   undersecretary_DESC
 }
 
+union ArticleModelParentPageField = InsightRecord | PageRecord
+
+type ArticleModelParentPageFieldMultiLocaleField {
+  locale: SiteLocale
+  value: ArticleModelParentPageField
+}
+
 """Block of type Article navigation (article_navigation)"""
 type ArticleNavigationRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -461,7 +468,7 @@ type ArticleRecord implements RecordInterface {
     If you want to fallback to a default translation when a translation has not been found
     """
     fallbackLocales: [SiteLocale!]
-  ): [PageRecordMultiLocaleField!]
+  ): [ArticleModelParentPageFieldMultiLocaleField!]
   _allSeoLocales(
     """
     If you want to fallback to a default translation when a translation has not been found
@@ -571,7 +578,7 @@ type ArticleRecord implements RecordInterface {
     If you want to fallback to a default translation when a translation has not been found
     """
     fallbackLocales: [SiteLocale!]
-  ): PageRecord
+  ): ArticleModelParentPageField
   position: IntType
   seo(
     """The locale to use to fetch the field's content"""
@@ -759,6 +766,31 @@ type AttachmentRecord implements RecordInterface {
   fileDescription: String
   fileTitle: String
   id: ItemId!
+}
+
+"""Block of type Box allegati (attachments_box)"""
+type AttachmentsBoxRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  downloads: [DownloadLinkRecord!]!
+  id: ItemId!
+  title: String!
 }
 
 """Block of type Author list (author_list)"""
@@ -1029,6 +1061,7 @@ type CardLinkListRecord implements RecordInterface {
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
   backgroundColor: String!
+  category: TagRecord
   cta: CardLinkListModelCtaField
   id: ItemId!
   lastItems: String
@@ -1037,6 +1070,7 @@ type CardLinkListRecord implements RecordInterface {
     """Process content as markdown"""
     markdown: Boolean
   ): String
+  showFilterOnCategory: BooleanType!
   showInlineCard: BooleanType!
   title: String!
 }
@@ -9324,6 +9358,7 @@ input TagModelFilter {
   _status: StatusFilter
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
+  isCategory: BooleanFilter
   name: StringFilter
   slug: StringFilter
   OR: [TagModelFilter]
@@ -9349,6 +9384,8 @@ enum TagModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
+  isCategory_ASC
+  isCategory_DESC
   name_ASC
   name_DESC
   slug_ASC
@@ -9376,6 +9413,7 @@ type TagRecord implements RecordInterface {
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
   id: ItemId!
+  isCategory: BooleanType!
   name: String
   slug: String
 }
@@ -10875,6 +10913,38 @@ type WebinarTopicRecord implements RecordInterface {
 type WebinarTopicRecordNonNullMultiLocaleField {
   locale: SiteLocale
   value: WebinarTopicRecord!
+}
+
+"""Block of type Card collegamento (wide_link_card)"""
+type WideLinkCardRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  article: ArticleRecord
+  category: String
+  id: ItemId!
+  image: FileField
+  link: LinkBlockRecord
+  paragraph(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+  title: String
 }
 
 type focalPoint {
