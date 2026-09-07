@@ -18,12 +18,22 @@ export const AllArticlesSlugFragment = graphql(
         id
       }
       parentPage {
-        id
-        ...PageLocalesFragment
+        ... on PageRecord {
+          id
+          ...PageLocalesFragment
+        }
+        ... on InsightRecord {
+          id
+          ...InsightLocalesFragment
+          parentPage {
+            id
+            ...PageLocalesFragment
+          }
+        }
       }
     }
   `,
-  [PageLocalesFragment, ArticleLocalesFragment],
+  [PageLocalesFragment, InsightLocalesFragment, ArticleLocalesFragment],
 );
 
 export type AllArticlesSlugFragmentType = FragmentOf<

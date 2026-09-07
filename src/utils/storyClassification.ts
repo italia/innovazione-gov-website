@@ -5,6 +5,7 @@ export const ARTICLE_TYPE_LABELS: Record<string, string> = {
   participation: "Intervento",
   focus: "Focus",
   guida: "Guida",
+  project: "Attività",
 };
 
 export function articleTypeLabel(type?: string | null): string {
@@ -20,6 +21,7 @@ const ARTICLE_TYPE_BY_TAB_TYPE: Record<string, string> = {
   press_release: "press_release",
   focus_page: "focus",
   guida: "guida",
+  project: "project",
 };
 
 export function articleTypeForTabType(tabType?: string | null): string | null {

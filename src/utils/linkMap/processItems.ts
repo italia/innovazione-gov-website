@@ -81,7 +81,7 @@ export const processItemsNestedPages = (
 ) =>
   processGenericItems(items, linkMap, home, {
     transformSteps: (steps) =>
-      steps.slice(0, 2).map((s) => ({ title: s.title, id: s.id })),
+      steps.slice(0, 3).map((s) => ({ title: s.title, id: s.id })),
   });
 
 const categoryTransformer = (steps: any[]) => {
