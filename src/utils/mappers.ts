@@ -11,6 +11,7 @@ import type { ArticleCard } from "@graphql/query/articleCards";
 import type { SiteLocale } from "@graphql/types";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { linkResolver } from "@utils/linkResolver";
+import { createDownloadUrl } from "@utils/createDownloadUrl";
 
 export const mapNewsToCardEditorialNewsProps = (
   news: NewsItemFragmentType,
@@ -92,9 +93,7 @@ export const mapResourceToResourceProps = (
     url = resourceContent.url;
     isDownload = false;
   } else {
-    url = resourceContent.doc
-      ? `${resourceContent.doc.url}?dl=${resourceContent.doc.filename}.${resourceContent.doc.format}`
-      : "#";
+    url = createDownloadUrl(resourceContent.doc ?? undefined);
     isDownload = true;
   }
 
