@@ -32,22 +32,12 @@ export async function getStaticPaths() {
       id: string;
       sidebar: SidebarFragmentType;
       showSidebar: boolean;
+      paragraph: string;
       title: string;
       articleType: string | null;
       dateTime: string | null;
       topics: string[];
       image: ImageFragmentType | null;
-      attachments: {
-        id: string;
-        fileTitle: string | null;
-        file: { url: string; filename: string; format: string } | null;
-      }[];
-      links: {
-        id: string;
-        title: string | null;
-        link: string | null;
-        description: string | null;
-      }[];
       publishedAt: string;
       updatedAt: string;
     };
@@ -87,14 +77,13 @@ export async function getStaticPaths() {
             showSidebar: page.showSidebar ?? true,
             content: getLocaleValue(page.allContentLocales, lang, null),
             title: getLocaleValue(page.allTitleLocales, lang, ""),
+            paragraph: getLocaleValue(page.allParagraphLocales, lang, ""),
             articleType: page.articleType ?? null,
             dateTime: page.dateShown ?? null,
             topics: (page.tags ?? [])
               .map((tag) => tag.name)
               .filter((name): name is string => !!name),
             image: getLocaleValue(page.allImageLocales, lang, null),
-            attachments: page.attachments ?? [],
-            links: page.links ?? [],
             publishedAt: page.publishedAt,
             updatedAt: seoRes?.updatedAt || page.updatedAt,
           },
@@ -114,13 +103,12 @@ const {
   id,
   sidebar,
   showSidebar,
+  paragraph,
   title,
   articleType,
   dateTime,
   topics,
   image,
-  attachments,
-  links,
   publishedAt,
   updatedAt,
 } = Astro.props;
@@ -147,9 +135,11 @@ const jsonLd: JsonLdPageData = {
 <Layout pageSeo={seoMeta} datePublished={publishedAt} jsonLd={jsonLd}>
   <ArticleHero
     title={title}
+    paragraph={paragraph}
     dateTime={dateTime}
     topics={topics}
     image={image}
+    articleType={articleType}
   />
   {
     content && (
@@ -157,8 +147,6 @@ const jsonLd: JsonLdPageData = {
         sidebar={sidebar}
         showSidebar={showSidebar}
         content={content}
-        attachments={attachments}
-        links={links}
       />
     )
   }

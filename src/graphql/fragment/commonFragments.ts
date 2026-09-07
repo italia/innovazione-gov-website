@@ -593,6 +593,57 @@ export const DownloadLinkFragment = graphql(`
 
 export type DownloadLinkFragmentType = FragmentOf<typeof DownloadLinkFragment>;
 
+export const AttachmentsBoxFragment = graphql(
+  `
+    fragment AttachmentsBoxFragment on AttachmentsBoxRecord @_unmask {
+      id
+      title
+      downloads {
+        ...DownloadLinkFragment
+      }
+    }
+  `,
+  [DownloadLinkFragment],
+);
+
+export type AttachmentsBoxFragmentType = FragmentOf<
+  typeof AttachmentsBoxFragment
+>;
+
+export const WideLinkCardFragment = graphql(
+  `
+    fragment WideLinkCardFragment on WideLinkCardRecord @_unmask {
+      id
+      title
+      paragraph
+      category
+      image {
+        ...ImageFragment
+      }
+      link {
+        ...LinkBlockFragment
+      }
+      article {
+        id
+        title
+        paragraph
+        description
+        dateShown
+        firstPublishedAt: _firstPublishedAt
+        image {
+          ...ImageFragment
+        }
+        tags {
+          name
+        }
+      }
+    }
+  `,
+  [ImageFragment, LinkBlockFragment],
+);
+
+export type WideLinkCardFragmentType = FragmentOf<typeof WideLinkCardFragment>;
+
 export const CardEditorialWithIconFragment = graphql(`
   fragment CardEditorialWithIconFragment on CardEditorialWithIconRecord
   @_unmask {

@@ -5,34 +5,14 @@ import type { ArticleContentFragmentType } from "@graphql/fragment/article";
 import type { SidebarFragmentType } from "@graphql/fragment/layout";
 import { getI18n } from "@i18n/microcopy";
 import { extractHeadings } from "@utils/extractHeadings";
-import { slugify } from "@utils/slugify";
-
-type Attachment = {
-  id: string;
-  fileTitle?: string | null;
-  file?: { url: string; filename: string; format: string } | null;
-};
-type ExternalLink = {
-  id: string;
-  title?: string | null;
-  link?: string | null;
-  description?: string | null;
-};
 
 type Props = {
   sidebar: SidebarFragmentType;
   content: ArticleContentFragmentType;
-  attachments?: Attachment[];
-  links?: ExternalLink[];
   showSidebar?: boolean;
 };
 
-const {
-  content,
-  attachments = [],
-  links = [],
-  showSidebar = true,
-} = Astro.props;
+const { content, showSidebar = true } = Astro.props;
 const { lang } = Astro.locals;
 const t = getI18n(lang);
 
@@ -41,20 +21,6 @@ const tocItems = headings.map((heading) => ({
   id: heading.id,
   label: heading.text,
 }));
-
-if (attachments.some((attachment) => attachment.file)) {
-  tocItems.push({
-    id: slugify(t["resources.title"]),
-    label: t["resources.title"],
-  });
-}
-
-if (links.some((externalLink) => externalLink.link)) {
-  tocItems.push({
-    id: slugify(t["links.title"]),
-    label: t["links.title"],
-  });
-}
 ---
 
 {
@@ -67,21 +33,12 @@ if (links.some((externalLink) => externalLink.link)) {
           )}
         </div>
         <div class="col-12 col-lg-8 px-lg-0">
-          <ArticleAdapter
-            content={content}
-            attachments={attachments}
-            links={links}
-          />
+          <ArticleAdapter content={content} />
         </div>
       </div>
     </div>
   ) : (
-    <ArticleAdapter
-      content={content}
-      attachments={attachments}
-      links={links}
-      fullWidth
-    />
+    <ArticleAdapter content={content} fullWidth />
   )
 }
 

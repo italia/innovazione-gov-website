@@ -1,6 +1,8 @@
 import {
   CalloutFragment,
   DownloadLinkFragment,
+  AttachmentsBoxFragment,
+  WideLinkCardFragment,
   ExternalLinkFragment,
   ImageBlockFragment,
   ImageFragment,
@@ -74,6 +76,12 @@ export const ArticleContentFragment = graphql(
         ... on DownloadLinkRecord {
           ...DownloadLinkFragment
         }
+        ... on WideLinkCardRecord {
+          ...WideLinkCardFragment
+        }
+        ... on AttachmentsBoxRecord {
+          ...AttachmentsBoxFragment
+        }
       }
     }
   `,
@@ -91,6 +99,8 @@ export const ArticleContentFragment = graphql(
     ListBlockquoteFragment,
     ListCardInfoFragment,
     DownloadLinkFragment,
+    WideLinkCardFragment,
+    AttachmentsBoxFragment,
   ],
 );
 
@@ -109,6 +119,10 @@ export const AllArticlesRecordFragment = graphql(
       showSidebar
       dateShown
       allTitleLocales: _allTitleLocales {
+        locale
+        value
+      }
+      allParagraphLocales: _allParagraphLocales {
         locale
         value
       }

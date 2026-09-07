@@ -1,41 +1,18 @@
 ---
 import StructuredTextAdapter from "@components/cms-adapters/datocms/StructuredTextAdapter.astro";
-import { ArticleAttachments } from "@components/organisms/ArticleAttachments";
-import { ArticleUsefulLinks } from "@components/organisms/ArticleUsefulLinks";
 import { SectionContainer } from "@components/organisms/SectionContainer";
 import type { ArticleContentFragmentType } from "@graphql/fragment/article";
 
-type Attachment = {
-  id: string;
-  fileTitle?: string | null;
-  file?: { url: string; filename: string; format: string } | null;
-};
-type ExternalLink = {
-  id: string;
-  title?: string | null;
-  link?: string | null;
-  description?: string | null;
-};
-
 type Props = {
   content: ArticleContentFragmentType;
-  attachments?: Attachment[];
-  links?: ExternalLink[];
   fullWidth?: boolean;
 };
 
-const {
-  content,
-  attachments = [],
-  links = [],
-  fullWidth = false,
-} = Astro.props;
+const { content, fullWidth = false } = Astro.props;
 ---
 
 <SectionContainer
   className={`structured-text-container${fullWidth ? "" : " ps-lg-4"}`}
 >
   <StructuredTextAdapter block={content} />
-  <ArticleAttachments attachments={attachments} />
-  <ArticleUsefulLinks links={links} />
 </SectionContainer>

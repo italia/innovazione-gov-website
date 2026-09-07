@@ -8,19 +8,33 @@ import { createBreadcrumb } from "@utils/createBreadcrumb";
 
 type Props = {
   title: string;
+  paragraph?: string | null;
   dateTime?: string | null;
   topics?: string[];
   image?: ImageProps | null;
+  articleType?: string | null;
 };
 
-const { title, dateTime, topics = [], image } = Astro.props;
+const {
+  title,
+  paragraph,
+  dateTime,
+  topics = [],
+  image,
+  articleType,
+} = Astro.props;
 const { recordId, lang } = Astro.locals;
 const t = getI18n(lang);
 
 const rawBreadcrumb = createBreadcrumb(recordId, lang);
+const isProject = articleType === "project";
+const lastLabel = isProject ? title : t["article.detail"];
+const shownTopics = isProject ? [] : topics;
+const shownDate = isProject ? null : dateTime;
+const shownParagraph = isProject ? paragraph?.trim() : null;
 const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
   ...item,
-  label: index === arr.length - 1 ? t["article.detail"] : item.label,
+  label: index === arr.length - 1 ? lastLabel : item.label,
 }));
 ---
 
@@ -32,16 +46,21 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
           <Breadcrumb items={breadcrumbItems} />
           <h1 class="article-hero__title">{title}</h1>
           {
-            dateTime && (
-              <DateTime className="article-hero__date" value={dateTime} />
+            shownParagraph && (
+              <p class="article-hero__paragraph">{shownParagraph}</p>
             )
           }
           {
-            topics.length > 0 && (
+            shownDate && (
+              <DateTime className="article-hero__date" value={shownDate} />
+            )
+          }
+          {
+            shownTopics.length > 0 && (
               <div class="article-hero__topics">
                 <p class="article-hero__topics-label">{t["article.topics"]}</p>
                 <ul class="article-hero__chips">
-                  {topics.map((topic) => (
+                  {shownTopics.map((topic) => (
                     <li class="article-hero__tag">{topic}</li>
                   ))}
                 </ul>
@@ -83,6 +102,13 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
     display: block;
     color: #5b6f82;
     font-size: 0.875rem;
+  }
+  .article-hero__paragraph {
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+    color: #1a1a1a !important;
+    font-size: 1.125rem !important;
+    line-height: 1.75rem !important;
   }
   .article-hero__topics {
     margin-top: 1.5rem;

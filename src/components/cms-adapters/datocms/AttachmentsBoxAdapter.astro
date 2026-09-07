@@ -1,0 +1,74 @@
+---
+import { Link } from "@components/atoms/Link";
+import type { AttachmentsBoxFragmentType } from "@graphql/fragment/commonFragments";
+import { createDownloadUrl } from "@utils/createDownloadUrl";
+
+type Props = {
+  block: AttachmentsBoxFragmentType;
+};
+
+const { block } = Astro.props;
+
+const files = (block.downloads ?? []).filter((download) => download.doc);
+---
+
+{
+  files.length > 0 && (
+    <div class="attachments-box">
+      <p class="attachments-box__title">{block.title}</p>
+      <ul class="attachments-box__list">
+        {files.map((download) => (
+          <li>
+            <Link
+              label={download.label ?? download.doc!.filename}
+              download={createDownloadUrl(download.doc!)}
+              variant="dark"
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+<style>
+  .attachments-box {
+    margin-block: 2rem;
+    border-radius: 8px;
+    background: #06c;
+    padding: 2rem;
+    color: #fff;
+  }
+  .attachments-box__title {
+    margin-bottom: 1.5rem;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .attachments-box__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .attachments-box__list li + li {
+    border-top: 1px solid rgb(255 255 255 / 0.25);
+  }
+  .attachments-box__list li {
+    padding: 0.75rem 0;
+  }
+  .attachments-box__list :global(a) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    color: #fff;
+  }
+  .attachments-box__list :global(a .fw-semibold) {
+    text-decoration: underline;
+  }
+  .attachments-box__list :global(svg) {
+    fill: #fff;
+    flex-shrink: 0;
+  }
+</style>
