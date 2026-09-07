@@ -90,5 +90,8 @@
   "subscribe.errorText": "Qualcosa è andato storto 😔 Riprova più tardi",
   "subscribe.successText": "Ti abbiamo mandato un’email, segui il collegamento per confermare la tua iscrizione",
   "position.open": "Posizione aperta",
-  "position.closed": "Posizione chiusa"
+  "position.closed": "Posizione chiusa",
+  "filter.byCategory": "Filtra per argomento",
+  "filter.all": "Seleziona",
+  "filter.noResults": "Nessun elemento per questo argomento."
 }

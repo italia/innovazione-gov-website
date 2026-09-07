@@ -4,6 +4,7 @@ import { CardEditorialNews } from "@components/molecules/CardEditorialNews";
 import { CardInlineMini } from "@components/molecules/CardInlineMini";
 import { Carousel, CarouselItem } from "@components/molecules/Carousel";
 import { SectionContainer } from "@components/organisms/SectionContainer";
+import { getI18n } from "@i18n/microcopy";
 import { getSectionBgClass } from "@utils/background";
 import { slugify } from "@utils/slugify";
 import type { ListCollectionProps } from "./types";
@@ -19,7 +20,21 @@ const {
   labelButton,
   linkTo,
   openInNewTab = false,
+  showCategoryFilter = false,
+  visibleCount = 3,
 } = Astro.props;
+
+const categories = [
+  ...new Set(items.flatMap((item) => item.filterCategories ?? [])),
+].sort((a, b) => a.localeCompare(b));
+
+const withFilter = showCategoryFilter && categories.length > 0;
+const filterId = `filtro-${slugify(title)}`;
+const listId = `elenco-${slugify(title)}`;
+const shownItems = withFilter ? items : items.slice(0, visibleCount);
+
+const { lang } = Astro.locals;
+const t = getI18n(lang);
 
 const textColorClass =
   background === "primary" || background === "dark" ? "text-white" : "";
@@ -33,33 +48,77 @@ const buttonVariant =
   sectionTitleId={title}
 >
   <div class="row justify-content-between align-items-top">
-    <div class="col-lg-8 col-12 pb-lg-5">
+    <div
+      class:list={[withFilter ? "col-lg-7" : "col-lg-8", "col-12", "pb-lg-5"]}
+    >
       <h2 class=`${textColorClass}` id={slugify(title)}>
         {title}
       </h2>
       {paragraph && <p class={`${textColorClass}`}>{paragraph}</p>}
     </div>
 
-    <div class=` ${!showInline ? 'd-none d-lg-block' : ''}`>
-      <ul class="it-card-list row">
+    {
+      withFilter && (
+        <div class="col-12 col-lg-4 pb-4 pb-lg-5">
+          <div class="select-wrapper">
+            <label
+              class:list={["form-label", "text-uppercase", textColorClass]}
+              for={filterId}
+            >
+              {t["filter.byCategory"]}
+            </label>
+            <select id={filterId} data-category-filter={listId}>
+              <option value="">{t["filter.all"]}</option>
+              {categories.map((category) => (
+                <option value={category}>{category}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      )
+    }
+
+    <div class:list={[!showInline && !withFilter ? "d-none d-lg-block" : ""]}>
+      <ul class="it-card-list row" id={listId}>
         {
-          items.map((item) => {
+          shownItems.map((item, index) => {
+            const categoryData = (item.filterCategories ?? []).join("|");
+            const hidden = withFilter && index >= visibleCount;
             return showInline ? (
-              <li class="col-12 col-lg-6 mb-3">
+              <li
+                class="col-12 col-lg-6 mb-3"
+                data-categories={categoryData}
+                hidden={hidden}
+              >
                 <CardInlineMini {...item} />
               </li>
             ) : (
-              <li class="col-12 col-lg-4 mb-3">
+              <li
+                class="col-12 col-lg-4 mb-3"
+                data-categories={categoryData}
+                hidden={hidden}
+              >
                 <CardEditorialNews {...item} />
               </li>
             );
           })
         }
       </ul>
+      {
+        withFilter && (
+          <p
+            class:list={["mt-3", textColorClass]}
+            data-filter-empty={listId}
+            hidden
+          >
+            {t["filter.noResults"]}
+          </p>
+        )
+      }
     </div>
 
     {
-      !showInline && (
+      !showInline && !withFilter && (
         <Carousel>
           {items.map((item) => (
             <CarouselItem>
@@ -85,3 +144,34 @@ const buttonVariant =
     }
   </div>
 </SectionContainer>
+
+<script>
+  const applyFilter = (select: HTMLSelectElement) => {
+    const listId = select.dataset.categoryFilter;
+    if (!listId) return;
+    const list = document.getElementById(listId);
+    if (!list) return;
+    const empty = document.querySelector<HTMLElement>(
+      `[data-filter-empty="${listId}"]`,
+    );
+    const chosen = select.value;
+    const cards = [...list.querySelectorAll<HTMLElement>("li")];
+    let shown = 0;
+    for (const card of cards) {
+      const categories = (card.dataset.categories ?? "")
+        .split("|")
+        .filter(Boolean);
+      const matches = !chosen || categories.includes(chosen);
+      const visible = matches && shown < 3;
+      card.hidden = !visible;
+      if (visible) shown += 1;
+    }
+    if (empty) empty.hidden = shown > 0;
+  };
+
+  document
+    .querySelectorAll<HTMLSelectElement>("[data-category-filter]")
+    .forEach((select) => {
+      select.addEventListener("change", () => applyFilter(select));
+    });
+</script>

@@ -10,4 +10,6 @@ export type ListCollectionProps = {
   labelButton?: string;
   linkTo?: string;
   openInNewTab?: boolean;
+  showCategoryFilter?: boolean;
+  visibleCount?: number;
 };

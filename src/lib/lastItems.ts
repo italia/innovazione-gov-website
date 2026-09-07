@@ -5,7 +5,12 @@ import type { SiteLocale } from "@graphql/types";
 import { executeQuery } from "@lib/datocms";
 import { linkResolver } from "@utils/linkResolver";
 
-type Options = { locale: SiteLocale; includeDrafts: boolean };
+type Options = {
+  locale: SiteLocale;
+  includeDrafts: boolean;
+  limit?: number;
+  categoryIds?: string[];
+};
 
 const ARTICLE_TYPE_BY_SELECTION: Record<string, string> = {
   news: "news",
@@ -15,6 +20,7 @@ const ARTICLE_TYPE_BY_SELECTION: Record<string, string> = {
   focus: "focus",
   guida: "guida",
   focus_page: "focus",
+  project: "project",
 };
 
 const LastArticlesQuery = graphql(
@@ -34,6 +40,7 @@ const LastArticlesQuery = graphql(
         firstPublishedAt: _firstPublishedAt
         tags {
           name
+          isCategory
         }
         image {
           ...ImageFragment
@@ -59,9 +66,17 @@ function dedupeSortTop(
     .slice(0, n);
 }
 
+const filterCategoriesOf = (
+  tags: { name: string | null; isCategory: boolean | null }[] | null,
+): string[] =>
+  (tags ?? [])
+    .filter((tag) => tag.isCategory)
+    .map((tag) => tag.name)
+    .filter((name): name is string => !!name);
+
 export async function getLastItems(
   selection: string,
-  { locale, includeDrafts }: Options,
+  { locale, includeDrafts, limit = 3, categoryIds }: Options,
 ): Promise<CardEditorialNewsProps[]> {
   if (selection === "articles") {
     const articlesRes = await executeQuery(LastArticlesQuery, {
@@ -80,15 +95,21 @@ export async function getLastItems(
         category: (r.tags ?? [])
           .map((t) => t.name)
           .filter((v): v is string => !!v),
+        filterCategories: filterCategoriesOf(r.tags),
         linkTo: linkResolver(r.id, locale),
       }),
     );
 
-    return dedupeSortTop(articleItems, 3);
+    return dedupeSortTop(articleItems, limit);
   }
 
   const articleType = ARTICLE_TYPE_BY_SELECTION[selection];
-  const filter = articleType ? { articleType: { eq: articleType } } : {};
+  const filter = {
+    ...(articleType ? { articleType: { eq: articleType } } : {}),
+    ...(categoryIds?.length ? { tags: { anyIn: categoryIds } } : {}),
+  };
+
+  const isProject = articleType === "project";
 
   const { records } = await executeQuery(LastArticlesQuery, {
     variables: { locale, filter },
@@ -102,11 +123,15 @@ export async function getLastItems(
       title: r.title ?? "",
       description: r.paragraph || r.description || "",
       image: r.image ?? undefined,
-      dateTime: r.dateShown ?? r.firstPublishedAt ?? undefined,
-      category: (r.tags ?? [])
-        .map((t) => t.name)
-        .filter((v): v is string => !!v),
+      dateTime: isProject
+        ? undefined
+        : (r.dateShown ?? r.firstPublishedAt ?? undefined),
+      category: isProject
+        ? []
+        : (r.tags ?? []).map((t) => t.name).filter((v): v is string => !!v),
+      filterCategories: filterCategoriesOf(r.tags),
       linkTo: linkResolver(r.id, locale),
     }))
-    .slice(0, 3);
+    .sort((a, b) => (isProject ? a.title.localeCompare(b.title) : 0))
+    .slice(0, limit);
 }

@@ -90,5 +90,8 @@
   "subscribe.errorText": "Something went wrong 😔 Please try again later",
   "subscribe.successText": "We sent you an email, follow the link to confirm your subscription",
   "position.open": "Open position",
-  "position.closed": "Closed position"
+  "position.closed": "Closed position",
+  "filter.byCategory": "Filter by topic",
+  "filter.all": "Select",
+  "filter.noResults": "No items for this topic."
 }

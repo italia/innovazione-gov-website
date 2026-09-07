@@ -18,12 +18,19 @@ const { lang } = Astro.locals;
 
 const isPreview = import.meta.env.DEV && isDraftModeEnabled(Astro.cookies);
 
+const categoryIds = block.category ? [block.category.id] : [];
+const onlyOneCategory = categoryIds.length > 0;
+const showCategoryFilter =
+  !onlyOneCategory && (block.showFilterOnCategory ?? false);
+
 let items: CardEditorialNewsProps[];
 
 if (block.lastItems) {
   items = await getLastItems(block.lastItems, {
     locale: lang as SiteLocale,
     includeDrafts: isPreview,
+    limit: onlyOneCategory || showCategoryFilter ? 60 : 3,
+    categoryIds,
   });
 } else {
   items = (block.listContent ?? []).map((item) => {
@@ -58,6 +65,8 @@ const { labelButton, linkTo, openInNewTab } = getCtaFields(
   paragraph={block.paragraph || undefined}
   background={block.backgroundColor as SectionBackground}
   showInline={block.showInlineCard ?? undefined}
+  showCategoryFilter={showCategoryFilter}
+  visibleCount={onlyOneCategory ? items.length : undefined}
   labelButton={labelButton}
   linkTo={linkTo}
   openInNewTab={openInNewTab}

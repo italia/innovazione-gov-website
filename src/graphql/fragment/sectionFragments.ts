@@ -738,6 +738,11 @@ export const CardLinkListFragment = graphql(
       paragraph
       backgroundColor
       showInlineCard
+      showFilterOnCategory
+      category {
+        id
+        name
+      }
       lastItems
       listContent {
         ...CardLinkFragment
