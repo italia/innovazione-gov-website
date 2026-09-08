@@ -12,6 +12,7 @@ type Props = {
   dateTime?: string | null;
   topics?: string[];
   image?: ImageProps | null;
+  logo?: ImageProps | null;
   articleType?: string | null;
 };
 
@@ -21,6 +22,7 @@ const {
   dateTime,
   topics = [],
   image,
+  logo,
   articleType,
 } = Astro.props;
 const { recordId, lang } = Astro.locals;
@@ -32,6 +34,7 @@ const lastLabel = isProject ? title : t["article.detail"];
 const shownTopics = isProject ? [] : topics;
 const shownDate = isProject ? null : dateTime;
 const shownParagraph = isProject ? paragraph?.trim() : null;
+const shownImage = (isProject ? (logo ?? image) : image) ?? null;
 const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
   ...item,
   label: index === arr.length - 1 ? lastLabel : item.label,
@@ -70,10 +73,10 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
         </div>
       </div>
       {
-        image && (
+        shownImage && (
           <div class="col-12 col-lg-5">
             <div class="article-hero__image">
-              <Image {...image} loading="eager" />
+              <Image {...shownImage} loading="eager" />
             </div>
           </div>
         )

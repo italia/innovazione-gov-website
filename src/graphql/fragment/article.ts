@@ -132,6 +132,12 @@ export const AllArticlesRecordFragment = graphql(
           ...ImageFragment
         }
       }
+      allLogoLocales: _allLogoLocales {
+        locale
+        value {
+          ...ImageFragment
+        }
+      }
       tags {
         name
       }

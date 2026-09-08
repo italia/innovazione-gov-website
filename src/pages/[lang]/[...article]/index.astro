@@ -38,6 +38,7 @@ export async function getStaticPaths() {
       dateTime: string | null;
       topics: string[];
       image: ImageFragmentType | null;
+      logo: ImageFragmentType | null;
       publishedAt: string;
       updatedAt: string;
     };
@@ -84,6 +85,7 @@ export async function getStaticPaths() {
               .map((tag) => tag.name)
               .filter((name): name is string => !!name),
             image: getLocaleValue(page.allImageLocales, lang, null),
+            logo: getLocaleValue(page.allLogoLocales, lang, null),
             publishedAt: page.publishedAt,
             updatedAt: seoRes?.updatedAt || page.updatedAt,
           },
@@ -109,6 +111,7 @@ const {
   dateTime,
   topics,
   image,
+  logo,
   publishedAt,
   updatedAt,
 } = Astro.props;
@@ -139,6 +142,7 @@ const jsonLd: JsonLdPageData = {
     dateTime={dateTime}
     topics={topics}
     image={image}
+    logo={logo}
     articleType={articleType}
   />
   {

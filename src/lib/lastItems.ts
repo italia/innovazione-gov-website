@@ -45,6 +45,9 @@ const LastArticlesQuery = graphql(
         image {
           ...ImageFragment
         }
+        logo {
+          ...ImageFragment
+        }
       }
     }
   `,
@@ -122,7 +125,8 @@ export async function getLastItems(
       isExternal: false,
       title: r.title ?? "",
       description: r.paragraph || r.description || "",
-      image: r.image ?? undefined,
+      image: (isProject ? (r.logo ?? r.image) : r.image) ?? undefined,
+      imageFit: isProject && r.logo ? ("contain" as const) : undefined,
       dateTime: isProject
         ? undefined
         : (r.dateShown ?? r.firstPublishedAt ?? undefined),

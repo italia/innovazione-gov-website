@@ -18,6 +18,7 @@ const {
   action,
   fullHeight = true,
   isExternal = true,
+  imageFit = "cover",
 } = Astro.props;
 
 const categories = Array.isArray(category)
@@ -55,7 +56,12 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
   </h3>
   {
     image && (
-      <div class="it-card-image-wrapper">
+      <div
+        class:list={[
+          "it-card-image-wrapper",
+          imageFit === "contain" && "it-card-image-wrapper--logo",
+        ]}
+      >
         <div class="ratio ratio-16x9">
           <figure class="figure img-full">
             <Image {...image} />
@@ -88,6 +94,11 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
 </article>
 
 <style>
+  .it-card-image-wrapper--logo :global(figure img) {
+    object-fit: contain !important;
+    padding: 1.5rem;
+  }
+
   .it-card-taxonomy .chip {
     pointer-events: none;
   }
