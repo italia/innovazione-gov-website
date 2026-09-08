@@ -1,0 +1,30 @@
+---
+import WideLinkCardAdapter from "@components/cms-adapters/datocms/WideLinkCardAdapter.astro";
+import type { WideLinkCardFragmentType } from "@graphql/fragment/commonFragments";
+
+type Props = {
+  title?: string;
+  cards: WideLinkCardFragmentType[];
+  variant?: "dark" | "light";
+};
+
+const { title, cards, variant = "dark" } = Astro.props;
+---
+
+<div class="additional-content-cards">
+  {
+    title && (
+      <p class:list={["it-label", variant === "light" && "text-white"]}>
+        {title}
+      </p>
+    )
+  }
+  {cards.map((card) => <WideLinkCardAdapter block={card} variant="compact" />)}
+</div>
+
+<style>
+  .additional-content-cards :global(.it-label) {
+    font-size: 1.75rem !important;
+    line-height: 2rem;
+  }
+</style>

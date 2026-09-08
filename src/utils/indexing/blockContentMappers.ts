@@ -130,7 +130,12 @@ const flattenTextImageSection = (record: TextAndImageFragmentType): string => {
 
   if (record.additionalContent) {
     record.additionalContent.content.forEach((item) => {
-      parts.push(item.title, item.description);
+      if (item.componentName === "CardEditorialWithIconRecord") {
+        parts.push(item.title, item.description);
+        return;
+      }
+      if (item.title) parts.push(item.title);
+      if (item.paragraph) parts.push(item.paragraph);
     });
   }
 

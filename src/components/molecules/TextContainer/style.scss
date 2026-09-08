@@ -3,3 +3,7 @@
 .text-white a {
   color: $white;
 }
+
+.text-container:not(.text-white) p {
+  color: $secondary;
+}

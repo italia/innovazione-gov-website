@@ -5,9 +5,10 @@ import { linkResolver } from "@utils/linkResolver";
 
 type Props = {
   block: WideLinkCardFragmentType;
+  variant?: "default" | "compact";
 };
 
-const { block } = Astro.props;
+const { block, variant = "default" } = Astro.props;
 const { lang } = Astro.locals;
 
 const article = block.article ?? null;
@@ -20,7 +21,11 @@ const linkTo =
 const title = block.title || article?.title || "";
 const paragraph =
   block.paragraph || article?.paragraph || article?.description || null;
-const image = block.image ?? article?.image ?? undefined;
+const isCompact = variant === "compact";
+const image =
+  block.image ??
+  (isCompact ? (article?.logo ?? article?.image) : article?.image) ??
+  undefined;
 const fitImage = block.image ? "contain" : "cover";
 const category = block.category || article?.tags?.[0]?.name || null;
 const dateTime = article
@@ -37,4 +42,6 @@ const dateTime = article
   fitImage={fitImage}
   isExternal={!!externalUrl}
   dateTime={dateTime}
+  variant={variant}
+  imageBackground={block.imageBackground === "blu" ? "blu" : "chiaro"}
 />

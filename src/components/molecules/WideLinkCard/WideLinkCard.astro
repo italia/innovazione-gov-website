@@ -12,6 +12,8 @@ type Props = {
   isExternal?: boolean;
   dateTime?: string | null;
   fitImage?: "cover" | "contain";
+  variant?: "default" | "compact";
+  imageBackground?: "chiaro" | "blu";
 };
 
 const {
@@ -23,16 +25,26 @@ const {
   isExternal,
   dateTime,
   fitImage = "contain",
+  variant = "default",
+  imageBackground = "chiaro",
 } = Astro.props;
+
+const isCompact = variant === "compact";
 ---
 
-<div class="wide-link-card">
+<div
+  class:list={[
+    "wide-link-card",
+    isCompact && "wide-link-card--compact",
+    imageBackground === "blu" && "wide-link-card--media-blu",
+  ]}
+>
   {
     image && (
       <div
         class:list={[
           "wide-link-card__media",
-          fitImage === "cover" && "wide-link-card__media--cover",
+          !isCompact && fitImage === "cover" && "wide-link-card__media--cover",
         ]}
       >
         <Image {...image} />
@@ -57,7 +69,7 @@ const {
     </p>
     {paragraph && <p class="wide-link-card__text">{paragraph}</p>}
     {
-      (category || dateTime) && (
+      !isCompact && (category || dateTime) && (
         <div class="wide-link-card__meta">
           {category && <span class="wide-link-card__category">{category}</span>}
           {dateTime && (
@@ -74,15 +86,19 @@ const {
     display: flex;
     flex-direction: column;
     border: 1px solid #d4d8dc;
+    border-radius: 4px;
     background: #fff;
     margin-bottom: 1.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 7.5%);
   }
   .wide-link-card__media {
     flex: 0 0 auto;
     background: #f5f6f7;
     aspect-ratio: 16 / 9;
-    max-height: 220px;
     overflow: hidden;
+  }
+  .wide-link-card--media-blu .wide-link-card__media {
+    background: #06c;
   }
   .wide-link-card__media :global(img) {
     width: 100%;
@@ -111,7 +127,7 @@ const {
   }
   .wide-link-card__text {
     margin: 0;
-    color: #1a1a1a;
+    color: #2f475e;
     font-size: 1rem;
     line-height: 1.5;
   }
@@ -136,19 +152,56 @@ const {
     text-transform: uppercase;
   }
 
+  .wide-link-card--compact {
+    position: relative;
+    border-color: #d4d8dc;
+    border-radius: 4px;
+    background: #f2f7fc;
+    box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 7.5%);
+  }
+  .wide-link-card--compact .wide-link-card__media {
+    background: transparent;
+    aspect-ratio: auto;
+    padding: 1rem;
+  }
+  .wide-link-card--compact .wide-link-card__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 2rem;
+  }
+  .wide-link-card--compact .wide-link-card__title :global(a) {
+    color: #0066cc;
+  }
+  .wide-link-card--compact .wide-link-card__text {
+    color: #2f475e;
+  }
+  .wide-link-card--compact .wide-link-card__title :global(a) {
+    text-decoration: underline;
+  }
+  .wide-link-card--compact .wide-link-card__title :global(a::after) {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
   @media (min-width: 768px) {
     .wide-link-card {
       flex-direction: row;
       align-items: stretch;
     }
     .wide-link-card__media {
-      flex: 0 0 45%;
+      flex: 0 0 50%;
       align-self: stretch;
       min-height: 100%;
     }
     .wide-link-card__body {
       flex: 1 1 auto;
       justify-content: center;
+    }
+    .wide-link-card--compact .wide-link-card__media {
+      flex: 0 0 14rem;
+      align-self: center;
+      min-height: 0;
     }
   }
 </style>

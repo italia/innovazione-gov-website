@@ -617,6 +617,7 @@ export const WideLinkCardFragment = graphql(
       title
       paragraph
       category
+      imageBackground
       image {
         ...ImageFragment
       }
@@ -631,6 +632,9 @@ export const WideLinkCardFragment = graphql(
         dateShown
         firstPublishedAt: _firstPublishedAt
         image {
+          ...ImageFragment
+        }
+        logo {
           ...ImageFragment
         }
         tags {
@@ -664,11 +668,20 @@ export const AdditionalContentFragment = graphql(
       id
       title
       content {
-        ...CardEditorialWithIconFragment
+        ... on RecordInterface {
+          id
+          componentName: __typename
+        }
+        ... on CardEditorialWithIconRecord {
+          ...CardEditorialWithIconFragment
+        }
+        ... on WideLinkCardRecord {
+          ...WideLinkCardFragment
+        }
       }
     }
   `,
-  [CardEditorialWithIconFragment],
+  [CardEditorialWithIconFragment, WideLinkCardFragment],
 );
 
 export type AdditionalContentFragmentType = FragmentOf<

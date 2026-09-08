@@ -3,6 +3,7 @@ import TextContainerAdapter from "@components/cms-adapters/datocms/TextContainer
 import { ImageContainer } from "@components/molecules/ImageContainer";
 import type { HeadingTag } from "@components/molecules/TextContainer/types";
 import { AdditionalContent } from "@components/organisms/AdditionalContent";
+import { AdditionalContentCards } from "@components/organisms/AdditionalContentCards";
 import { TextAndImage } from "@components/organisms/TextAndImage";
 import type { VariantTextAndImageProps } from "@components/organisms/TextAndImage/types";
 import type { TextAndImageFragmentType } from "@graphql/fragment/sectionFragments";
@@ -27,12 +28,20 @@ const variantAdditionalContent =
     : undefined;
 
 const additionalContent = block.additionalContent;
+
+const cardsInEvidenza = (additionalContent?.content ?? []).filter(
+  (item) => item.componentName === "WideLinkCardRecord",
+);
+const cardsConIcona = (additionalContent?.content ?? []).filter(
+  (item) => item.componentName === "CardEditorialWithIconRecord",
+);
 ---
 
 <TextAndImage
   sectionTitleId={block.text.title}
   variant={block.variant as VariantTextAndImageProps}
   background={block.backgroundColor as SectionBackground}
+  contentInRightColumn={!block.image && cardsInEvidenza.length > 0}
 >
   <TextContainerAdapter
     slot="text"
@@ -48,11 +57,22 @@ const additionalContent = block.additionalContent;
   }
 
   {
-    additionalContent && (
+    additionalContent && cardsInEvidenza.length > 0 && (
+      <AdditionalContentCards
+        slot="additionalContent"
+        title={additionalContent.title || undefined}
+        cards={cardsInEvidenza}
+        variant={variantAdditionalContent}
+      />
+    )
+  }
+
+  {
+    additionalContent && cardsConIcona.length > 0 && (
       <AdditionalContent
         slot="additionalContent"
         title={additionalContent.title || undefined}
-        content={additionalContent.content.map((item) => {
+        content={cardsConIcona.map((item) => {
           return {
             title: item.title,
             description: item.description,

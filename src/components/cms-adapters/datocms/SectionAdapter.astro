@@ -10,6 +10,7 @@ import UseCasesAdapter from "@components/cms-adapters/datocms/UseCasesAdapter.as
 import { SplitContent } from "@components/layout/SplitContent";
 import type { SectionAlignItems } from "@components/layout/SplitContent/types";
 import { AdditionalContent } from "@components/organisms/AdditionalContent";
+import { AdditionalContentCards } from "@components/organisms/AdditionalContentCards";
 import type { SectionFragmentType } from "@graphql/fragment/sectionFragments";
 import type { SectionBackground } from "@utils/background";
 import { DatoBlockModel } from "@utils/cmsMapper";
@@ -36,6 +37,13 @@ const variantAdditionalContent =
     : undefined;
 
 const additionalContent = block.additionalContent;
+
+const cardsInEvidenza = (additionalContent?.content ?? []).filter(
+  (item) => item.componentName === "WideLinkCardRecord",
+);
+const cardsConIcona = (additionalContent?.content ?? []).filter(
+  (item) => item.componentName === "CardEditorialWithIconRecord",
+);
 const isRightBlockImage =
   rightBlock?.componentName === DatoBlockModel.ImageBlock;
 const className = isRightBlockImage ? "px-0" : "";
@@ -92,10 +100,20 @@ const className = isRightBlockImage ? "px-0" : "";
   </Fragment>
 
   {
-    additionalContent && (
+    cardsInEvidenza.length > 0 && (
+      <AdditionalContentCards
+        title={additionalContent?.title || undefined}
+        cards={cardsInEvidenza}
+        variant={variantAdditionalContent}
+      />
+    )
+  }
+
+  {
+    cardsConIcona.length > 0 && (
       <AdditionalContent
-        title={additionalContent.title || undefined}
-        content={additionalContent.content.map((item) => {
+        title={additionalContent?.title || undefined}
+        content={cardsConIcona.map((item) => {
           return {
             title: item.title,
             description: item.description,

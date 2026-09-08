@@ -8,12 +8,13 @@ const {
   background = "default",
   variant = "variant-1",
   sectionTitleId,
+  contentInRightColumn = false,
 } = Astro.props;
 const isWideImage = variant === "variant-2";
 const columnLeftSize = isWideImage ? 4 : 6;
-const columnRightSize = isWideImage ? 8 : 5;
+const columnRightSize = isWideImage ? 8 : contentInRightColumn ? 6 : 5;
 
-const alignItems = isWideImage ? "top" : "center";
+const alignItems = isWideImage || contentInRightColumn ? "top" : "center";
 ---
 
 <SplitContent
@@ -22,9 +23,17 @@ const alignItems = isWideImage ? "top" : "center";
   alignItems={alignItems}
   background={background}
   sectionTitleId={sectionTitleId}
-  classSecondColumn={isWideImage ? "ps-lg-5" : ""}
+  classSecondColumn={isWideImage || contentInRightColumn ? "ps-lg-5" : ""}
 >
   <slot name="text" slot="left" />
-  <slot name="image" slot="right" />
-  <slot name="additionalContent" />
+  {
+    contentInRightColumn ? (
+      <slot name="additionalContent" slot="right" />
+    ) : (
+      <Fragment>
+        <slot name="image" slot="right" />
+        <slot name="additionalContent" />
+      </Fragment>
+    )
+  }
 </SplitContent>
