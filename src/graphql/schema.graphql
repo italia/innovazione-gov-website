@@ -135,6 +135,8 @@ type ActionCardRecord implements RecordInterface {
   videoUrl: String
 }
 
+union AdditionalContentModelContentField = CardEditorialWithIconRecord | WideLinkCardRecord
+
 """Block of type Additional content (additional_content)"""
 type AdditionalContentRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -155,7 +157,7 @@ type AdditionalContentRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
-  content: [CardEditorialWithIconRecord!]!
+  content: [AdditionalContentModelContentField!]!
   id: ItemId!
   title: String
 }
@@ -343,6 +345,7 @@ input ArticleModelFilter {
   descriptionTitle: StringFilter
   image: FileFilter
   links: LinksFilter
+  logo: FileFilter
   paragraph: TextFilter
   parentPage: LinkFilter
   seo: SeoFilter
@@ -454,6 +457,12 @@ type ArticleRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): [FileFieldMultiLocaleField!]
+  _allLogoLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [FileFieldMultiLocaleField!]
   _allParagraphLocales(
     """Process content as markdown"""
     markdown: Boolean
@@ -557,6 +566,15 @@ type ArticleRecord implements RecordInterface {
     fallbackLocales: [SiteLocale!]
   ): FileField
   links: [LinkExternalRecord!]!
+  logo(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): FileField
   paragraph(
     """Process content as markdown"""
     markdown: Boolean
@@ -1040,6 +1058,8 @@ type CardEditorialWithIconRecord implements RecordInterface {
 
 union CardLinkListModelCtaField = ExternalLinkRecord | InternalLinkRecord
 
+union CardLinkListModelListContentField = CardLinkRecord | WideLinkCardRecord
+
 """Block of type Section card link list  (card_link_list)"""
 type CardLinkListRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -1065,7 +1085,7 @@ type CardLinkListRecord implements RecordInterface {
   cta: CardLinkListModelCtaField
   id: ItemId!
   lastItems: String
-  listContent: [CardLinkRecord!]!
+  listContent: [CardLinkListModelListContentField!]!
   paragraph(
     """Process content as markdown"""
     markdown: Boolean
@@ -10939,6 +10959,7 @@ type WideLinkCardRecord implements RecordInterface {
   category: String
   id: ItemId!
   image: FileField
+  imageBackground: String
   link: LinkBlockRecord
   paragraph(
     """Process content as markdown"""
