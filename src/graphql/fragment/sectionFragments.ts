@@ -21,6 +21,7 @@ import {
   ListCardEditorialWithIconFragment,
   ListCardInfoFragment,
   ListCollectionFragment,
+  WideLinkCardFragment,
   ListItemFragment,
   NewsTabFragment,
   OrderedListFragment,
@@ -745,7 +746,16 @@ export const CardLinkListFragment = graphql(
       }
       lastItems
       listContent {
-        ...CardLinkFragment
+        ... on RecordInterface {
+          id
+          componentName: __typename
+        }
+        ... on CardLinkRecord {
+          ...CardLinkFragment
+        }
+        ... on WideLinkCardRecord {
+          ...WideLinkCardFragment
+        }
       }
       cta {
         ... on RecordInterface {
@@ -761,7 +771,12 @@ export const CardLinkListFragment = graphql(
       }
     }
   `,
-  [CardLinkFragment, InternalLinkFragment, ExternalLinkFragment],
+  [
+    CardLinkFragment,
+    WideLinkCardFragment,
+    InternalLinkFragment,
+    ExternalLinkFragment,
+  ],
 );
 
 export type CardLinkListFragmentType = FragmentOf<typeof CardLinkListFragment>;

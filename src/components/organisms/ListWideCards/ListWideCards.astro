@@ -1,0 +1,35 @@
+---
+import WideLinkCardAdapter from "@components/cms-adapters/datocms/WideLinkCardAdapter.astro";
+import { SectionContainer } from "@components/organisms/SectionContainer";
+import type { WideLinkCardFragmentType } from "@graphql/fragment/commonFragments";
+import { getSectionBgClass } from "@utils/background";
+import type { SectionBackground } from "@utils/background";
+import { slugify } from "@utils/slugify";
+
+type Props = {
+  title: string;
+  paragraph?: string | null;
+  cards: WideLinkCardFragmentType[];
+  background?: SectionBackground;
+};
+
+const { title, paragraph, cards, background = "lighter" } = Astro.props;
+
+const textColorClass =
+  background === "primary" || background === "dark" ? "text-white" : "";
+---
+
+<SectionContainer
+  className={getSectionBgClass(background)}
+  sectionTitleId={title}
+>
+  <div class="row">
+    <div class="col-12 col-lg-8">
+      <h2 class={textColorClass} id={slugify(title)}>{title}</h2>
+      {paragraph && <p class={textColorClass}>{paragraph}</p>}
+      <div class="mt-4">
+        {cards.map((card) => <WideLinkCardAdapter block={card} />)}
+      </div>
+    </div>
+  </div>
+</SectionContainer>
