@@ -72,7 +72,9 @@ function metaMenuItemAdapter(
 }
 
 type SecondaryItem =
-  MegaMenuItemFragmentType | MenuItemFragmentType | ExternalLinkFragmentType;
+  | MegaMenuItemFragmentType
+  | MenuItemFragmentType
+  | ExternalLinkFragmentType;
 
 // I record interni (Menu/MegaMenu) hanno `pointsTo`; gli ExternalLinkRecord no.
 function isExternalLink(item: SecondaryItem): item is ExternalLinkFragmentType {
