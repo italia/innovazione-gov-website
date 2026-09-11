@@ -2,6 +2,7 @@ import {
   CalloutLinkFragment,
   CatalogueFeedFragment,
   HeroFragment,
+  TextAndImageFragment,
   TextOnlyFragment,
 } from "@graphql/fragment/sectionFragments";
 import { graphql, type FragmentOf } from "@graphql/graphql";
@@ -25,9 +26,20 @@ export const CatalogueContentFragment = graphql(
       ... on TextOnlyRecord {
         ...TextOnlyFragment
       }
+      # "Text + image" è ammesso anche nelle pagine indice: senza questi campi
+      # il blocco arrivava vuoto e TextAndImageAdapter crashava su text.title.
+      ... on TextImageRecord {
+        ...TextAndImageFragment
+      }
     }
   `,
-  [HeroFragment, CatalogueFeedFragment, CalloutLinkFragment, TextOnlyFragment],
+  [
+    HeroFragment,
+    CatalogueFeedFragment,
+    CalloutLinkFragment,
+    TextOnlyFragment,
+    TextAndImageFragment,
+  ],
 );
 
 export type CatalogueContentFragmentType = FragmentOf<

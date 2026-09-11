@@ -4411,7 +4411,7 @@ input InUseFilter {
   eq: BooleanType
 }
 
-union IndexPageModelContentField = CalloutLinkRecord | CatalogueFeedRecord | HeroRecord | TextOnlyRecord
+union IndexPageModelContentField = CalloutLinkRecord | CatalogueFeedRecord | HeroRecord | TextImageRecord | TextOnlyRecord | TopicListRecord
 
 type IndexPageModelContentFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
@@ -9378,6 +9378,7 @@ input TagModelFilter {
   _status: StatusFilter
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
+  description: TextFilter
   isCategory: BooleanFilter
   name: StringFilter
   slug: StringFilter
@@ -9432,6 +9433,10 @@ type TagRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  description(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
   id: ItemId!
   isCategory: BooleanType!
   name: String
@@ -9857,6 +9862,32 @@ type TopicFilterRecord implements RecordInterface {
   ): String!
   title: String!
   titleFilter: String!
+}
+
+"""Block of type Elenco argomenti (topic_list)"""
+type TopicListRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  backgroundColor: String!
+  id: ItemId!
+  order: String!
+  showCount: BooleanType!
 }
 
 """Block of type Topic (topic)"""
