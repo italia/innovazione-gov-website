@@ -18,6 +18,7 @@ import {
   TextAndUseCasesFragment,
   TextOnlyFragment,
   TimelineFragment,
+  LinkMenuFragment,
 } from "@graphql/fragment/sectionFragments";
 import { AllInsightsSlugFragment } from "@graphql/fragment/slugFragments";
 import { graphql, type FragmentOf } from "@graphql/graphql";
@@ -49,6 +50,9 @@ export const InsightContentFragment = graphql(
       }
       ... on TextImageRecord {
         ...TextAndImageFragment
+      }
+      ... on LinkMenuRecord {
+        ...LinkMenuFragment
       }
       ... on TextAccordionRecord {
         ...TextAndAccordionFragment
@@ -84,6 +88,7 @@ export const InsightContentFragment = graphql(
     ArticleSTFragment,
     SupportChannelsSectionFragment,
     TextAndImageFragment,
+    LinkMenuFragment,
     TextAndAccordionFragment,
     TextOnlyFragment,
     CardLinkListFragment,
@@ -126,6 +131,11 @@ export const AllInsightsRecordFragment = graphql(
       publishedAt: _publishedAt
       updatedAt: _updatedAt
       showSectionsNav
+      sectionsNavLayout
+      targets {
+        id
+        label
+      }
       allContentLocales: _allContentLocales {
         locale
         value {

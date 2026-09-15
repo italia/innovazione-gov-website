@@ -140,6 +140,7 @@ export const AllArticlesRecordFragment = graphql(
       }
       tags {
         name
+        slug
       }
       attachments {
         id

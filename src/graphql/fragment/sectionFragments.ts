@@ -416,10 +416,14 @@ export const StructuredTextFragment = graphql(
         ... on DownloadLinkRecord {
           ...DownloadLinkFragment
         }
+        ... on AccordionBlockRecord {
+          ...AccordionBlockFragment
+        }
       }
     }
   `,
   [
+    AccordionBlockFragment,
     ListCardEditorialWithIconFragment,
     ExternalLinkFragment,
     InternalLinkFragment,
@@ -543,6 +547,7 @@ export type IntroArticleFragmentType = FragmentOf<typeof IntroArticleFragment>;
 export const TextAndImageFragment = graphql(
   `
     fragment TextAndImageFragment on TextImageRecord @_unmask {
+      menuLabel
       heading
       text {
         ...TextBlockFragment
@@ -562,11 +567,41 @@ export const TextAndImageFragment = graphql(
 
 export type TextAndImageFragmentType = FragmentOf<typeof TextAndImageFragment>;
 
+export const LinkMenuFragment = graphql(
+  `
+    fragment LinkMenuFragment on LinkMenuRecord @_unmask {
+      id
+      title
+      backgroundColor
+      links {
+        ... on RecordInterface {
+          id
+          componentName: __typename
+        }
+        ... on InternalLinkRecord {
+          ...InternalLinkFragment
+        }
+        ... on ExternalLinkRecord {
+          ...ExternalLinkFragment
+        }
+      }
+    }
+  `,
+  [InternalLinkFragment, ExternalLinkFragment],
+);
+
+export type LinkMenuFragmentType = FragmentOf<typeof LinkMenuFragment>;
+
 export const TextAndStatisticsFragment = graphql(
   `
     fragment TextAndStatisticsFragment on TextStatisticRecord @_unmask {
+      menuLabel
       backgroundColor
       showInline
+      layout
+      image {
+        ...ImageFragment
+      }
       text {
         ...TextBlockFragment
       }
@@ -575,7 +610,7 @@ export const TextAndStatisticsFragment = graphql(
       }
     }
   `,
-  [TextBlockFragment, StatisticBlockFragment],
+  [TextBlockFragment, StatisticBlockFragment, ImageFragment],
 );
 
 export type TextAndStatisticsFragmentType = FragmentOf<
@@ -623,6 +658,7 @@ export type TextAndUseCasesFragmentType = FragmentOf<
 export const TextAndAccordionFragment = graphql(
   `
     fragment TextAndAccordionFragment on TextAccordionRecord @_unmask {
+      menuLabel
       text {
         ...TextBlockFragment
       }
@@ -671,6 +707,7 @@ export type TimelineItemFragmentType = FragmentOf<typeof TimelineItemFragment>;
 export const TimelineFragment = graphql(
   `
     fragment TimelineFragment on TimelineRecord @_unmask {
+      menuLabel
       id
       title
       paragraph(markdown: true)
@@ -719,6 +756,7 @@ export type CalloutLinkFragmentType = FragmentOf<typeof CalloutLinkFragment>;
 export const TextOnlyFragment = graphql(
   `
     fragment TextOnlyFragment on TextOnlyRecord @_unmask {
+      menuLabel
       heading
       text {
         ...TextBlockFragment
@@ -734,6 +772,7 @@ export type TextOnlyFragmentType = FragmentOf<typeof TextOnlyFragment>;
 export const CardLinkListFragment = graphql(
   `
     fragment CardLinkListFragment on CardLinkListRecord @_unmask {
+      menuLabel
       id
       title
       paragraph
@@ -780,6 +819,21 @@ export const CardLinkListFragment = graphql(
 );
 
 export type CardLinkListFragmentType = FragmentOf<typeof CardLinkListFragment>;
+
+export const TopicListFragment = graphql(
+  `
+    fragment TopicListFragment on TopicListRecord @_unmask {
+      id
+      title
+      backgroundColor
+      order
+      showCount
+    }
+  `,
+  [],
+);
+
+export type TopicListFragmentType = FragmentOf<typeof TopicListFragment>;
 
 export const JobPositionListFragment = graphql(
   `

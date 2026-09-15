@@ -1086,6 +1086,7 @@ type CardLinkListRecord implements RecordInterface {
   id: ItemId!
   lastItems: String
   listContent: [CardLinkListModelListContentField!]!
+  menuLabel: String
   paragraph(
     """Process content as markdown"""
     markdown: Boolean
@@ -4566,7 +4567,7 @@ type IndexPageRecord implements RecordInterface {
   ): String!
 }
 
-union InsightModelContentField = CardLinkListRecord | FaqSectionRecord | HeroRecord | IntroArticleRecord | JobPositionListRecord | ListCollectionRecord | StructuredTextRecord | SupportChannelsSectionRecord | SupportCtaSectionRecord | TextAccordionRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | TextUseCaseRecord | TimelineRecord
+union InsightModelContentField = CardLinkListRecord | FaqSectionRecord | HeroRecord | IntroArticleRecord | JobPositionListRecord | LinkMenuRecord | ListCollectionRecord | StructuredTextRecord | SupportChannelsSectionRecord | SupportCtaSectionRecord | TextAccordionRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | TextUseCaseRecord | TimelineRecord
 
 type InsightModelContentFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
@@ -4589,9 +4590,12 @@ input InsightModelFilter {
   image: FileFilter
   links: LinksFilter
   parentPage: LinkFilter
+  sectionsNavLayout: StringFilter
   seo: SeoFilter
   showSectionsNav: BooleanFilter
   slug: SlugFilter
+  tags: LinksFilter
+  targets: LinksFilter
   title: StringFilter
   topic: LinkFilter
   OR: [InsightModelFilter]
@@ -4617,6 +4621,8 @@ enum InsightModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
+  sectionsNavLayout_ASC
+  sectionsNavLayout_DESC
   showSectionsNav_ASC
   showSectionsNav_DESC
   title_ASC
@@ -4737,6 +4743,7 @@ type InsightRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): PageRecord
+  sectionsNavLayout: String
   seo(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -4756,6 +4763,8 @@ type InsightRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): String!
+  tags: [TagRecord!]!
+  targets: [TargetRecord!]!
   title(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -5232,6 +5241,7 @@ input KpiElementModelFilter {
   flowDirection: StringFilter
   flowValue: StringFilter
   footerText: StringFilter
+  icon: FileFilter
   openDataPath: StringFilter
   percentage: StringFilter
   showFlow: BooleanFilter
@@ -5313,6 +5323,7 @@ type KpiElementRecord implements RecordInterface {
   flowDirection: String
   flowValue: String
   footerText: String
+  icon: FileField
   id: ItemId!
   openDataPath: String
   percentage: String
@@ -5703,6 +5714,34 @@ input LinkFilter {
   Filter records with the specified field defined (i.e. with any value) or not
   """
   exists: BooleanType
+}
+
+union LinkMenuModelLinksField = ExternalLinkRecord | InternalLinkRecord
+
+"""Block of type Link menu (link_menu)"""
+type LinkMenuRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  backgroundColor: String!
+  id: ItemId!
+  links: [LinkMenuModelLinksField!]!
+  title: String
 }
 
 """Specifies how to filter Multiple-links fields"""
@@ -6859,7 +6898,7 @@ type OwnerRecord implements RecordInterface {
   ): String!
 }
 
-union PageModelContentField = CardLinkListRecord | CarouselRecord | DataSectionRecord | FaqSectionRecord | GraphitaliaDashboardRecord | HeroRecord | NewsFeedRecord | StructuredTextRecord | SupportChannelsSectionRecord | SupportCtaSectionRecord | TextAccordionRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | ThirdPartyCookieRecord | TopicFilterRecord | UseCaseContainerRecord
+union PageModelContentField = CardLinkListRecord | CarouselRecord | DataSectionRecord | FaqSectionRecord | GraphitaliaDashboardRecord | HeroRecord | LinkMenuRecord | NewsFeedRecord | StructuredTextRecord | SupportChannelsSectionRecord | SupportCtaSectionRecord | TextAccordionRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | ThirdPartyCookieRecord | TimelineRecord | TopicFilterRecord | TopicListRecord | UseCaseContainerRecord
 
 type PageModelContentFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
@@ -6879,7 +6918,9 @@ input PageModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   _locales: LocalesFilter
+  sectionsNavLayout: StringFilter
   seo: SeoFilter
+  showSectionsNav: BooleanFilter
   slug: SlugFilter
   title: StringFilter
   OR: [PageModelFilter]
@@ -6907,6 +6948,10 @@ enum PageModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
+  sectionsNavLayout_ASC
+  sectionsNavLayout_DESC
+  showSectionsNav_ASC
+  showSectionsNav_DESC
   title_ASC
   title_DESC
 }
@@ -6969,6 +7014,7 @@ type PageRecord implements RecordInterface {
   id: ItemId!
   parent: PageRecord
   position: IntType
+  sectionsNavLayout: String
   seo(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -6978,6 +7024,7 @@ type PageRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): SeoField
+  showSectionsNav: BooleanType!
   slug(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -9240,7 +9287,7 @@ input StructuredTextFilter {
   exists: BooleanType
 }
 
-union StructuredTextModelContentBlocksField = CalloutRecord | CardServiceRecord | DownloadLinkRecord | ExternalLinkRecord | ImageBlockRecord | InternalLinkRecord | ListBlockquoteRecord | ListCardEditorialWithIconRecord | ListCardInfoRecord | ListExternalLinkRecord | OrderedListRecord | QuickLinkCardRecord | SupportCtaSectionRecord | TopicsBlockRecord
+union StructuredTextModelContentBlocksField = AccordionBlockRecord | CalloutRecord | CardServiceRecord | DownloadLinkRecord | ExternalLinkRecord | ImageBlockRecord | InternalLinkRecord | ListBlockquoteRecord | ListCardEditorialWithIconRecord | ListCardInfoRecord | ListExternalLinkRecord | OrderedListRecord | QuickLinkCardRecord | SupportCtaSectionRecord | TopicsBlockRecord
 
 type StructuredTextModelContentField {
   blocks: [StructuredTextModelContentBlocksField!]!
@@ -9544,6 +9591,7 @@ type TextAccordionRecord implements RecordInterface {
   accordion: AccordionBlockRecord!
   backgroundColor: String!
   id: ItemId!
+  menuLabel: String
   text: TextBlockRecord!
 }
 
@@ -9659,6 +9707,7 @@ type TextImageRecord implements RecordInterface {
   heading: String
   id: ItemId!
   image: FileField
+  menuLabel: String
   text: TextBlockRecord!
   variant: String!
 }
@@ -9686,6 +9735,7 @@ type TextOnlyRecord implements RecordInterface {
   backgroundColor: String!
   heading: String
   id: ItemId!
+  menuLabel: String
   text: TextBlockRecord!
 }
 
@@ -9711,6 +9761,9 @@ type TextStatisticRecord implements RecordInterface {
   _updatedAt: DateTime!
   backgroundColor: String!
   id: ItemId!
+  image: FileField
+  layout: String
+  menuLabel: String
   showInline: BooleanType!
   statistics: StatisticBlockRecord!
   text: TextBlockRecord!
@@ -9826,6 +9879,7 @@ type TimelineRecord implements RecordInterface {
   _updatedAt: DateTime!
   id: ItemId!
   items: [TimelineItemRecord!]!
+  menuLabel: String
   paragraph(
     """Process content as markdown"""
     markdown: Boolean
@@ -9888,6 +9942,7 @@ type TopicListRecord implements RecordInterface {
   id: ItemId!
   order: String!
   showCount: BooleanType!
+  title: String
 }
 
 """Block of type Topic (topic)"""

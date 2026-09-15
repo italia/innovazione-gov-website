@@ -17,9 +17,12 @@ import {
   TextAndImageFragment,
   TextAndStatisticsFragment,
   TextOnlyFragment,
+  TimelineFragment,
   ThirdPartyCookieFragment,
+  TopicListFragment,
   TopicFilterFragment,
   UseCaseContainerFragment,
+  LinkMenuFragment,
 } from "@graphql/fragment/sectionFragments";
 import { graphql, type FragmentOf } from "@graphql/graphql";
 
@@ -63,6 +66,9 @@ export const PageContentFragment = graphql(
       ... on TextImageRecord {
         ...TextAndImageFragment
       }
+      ... on LinkMenuRecord {
+        ...LinkMenuFragment
+      }
       ... on TextAccordionRecord {
         ...TextAndAccordionFragment
       }
@@ -74,6 +80,12 @@ export const PageContentFragment = graphql(
       }
       ... on TextStatisticRecord {
         ...TextAndStatisticsFragment
+      }
+      ... on TimelineRecord {
+        ...TimelineFragment
+      }
+      ... on TopicListRecord {
+        ...TopicListFragment
       }
       ... on ThirdPartyCookieRecord {
         ...ThirdPartyCookieFragment
@@ -114,10 +126,13 @@ export const PageContentFragment = graphql(
     SupportCTASectionFragment,
     ArticleSTFragment,
     TextAndImageFragment,
+    LinkMenuFragment,
     TextAndAccordionFragment,
     TextOnlyFragment,
     CardLinkListFragment,
     TextAndStatisticsFragment,
+    TimelineFragment,
+    TopicListFragment,
     ThirdPartyCookieFragment,
     ImageFragment,
     InternalLinkFragment,
@@ -134,6 +149,8 @@ export const PageFragment = graphql(
       locales: _locales
       publishedAt: _publishedAt
       updatedAt: _updatedAt
+      showSectionsNav
+      sectionsNavLayout
       allContentLocales: _allContentLocales {
         locale
         value {

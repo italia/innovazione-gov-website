@@ -177,13 +177,22 @@ export const KpiFragment = graphql(`
 
 export type KpiFragmentType = FragmentOf<typeof KpiFragment>;
 
-export const KpiElementFragment = graphql(`
-  fragment KpiElementFragment on KpiElementRecord @_unmask {
-    title
-    valuePrefix
-    value
-  }
-`);
+export const KpiElementFragment = graphql(
+  `
+    fragment KpiElementFragment on KpiElementRecord @_unmask {
+      id
+      title
+      valuePrefix
+      value
+      valueSuffix
+      footerText
+      icon {
+        ...ImageFragment
+      }
+    }
+  `,
+  [ImageFragment],
+);
 
 export type KpiElementFragmentType = FragmentOf<typeof KpiElementFragment>;
 
