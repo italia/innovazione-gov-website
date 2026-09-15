@@ -1,0 +1,118 @@
+---
+import { ButtonLink } from "@components/atoms/Button";
+import { Breadcrumb } from "@components/molecules/Breadcrumb";
+import { DateTime } from "@components/atoms/DateTime";
+import TextAndImageAdapter from "@components/cms-adapters/datocms/TextAndImageAdapter.astro";
+import { Hero } from "@components/organisms/Hero";
+import { SectionContainer } from "@components/organisms/SectionContainer";
+import type { SiteLocale } from "@graphql/types";
+import Layout from "@layouts/Layout.astro";
+import { createBreadcrumb } from "@utils/createBreadcrumb";
+import { buildTopicPaths } from "@lib/topics";
+
+export async function getStaticPaths() {
+  return buildTopicPaths(["it"]);
+}
+
+const { indiceArgomentiId, slug, nome, descrizione, sezioni, bloccoChiusura } =
+  Astro.props;
+const { lang } = Astro.params;
+const locale = lang as SiteLocale;
+
+Astro.locals.lang = locale;
+
+const breadcrumb = createBreadcrumb(indiceArgomentiId, locale).map((voce) => ({
+  ...voce,
+  active: false,
+}));
+breadcrumb.push({ label: nome, linkTo: "#", active: true, id: nome });
+
+const seoMeta = [
+  { tag: "title", content: `${nome} | Argomenti`, attributes: null },
+  {
+    tag: "meta",
+    content: null,
+    attributes: {
+      name: "description",
+      content:
+        descrizione ??
+        `Notizie, focus e comunicati stampa del Dipartimento sull'argomento ${nome}.`,
+    },
+  },
+];
+
+const indicePerSezione = (indice: string) =>
+  `${breadcrumb[1]?.linkTo ?? ""}/${indice}`;
+---
+
+<Layout pageSeo={seoMeta}>
+  <Hero
+    title={nome}
+    paragraph={descrizione ?? undefined}
+    variant="small"
+    backgroundColor="lighter"
+    showBreadcrumb={true}
+  >
+    <Breadcrumb slot="breadcrumb" items={breadcrumb} />
+  </Hero>
+
+  {
+    sezioni.map((sezione) => (
+      <SectionContainer sectionTitleId={sezione.titolo}>
+        <div class="row">
+          <div class="col-12 col-lg-8">
+            <h2>{sezione.titolo}</h2>
+            <ul class="topic-articles">
+              {sezione.articoli.map((articolo) => (
+                <li>
+                  <a href={articolo.path}>{articolo.title}</a>
+                  <p>
+                    {articolo.dateShown && (
+                      <DateTime
+                        className="topic-articles__date"
+                        value={articolo.dateShown}
+                      />
+                    )}
+                    {articolo.paragraph && <span> – {articolo.paragraph}</span>}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            {sezione.totale > sezione.articoli.length && (
+              <ButtonLink
+                size="small"
+                label={sezione.etichettaCta}
+                linkTo={`${indicePerSezione(sezione.indice)}?filter=${slug}`}
+              />
+            )}
+          </div>
+        </div>
+      </SectionContainer>
+    ))
+  }
+
+  {bloccoChiusura && <TextAndImageAdapter block={bloccoChiusura} />}
+</Layout>
+
+<style>
+  .topic-articles {
+    margin: 0 0 2rem;
+    padding: 0;
+    list-style: none;
+  }
+  .topic-articles li {
+    border-bottom: 1px solid #d4d8dc;
+    padding-block: 1rem;
+  }
+  .topic-articles a {
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+  }
+  .topic-articles p {
+    margin: 0.25rem 0 0;
+    color: #2f475e;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+</style>

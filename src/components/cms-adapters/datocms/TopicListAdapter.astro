@@ -1,0 +1,58 @@
+---
+import { TopicList } from "@components/organisms/TopicList";
+import type { TopicListFragmentType } from "@graphql/fragment/sectionFragments";
+import type { SiteLocale } from "@graphql/types";
+import type { SectionBackground } from "@utils/background";
+import { topicPath } from "@utils/topicRoutes";
+import { getCollection } from "astro:content";
+
+type Props = {
+  block: TopicListFragmentType;
+};
+
+const { block } = Astro.props;
+const { lang } = Astro.locals;
+const locale = lang as SiteLocale;
+
+const TIPI_IN_ELENCO = ["news", "focus", "press_release"];
+
+const articoli = await getCollection("article");
+
+const perSlug = new Map<string, { name: string; count: number }>();
+for (const voce of articoli) {
+  const articolo = voce.data;
+  if (!TIPI_IN_ELENCO.includes(articolo.articleType ?? "")) continue;
+  if (!articolo.locales.includes(locale)) continue;
+  for (const tag of articolo.tags ?? []) {
+    if (!tag.slug || !tag.name) continue;
+    const attuale = perSlug.get(tag.slug);
+    perSlug.set(tag.slug, {
+      name: tag.name,
+      count: (attuale?.count ?? 0) + 1,
+    });
+  }
+}
+
+const topics = [...perSlug]
+  .map(([slug, dati]) => ({
+    name: dati.name,
+    count: dati.count,
+    path: topicPath(locale, slug),
+  }))
+  .sort((a, b) =>
+    block.order === "frequenza"
+      ? b.count - a.count || a.name.localeCompare(b.name, "it")
+      : a.name.localeCompare(b.name, "it"),
+  );
+---
+
+{
+  topics.length > 0 && (
+    <TopicList
+      title={block.title}
+      topics={topics}
+      background={block.backgroundColor as SectionBackground}
+      showCount={block.showCount ?? true}
+    />
+  )
+}

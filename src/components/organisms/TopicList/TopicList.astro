@@ -1,0 +1,77 @@
+---
+import { SectionContainer } from "@components/organisms/SectionContainer";
+import { getSectionBgClass } from "@utils/background";
+import type { SectionBackground } from "@utils/background";
+
+type Topic = {
+  name: string;
+  path: string;
+  count: number;
+};
+
+type Props = {
+  title?: string | null;
+  topics: Topic[];
+  background?: SectionBackground;
+  showCount?: boolean;
+};
+
+const { title, topics, background = "default", showCount = true } = Astro.props;
+
+const textColorClass =
+  background === "primary" || background === "dark" ? "text-white" : "";
+---
+
+<SectionContainer
+  className={getSectionBgClass(background)}
+  sectionTitleId={title ?? undefined}
+>
+  {title && <h2 class:list={["mb-4", textColorClass]}>{title}</h2>}
+  <ul class:list={["topic-list", textColorClass]}>
+    {
+      topics.map((topic) => (
+        <li>
+          <a href={topic.path}>
+            {topic.name}
+            {showCount && <span class="topic-list__count">{topic.count}</span>}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</SectionContainer>
+
+<style>
+  .topic-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .topic-list a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    border: 1px solid #d4d8dc;
+    border-radius: 4px;
+    background: #fff;
+    padding: 0.75rem 1rem;
+    color: #06c;
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    text-decoration: none;
+  }
+  .topic-list a:hover,
+  .topic-list a:focus-visible {
+    background: #f0f6fc;
+    text-decoration: underline;
+  }
+  .topic-list__count {
+    color: #2f475e;
+    font-weight: 400;
+    font-size: 0.875rem;
+  }
+</style>
