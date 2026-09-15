@@ -1,35 +1,44 @@
-const INLINE_PATTERN =
-  /\[([^\]]+)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)|\*\*([^*]+)\*\*|__([^_]+)__|\*([^*\n]+)\*|(?<![A-Za-z0-9])_([^_\n]+)_(?![A-Za-z0-9])/g;
+const LINK_PATTERN =
+  /\[((?:[^[\]]|\[[^\]]*\])+)\]\((https?:\/\/[^)\n]+|\/[^)\n]*)\)/g;
+
+const EMPHASIS_PATTERN =
+  /\*\*([^*]+)\*\*|__([^_]+)__|\*([^*\n]+)\*|(?<![A-Za-z0-9])_([^_\n]+)_(?![A-Za-z0-9])/g;
 
 const span = (value, marks) =>
   marks ? { type: "span", marks, value } : { type: "span", value };
 
-export function inlineNodes(text) {
+function emphasisNodes(text) {
   const nodes = [];
   let cursor = 0;
-  for (const match of text.matchAll(INLINE_PATTERN)) {
-    const [
-      full,
-      linkLabel,
-      linkUrl,
-      strongStars,
-      strongUnderscores,
-      emStars,
-      emUnderscores,
-    ] = match;
+  for (const match of text.matchAll(EMPHASIS_PATTERN)) {
+    const [full, strongStars, strongUnderscores, emStars, emUnderscores] =
+      match;
     if (match.index > cursor) nodes.push(span(text.slice(cursor, match.index)));
-    if (linkUrl)
-      nodes.push({
-        type: "link",
-        url: linkUrl,
-        children: [span(linkLabel)],
-      });
-    else if (strongStars ?? strongUnderscores)
+    if (strongStars ?? strongUnderscores)
       nodes.push(span(strongStars ?? strongUnderscores, ["strong"]));
     else nodes.push(span(emStars ?? emUnderscores, ["emphasis"]));
     cursor = match.index + full.length;
   }
   if (cursor < text.length) nodes.push(span(text.slice(cursor)));
+  return nodes.filter((node) => node.value !== "");
+}
+
+export function inlineNodes(text) {
+  const nodes = [];
+  let cursor = 0;
+  for (const match of text.matchAll(LINK_PATTERN)) {
+    const [full, linkLabel, linkUrl] = match;
+    if (match.index > cursor)
+      nodes.push(...emphasisNodes(text.slice(cursor, match.index)));
+    const children = emphasisNodes(linkLabel);
+    nodes.push({
+      type: "link",
+      url: linkUrl.trim().replace(/\s+/g, "%20"),
+      children: children.length ? children : [span(linkLabel)],
+    });
+    cursor = match.index + full.length;
+  }
+  if (cursor < text.length) nodes.push(...emphasisNodes(text.slice(cursor)));
   return nodes.filter((node) => node.type !== "span" || node.value !== "");
 }
 
@@ -73,7 +82,10 @@ export function markdownToDastNodes(markdown) {
       flushBullets();
       continue;
     }
-    flushBullets();
+    if (bulletLines.length) {
+      bulletLines[bulletLines.length - 1] += ` ${rawLine.trim()}`;
+      continue;
+    }
     paragraphLines.push(rawLine.trim());
   }
   flushParagraph();
