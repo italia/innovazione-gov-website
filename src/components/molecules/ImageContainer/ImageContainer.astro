@@ -5,9 +5,18 @@ import type { ImageContainerProps } from "./types";
 type Props = ImageContainerProps;
 
 const { ratio = "4x3", image } = Astro.props;
+const isNatural = ratio === "natural";
+const larghezzaMassima =
+  isNatural && image.width ? `max-width: ${image.width}px` : undefined;
 ---
 
-<div class:list={["image-container", "ratio", `ratio-${ratio}`]}>
+<div
+  class:list={[
+    "image-container",
+    isNatural ? "image-container--natural" : ["ratio", `ratio-${ratio}`],
+  ]}
+  style={larghezzaMassima}
+>
   <Image {...image} />
 </div>
 
@@ -15,5 +24,14 @@ const { ratio = "4x3", image } = Astro.props;
   .image-container :global(img) {
     object-fit: cover;
     object-position: center;
+  }
+  .image-container--natural {
+    width: 100%;
+  }
+  .image-container--natural :global(img) {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
   }
 </style>

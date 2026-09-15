@@ -33,6 +33,8 @@ const filterId = `filtro-${slugify(title)}`;
 const listId = `elenco-${slugify(title)}`;
 const shownItems = withFilter ? items : items.slice(0, visibleCount);
 
+const colonnaCard = shownItems.length === 2 ? "col-lg-6" : "col-lg-4";
+
 const { lang } = Astro.locals;
 const t = getI18n(lang);
 
@@ -94,7 +96,7 @@ const buttonVariant =
               </li>
             ) : (
               <li
-                class="col-12 col-lg-4 mb-3"
+                class:list={["col-12", colonnaCard, "mb-3"]}
                 data-categories={categoryData}
                 hidden={hidden}
               >

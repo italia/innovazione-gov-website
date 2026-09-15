@@ -29,6 +29,18 @@ const variantAdditionalContent =
 
 const additionalContent = block.additionalContent;
 
+const proporzioniImmagine =
+  block.image?.width && block.image?.height
+    ? block.image.width / block.image.height
+    : null;
+const ratioImmagine = !proporzioniImmagine
+  ? "4x3"
+  : proporzioniImmagine > 2
+    ? "21x9"
+    : proporzioniImmagine > 1.5
+      ? "16x9"
+      : "4x3";
+
 const cardsInEvidenza = (additionalContent?.content ?? []).filter(
   (item) => item.componentName === "WideLinkCardRecord",
 );
@@ -52,7 +64,7 @@ const cardsConIcona = (additionalContent?.content ?? []).filter(
 
   {
     block.image && (
-      <ImageContainer slot="image" image={block.image} ratio="4x3" />
+      <ImageContainer slot="image" image={block.image} ratio={ratioImmagine} />
     )
   }
 

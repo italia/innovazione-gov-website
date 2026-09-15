@@ -26,14 +26,7 @@ const alignItems = isWideImage || contentInRightColumn ? "top" : "center";
   classSecondColumn={isWideImage || contentInRightColumn ? "ps-lg-5" : ""}
 >
   <slot name="text" slot="left" />
-  {
-    contentInRightColumn ? (
-      <slot name="additionalContent" slot="right" />
-    ) : (
-      <Fragment>
-        <slot name="image" slot="right" />
-        <slot name="additionalContent" />
-      </Fragment>
-    )
-  }
+  {contentInRightColumn && <slot name="additionalContent" slot="right" />}
+  {!contentInRightColumn && <slot name="image" slot="right" />}
+  {!contentInRightColumn && <slot name="additionalContent" />}
 </SplitContent>
