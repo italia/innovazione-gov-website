@@ -1,0 +1,71 @@
+---
+import type { KpiCardProps } from "./types";
+
+type Props = KpiCardProps;
+
+const { title, value, description, icon } = Astro.props;
+---
+
+<div class="kpi-card">
+  <div class="kpi-card__body">
+    <p class="kpi-card__title">{title}</p>
+    {description && <p class="kpi-card__description">{description}</p>}
+  </div>
+  <p class="kpi-card__value">{value}</p>
+  {
+    icon && (
+      <img
+        class="kpi-card__icon"
+        src={icon.url}
+        alt=""
+        width={icon.width ?? undefined}
+        height={icon.height ?? undefined}
+        loading="lazy"
+        aria-hidden="true"
+      />
+    )
+  }
+</div>
+
+<style>
+  .kpi-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-radius: 4px;
+    background: #fff;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 12%);
+  }
+  .kpi-card__body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .kpi-card__title {
+    margin: 0;
+    color: #06c;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .kpi-card__description {
+    margin: 0;
+    color: #2f475e;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+  .kpi-card__value {
+    flex: 0 0 auto;
+    margin: 0;
+    color: #06c;
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .kpi-card__icon {
+    flex: 0 0 auto;
+    width: 3.5rem;
+    height: 3.5rem;
+    object-fit: contain;
+  }
+</style>

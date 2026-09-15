@@ -1,4 +1,5 @@
 ---
+import AccordionAdapter from "@components/cms-adapters/datocms/AccordionAdapter.astro";
 import CalloutAdapter from "@components/cms-adapters/datocms/CalloutAdapter.astro";
 import CardServiceAdapter from "@components/cms-adapters/datocms/CardServiceAdapter.astro";
 import DownloadLinkAdapter from "@components/cms-adapters/datocms/DownloadLinkAdapter.astro";
@@ -49,6 +50,7 @@ const { block } = Astro.props;
     DownloadLinkRecord: DownloadLinkAdapter,
     WideLinkCardRecord: WideLinkCardAdapter,
     AttachmentsBoxRecord: AttachmentsBoxAdapter,
+    AccordionBlockRecord: AccordionAdapter,
   }}
   nodeOverrides={{ link: LinkInlineAdapter, heading: HeadingAdapter }}
 />

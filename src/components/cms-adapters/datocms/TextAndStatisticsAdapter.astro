@@ -13,6 +13,8 @@ const { block } = Astro.props;
 
 const variantTextContainer =
   block.backgroundColor === "dark" ? "dark" : "light";
+const layout = block.layout === "cards" ? "cards" : "default";
+const image = layout === "cards" ? block.image : null;
 ---
 
 <TextAndStatistics
@@ -20,15 +22,50 @@ const variantTextContainer =
   showInline={block.showInline}
   sectionTitleId={block.text.title}
 >
-  <TextContainerAdapter
-    slot="text"
-    block={block.text}
-    variant={variantTextContainer}
-  />
+  <div slot="text" class="text-and-statistics__intro">
+    {
+      image?.url && (
+        <img
+          class="text-and-statistics__image"
+          src={image.url}
+          alt={image.alt ?? ""}
+          loading="lazy"
+        />
+      )
+    }
+    <TextContainerAdapter block={block.text} variant={variantTextContainer} />
+  </div>
   <StatisticAdapter
     slot="statistics"
     block={block.statistics}
     variant={variantTextContainer}
     showInline={block.showInline}
+    layout={layout}
   />
 </TextAndStatistics>
+
+<style>
+  .text-and-statistics__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .text-and-statistics__image {
+    flex: 0 0 auto;
+    border-radius: 50%;
+    width: 8.75rem;
+    height: 8.75rem;
+    object-fit: cover;
+  }
+  @media (min-width: 992px) {
+    .text-and-statistics__intro {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+    .text-and-statistics__image {
+      width: 10.9375rem;
+      height: 10.9375rem;
+    }
+  }
+</style>

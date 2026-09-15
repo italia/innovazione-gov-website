@@ -1,0 +1,31 @@
+---
+import { LinkMenu } from "@components/organisms/LinkMenu";
+import type { LinkMenuItem } from "@components/organisms/LinkMenu/types";
+import type { LinkMenuFragmentType } from "@graphql/fragment/sectionFragments";
+import type { SectionBackground } from "@utils/background";
+import { getCtaFields } from "@utils/getCtaFields";
+
+type Props = {
+  block: LinkMenuFragmentType;
+};
+
+const { block } = Astro.props;
+const { lang } = Astro.locals;
+
+const items = block.links.reduce<LinkMenuItem[]>((elenco, link) => {
+  const { labelButton, linkTo, openInNewTab } = getCtaFields(link, lang);
+  if (labelButton && linkTo)
+    elenco.push({
+      label: labelButton,
+      linkTo,
+      isExternal: Boolean(openInNewTab),
+    });
+  return elenco;
+}, []);
+---
+
+<LinkMenu
+  title={block.title}
+  items={items}
+  background={block.backgroundColor as SectionBackground}
+/>

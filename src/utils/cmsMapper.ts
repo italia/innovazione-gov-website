@@ -46,6 +46,8 @@ export enum DatoBlockModel {
   UseCaseBlock = "UseCaseBlockRecord",
   TextBlock = "TextBlockRecord",
   TextOnly = "TextOnlyRecord",
+  TopicList = "TopicListRecord",
+  LinkMenu = "LinkMenuRecord",
   CardLinkList = "CardLinkListRecord",
   ListExternalLink = "ListExternalLinkRecord",
   Resource = "ResourceRecord",

@@ -38,6 +38,8 @@ import type { PageContentFragmentType } from "@graphql/fragment/page";
 import type { SearchPageContentFragmentType } from "@graphql/fragment/search";
 import type { WebinarContentFragmentType } from "@graphql/fragment/webinar";
 import { DatoBlockModel } from "@utils/cmsMapper";
+import TopicListAdapter from "@components/cms-adapters/datocms/TopicListAdapter.astro";
+import LinkMenuAdapter from "@components/cms-adapters/datocms/LinkMenuAdapter.astro";
 
 type ContentType =
   | HomepageModelContentFragmentType
@@ -131,6 +133,10 @@ const lastStructuredTextIndex = content.reduce(
         return <IntroArticleAdapter block={block} />;
       case DatoBlockModel.CalloutLink:
         return <CalloutLinkAdapter block={block} />;
+      case DatoBlockModel.TopicList:
+        return <TopicListAdapter block={block} />;
+      case DatoBlockModel.LinkMenu:
+        return <LinkMenuAdapter block={block} />;
       case DatoBlockModel.TextOnly:
         return <TextOnlyAdapter block={block} />;
       case DatoBlockModel.CardLinkList:

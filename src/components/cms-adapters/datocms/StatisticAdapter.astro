@@ -3,6 +3,8 @@ import type {
   DataContainerProps,
   VariantTextDataContainerProps,
 } from "@components/molecules/DataContainer/types";
+import { KpiCard } from "@components/molecules/KpiCard";
+import type { KpiCardProps } from "@components/molecules/KpiCard/types";
 import { Statistics } from "@components/molecules/Statistics";
 import type { StatisticBlockFragmentType } from "@graphql/fragment/commonFragments";
 
@@ -10,9 +12,15 @@ type Props = {
   block: StatisticBlockFragmentType;
   variant?: VariantTextDataContainerProps;
   showInline?: boolean;
+  layout?: "default" | "cards";
 };
 
-const { block, variant = "dark", showInline = false } = Astro.props;
+const {
+  block,
+  variant = "dark",
+  showInline = false,
+  layout = "default",
+} = Astro.props;
 let items: DataContainerProps[] = [];
 
 if (block.statistics.length > 0) {
@@ -33,6 +41,34 @@ if (block.kpiElement.length > 0) {
     };
   });
 }
+
+const cards: KpiCardProps[] = block.kpiElement.map((item) => ({
+  title: item.title,
+  value: `${item.valuePrefix ?? ""}${item.value ?? ""}${item.valueSuffix ?? ""}`,
+  description: item.footerText,
+  icon: item.icon,
+}));
 ---
 
-<Statistics items={items} variant={variant} showInline={showInline} />
+{
+  layout === "cards" ? (
+    <ul class="kpi-card-list list-unstyled" role="list">
+      {cards.map((card) => (
+        <li>
+          <KpiCard {...card} />
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <Statistics items={items} variant={variant} showInline={showInline} />
+  )
+}
+
+<style>
+  .kpi-card-list {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+</style>

@@ -1,0 +1,94 @@
+---
+import ItIcon from "@static/assets/ItIcon.astro";
+import { getSectionBgClass } from "@utils/background";
+import type { LinkMenuProps } from "./types";
+
+type Props = LinkMenuProps;
+
+const { title, items, background = "default" } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <nav
+      class={`link-menu ${getSectionBgClass(background)}`}
+      aria-label={title || undefined}
+    >
+      <div class="container">
+        {title && <p class="link-menu__title">{title}</p>}
+        <ul class="link-menu__list">
+          {items.map((item) => (
+            <li>
+              <a
+                class="link-menu__link"
+                href={item.linkTo}
+                target={item.isExternal ? "_blank" : undefined}
+                rel={item.isExternal ? "noopener noreferrer" : undefined}
+              >
+                {item.label}
+                <ItIcon
+                  name={item.isExternal ? "it-external-link" : "it-arrow-right"}
+                  size="sm"
+                  color="primary"
+                  class="link-menu__icon"
+                />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+  )
+}
+
+<style>
+  .link-menu {
+    padding-block: 2rem;
+  }
+  .link-menu__title {
+    margin-bottom: 1rem;
+    color: #5b6f82;
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .link-menu__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .link-menu__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    color: #06c;
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+  .link-menu__link:hover {
+    text-decoration: underline;
+  }
+  .link-menu__link:focus-visible {
+    outline: 3px solid #06c;
+    outline-offset: 2px;
+  }
+  .link-menu :global(.link-menu__icon) {
+    fill: #06c;
+  }
+
+  @media (min-width: 768px) {
+    .link-menu__list {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+  }
+</style>
