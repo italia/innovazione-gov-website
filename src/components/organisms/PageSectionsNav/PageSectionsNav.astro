@@ -3,13 +3,17 @@ import type { PageSectionsNavProps } from "./types";
 
 type Props = PageSectionsNavProps;
 
-const { header, items } = Astro.props;
+const { header, items, variant = "horizontal" } = Astro.props;
+const isSidebar = variant === "sidebar";
 ---
 
 {
   items.length > 1 && (
-    <nav class="page-sections" aria-label={header}>
-      <div class="container">
+    <nav
+      class:list={["page-sections", isSidebar && "page-sections--sidebar"]}
+      aria-label={header}
+    >
+      <div class:list={[!isSidebar && "container"]}>
         <p class="page-sections__title">{header}</p>
         <ul class="page-sections__list">
           {items.map((item) => (
@@ -133,11 +137,48 @@ const { header, items } = Astro.props;
     outline-offset: 2px;
   }
 
+  .page-sections--sidebar {
+    border-bottom: none;
+    background: transparent;
+    padding-block: 0;
+  }
+  .page-sections--sidebar .page-sections__title {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #d4d8dc;
+    color: #17334f;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+  }
+  .page-sections--sidebar .page-sections__list {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+    overflow-x: visible;
+  }
+  .page-sections--sidebar .page-sections__link {
+    align-items: flex-start;
+    padding-left: 0.75rem;
+    border-bottom: none;
+    border-left: 3px solid transparent;
+    font-weight: 600;
+    white-space: normal;
+  }
+  .page-sections--sidebar .page-sections__link:global(.active) {
+    border-left-color: #06c;
+    color: #06c;
+  }
+
   @media (min-width: 992px) {
     .page-sections {
       position: sticky;
       top: var(--page-sections-top, 3.625rem);
       z-index: 3;
+    }
+    .page-sections--sidebar {
+      top: calc(var(--page-sections-top, 3.625rem) + 1.5rem);
+      padding-right: 1.5rem;
     }
     .page-sections__list {
       flex-wrap: wrap;

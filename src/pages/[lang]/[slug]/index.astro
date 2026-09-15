@@ -11,6 +11,10 @@ import { type JsonLdPageData, extractFaqItems } from "@utils/JsonLD/seoJsonLd";
 import { linkResolver } from "@utils/linkResolver";
 import { removeLang } from "@utils/pathHelper";
 import { getCollection, getEntry } from "astro:content";
+import { PageSectionsNav } from "@components/organisms/PageSectionsNav";
+import { PageWithSidebar } from "@components/layout/PageWithSidebar";
+import { extractPageSections, splitPageIntro } from "@utils/pageSections";
+import { getI18n } from "@i18n/microcopy";
 
 export async function getStaticPaths() {
   type PathItem = {
@@ -22,6 +26,8 @@ export async function getStaticPaths() {
       seoMeta: TagFragmentType[];
       seo: SeoFieldFragmentType | null;
       content: PageContentFragmentType[];
+      showSectionsNav: boolean;
+      sectionsNavLayout: string | null;
       publishedAt: string;
       updatedAt: string;
       id: string;
@@ -55,6 +61,8 @@ export async function getStaticPaths() {
             publishedAt: page.data.publishedAt,
             updatedAt: seoRes?.updatedAt || page.data.updatedAt,
             content: getLocaleValue(page.data.allContentLocales, lang, []),
+            showSectionsNav: page.data.showSectionsNav ?? false,
+            sectionsNavLayout: page.data.sectionsNavLayout ?? null,
           },
         };
       }),
@@ -65,11 +73,22 @@ export async function getStaticPaths() {
   return paths.filter((path): path is PathItem => !!path.params.lang);
 }
 
-const { id, content, seo, seoMeta, publishedAt, updatedAt } = Astro.props;
+const {
+  id,
+  content,
+  seo,
+  seoMeta,
+  showSectionsNav,
+  sectionsNavLayout,
+  publishedAt,
+  updatedAt,
+} = Astro.props;
 const { lang } = Astro.params;
 
 Astro.locals.lang = lang;
 Astro.locals.recordId = id;
+
+const t = getI18n(lang);
 
 const jsonLd: JsonLdPageData = {
   pageType: ["collection"],
@@ -78,8 +97,37 @@ const jsonLd: JsonLdPageData = {
   updatedAt,
   faq: extractFaqItems(content ?? []),
 };
+
+const indiceInSidebar = sectionsNavLayout === "sidebar";
+const sections = showSectionsNav
+  ? extractPageSections(content, indiceInSidebar ? [2] : [2, 3])
+  : [];
+const { intro: introBlocks, rest: restBlocks } = splitPageIntro(content);
 ---
 
 <Layout pageSeo={seoMeta} datePublished={publishedAt} jsonLd={jsonLd}>
-  <PageAdapter content={content} />
+  {
+    sections.length === 0 ? (
+      <PageAdapter content={content} />
+    ) : indiceInSidebar ? (
+      <Fragment>
+        <PageAdapter content={introBlocks} />
+        <PageWithSidebar>
+          <PageSectionsNav
+            slot="sidebar"
+            header={t["toc.title"]}
+            items={sections}
+            variant="sidebar"
+          />
+          <PageAdapter content={restBlocks} />
+        </PageWithSidebar>
+      </Fragment>
+    ) : (
+      <Fragment>
+        <PageAdapter content={introBlocks} />
+        <PageSectionsNav header={t["toc.title"]} items={sections} />
+        <PageAdapter content={restBlocks} />
+      </Fragment>
+    )
+  }
 </Layout>

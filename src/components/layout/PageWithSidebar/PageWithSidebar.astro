@@ -1,0 +1,49 @@
+---
+
+---
+
+<div class="page-sidebar">
+  <div class="container">
+    <div class="row">
+      <aside class="col-12 col-lg-4 col-xl-3 page-sidebar__aside">
+        <slot name="sidebar" />
+      </aside>
+      <div class="col-12 col-lg-8 col-xl-9 page-sidebar__content">
+        <slot />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .page-sidebar {
+    padding-top: 2rem;
+  }
+  .page-sidebar__aside {
+    margin-bottom: 2rem;
+  }
+  .page-sidebar__content :global(.container) {
+    max-width: none;
+    padding-inline: 0;
+  }
+  .page-sidebar__content :global(section > .container) {
+    padding-block: 0 3rem;
+  }
+  .page-sidebar__content :global(.col-lg-8) {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .page-sidebar__content {
+    overflow-wrap: anywhere;
+  }
+
+  @media (min-width: 992px) {
+    .page-sidebar__aside {
+      margin-bottom: 0;
+      border-right: 1px solid #d4d8dc;
+    }
+    .page-sidebar__content {
+      padding-left: 2rem;
+    }
+  }
+</style>

@@ -1,6 +1,7 @@
 ---
 import PageAdapter from "@components/cms-adapters/datocms/PageAdapter.astro";
 import { PageSectionsNav } from "@components/organisms/PageSectionsNav";
+import { PageWithSidebar } from "@components/layout/PageWithSidebar";
 import { getI18n } from "@i18n/microcopy";
 import type { TagFragmentType } from "@graphql/fragment/commonFragments";
 import type { InsightContentFragmentType } from "@graphql/fragment/insight";
@@ -9,10 +10,12 @@ import type { SiteLocale } from "@graphql/types";
 import Layout from "@layouts/Layout.astro";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { extractFaqItems, type JsonLdPageData } from "@utils/JsonLD/seoJsonLd";
-import { extractPageSections } from "@utils/pageSections";
+import { extractPageSections, splitPageIntro } from "@utils/pageSections";
 import { linkResolver } from "@utils/linkResolver";
 import { removeLang } from "@utils/pathHelper";
 import { getCollection, getEntry } from "astro:content";
+import { Topics } from "@components/molecules/Topics";
+import { SectionContainer } from "@components/organisms/SectionContainer";
 
 export async function getStaticPaths() {
   type PathItem = {
@@ -26,6 +29,8 @@ export async function getStaticPaths() {
       content: InsightContentFragmentType[];
       id: string;
       showSectionsNav: boolean;
+      sectionsNavLayout: string | null;
+      targets: { id: string; label: string }[];
       attachments: {
         id: string;
         fileTitle: string | null;
@@ -68,6 +73,8 @@ export async function getStaticPaths() {
             seo: seoRes?.seo ?? null,
             id: page.id,
             showSectionsNav: page.showSectionsNav ?? false,
+            sectionsNavLayout: page.sectionsNavLayout ?? null,
+            targets: page.targets ?? [],
             attachments: page.attachments ?? [],
             links: page.links ?? [],
             publishedAt: page.publishedAt,
@@ -91,6 +98,8 @@ const {
   attachments,
   links,
   showSectionsNav,
+  sectionsNavLayout,
+  targets,
   publishedAt,
   updatedAt,
 } = Astro.props;
@@ -100,8 +109,11 @@ Astro.locals.lang = lang;
 Astro.locals.recordId = id;
 
 const t = getI18n(lang);
-const sections = showSectionsNav ? extractPageSections(content) : [];
-const [firstBlock, ...restBlocks] = content ?? [];
+const indiceInSidebar = sectionsNavLayout === "sidebar";
+const sections = showSectionsNav
+  ? extractPageSections(content, indiceInSidebar ? [2] : [2, 3])
+  : [];
+const { intro: introBlocks, rest: restBlocks } = splitPageIntro(content);
 
 const jsonLd: JsonLdPageData = {
   pageType: ["content"],
@@ -114,7 +126,41 @@ const jsonLd: JsonLdPageData = {
 ---
 
 <Layout pageSeo={seoMeta} datePublished={publishedAt} jsonLd={jsonLd}>
-  {firstBlock && <PageAdapter content={[firstBlock]} />}
-  <PageSectionsNav header={t["toc.title"]} items={sections} />
-  <PageAdapter content={restBlocks} attachments={attachments} links={links} />
+  {introBlocks.length > 0 && <PageAdapter content={introBlocks} />}
+  {
+    targets.length > 0 && (
+      <SectionContainer>
+        <Topics
+          title={t["article.topics"]}
+          topics={targets.map((target) => target.label)}
+        />
+      </SectionContainer>
+    )
+  }
+  {
+    indiceInSidebar && sections.length > 1 ? (
+      <PageWithSidebar>
+        <PageSectionsNav
+          slot="sidebar"
+          header={t["toc.title"]}
+          items={sections}
+          variant="sidebar"
+        />
+        <PageAdapter
+          content={restBlocks}
+          attachments={attachments}
+          links={links}
+        />
+      </PageWithSidebar>
+    ) : (
+      <Fragment>
+        <PageSectionsNav header={t["toc.title"]} items={sections} />
+        <PageAdapter
+          content={restBlocks}
+          attachments={attachments}
+          links={links}
+        />
+      </Fragment>
+    )
+  }
 </Layout>
