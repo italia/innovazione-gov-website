@@ -1,77 +1,58 @@
 ---
 import { Footer } from "@components/organisms/Footer";
 import type {
+  FooterColumnProps,
   FooterLinkProps,
   FooterLinkSupportingBrandProps,
-  FooterLogoProps,
   MailingListFormProps,
 } from "@components/organisms/Footer/types";
 import type { FooterFragmentType } from "@graphql/fragment/layout";
 import { DatoBlockModel } from "@utils/cmsMapper";
 import { getLocaleValue } from "@utils/getLocaleValue";
-
 import { linkResolver } from "@utils/linkResolver";
 
-type Props = FooterFragmentType;
+type Props = FooterFragmentType & {
+  /** Logo e nome del sito, gli stessi dell'header (campi logo_select e site_name). */
+  logoSelect?: string | null;
+  siteName?: string | null;
+  homeRecordId?: string;
+};
 
 const {
-  _allHeadingLocales,
-  _allOrganizationsLocales,
-  _allTopicTitleLocales,
-  _allTopicLinkLocales,
   _allUtilityTitleLocales,
   _allUtilityLocales,
   _allSmallPrintLocales,
   _allMailingListFormLocales,
   showSitemapLink,
+  logoSelect,
+  siteName,
+  homeRecordId,
 } = Astro.props;
 
 const { lang } = Astro.locals;
-const heading = getLocaleValue(_allHeadingLocales, lang, "");
-const organizations = getLocaleValue(_allOrganizationsLocales, lang, null);
-const topicTitle = getLocaleValue(_allTopicTitleLocales, lang, "") ?? "";
-const topicLink = getLocaleValue(_allTopicLinkLocales, lang, null);
-const utilityTitle = getLocaleValue(_allUtilityTitleLocales, lang, "");
+const utilityTitle = getLocaleValue(_allUtilityTitleLocales, lang, "") ?? "";
 const utility = getLocaleValue(_allUtilityLocales, lang, null);
 const smallPrint = getLocaleValue(_allSmallPrintLocales, lang, null);
 const mailingList = getLocaleValue(_allMailingListFormLocales, lang, null);
 
-const logos: FooterLogoProps[] =
-  organizations?.map((org) => {
-    return {
-      logo: org.logo,
-      linkTo: org.url,
-    };
-  }) || [];
-
-const topicItems =
-  topicLink?.map((link) => {
-    return {
-      label: link.label,
-      visuallyHidden: "link",
-      linkTo: linkResolver(link.linkTo.id, lang),
-    };
-  }) || [];
-
-const socialUtilities: FooterLinkSupportingBrandProps[] =
+const socialItems: FooterLinkSupportingBrandProps[] =
   utility
     ?.filter((util) => util.componentName === DatoBlockModel.SupportingBrand)
     .map((util) => ({
       label: util.label,
-      ariaLabel: "link",
       icon: util.brandLogo,
       url: util.url,
     })) || [];
 
-const linkUtilities: FooterLinkProps[] =
+// I link esterni del campo `utility` diventano una colonna a sé, senza titolo
+// finché il modello non avrà le colonne dedicate (passaggio 2).
+const utilityLinks: FooterLinkProps[] =
   utility
     ?.filter((util) => util.componentName === DatoBlockModel.ExternalLink)
-    .map((util) => ({
-      label: util.label,
-      ariaLabel: "link",
-      url: util.url,
-      openInNewTab: true,
-    })) || [];
+    .map((util) => ({ label: util.label, url: util.url })) || [];
+
+const columns: FooterColumnProps[] =
+  utilityLinks.length > 0 ? [{ title: "", links: utilityLinks }] : [];
 
 const smallPrints: FooterLinkProps[] =
   smallPrint?.map((link) => {
@@ -96,24 +77,15 @@ const mailingListForm: MailingListFormProps | undefined = mailingList
 ---
 
 <Footer
-  mailingListForm={mailingListForm}
   brand={{
-    heading: heading,
-    logos: logos,
+    logo: logoSelect
+      ? { url: logoSelect, width: null, height: null }
+      : undefined,
+    name: siteName ?? "",
+    linkTo: linkResolver(homeRecordId, lang),
   }}
-  topics={{
-    title: topicTitle,
-    items: topicItems,
-  }}
-  utilities={[
-    {
-      title: utilityTitle,
-      socialItems: socialUtilities,
-      linkItems: linkUtilities,
-    },
-  ]}
-  smallPrints={{
-    links: smallPrints,
-    showSitemap: showSitemapLink,
-  }}
+  social={{ title: utilityTitle, items: socialItems }}
+  columns={columns}
+  mailingListForm={mailingListForm}
+  smallPrints={{ links: smallPrints, showSitemap: showSitemapLink }}
 />

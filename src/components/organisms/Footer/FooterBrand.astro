@@ -1,33 +1,31 @@
 ---
-import FooterLogo from "./FooterLogo.astro";
+import { getI18n } from "@i18n/microcopy";
 import type { FooterBrandProps } from "./types";
 
 type Props = FooterBrandProps;
 
-const { heading, logos } = Astro.props;
+const { logo, name, linkTo } = Astro.props;
+const { lang } = Astro.locals;
+const t = getI18n(lang);
 ---
 
-<div class="footer-brand it-footer-small-prints pt-5 pb-4 text-white">
-  <div class="container">
-    <div class="row">
-      <div class="col-12 text-center text-md-start">
-        <div class="small mb-4" set:html={heading} />
+<section class="py-4 px-0">
+  <div class="it-brand-wrapper">
+    <a href={linkTo} aria-label={t["header.logo"]} class="text-white">
+      {
+        logo?.url && (
+          <img
+            src={logo.url}
+            alt={logo.alt ?? ""}
+            width={logo.width ?? undefined}
+            height={logo.height ?? undefined}
+            class="it-brand-logo"
+          />
+        )
+      }
+      <div class="it-brand-text">
+        <div class="it-brand-title text-white">{name}</div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <ul
-          class="logos list-unstyled d-flex flex-column flex-md-row flex-wrap align-items-center mb-0"
-        >
-          {
-            logos.map((logo) => (
-              <li class="mb-4 me-md-5">
-                <FooterLogo {...logo} />
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
+    </a>
   </div>
-</div>
+</section>

@@ -1,21 +1,39 @@
-import type { ChipLinkProps } from "@components/atoms/Chip/types";
 import type { ImageProps } from "@components/atoms/Image/types";
 import type { LinkProps } from "@components/atoms/Link/types";
 
-export type FooterProps = FooterMainProps & {
+export type FooterProps = {
   brand: FooterBrandProps;
+  /** Colonna "Contatti": arriva da DatoCMS al passaggio 2, per ora opzionale. */
+  contacts?: FooterContactsProps;
+  social?: FooterSocialProps;
+  /** Colonne di link titolate (es. "Altri siti web", "Trasparenza"). */
+  columns?: FooterColumnProps[];
+  mailingListForm?: MailingListFormProps;
   smallPrints: FooterSmallPrintsProps;
 };
 
-export type FooterMainProps = {
-  topics: FooterTopicsProps;
-  utilities: FooterUtilityProps[];
-  mailingListForm?: MailingListFormProps;
+export type FooterBrandProps = {
+  logo?: Pick<ImageProps, "url" | "width" | "height" | "alt">;
+  name: string;
+  linkTo: string;
 };
 
-export type FooterLogoProps = {
-  logo: ImageProps;
-  linkTo: string;
+export type FooterContactsProps = {
+  title: string;
+  /** Testo (anche HTML) dell'indirizzo. */
+  address: string;
+  /** Id dello sprite Bootstrap Italia, es. "it-pa". */
+  icon?: string;
+};
+
+export type FooterSocialProps = {
+  title: string;
+  items: FooterLinkSupportingBrandProps[];
+};
+
+export type FooterColumnProps = {
+  title: string;
+  links: FooterLinkProps[];
 };
 
 export type FooterSmallPrintsProps = {
@@ -23,23 +41,8 @@ export type FooterSmallPrintsProps = {
   showSitemap?: boolean;
 };
 
-export type FooterBrandProps = {
-  heading: string;
-  logos: FooterLogoProps[];
-};
-
-export type FooterTopicsProps = {
-  title: string;
-  items: ChipLinkProps[];
-};
-
-export type FooterUtilityProps = {
-  title: string;
-  socialItems: FooterLinkSupportingBrandProps[];
-  linkItems: LinkProps[];
-};
-
 export type FooterLinkSupportingBrandProps = {
+  /** URL di un'immagine oppure id dello sprite BI ("it-facebook"). */
   icon?: string;
   label: string;
   url: string;

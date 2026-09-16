@@ -159,7 +159,12 @@ const isProd = import.meta.env.PROD;
         <Feedback client:visible lang={lang} recordId={recordId} />
       )
     }
-    <FooterAdapter {...footerLayout} />
+    <FooterAdapter
+      {...footerLayout}
+      logoSelect={layout.logoSelect}
+      siteName={layout.siteName}
+      homeRecordId={homepageId}
+    />
   </body>
 </html>
 <script src={bsi} defer is:inline></script>

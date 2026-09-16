@@ -93,5 +93,6 @@
   "videoplayer.overlay.cookiePolicy": "cookie policy",
   "videoplayer.overlay.title": "Accept YouTube cookies to watch the video. You can manage your preferences in the",
   "videoplayer.remember": "Remember for all videos",
-  "videoplayer.transcription": "Transcript"
+  "videoplayer.transcription": "Transcript",
+  "footer.sitemap": "Sitemap"
 }

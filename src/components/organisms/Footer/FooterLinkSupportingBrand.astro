@@ -8,15 +8,29 @@ type Props = FooterLinkSupportingBrandProps;
 const { icon, label, url } = Astro.props;
 const { lang } = Astro.locals;
 const t = getI18n(lang);
+
+// Le icone possono essere immagini caricate su DatoCMS (brandLogo) oppure
+// id dello sprite di Bootstrap Italia: nel design sono sole icone, il nome
+// del social resta per gli screen reader.
+const isSprite = !!icon && icon.startsWith("it-");
 ---
 
 <a
   href={url}
-  class="list-item left-icon d-inline-flex align-items-center"
+  class="d-inline-flex align-items-center text-white"
   target="_blank"
   rel="noreferrer"
-  aria-label={t["link.external"]}
 >
-  {icon && <Icon icon={icon} className="icon-sm text-white me-2" />}
-  <span>{label}</span>
+  {
+    isSprite ? (
+      <svg class="icon icon-sm icon-white" aria-hidden="true">
+        <use href={`/bsi-svg/sprites.svg#${icon}`} />
+      </svg>
+    ) : (
+      icon && <Icon icon={icon} className="icon-sm text-white" />
+    )
+  }
+  <span class="visually-hidden">
+    {label} - {t["link.external"]}
+  </span>
 </a>

@@ -1,71 +1,67 @@
 ---
-import { ChipLink } from "@components/atoms/Chip";
-
 import { SubscribeMailingList } from "@components/react/SubscribeMailingList";
-import { getI18n } from "@i18n/microcopy";
+import FooterBrand from "./FooterBrand.astro";
 import FooterLink from "./FooterLink.astro";
 import FooterLinkSupportingBrand from "./FooterLinkSupportingBrand.astro";
-import type { FooterMainProps } from "./types";
+import type { FooterProps } from "./types";
 
-type Props = FooterMainProps;
-const { topics, utilities, mailingListForm } = Astro.props;
+type Props = Omit<FooterProps, "smallPrints">;
+const { brand, contacts, social, columns = [], mailingListForm } = Astro.props;
 const lang = Astro.locals.lang || "it";
-const t = getI18n(lang);
 ---
 
 <div class="it-footer-main" id="footer">
   <div class="container">
-    <section class="px-0">
-      <div class="row">
-        <div class="col-12 py-4">
-          {topics.title && <p class="h4 pb-4">{topics.title}</p>}
-          <ul
-            class="it-footer-small-prints-list list-inline mb-0 d-flex flex-wrap flex-md-row"
-          >
-            {
-              topics.items.map((topic) => (
-                <li class="list-inline-item">
-                  <ChipLink
-                    {...topic}
-                    variant="outline-white"
-                    size="large"
-                    visuallyHidden={t["link.internal"]}
-                  />
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-      </div>
-    </section>
-    <section
-      class:list={["py-4 px-0", { "border-white border-top": topics.title }]}
-    >
+    <FooterBrand {...brand} />
+    <section class="py-4 px-0">
       <div class="row">
         {
-          utilities.map((utility) => (
-            <div class="col-12 ">
-              <p class="h4 pb-4">{utility.title}</p>
-              <ul class="list-inline mb-0 d-flex flex-column flex-md-row">
-                {utility.socialItems.map((item) => (
-                  <li class="list-inline-item me-4 mb-2">
+          contacts && (
+            <div class="col-12 col-md-6 col-lg-3 pb-4">
+              <h4 class="footer-heading-title">{contacts.title}</h4>
+              {contacts.icon && (
+                <svg class="icon icon-sm icon-white mb-3" aria-hidden="true">
+                  <use href={`/bsi-svg/sprites.svg#${contacts.icon}`} />
+                </svg>
+              )}
+              <p class="fw-semibold mb-0" set:html={contacts.address} />
+            </div>
+          )
+        }
+        {
+          social && social.items.length > 0 && (
+            <div class="col-12 col-md-6 col-lg-3 pb-4">
+              <h4 class="footer-heading-title">{social.title}</h4>
+              <ul class="list-inline mb-0 d-flex flex-wrap footer-social">
+                {social.items.map((item) => (
+                  <li class="list-inline-item">
                     <FooterLinkSupportingBrand {...item} />
                   </li>
                 ))}
-                <li
-                  class="d-none d-lg-block border-end border-white ms-2 me-4"
-                  style={{ height: "24px", alignSelf: "center" }}
-                />
-                <li
-                  class="d-lg-none d-block border-bottom border-white mx-2 my-3 my-lg-0"
-                  style={{ width: "100%", alignSelf: "center" }}
-                />
-                {utility.linkItems.map((item) => (
-                  <li class="list-inline-item me-4 mb-2">
-                    <FooterLink variant="dark" {...item} />
-                  </li>
-                ))}
               </ul>
+            </div>
+          )
+        }
+        {
+          columns.map((column) => (
+            <div class="col-12 col-md-6 col-lg-3 pb-4">
+              {column.title && (
+                <h4 class="footer-heading-title">{column.title}</h4>
+              )}
+              <div class="link-list-wrapper">
+                <ul class="footer-list link-list clearfix">
+                  {column.links.map((link) => (
+                    <li>
+                      <FooterLink
+                        variant="dark"
+                        {...link}
+                        openInNewTab={!!link.url}
+                        isIcon={true}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           ))
         }
@@ -75,7 +71,7 @@ const t = getI18n(lang);
       mailingListForm && (
         <section class="py-4 border-white border-top px-0">
           <div class="row">
-            <div class="col-12 col-lg-6 ">
+            <div class="col-12 col-lg-6">
               <div class="pb-4 d-flex align-items-center justify-content-between">
                 <p class="h4">{mailingListForm.title}</p>
                 <a
@@ -101,3 +97,22 @@ const t = getI18n(lang);
     }
   </div>
 </div>
+
+<style>
+  /* Il design usa lo stile dei titoli BI per le colonne del footer, in
+     maiuscolo per i primi tre e in tondo per "Trasparenza": la differenza è
+     editoriale, quindi qui restano tutti uguali. */
+  .footer-heading-title {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .footer-social {
+    gap: 1.5rem 2rem;
+    max-width: 12rem;
+  }
+  .footer-list li {
+    padding: 0 0 0.75rem;
+  }
+</style>

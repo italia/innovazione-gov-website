@@ -130,53 +130,27 @@ import { AdditionalContent } from "./organisms/AdditionalContent";
     <tr>
       <td class="p-3">
         <Footer
-          brand={{
-            heading: "Nome dipartimento",
-            logos: [],
+          brand={{ name: "Nome dipartimento", linkTo: "#" }}
+          contacts={{
+            title: "Contatti",
+            icon: "it-pa",
+            address: "Largo Pietro di Brazzà, 86 - 00187 Roma",
           }}
-          topics={{
-            title: "Parliamo di",
+          social={{
+            title: "Seguici su",
             items: [
-              {
-                label: "Sviluppo interfaccia",
-                visuallyHidden: "link",
-                linkTo: "#",
-              },
-              {
-                label: "Sviluppo interfaccia",
-                visuallyHidden: "link",
-                linkTo: "#",
-              },
+              { label: "LinkedIn", icon: "it-linkedin", url: "#" },
+              { label: "Facebook", icon: "it-facebook", url: "#" },
             ],
           }}
-          utilities={[
+          columns={[
             {
-              title: "Community",
-              linkItems: [],
-              socialItems: [
-                {
-                  label: "Forum italia",
-                  icon: "it-designers-italia",
-                  url: "#",
-                },
-                {
-                  label: "Slack",
-                  icon: "it-slack",
-                  url: "#",
-                },
-                {
-                  label: "Github",
-                  icon: "it-github",
-                  url: "#",
-                },
-              ],
+              title: "Altri siti web",
+              links: [{ label: "Sito del Governo Italiano", url: "#" }],
             },
           ]}
           smallPrints={{
-            links: [
-              { label: "Media Policy", linkTo: "#" },
-              { label: "Note legali", linkTo: "#" },
-            ],
+            links: [{ label: "Privacy policy", linkTo: "#" }],
           }}
         />
       </td>
