@@ -1,13 +1,21 @@
 ---
-import PageAdapter from "@components/cms-adapters/datocms/PageAdapter.astro";
+import StructuredTextAdapter from "@components/cms-adapters/datocms/StructuredTextAdapter.astro";
+import { ArticleToc } from "@components/organisms/ArticleToc";
+import { PositionHero } from "@components/organisms/PositionHero";
+import type { PositionMeta } from "@components/organisms/PositionHero/types";
+import { SectionContainer } from "@components/organisms/SectionContainer";
 import type { TagFragmentType } from "@graphql/fragment/commonFragments";
 import type { JobPositionContentFragmentType } from "@graphql/fragment/jobPosition";
 import type { SeoFieldFragmentType } from "@graphql/fragment/seoFragments";
 import type { SiteLocale } from "@graphql/types";
+import { getI18n } from "@i18n/microcopy";
 import Layout from "@layouts/Layout.astro";
+import { DatoBlockModel } from "@utils/cmsMapper";
+import { extractHeadings } from "@utils/extractHeadings";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { extractFaqItems, type JsonLdPageData } from "@utils/JsonLD/seoJsonLd";
 import { linkResolver } from "@utils/linkResolver";
+import { effectivePositionStatus } from "@utils/positionStatus";
 import { removeLang } from "@utils/pathHelper";
 import { getCollection, getEntry } from "astro:content";
 
@@ -22,6 +30,15 @@ export async function getStaticPaths() {
       seo: SeoFieldFragmentType | null;
       content: JobPositionContentFragmentType[];
       id: string;
+      title: string;
+      abstract: string;
+      office: string;
+      compensation: string;
+      positionStatus: string;
+      openDate: string | null;
+      closeDate: string | null;
+      showSidebar: boolean;
+      topics: string[];
       publishedAt: string;
       updatedAt: string;
     };
@@ -52,6 +69,19 @@ export async function getStaticPaths() {
             seoMeta: seoRes?.metaTags || [],
             seo: seoRes?.seo ?? null,
             id: position.id,
+            title: getLocaleValue(position.allTitleLocales, lang, ""),
+            abstract:
+              getLocaleValue(position.allAbstractLocales, lang, "") ?? "",
+            office: getLocaleValue(position.allOfficeLocales, lang, "") ?? "",
+            compensation:
+              getLocaleValue(position.allCompensationLocales, lang, "") ?? "",
+            positionStatus: position.positionStatus,
+            openDate: position.openDate,
+            closeDate: position.closeDate,
+            showSidebar: position.showSidebar,
+            topics: (getLocaleValue(position.allTopicsLocales, lang, []) ?? [])
+              .map((topic) => topic.name)
+              .filter((name): name is string => Boolean(name)),
             publishedAt: position.publishedAt,
             updatedAt: seoRes?.updatedAt || position.updatedAt,
             content: getLocaleValue(position.allContentLocales, lang, null),
@@ -62,18 +92,74 @@ export async function getStaticPaths() {
 
   const paths = await Promise.all(pathsPromises);
 
-  // Senza slug nel linkMap (record senza pagina di archivio) il path sarebbe
-  // vuoto e collideerebbe con la home della lingua: meglio non generarlo.
   return paths.filter(
     (path): path is PathItem => !!path.params.lang && !!path.params.position,
   );
 }
 
-const { id, content, seo, seoMeta, publishedAt, updatedAt } = Astro.props;
+const {
+  id,
+  content,
+  seo,
+  seoMeta,
+  title,
+  abstract,
+  office,
+  compensation,
+  positionStatus,
+  openDate,
+  closeDate,
+  showSidebar,
+  topics,
+  publishedAt,
+  updatedAt,
+} = Astro.props;
 const { lang } = Astro.params;
 
 Astro.locals.lang = lang;
 Astro.locals.recordId = id;
+
+const t = getI18n(lang);
+
+const dataEstesa = (valore: string | null) =>
+  valore
+    ? new Intl.DateTimeFormat(lang, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }).format(new Date(valore))
+    : "";
+
+const statoEffettivo = effectivePositionStatus(positionStatus, closeDate);
+const etichettaStato =
+  t[`position.status.${statoEffettivo}` as keyof typeof t] ??
+  t["position.status.closed"];
+
+const meta: PositionMeta[] = [
+  { label: t["position.openDate"], value: dataEstesa(openDate) },
+  { label: t["position.state"], value: etichettaStato },
+  {
+    label: t["position.compensation"],
+    value: compensation
+      ? `${t["position.compensationPrefix"]} ${compensation}`
+      : "",
+  },
+  { label: t["position.closeDate"], value: dataEstesa(closeDate) },
+  { label: t["position.office"], value: office },
+].filter((voce) => voce.value);
+
+const testo = (content ?? []).find(
+  (block) => block.componentName === DatoBlockModel.StructuredText,
+);
+const contenuto = testo && "textContent" in testo ? testo.textContent : null;
+
+const tocItems = contenuto
+  ? extractHeadings(contenuto.value, [3]).map((heading) => ({
+      id: heading.id,
+      label: heading.text,
+    }))
+  : [];
+const conIndice = showSidebar && tocItems.length > 0;
 
 const jsonLd: JsonLdPageData = {
   pageType: ["content"],
@@ -86,5 +172,50 @@ const jsonLd: JsonLdPageData = {
 ---
 
 <Layout pageSeo={seoMeta} datePublished={publishedAt} jsonLd={jsonLd}>
-  <PageAdapter content={content} />
+  <PositionHero
+    title={title}
+    paragraph={abstract}
+    meta={meta}
+    topics={topics}
+  />
+  {
+    contenuto && conIndice && (
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-lg-4 px-lg-0 pb-lg-5 border-end position-menu">
+            <ArticleToc header={t["toc.title"]} items={tocItems} />
+          </div>
+          <div class="col-12 col-lg-8 px-lg-0">
+            <SectionContainer className="structured-text-container ps-lg-4">
+              <StructuredTextAdapter block={contenuto} />
+            </SectionContainer>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  {
+    contenuto && !conIndice && (
+      <SectionContainer className="structured-text-container">
+        <StructuredTextAdapter block={contenuto} />
+      </SectionContainer>
+    )
+  }
 </Layout>
+
+<style>
+  .position-menu {
+    padding-top: 3rem;
+  }
+  @media (min-width: 992px) {
+    .position-menu {
+      padding-top: 5rem;
+    }
+  }
+</style>
+
+<style is:global>
+  .structured-text-container :is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 7rem;
+  }
+</style>

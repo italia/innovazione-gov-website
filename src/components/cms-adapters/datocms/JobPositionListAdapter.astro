@@ -4,8 +4,10 @@ import {
   type JobPositionItemProps,
 } from "@components/react/JobPositionList";
 import type { JobPositionListFragmentType } from "@graphql/fragment/sectionFragments";
+import { getI18n } from "@i18n/microcopy";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { linkResolver } from "@utils/linkResolver";
+import { effectivePositionStatus } from "@utils/positionStatus";
 import { getCollection } from "astro:content";
 
 type Props = {
@@ -14,23 +16,35 @@ type Props = {
 
 const { block } = Astro.props;
 const { lang } = Astro.locals;
+const t = getI18n(lang);
 
-// Le voci arrivano dalla collection, non dal blocco: il redattore configura
-// solo quante mostrarne per pagina. Le posizioni chiuse restano in elenco (è
-// un archivio), ordinate dalla più recente per data di chiusura.
 const positions = await getCollection("job_position");
+
+const quando = (position: {
+  sortDate: string | null;
+  openDate: string | null;
+}) => position.sortDate ?? position.openDate ?? "";
 
 const items: JobPositionItemProps[] = positions
   .map((entry) => entry.data)
   .filter((position) => position.locales.includes(lang))
-  .sort((a, b) => (b.closeDate ?? "").localeCompare(a.closeDate ?? ""))
-  .map((position) => ({
-    id: position.id,
-    title: getLocaleValue(position.allTitleLocales, lang, ""),
-    description: getLocaleValue(position.allAbstractLocales, lang, "") ?? "",
-    status: position.positionStatus,
-    linkTo: linkResolver(position.id, lang),
-  }))
+  .sort((a, b) => quando(b).localeCompare(quando(a)))
+  .map((position) => {
+    const status = effectivePositionStatus(
+      position.positionStatus,
+      position.closeDate,
+    );
+    return {
+      id: position.id,
+      title: getLocaleValue(position.allTitleLocales, lang, ""),
+      description: getLocaleValue(position.allAbstractLocales, lang, "") ?? "",
+      status,
+      statusLabel:
+        t[`position.badge.${status}` as keyof typeof t] ??
+        t["position.badge.closed"],
+      linkTo: linkResolver(position.id, lang),
+    };
+  })
   .filter((item) => item.title && item.linkTo !== "#");
 ---
 
@@ -39,8 +53,105 @@ const items: JobPositionItemProps[] = positions
     <JobPositionList
       client:load
       items={items}
-      perPage={block.elementPerPage ?? 5}
+      perPage={block.elementPerPage ?? 10}
       lang={lang}
     />
   )
 }
+
+<style is:global>
+  .position-list {
+    padding-top: 3rem;
+  }
+  .position-list__column {
+    max-width: 48rem;
+  }
+  .position-list__intro {
+    margin-bottom: 2rem;
+    color: #17334f;
+    font-weight: 600;
+    font-size: 0.875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .position-list__filters {
+    align-items: end;
+    margin-bottom: 2.5rem;
+    row-gap: 1.5rem;
+  }
+  .position-list__toggle label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0;
+    font-weight: 600;
+  }
+  .position-list__toggle .lever {
+    float: none;
+    flex: 0 0 auto;
+    margin: 0;
+  }
+  .position-list__empty {
+    margin-bottom: 2rem;
+    color: #5b6f82;
+  }
+  .position-list__items {
+    display: grid;
+    gap: 2rem;
+    margin: 0 0 2.5rem;
+    padding: 0;
+  }
+  .position-item__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+    margin: 0 0 0.75rem;
+  }
+  .position-item__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #06c;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.5;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+  .position-item__link .icon {
+    flex: 0 0 auto;
+    fill: #06c;
+    text-decoration: none;
+  }
+  .position-item__badge {
+    border-radius: 4px;
+    background: #3b4b5c;
+    padding: 0.25rem 0.75rem;
+    color: #fff;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+  .position-item__text {
+    margin: 0;
+    color: #1c1c1c;
+    line-height: 1.6;
+  }
+  .position-list__more {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (min-width: 992px) {
+    .position-list {
+      padding-top: 4.5rem;
+    }
+  }
+
+  .position-list__filters .form-group label {
+    color: #5b6f82;
+  }
+</style>
