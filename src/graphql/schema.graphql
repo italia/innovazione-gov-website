@@ -5030,12 +5030,16 @@ input JobPositionModelFilter {
   abstract: TextFilter
   closeDate: DateFilter
   compensation: StringFilter
+  office: StringFilter
   openDate: DateFilter
   parentPage: LinkFilter
   positionStatus: StringFilter
   seo: SeoFilter
+  showSidebar: BooleanFilter
   slug: SlugFilter
+  sortDate: DateFilter
   title: StringFilter
+  topics: LinksFilter
   OR: [JobPositionModelFilter]
   AND: [JobPositionModelFilter]
 }
@@ -5063,10 +5067,16 @@ enum JobPositionModelOrderBy {
   closeDate_DESC
   compensation_ASC
   compensation_DESC
+  office_ASC
+  office_DESC
   openDate_ASC
   openDate_DESC
   positionStatus_ASC
   positionStatus_DESC
+  showSidebar_ASC
+  showSidebar_DESC
+  sortDate_ASC
+  sortDate_DESC
   title_ASC
   title_DESC
 }
@@ -5101,6 +5111,12 @@ type JobPositionRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): [JobPositionModelContentFieldListListNonNullMultiLocaleField!]
+  _allOfficeLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringMultiLocaleField!]
   _allParentPageLocales(
     """
     If you want to fallback to a default translation when a translation has not been found
@@ -5125,6 +5141,12 @@ type JobPositionRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): [StringNonNullMultiLocaleField!]
+  _allTopicsLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [TagRecordListListNonNullMultiLocaleField!]
   _createdAt: DateTime!
 
   """Editing URL"""
@@ -5176,6 +5198,15 @@ type JobPositionRecord implements RecordInterface {
     fallbackLocales: [SiteLocale!]
   ): [JobPositionModelContentField!]!
   id: ItemId!
+  office(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String
   openDate: Date
   parentPage(
     """The locale to use to fetch the field's content"""
@@ -5196,6 +5227,7 @@ type JobPositionRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): SeoField
+  showSidebar: BooleanType!
   slug(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -5205,6 +5237,7 @@ type JobPositionRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): String!
+  sortDate: Date
   title(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -5214,6 +5247,15 @@ type JobPositionRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): String!
+  topics(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [TagRecord!]!
 }
 
 scalar JsonField
@@ -9488,6 +9530,11 @@ type TagRecord implements RecordInterface {
   isCategory: BooleanType!
   name: String
   slug: String
+}
+
+type TagRecordListListNonNullMultiLocaleField {
+  locale: SiteLocale
+  value: [TagRecord!]!
 }
 
 input TargetModelFilter {

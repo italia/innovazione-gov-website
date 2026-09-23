@@ -167,6 +167,20 @@ export const AllJobPositionsRecordFragment = graphql(
       positionStatus
       openDate
       closeDate
+      sortDate
+      showSidebar
+      allOfficeLocales: _allOfficeLocales {
+        locale
+        value
+      }
+      allTopicsLocales: _allTopicsLocales {
+        locale
+        value {
+          id
+          name
+          slug
+        }
+      }
       allTitleLocales: _allTitleLocales {
         locale
         value
