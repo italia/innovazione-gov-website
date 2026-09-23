@@ -24,6 +24,17 @@ const val = (campo) =>
 const testo = (v) => String(v ?? "").trim();
 const soloData = (v) => (testo(v) ? testo(v).slice(0, 10) : null);
 
+const oggi = () => new Date().toISOString().slice(0, 10);
+
+/**
+ * Nel vecchio CMS restano posizioni con lo stato "aperto" e il bando scaduto da
+ * anni: il sito in produzione le mostra chiuse, e così le importiamo.
+ */
+const statoEffettivo = (stato, dataChiusura) =>
+  stato === "open" && (!dataChiusura || dataChiusura < oggi())
+    ? "closed"
+    : stato;
+
 const STATO_PER_NOME = {
   APERTO: "open",
   CHIUSO: "closed",
@@ -120,7 +131,10 @@ for (const sorgente of posizioniSorgente) {
   }
 
   const nomeStato = statiPerId.get(val(sorgente.announcement_status)) ?? "";
-  const stato = STATO_PER_NOME[nomeStato] ?? "closed";
+  const stato = statoEffettivo(
+    STATO_PER_NOME[nomeStato] ?? "closed",
+    soloData(val(sorgente.announcement_date_closing)),
+  );
   perStato[stato] = (perStato[stato] ?? 0) + 1;
 
   const argomenti = [];
