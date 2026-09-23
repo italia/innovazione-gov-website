@@ -1,4 +1,5 @@
 import {
+  AccordionBlockFragment,
   CalloutFragment,
   DownloadLinkFragment,
   AttachmentsBoxFragment,
@@ -82,10 +83,14 @@ export const ArticleContentFragment = graphql(
         ... on AttachmentsBoxRecord {
           ...AttachmentsBoxFragment
         }
+        ... on AccordionBlockRecord {
+          ...AccordionBlockFragment
+        }
       }
     }
   `,
   [
+    AccordionBlockFragment,
     ListCardEditorialWithIconFragment,
     InternalLinkFragment,
     ExternalLinkFragment,

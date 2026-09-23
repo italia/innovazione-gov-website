@@ -36,7 +36,7 @@ if (block.statistics.length > 0) {
 if (block.kpiElement.length > 0) {
   items = block.kpiElement.map((item) => {
     return {
-      info: `${item.valuePrefix} ${item.value}`,
+      info: `${item.valuePrefix ? `${item.valuePrefix} ` : ""}${item.value ?? ""}${item.valueSuffix ?? ""}`,
       title: item.title,
     };
   });

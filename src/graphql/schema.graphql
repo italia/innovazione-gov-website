@@ -310,7 +310,7 @@ type ArticleListRecord implements RecordInterface {
   relatedArticles: [MenuArticleItemRecord!]!
 }
 
-union ArticleModelContentBlocksField = AttachmentsBoxRecord | CalloutRecord | CardServiceRecord | DownloadLinkRecord | ExternalLinkRecord | ImageBlockRecord | InternalLinkRecord | ListBlockquoteRecord | ListCardEditorialWithIconRecord | ListCardInfoRecord | ListExternalLinkRecord | OrderedListRecord | QuickLinkCardRecord | RelatedArticleRecord | SupportCtaSectionRecord | TopicsBlockRecord | WideLinkCardRecord
+union ArticleModelContentBlocksField = AccordionBlockRecord | AttachmentsBoxRecord | CalloutRecord | CardServiceRecord | DownloadLinkRecord | ExternalLinkRecord | ImageBlockRecord | InternalLinkRecord | ListBlockquoteRecord | ListCardEditorialWithIconRecord | ListCardInfoRecord | ListExternalLinkRecord | OrderedListRecord | QuickLinkCardRecord | RelatedArticleRecord | SupportCtaSectionRecord | TopicsBlockRecord | WideLinkCardRecord
 
 type ArticleModelContentField {
   blocks: [ArticleModelContentBlocksField!]!
