@@ -236,7 +236,6 @@ body {
 
 .pagination .page-item .page-link {
   &.page-link--arrow {
-    font-size: 2rem;
     line-height: 1;
   }
 
@@ -244,4 +243,8 @@ body {
   &.active {
     border: 2px solid currentcolor;
   }
+}
+
+.page-link__freccia--next {
+  transform: rotate(180deg);
 }
