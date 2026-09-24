@@ -47,7 +47,7 @@ type PaginatedCollectionProps =
 
 export function PaginatedCollection({
   items,
-  perPage = 6,
+  perPage = 12,
   title,
   paragraph,
   filterTitle,

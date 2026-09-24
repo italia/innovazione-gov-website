@@ -8,6 +8,10 @@ type PaginationProps = {
   lang: SiteLocale;
 };
 
+const SALTO = "salto";
+
+type VocePaginazione = number | typeof SALTO;
+
 const Freccia = ({ verso }: { verso: "prev" | "next" }) => (
   <svg
     className={`page-link__freccia page-link__freccia--${verso}`}
@@ -25,6 +29,30 @@ const Freccia = ({ verso }: { verso: "prev" | "next" }) => (
   </svg>
 );
 
+export function vociPaginazione(
+  currentPage: number,
+  totalPages: number,
+  raggio = 1,
+): VocePaginazione[] {
+  const pagine = new Set<number>([1, totalPages]);
+  for (
+    let pagina = currentPage - raggio;
+    pagina <= currentPage + raggio;
+    pagina += 1
+  ) {
+    if (pagina > 1 && pagina < totalPages) pagine.add(pagina);
+  }
+
+  const voci: VocePaginazione[] = [];
+  let precedente = 0;
+  for (const pagina of [...pagine].sort((a, b) => a - b)) {
+    if (pagina - precedente > 1) voci.push(SALTO);
+    voci.push(pagina);
+    precedente = pagina;
+  }
+  return voci;
+}
+
 export function Pagination({
   currentPage,
   totalPages,
@@ -33,6 +61,7 @@ export function Pagination({
 }: PaginationProps) {
   if (totalPages <= 1) return null;
   const t = getI18n(lang);
+  const voci = vociPaginazione(currentPage, totalPages);
 
   return (
     <nav aria-label={t["nav.pagination"]}>
@@ -47,17 +76,31 @@ export function Pagination({
             <Freccia verso="prev" />
           </button>
         </li>
-        {Array.from({ length: totalPages }, (_, idx) => (
-          <li key={idx} className="page-item">
-            <button
-              onClick={() => onPageChange(idx + 1)}
-              aria-current={currentPage === idx + 1 ? "page" : undefined}
-              className={`page-link ${currentPage === idx + 1 ? "active" : ""}`}
+        {voci.map((voce, indice) =>
+          voce === SALTO ? (
+            <li className="page-item page-item--salto" key={`salto-${indice}`}>
+              <span className="page-link page-link--salto" aria-hidden="true">
+                …
+              </span>
+            </li>
+          ) : (
+            <li
+              key={voce}
+              className={`page-item ${
+                Math.abs(voce - currentPage) === 1 ? "page-item--vicina" : ""
+              }`}
             >
-              {idx + 1}
-            </button>
-          </li>
-        ))}
+              <button
+                onClick={() => onPageChange(voce)}
+                aria-current={currentPage === voce ? "page" : undefined}
+                aria-label={`${t["nav.pagination"]} ${voce}`}
+                className={`page-link ${currentPage === voce ? "active" : ""}`}
+              >
+                {voce}
+              </button>
+            </li>
+          ),
+        )}
         <li className="page-item">
           <button
             onClick={() => onPageChange(currentPage + 1)}
