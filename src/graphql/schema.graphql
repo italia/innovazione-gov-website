@@ -5468,7 +5468,7 @@ type LayoutRecord implements RecordInterface {
     If you want to fallback to a default translation when a translation has not been found
     """
     fallbackLocales: [SiteLocale!]
-  ): [StringNonNullMultiLocaleField!]
+  ): [StringMultiLocaleField!]
   _allListNavbarBrandLocales(
     """
     If you want to fallback to a default translation when a translation has not been found
@@ -5601,7 +5601,7 @@ type LayoutRecord implements RecordInterface {
     If you want to fallback to a default translation when a translation has not been found
     """
     fallbackLocales: [SiteLocale!]
-  ): String!
+  ): String
   id: ItemId!
   listNavbarBrand(
     """The locale to use to fetch the field's content"""
