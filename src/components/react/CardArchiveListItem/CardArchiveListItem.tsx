@@ -33,10 +33,8 @@ export function CardArchiveListItem({
           />
         </svg>
         <span>
-          <h3 className="h6 mb-0">
-            <strong>{title}</strong>
-          </h3>
-          <p className="text-secondary fw-normal d-block mb-3 mt-1 small">
+          <h3 className="mb-0 archive-item__title">{title}</h3>
+          <p className="fw-normal d-block mb-3 mt-1 archive-item__meta">
             {dateTime && <DateTime value={dateTime} className="" lang={lang} />}
             {description && <span> — {description}</span>}
           </p>

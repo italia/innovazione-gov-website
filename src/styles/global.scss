@@ -233,3 +233,15 @@ body {
     flex: none;
   }
 }
+
+.pagination .page-item .page-link {
+  &.page-link--arrow {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  &[aria-current],
+  &.active {
+    border: 2px solid currentcolor;
+  }
+}

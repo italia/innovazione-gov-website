@@ -25,7 +25,7 @@ export function Pagination({
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
             aria-label={t["nav.prev"]}
-            className="page-link"
+            className="page-link page-link--arrow"
           >
             &lsaquo;
           </button>
@@ -46,7 +46,7 @@ export function Pagination({
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
             aria-label={t["nav.next"]}
-            className="page-link"
+            className="page-link page-link--arrow"
           >
             &rsaquo;
           </button>
