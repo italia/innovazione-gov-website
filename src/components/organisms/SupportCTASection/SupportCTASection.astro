@@ -10,7 +10,7 @@ type Props = SupportCTASectionProps;
 const {
   title,
   paragraph,
-  labelButton,
+  labelButton: label,
   linkTo,
   image,
   background = "lighter",
@@ -18,14 +18,25 @@ const {
   openInNewTab = false,
 } = Astro.props;
 
+const ESTENSIONI_SCARICABILI =
+  /\.(pdf|zip|doc|docx|xls|xlsx|ppt|pptx|odt|ods|csv|rtf|7z|rar)(\?|#|$)/i;
+
 const backgroundColorClass = getSectionBgClass(background);
-const isDarkBackground = background === "primary" || background === "dark";
+const isBlueBackground = background === "primary";
+const isDarkBackground = isBlueBackground || background === "dark";
 const textColorClass = isDarkBackground ? "text-white" : "";
 const buttonVariant = isDarkBackground ? "dark" : "light";
+const portaAUnFile =
+  ESTENSIONI_SCARICABILI.test(linkTo ?? "") || /^scarica\b/i.test(label ?? "");
+const buttonIcon = portaAUnFile
+  ? "it-download"
+  : openInNewTab
+    ? "it-external-link"
+    : undefined;
 ---
 
 <section
-  class={`${backgroundColorClass} ${isDarkBackground ? "cta-blue" : ""} ${size === "small" ? "rounded-2" : ""}`}
+  class={`${backgroundColorClass} ${isBlueBackground ? "cta-blue" : ""} ${size === "small" ? "rounded-2" : ""}`}
   aria-labelledby={slugify(title)}
 >
   <div class={`container py-5  ${size === "small" ? "px-5" : ""}`}>
@@ -37,13 +48,14 @@ const buttonVariant = isDarkBackground ? "dark" : "light";
           </h3>
           <div class="mb-4 cta-paragraph" set:html={paragraph} />
           {
-            labelButton && linkTo && (
+            label && linkTo && (
               <div class="mt-5">
                 <ButtonLink
                   size="small"
                   variant={buttonVariant}
-                  label={labelButton}
+                  label={label}
                   linkTo={linkTo}
+                  icon={buttonIcon}
                   openInNewTab={openInNewTab}
                 />
               </div>
