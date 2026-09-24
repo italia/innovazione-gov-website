@@ -20,7 +20,7 @@ export const getNews = async (isPreview: boolean) => {
 };
 
 export const getArticles = async (isPreview: boolean) => {
-  const res = await executeQuery(AllArticleCardsQuery, {
+  const res = await executeAutoPagingQuery(AllArticleCardsQuery, {
     includeDrafts: isPreview,
   });
   return res?.allArticles ?? [];

@@ -4,7 +4,7 @@ import { graphql, type ResultOf } from "@graphql/graphql";
 export const AllArticleCardsQuery = graphql(
   `
     query AllArticleCards {
-      allArticles(first: 500, orderBy: _firstPublishedAt_DESC) {
+      allArticles(first: 2500, orderBy: _firstPublishedAt_DESC) {
         id
         articleType
         undersecretary
