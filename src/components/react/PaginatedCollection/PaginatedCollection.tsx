@@ -112,8 +112,8 @@ export function PaginatedCollection({
       <div className="d-flex flex-lg-row flex-column justify-content-between align-items-top">
         <div className="col-lg-5 col-12">
           <div className={`text-container mb-4 mb-lg-0`}>
-            <h2 className="mb-3">{title}</h2>
-            <div className="mb-4">{paragraph}</div>
+            <h2 className="mb-3 collection-header__title">{title}</h2>
+            <div className="mb-4 collection-header__paragraph">{paragraph}</div>
           </div>
         </div>
         <div className="col-lg-4 col-12">
