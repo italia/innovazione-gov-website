@@ -57,6 +57,7 @@ const lang = Astro.locals.lang || "it";
                         {...link}
                         openInNewTab={!!link.url}
                         isIcon={true}
+                        externalIcon={false}
                       />
                     </li>
                   ))}
@@ -108,11 +109,26 @@ const lang = Astro.locals.lang || "it";
     text-transform: uppercase;
     margin-bottom: 1.5rem;
   }
+  /* Griglia di icone da 24px, tre per riga, con lo spazio del design. */
   .footer-social {
-    gap: 1.5rem 2rem;
-    max-width: 12rem;
+    gap: 0.75rem 1rem;
+    max-width: 7rem;
+  }
+  .footer-social .list-inline-item {
+    margin-right: 0;
   }
   .footer-list li {
     padding: 0 0 0.75rem;
+  }
+  /* BI colora i link delle liste con il primary, che sul blu non si legge:
+     il design li vuole in azzurro chiaro e in grassetto, senza icona. */
+  .it-footer-main .link-list-wrapper .footer-list :global(a),
+  .it-footer-main .link-list-wrapper .footer-list :global(a span) {
+    color: var(--footer-link-color);
+    font-weight: 600;
+  }
+  .it-footer-main .link-list-wrapper .footer-list :global(a:hover),
+  .it-footer-main .link-list-wrapper .footer-list :global(a:hover span) {
+    color: #fff;
   }
 </style>

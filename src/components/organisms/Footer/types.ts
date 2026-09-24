@@ -56,6 +56,8 @@ export type FooterLinkProps = {
   variant?: "dark" | "light";
   titleIcon?: string;
   isIcon?: boolean;
+  /** Mostra l'icona "esterno" accanto ai link con url (default true). */
+  externalIcon?: boolean;
 };
 
 export type MailingListFormProps = {

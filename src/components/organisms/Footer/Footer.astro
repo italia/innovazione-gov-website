@@ -12,3 +12,11 @@ const { smallPrints, ...main } = Astro.props;
   <FooterMain {...main} />
   <FooterSmallPrints {...smallPrints} />
 </footer>
+
+<style>
+  /* Colore dei link su fondo blu, dal design del footer (non è nella palette
+     di Bootstrap Italia): lo leggono le colonne e la barra finale. */
+  .it-footer {
+    --footer-link-color: #a2f0ef;
+  }
+</style>

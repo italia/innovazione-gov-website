@@ -14,6 +14,7 @@ const {
   openInNewTab = false,
   isIcon = false,
   variant = "light",
+  externalIcon = true,
 } = Astro.props;
 
 const finalHref = url || linkTo || "#";
@@ -36,7 +37,9 @@ const t = getI18n(lang);
   {
     url && (
       <>
-        <ItExternalLink color={colorIcon} size="sm" title={titleIcon} />
+        {externalIcon && (
+          <ItExternalLink color={colorIcon} size="sm" title={titleIcon} />
+        )}
         <span class="visually-hidden">{t["link.external"]}</span>
       </>
     )
