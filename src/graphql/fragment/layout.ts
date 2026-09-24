@@ -143,6 +143,33 @@ export const FooterFragment = graphql(
           }
         }
       }
+      _allContactTitleLocales {
+        locale
+        value
+      }
+      _allContactAddressLocales {
+        locale
+        value
+      }
+      _allFooterColumnsLocales {
+        locale
+        value {
+          id
+          title
+          links {
+            ... on RecordInterface {
+              id
+              componentName: __typename
+            }
+            ... on ExternalLinkRecord {
+              ...ExternalLinkFragment
+            }
+            ... on InternalLinkRecord {
+              ...InternalLinkFragment
+            }
+          }
+        }
+      }
       _allMailingListFormLocales {
         locale
         value {

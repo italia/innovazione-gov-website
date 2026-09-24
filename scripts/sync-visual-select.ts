@@ -19,7 +19,9 @@ async function syncOptions() {
     const jsonPath = resolve(outputPath);
     const rawData = readFileSync(jsonPath, "utf8");
     const optionsData = JSON.parse(rawData);
-    const visualOptions = JSON.stringify(optionsData, null, 2);
+    // Compatto: i parametri del plugin hanno un limite di dimensione e il JSON
+    // indentato lo supera già con una trentina di icone.
+    const visualOptions = JSON.stringify(optionsData);
 
     console.log('Update settings of plugin "Visual Select"');
 

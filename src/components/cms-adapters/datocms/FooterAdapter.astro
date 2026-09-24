@@ -2,6 +2,7 @@
 import { Footer } from "@components/organisms/Footer";
 import type {
   FooterColumnProps,
+  FooterContactsProps,
   FooterLinkProps,
   FooterLinkSupportingBrandProps,
   MailingListFormProps,
@@ -22,6 +23,9 @@ const {
   _allUtilityTitleLocales,
   _allUtilityLocales,
   _allSmallPrintLocales,
+  _allContactTitleLocales,
+  _allContactAddressLocales,
+  _allFooterColumnsLocales,
   _allMailingListFormLocales,
   showSitemapLink,
   logoSelect,
@@ -34,6 +38,25 @@ const utilityTitle = getLocaleValue(_allUtilityTitleLocales, lang, "") ?? "";
 const utility = getLocaleValue(_allUtilityLocales, lang, null);
 const smallPrint = getLocaleValue(_allSmallPrintLocales, lang, null);
 const mailingList = getLocaleValue(_allMailingListFormLocales, lang, null);
+const contactTitle = getLocaleValue(_allContactTitleLocales, lang, null);
+const contactAddress = getLocaleValue(_allContactAddressLocales, lang, null);
+const footerColumns = getLocaleValue(_allFooterColumnsLocales, lang, null);
+
+const escapeHtml = (text: string) =>
+  text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+// L'indirizzo è un campo di testo semplice: ogni riga va a capo nel footer.
+const contacts: FooterContactsProps | undefined = contactAddress?.trim()
+  ? {
+      title: contactTitle ?? "",
+      address: escapeHtml(contactAddress.trim()).replace(/\r?\n/g, "<br />"),
+      icon: "it-pa",
+    }
+  : undefined;
 
 const socialItems: FooterLinkSupportingBrandProps[] =
   utility
@@ -44,26 +67,34 @@ const socialItems: FooterLinkSupportingBrandProps[] =
       url: util.url,
     })) || [];
 
-// I link esterni del campo `utility` diventano una colonna a sé, senza titolo
-// finché il modello non avrà le colonne dedicate (passaggio 2).
-const utilityLinks: FooterLinkProps[] =
-  utility
-    ?.filter((util) => util.componentName === DatoBlockModel.ExternalLink)
-    .map((util) => ({ label: util.label, url: util.url })) || [];
+type CmsLink = NonNullable<typeof smallPrint>[number];
 
+// Un link interno può puntare a una sezione della pagina (es. la gestione
+// dei cookie in fondo alla privacy policy) tramite il campo `anchor`.
+const toFooterLink = (link: CmsLink): FooterLinkProps => {
+  if (link.componentName === DatoBlockModel.ExternalLink) {
+    return { label: link.label, url: link.url };
+  }
+  const path = linkResolver(link.linkTo?.id, lang);
+  const anchor = link.anchor?.trim();
+
+  return {
+    label: link.label,
+    linkTo: anchor && path !== "#" ? `${path}#${anchor}` : path,
+  };
+};
+
+// Le colonne di link titolate (Altri siti web, Trasparenza, ...) arrivano dal
+// campo `footer_columns`; quelle senza link non si mostrano.
 const columns: FooterColumnProps[] =
-  utilityLinks.length > 0 ? [{ title: "", links: utilityLinks }] : [];
+  footerColumns
+    ?.map((column) => ({
+      title: column.title ?? "",
+      links: column.links.map(toFooterLink),
+    }))
+    .filter((column) => column.links.length > 0) || [];
 
-const smallPrints: FooterLinkProps[] =
-  smallPrint?.map((link) => {
-    const isExternal = link.componentName === DatoBlockModel.ExternalLink;
-    const url = isExternal ? link.url : linkResolver(link.linkTo?.id, lang);
-
-    return {
-      label: link.label,
-      [isExternal ? "url" : "linkTo"]: url,
-    };
-  }) || [];
+const smallPrints: FooterLinkProps[] = smallPrint?.map(toFooterLink) || [];
 
 const mailingListForm: MailingListFormProps | undefined = mailingList
   ? {
@@ -84,6 +115,7 @@ const mailingListForm: MailingListFormProps | undefined = mailingList
     name: siteName ?? "",
     linkTo: linkResolver(homeRecordId, lang),
   }}
+  contacts={contacts}
   social={{ title: utilityTitle, items: socialItems }}
   columns={columns}
   mailingListForm={mailingListForm}

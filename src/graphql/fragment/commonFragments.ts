@@ -39,6 +39,7 @@ export type AltImageFragmentType = FragmentOf<typeof AltImageFragment>;
 export const InternalLinkFragment = graphql(`
   fragment InternalLinkFragment on InternalLinkRecord @_unmask {
     label
+    anchor
     linkTo {
       ... on IndexPageRecord {
         id

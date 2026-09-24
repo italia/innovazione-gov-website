@@ -279,6 +279,42 @@
       "type": "image",
       "display": "https://www.datocms-assets.com/166118/1768312333-logo-dtd.svg",
       "value": "https://www.datocms-assets.com/166118/1768312333-logo-dtd.svg"
+    },
+    {
+      "name": "X white",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1790237534-social-x-white.svg",
+      "value": "https://www.datocms-assets.com/217545/1790237534-social-x-white.svg"
+    },
+    {
+      "name": "LinkedIn white",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1790237537-social-linkedin-white.svg",
+      "value": "https://www.datocms-assets.com/217545/1790237537-social-linkedin-white.svg"
+    },
+    {
+      "name": "Facebook white",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1790237539-social-facebook-white.svg",
+      "value": "https://www.datocms-assets.com/217545/1790237539-social-facebook-white.svg"
+    },
+    {
+      "name": "Medium white",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1790237542-social-medium-white.svg",
+      "value": "https://www.datocms-assets.com/217545/1790237542-social-medium-white.svg"
+    },
+    {
+      "name": "YouTube white",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1790237544-social-youtube-white.svg",
+      "value": "https://www.datocms-assets.com/217545/1790237544-social-youtube-white.svg"
+    },
+    {
+      "name": "Instagram white",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1790237547-social-instagram-white.svg",
+      "value": "https://www.datocms-assets.com/217545/1790237547-social-instagram-white.svg"
     }
   ]
 }

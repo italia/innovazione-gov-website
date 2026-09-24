@@ -1979,6 +1979,38 @@ Represents signed double-precision fractional values as specified by [IEEE 754](
 """
 scalar FloatType
 
+union FooterColumnModelLinksField = ExternalLinkRecord | InternalLinkRecord
+
+"""Block of type Colonna del footer (footer_column)"""
+type FooterColumnRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  id: ItemId!
+  links: [FooterColumnModelLinksField!]!
+  title: String
+}
+
+type FooterColumnRecordListListNonNullMultiLocaleField {
+  locale: SiteLocale
+  value: [FooterColumnRecord!]!
+}
+
 type GlobalSeoField {
   facebookPageUrl: String
   fallbackSeo: SeoField
@@ -4927,6 +4959,7 @@ type InternalLinkRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  anchor: String
   id: ItemId!
   label: String!
   linkTo: InternalLinkModelLinkToField!
@@ -5406,6 +5439,27 @@ type LayoutModelUtilityFieldListListNonNullMultiLocaleField {
 
 """Record of type Layout (layout)"""
 type LayoutRecord implements RecordInterface {
+  _allContactAddressLocales(
+    """Process content as markdown"""
+    markdown: Boolean
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringMultiLocaleField!]
+  _allContactTitleLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringMultiLocaleField!]
+  _allFooterColumnsLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [FooterColumnRecordListListNonNullMultiLocaleField!]
   _allHeadingLocales(
     """Process content as markdown"""
     markdown: Boolean
@@ -5506,6 +5560,36 @@ type LayoutRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  contactAddress(
+    """Process content as markdown"""
+    markdown: Boolean
+
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String
+  contactTitle(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String
+  footerColumns(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [FooterColumnRecord!]!
   heading(
     """Process content as markdown"""
     markdown: Boolean
