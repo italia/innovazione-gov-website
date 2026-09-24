@@ -16,6 +16,8 @@ export type FooterBrandProps = {
   logo?: Pick<ImageProps, "url" | "width" | "height" | "alt">;
   name: string;
   linkTo: string;
+  /** Il logo contiene già il nome (lockup): niente testo accanto, nome nell'alt. */
+  nameInLogo?: boolean;
 };
 
 export type FooterContactsProps = {

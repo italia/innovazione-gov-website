@@ -4,7 +4,7 @@ import type { FooterBrandProps } from "./types";
 
 type Props = FooterBrandProps;
 
-const { logo, name, linkTo } = Astro.props;
+const { logo, name, linkTo, nameInLogo = false } = Astro.props;
 const { lang } = Astro.locals;
 const t = getI18n(lang);
 ---
@@ -16,16 +16,30 @@ const t = getI18n(lang);
         logo?.url && (
           <img
             src={logo.url}
-            alt={logo.alt ?? ""}
+            alt={nameInLogo ? name : (logo.alt ?? "")}
             width={logo.width ?? undefined}
             height={logo.height ?? undefined}
-            class="it-brand-logo"
+            class:list={["it-brand-logo", nameInLogo && "footer-brand-lockup"]}
           />
         )
       }
-      <div class="it-brand-text">
-        <div class="it-brand-title text-white">{name}</div>
-      </div>
+      {
+        !nameInLogo && (
+          <div class="it-brand-text">
+            <div class="it-brand-title text-white">{name}</div>
+          </div>
+        )
+      }
     </a>
   </div>
 </section>
+
+<style>
+  /* Il lockup (emblema + D + nome su tre righe) è largo: sugli schermi
+     stretti si riduce senza deformarsi. */
+  .footer-brand-lockup {
+    max-width: 100%;
+    object-fit: contain;
+    object-position: left center;
+  }
+</style>

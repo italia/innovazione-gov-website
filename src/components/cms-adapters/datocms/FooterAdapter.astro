@@ -20,6 +20,7 @@ type Props = FooterFragmentType & {
 };
 
 const {
+  _allOrganizationsLocales,
   _allUtilityTitleLocales,
   _allUtilityLocales,
   _allSmallPrintLocales,
@@ -34,6 +35,12 @@ const {
 } = Astro.props;
 
 const { lang } = Astro.locals;
+
+// Il logo del footer è il primo Brand di `organizations` (il lockup con il
+// nome del Dipartimento, come nel design); senza, si ripiega su logo e nome
+// dell'header.
+const organization = getLocaleValue(_allOrganizationsLocales, lang, null)?.[0];
+const organizationLogo = organization?.logo;
 const utilityTitle = getLocaleValue(_allUtilityTitleLocales, lang, "") ?? "";
 const utility = getLocaleValue(_allUtilityLocales, lang, null);
 const smallPrint = getLocaleValue(_allSmallPrintLocales, lang, null);
@@ -108,13 +115,24 @@ const mailingListForm: MailingListFormProps | undefined = mailingList
 ---
 
 <Footer
-  brand={{
-    logo: logoSelect
-      ? { url: logoSelect, width: null, height: null }
-      : undefined,
-    name: siteName ?? "",
-    linkTo: linkResolver(homeRecordId, lang),
-  }}
+  brand={organizationLogo
+    ? {
+        logo: {
+          url: organizationLogo.url,
+          width: organizationLogo.width,
+          height: organizationLogo.height,
+        },
+        name: siteName ?? "",
+        linkTo: linkResolver(homeRecordId, lang),
+        nameInLogo: true,
+      }
+    : {
+        logo: logoSelect
+          ? { url: logoSelect, width: null, height: null }
+          : undefined,
+        name: siteName ?? "",
+        linkTo: linkResolver(homeRecordId, lang),
+      }}
   contacts={contacts}
   social={{ title: utilityTitle, items: socialItems }}
   columns={columns}
