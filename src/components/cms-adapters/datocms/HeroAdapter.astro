@@ -17,17 +17,17 @@ const { recordId, lang } = Astro.locals;
 
 const itemsBreadcrumb = createBreadcrumb(recordId, lang);
 
+const immagineATuttaHero =
+  block.variant === "default" &&
+  Boolean(block.backgroundImage || block.backgroundImageForMobile);
+
 const variantTextColorBreadcrumb = () => {
-  const variantOnBackgroundColor =
-    block.backgroundColor === "lighter" || block.backgroundColor === "default"
-      ? "light"
-      : "dark";
+  if (immagineATuttaHero) return "dark";
 
-  if (block.variant === "default" || block.variant === "small") {
-    return block.backgroundImage ? "dark" : variantOnBackgroundColor;
-  }
-
-  return variantOnBackgroundColor;
+  return block.backgroundColor === "lighter" ||
+    block.backgroundColor === "default"
+    ? "light"
+    : "dark";
 };
 
 const { labelButton, linkTo, openInNewTab } = getCtaFields(block.cta, lang);

@@ -28,6 +28,12 @@ const onlyBreadcrumb =
   !(labelButton && linkTo) &&
   !image &&
   !imageMobile;
+
+const immagineATuttaHero =
+  variant === "default" && Boolean(image || imageMobile);
+const layoutClass = immagineATuttaHero
+  ? "it-hero-wrapper--full-image"
+  : "it-hero-wrapper--split";
 ---
 
 <style>
@@ -35,12 +41,39 @@ const onlyBreadcrumb =
 </style>
 
 <section
-  class={`it-hero-wrapper it-hero-wrapper--split ${sizeClass} ${bgClass} ${onlyBreadcrumb ? "only-breadcrumb" : ""}`}
+  class={`it-hero-wrapper ${layoutClass} ${sizeClass} ${bgClass} ${onlyBreadcrumb ? "only-breadcrumb" : ""}`}
   aria-labelledby={title ? slugify(title) : undefined}
 >
+  {
+    immagineATuttaHero && (
+      <Fragment>
+        {imageMobile && (
+          <div class="img-responsive-wrapper d-block d-lg-none">
+            <div class="img-responsive">
+              <div class="img-wrapper">
+                <Image {...imageMobile} loading="eager" />
+              </div>
+            </div>
+          </div>
+        )}
+        {image && (
+          <div
+            class={`img-responsive-wrapper${imageMobile ? " d-none d-lg-block" : ""}`}
+          >
+            <div class="img-responsive">
+              <div class="img-wrapper">
+                <Image {...image} loading="eager" />
+              </div>
+            </div>
+          </div>
+        )}
+      </Fragment>
+    )
+  }
+
   <div class="container h-100">
     <div class="row align-items-center h-100">
-      <div class="col-12 col-lg-7">
+      <div class={immagineATuttaHero ? "col-12 col-lg-8" : "col-12 col-lg-7"}>
         <div class="it-hero-text-wrapper px-0">
           {showBreadcrumb && <slot name="breadcrumb" />}
           {title && <h1 id={slugify(title)}>{title}</h1>}
@@ -62,7 +95,7 @@ const onlyBreadcrumb =
       </div>
 
       {
-        (image || imageMobile) && (
+        !immagineATuttaHero && (image || imageMobile) && (
           <div class="col-12 col-lg-5">
             {imageMobile && (
               <div class="hero-split__image d-block d-lg-none">
