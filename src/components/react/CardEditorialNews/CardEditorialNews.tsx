@@ -69,12 +69,12 @@ export function CardEditorialNews({
       {shouldShowFooter && (
         <footer className="it-card-related it-card-footer">
           {categories.length > 0 && (
-            <div className="it-card-taxonomy">
+            <div className="it-card-taxonomy d-flex flex-wrap gap-2">
               <span className="visually-hidden">{t["card.topic"]}</span>
               {categories.map((cat) => (
-                <p className="it-card-category" key={cat}>
-                  {cat}
-                </p>
+                <div className="chip chip-simple" key={cat}>
+                  <span className="chip-label">{cat}</span>
+                </div>
               ))}
             </div>
           )}

@@ -271,3 +271,7 @@ body {
   column-gap: 0.75rem;
   row-gap: 0.25rem;
 }
+
+.it-card-taxonomy .chip {
+  pointer-events: none;
+}
