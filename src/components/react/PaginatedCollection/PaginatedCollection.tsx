@@ -149,9 +149,9 @@ export function PaginatedCollection({
         </div>
       </div>
 
-      <div ref={resultsRef} tabIndex={-1} className="collection-results">
+      <div ref={resultsRef} tabIndex={-1} className="collection-results pt-5">
         {layout === "list" ? (
-          <div className="it-list-wrapper pt-4">
+          <div className="it-list-wrapper">
             <ul className="it-list mt-4 mt-md-3">
               {paginatedItems.map((n) => {
                 const item = n as CardEditorialNewsProps;
@@ -170,13 +170,13 @@ export function PaginatedCollection({
             </ul>
           </div>
         ) : isMeasures ? (
-          <div className="accordion pt-4">
+          <div className="accordion">
             {paginatedItems.map((n) => (
               <CardMeasure key={n.title} {...(n as CardMeasureProps)} />
             ))}
           </div>
         ) : (
-          <ul className="it-card-list row pt-4">
+          <ul className="it-card-list row">
             {paginatedItems.map((n) => {
               const isResource = newsPageTabType === "resource";
               const colClass = isResource
