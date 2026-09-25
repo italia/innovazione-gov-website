@@ -12,7 +12,7 @@ const { content, fullWidth = false } = Astro.props;
 ---
 
 <SectionContainer
-  className={`structured-text-container${fullWidth ? "" : " ps-lg-4"}`}
+  className={`structured-text-container${fullWidth ? " structured-text-container--narrow" : " ps-lg-4"}`}
 >
   <StructuredTextAdapter block={content} />
 </SectionContainer>

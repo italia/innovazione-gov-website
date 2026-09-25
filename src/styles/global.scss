@@ -272,6 +272,12 @@ body {
   }
 }
 
+@media (min-width: 992px) {
+  .structured-text-container--narrow .container {
+    max-width: 747px;
+  }
+}
+
 .it-card-taxonomy {
   display: flex;
   flex-wrap: wrap;
