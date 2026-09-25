@@ -97,6 +97,10 @@ const jsonLd: JsonLdPageData = {
 };
 ---
 
-<Layout pageSeo={seoMeta} datePublished={publishedAt} jsonLd={jsonLd}>
+<Layout
+  pageSeo={seoMeta}
+  datePublished={publishedAt ?? updatedAt}
+  jsonLd={jsonLd}
+>
   <PageAdapter content={content} />
 </Layout>

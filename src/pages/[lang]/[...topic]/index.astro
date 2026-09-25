@@ -43,9 +43,20 @@ const seoMeta = [
 
 const indicePerSezione = (indice: string) =>
   `${breadcrumb[1]?.linkTo ?? ""}/${indice}`;
+
+const dateArticoli = sezioni
+  .flatMap((sezione) => sezione.articoli)
+  .map((articolo) => articolo.dateShown)
+  .filter((data): data is string => Boolean(data));
+
+const ultimoAggiornamento = dateArticoli.length
+  ? dateArticoli.reduce((piuRecente, data) =>
+      data > piuRecente ? data : piuRecente,
+    )
+  : undefined;
 ---
 
-<Layout pageSeo={seoMeta}>
+<Layout pageSeo={seoMeta} datePublished={ultimoAggiornamento}>
   <Hero
     title={nome}
     paragraph={descrizione ?? undefined}
