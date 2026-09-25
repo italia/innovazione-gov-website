@@ -263,6 +263,13 @@ body {
 .collection-results {
   scroll-margin-top: 7rem;
   outline: none;
+  padding-top: 3.5rem;
+}
+
+@media (min-width: 992px) {
+  .collection-results {
+    padding-top: 5rem;
+  }
 }
 
 .it-card-taxonomy {

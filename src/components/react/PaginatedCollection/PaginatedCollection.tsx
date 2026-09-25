@@ -149,7 +149,7 @@ export function PaginatedCollection({
         </div>
       </div>
 
-      <div ref={resultsRef} tabIndex={-1} className="collection-results pt-5">
+      <div ref={resultsRef} tabIndex={-1} className="collection-results">
         {layout === "list" ? (
           <div className="it-list-wrapper">
             <ul className="it-list mt-4 mt-md-3">
