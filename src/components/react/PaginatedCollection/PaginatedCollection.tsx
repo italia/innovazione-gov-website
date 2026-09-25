@@ -11,7 +11,7 @@ import { FilterPills } from "@components/react/FilterPills";
 import { Pagination } from "@components/react/Pagination";
 import type { SiteLocale } from "@graphql/types";
 import { slugify } from "@utils/slugify";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Resource, type ResourceProps } from "../Resource";
 import { Select } from "../Select";
 type PaginatedCollectionCommonProps = {
@@ -60,6 +60,7 @@ export function PaginatedCollection({
 }: PaginatedCollectionProps) {
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(labelForAll);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const derivedCategories = Array.from(
     new Set(
@@ -99,6 +100,19 @@ export function PaginatedCollection({
   const start = (page - 1) * perPage;
   const paginatedItems = filteredItems.slice(start, start + perPage);
 
+  const handlePageChange = (nextPage: number) => {
+    setPage(nextPage);
+    const results = resultsRef.current;
+    if (!results) return;
+    results.focus({ preventScroll: true });
+    results.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+      block: "start",
+    });
+  };
+
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
     setPage(1);
@@ -135,65 +149,67 @@ export function PaginatedCollection({
         </div>
       </div>
 
-      {layout === "list" ? (
-        <div className="it-list-wrapper pt-4">
-          <ul className="it-list mt-4 mt-md-3">
+      <div ref={resultsRef} tabIndex={-1} className="collection-results">
+        {layout === "list" ? (
+          <div className="it-list-wrapper pt-4">
+            <ul className="it-list mt-4 mt-md-3">
+              {paginatedItems.map((n) => {
+                const item = n as CardEditorialNewsProps;
+                return (
+                  <CardArchiveListItem
+                    key={item.id ?? item.title}
+                    id={item.id}
+                    title={item.title}
+                    description={item.description}
+                    dateTime={item.dateTime}
+                    linkTo={item.linkTo}
+                    lang={lang}
+                  />
+                );
+              })}
+            </ul>
+          </div>
+        ) : isMeasures ? (
+          <div className="accordion pt-4">
+            {paginatedItems.map((n) => (
+              <CardMeasure key={n.title} {...(n as CardMeasureProps)} />
+            ))}
+          </div>
+        ) : (
+          <ul className="it-card-list row pt-4">
             {paginatedItems.map((n) => {
-              const item = n as CardEditorialNewsProps;
+              const isResource = newsPageTabType === "resource";
+              const colClass = isResource
+                ? "col-12 col-lg-7 mb-3"
+                : "col-12 col-lg-4 mb-5";
+
+              const itemKey = n.title;
+
               return (
-                <CardArchiveListItem
-                  key={item.id ?? item.title}
-                  id={item.id}
-                  title={item.title}
-                  description={item.description}
-                  dateTime={item.dateTime}
-                  linkTo={item.linkTo}
-                  lang={lang}
-                />
+                <li className={colClass} key={itemKey}>
+                  {newsPageTabType === "news_item" && (
+                    <CardEditorialNews {...(n as CardEditorialNewsProps)} />
+                  )}
+
+                  {newsPageTabType === "webinar_item" && (
+                    <CardEditorialNews {...(n as CardEditorialNewsProps)} />
+                  )}
+
+                  {newsPageTabType === "resource" && (
+                    <Resource {...(n as ResourceProps)} />
+                  )}
+                </li>
               );
             })}
           </ul>
-        </div>
-      ) : isMeasures ? (
-        <div className="accordion pt-4">
-          {paginatedItems.map((n) => (
-            <CardMeasure key={n.title} {...(n as CardMeasureProps)} />
-          ))}
-        </div>
-      ) : (
-        <ul className="it-card-list row pt-4">
-          {paginatedItems.map((n) => {
-            const isResource = newsPageTabType === "resource";
-            const colClass = isResource
-              ? "col-12 col-lg-7 mb-3"
-              : "col-12 col-lg-4 mb-5";
-
-            const itemKey = n.title;
-
-            return (
-              <li className={colClass} key={itemKey}>
-                {newsPageTabType === "news_item" && (
-                  <CardEditorialNews {...(n as CardEditorialNewsProps)} />
-                )}
-
-                {newsPageTabType === "webinar_item" && (
-                  <CardEditorialNews {...(n as CardEditorialNewsProps)} />
-                )}
-
-                {newsPageTabType === "resource" && (
-                  <Resource {...(n as ResourceProps)} />
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      )}
+        )}
+      </div>
 
       <Pagination
         lang={lang}
         currentPage={page}
         totalPages={totalPages}
-        onPageChange={setPage}
+        onPageChange={handlePageChange}
       />
     </div>
   );
