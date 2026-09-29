@@ -116,3 +116,24 @@ const classVariantNav = variant === "light" ? "theme-light-desk" : "";
     </div>
   </div>
 </div>
+
+<style>
+  .it-right-zone .it-socials ul {
+    flex-wrap: wrap;
+    gap: 0 0.5rem;
+    max-width: 7rem;
+  }
+
+  .it-header-center-content-wrapper
+    .it-right-zone
+    .it-socials
+    ul
+    :global(.icon) {
+    margin-left: 0;
+  }
+
+  .it-right-zone .it-socials > span,
+  .it-right-zone .it-search-wrapper > span {
+    font-size: 16px;
+  }
+</style>
