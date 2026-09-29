@@ -1,7 +1,10 @@
 import {
+  ChartFragment,
   ExternalLinkFragment,
   ImageFragment,
   InternalLinkFragment,
+  KpiFragment,
+  ListCardEditorialWithIconWrapperFragment,
 } from "@graphql/fragment/commonFragments";
 import {
   ArticleSTFragment,
@@ -16,6 +19,7 @@ import {
   TextAndAccordionFragment,
   TextAndImageFragment,
   TextAndStatisticsFragment,
+  TextDonutFragment,
   TextOnlyFragment,
   TimelineFragment,
   ThirdPartyCookieFragment,
@@ -32,6 +36,18 @@ export const PageContentFragment = graphql(
       ... on RecordInterface {
         id
         componentName: __typename
+      }
+      ... on TextDonutRecord {
+        ...TextDonutFragment
+      }
+      ... on SettingsChartRecord {
+        ...ChartFragment
+      }
+      ... on SettingsKpiRecord {
+        ...KpiFragment
+      }
+      ... on ListCardEditorialWithIconWrapperRecord {
+        ...ListCardEditorialWithIconWrapperFragment
       }
       ... on HeroRecord {
         ...HeroFragment
@@ -137,6 +153,10 @@ export const PageContentFragment = graphql(
     ImageFragment,
     InternalLinkFragment,
     ExternalLinkFragment,
+    TextDonutFragment,
+    ChartFragment,
+    KpiFragment,
+    ListCardEditorialWithIconWrapperFragment,
   ],
 );
 

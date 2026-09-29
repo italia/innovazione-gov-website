@@ -7027,7 +7027,7 @@ type OwnerRecord implements RecordInterface {
   ): String!
 }
 
-union PageModelContentField = CardLinkListRecord | CarouselRecord | DataSectionRecord | FaqSectionRecord | GraphitaliaDashboardRecord | HeroRecord | LinkMenuRecord | NewsFeedRecord | StructuredTextRecord | SupportChannelsSectionRecord | SupportCtaSectionRecord | TextAccordionRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | ThirdPartyCookieRecord | TimelineRecord | TopicFilterRecord | TopicListRecord | UseCaseContainerRecord
+union PageModelContentField = CardLinkListRecord | CarouselRecord | DataSectionRecord | FaqSectionRecord | GraphitaliaDashboardRecord | HeroRecord | LinkMenuRecord | ListCardEditorialWithIconWrapperRecord | NewsFeedRecord | SettingsChartRecord | SettingsKpiRecord | StructuredTextRecord | SupportChannelsSectionRecord | SupportCtaSectionRecord | TextAccordionRecord | TextDonutRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | ThirdPartyCookieRecord | TimelineRecord | TopicFilterRecord | TopicListRecord | UseCaseContainerRecord
 
 type PageModelContentFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
