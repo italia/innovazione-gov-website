@@ -13,24 +13,27 @@ const lang = Astro.locals.lang || "it";
 <div class="it-footer-main" id="footer">
   <div class="container">
     <FooterBrand {...brand} />
-    <section class="py-4 px-0">
+    <section class="px-0">
       <div class="row">
         {
           contacts && (
-            <div class="col-12 col-md-6 col-lg-3 pb-4">
+            <div class="col-12 col-md-6 col-lg-4 pb-4">
               <h4 class="footer-heading-title">{contacts.title}</h4>
               {contacts.icon && (
                 <svg class="icon icon-sm icon-white mb-3" aria-hidden="true">
                   <use href={`/bsi-svg/sprites.svg#${contacts.icon}`} />
                 </svg>
               )}
-              <p class="fw-semibold mb-0" set:html={contacts.address} />
+              <p
+                class="fw-semibold mb-0 footer-address"
+                set:html={contacts.address}
+              />
             </div>
           )
         }
         {
           social && social.items.length > 0 && (
-            <div class="col-12 col-md-6 col-lg-3 pb-4">
+            <div class="col-12 col-md-6 col-lg-2 pb-4">
               <h4 class="footer-heading-title">{social.title}</h4>
               <ul class="list-inline mb-0 d-flex flex-wrap footer-social">
                 {social.items.map((item) => (
@@ -107,11 +110,14 @@ const lang = Astro.locals.lang || "it";
     font-size: 1rem;
     font-weight: 600;
     text-transform: uppercase;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .footer-address {
+    white-space: nowrap;
   }
   /* Griglia di icone da 24px, tre per riga, con lo spazio del design. */
   .footer-social {
-    gap: 0.75rem 1rem;
+    gap: 0 0.5rem;
     max-width: 7rem;
   }
   .footer-social .list-inline-item {
