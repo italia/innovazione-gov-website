@@ -14,13 +14,15 @@ const { title, paragraph, items } = Astro.props;
 <SplitContent
   leftColumns={5}
   rightColumns={6}
-  alignItems="top"
+  alignItems="stretch"
   sectionTitleId={title}
 >
-  <TextContainer slot="left" title={title} paragraph={paragraph ?? ""} />
+  <div slot="left" class="timeline__intro">
+    <TextContainer title={title} paragraph={paragraph ?? ""} />
+  </div>
 
   <div slot="right" class="it-section-bg-light timeline">
-    <ol class="timeline__list">
+    <ol class="timeline__list" role="list">
       {
         items.map((item) => (
           <li class="timeline__item">
@@ -129,9 +131,9 @@ const { title, paragraph, items } = Astro.props;
     position: absolute;
     top: 1.5rem;
     bottom: 1.5rem;
-    left: 1.4375rem;
-    width: 2px;
-    background: var(--timeline-off);
+    left: 1.375rem;
+    width: 4px;
+    background: linear-gradient(180deg, rgb(0 51 102) 0%, rgb(0 115 230) 100%);
   }
   .timeline__item {
     position: relative;
@@ -257,6 +259,11 @@ const { title, paragraph, items } = Astro.props;
   @media (min-width: 992px) {
     .timeline {
       padding: 2.5rem 3rem;
+    }
+
+    .timeline__intro {
+      position: sticky;
+      top: 6rem;
     }
   }
 </style>
