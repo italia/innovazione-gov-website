@@ -5063,6 +5063,7 @@ input JobPositionModelFilter {
   abstract: TextFilter
   closeDate: DateFilter
   compensation: StringFilter
+  image: FileFilter
   office: StringFilter
   openDate: DateFilter
   parentPage: LinkFilter
@@ -5231,6 +5232,7 @@ type JobPositionRecord implements RecordInterface {
     fallbackLocales: [SiteLocale!]
   ): [JobPositionModelContentField!]!
   id: ItemId!
+  image: FileField
   office(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale

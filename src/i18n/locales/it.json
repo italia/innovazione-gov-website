@@ -51,6 +51,7 @@
   "filter.noResults": "Nessun elemento per questo argomento.",
   "filter.topic": "Argomento: ",
   "footer.sectionLink": "Sezione link utili",
+  "footer.sitemap": "Mappa del sito",
   "header.hideMenu": "Nascondi navigazione",
   "header.languageSelected": "Selezionata",
   "header.languageSelector": "Seleziona lingua: lingua selezionata",
@@ -87,6 +88,7 @@
   "position.compensationPrefix": "Fino a",
   "position.detail": "Scopri la posizione",
   "position.label": "Posizione lavorativa",
+  "position.latestOpen": "Ultime posizioni aperte",
   "position.loadMore": "Mostra altre posizioni",
   "position.noOpen": "Al momento non ci sono posizioni lavorative aperte",
   "position.noResults": "Nessuna posizione corrisponde alla ricerca",
@@ -119,6 +121,5 @@
   "videoplayer.overlay.cookiePolicy": "cookie policy",
   "videoplayer.overlay.title": "Accetta i cookie di YouTube per vedere il video. Puoi gestire le preferenze nella",
   "videoplayer.remember": "Ricorda per tutti i video",
-  "videoplayer.transcription": "Trascrizione",
-  "footer.sitemap": "Mappa del sito"
+  "videoplayer.transcription": "Trascrizione"
 }

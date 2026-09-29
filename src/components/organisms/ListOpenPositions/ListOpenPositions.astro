@@ -1,0 +1,190 @@
+---
+import ButtonLink from "@components/atoms/Button/ButtonLink.astro";
+import { Image } from "@components/atoms/Image";
+import type { ImageProps } from "@components/atoms/Image/types";
+import { SectionContainer } from "@components/organisms/SectionContainer";
+import { getI18n } from "@i18n/microcopy";
+import { getSectionBgClass } from "@utils/background";
+import type { SectionBackground } from "@utils/background";
+import { slugify } from "@utils/slugify";
+
+export type OpenPositionItemProps = {
+  id: string;
+  title: string;
+  description?: string;
+  image?: ImageProps;
+  linkTo: string;
+};
+
+type Props = {
+  title: string;
+  paragraph?: string | null;
+  items: OpenPositionItemProps[];
+  background?: SectionBackground;
+  labelButton?: string;
+  linkTo?: string;
+  openInNewTab?: boolean;
+};
+
+const {
+  title,
+  paragraph,
+  items,
+  background = "default",
+  labelButton,
+  linkTo,
+  openInNewTab = false,
+} = Astro.props;
+
+const { lang } = Astro.locals;
+const t = getI18n(lang);
+
+const isDark = background === "primary" || background === "dark";
+const textColorClass = isDark ? "text-white" : "";
+---
+
+<SectionContainer
+  className={`open-positions ${getSectionBgClass(background)}`}
+  sectionTitleId={title}
+>
+  <div class="row justify-content-between">
+    <div class="col-12 col-lg-5 mb-5 mb-lg-0">
+      <h2 class={textColorClass} id={slugify(title)}>{title}</h2>
+      {paragraph && <p class={`mb-4 ${textColorClass}`}>{paragraph}</p>}
+      {
+        labelButton && linkTo && (
+          <ButtonLink
+            size="small"
+            variant={isDark ? "dark" : "light"}
+            label={labelButton}
+            linkTo={linkTo}
+            openInNewTab={openInNewTab}
+          />
+        )
+      }
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <h3 class:list={["open-positions__label", textColorClass]}>
+        {t["position.latestOpen"]}
+      </h3>
+      {
+        items.length > 0 ? (
+          <ul class="open-positions__list">
+            {items.map((item) => (
+              <li>
+                <article class="open-positions__card">
+                  {item.image && (
+                    <div class="open-positions__media">
+                      <Image {...item.image} alt="" />
+                    </div>
+                  )}
+                  <div class="open-positions__body">
+                    <h4 class="open-positions__title">
+                      <a href={item.linkTo}>
+                        {item.title}
+                        <svg
+                          class="icon icon-sm icon-primary"
+                          aria-hidden="true"
+                        >
+                          <use href="/bsi-svg/sprites.svg#it-arrow-right" />
+                        </svg>
+                      </a>
+                    </h4>
+                    {item.description && (
+                      <p class="open-positions__text">{item.description}</p>
+                    )}
+                  </div>
+                </article>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class:list={["open-positions__empty", textColorClass]}>
+            {t["position.noOpen"]}
+          </p>
+        )
+      }
+    </div>
+  </div>
+</SectionContainer>
+
+<style>
+  .open-positions__label {
+    margin-bottom: 1.5rem;
+    color: #17334f;
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .open-positions__list {
+    display: grid;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .open-positions__card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 1.25rem;
+    border: 1px solid #e3ecf5;
+    background: #f2f7fc;
+    padding: 1.25rem;
+  }
+
+  .open-positions__media {
+    flex: 0 0 auto;
+    width: 11.25rem;
+    max-width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .open-positions__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .open-positions__body {
+    flex: 1 1 14rem;
+  }
+
+  .open-positions__title {
+    margin: 0 0 0.5rem;
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+
+  .open-positions__title a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #06c;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .open-positions__title .icon {
+    flex: 0 0 auto;
+    fill: #06c;
+  }
+
+  .open-positions__text {
+    margin: 0;
+    color: #1c1c1c;
+    line-height: 1.6;
+  }
+
+  .open-positions__empty {
+    margin: 0;
+    color: #5b6f82;
+  }
+</style>

@@ -1,5 +1,6 @@
 import {
   CalloutFragment,
+  ImageFragment,
   ListCollectionFragment,
 } from "@graphql/fragment/commonFragments";
 import {
@@ -169,6 +170,9 @@ export const AllJobPositionsRecordFragment = graphql(
       closeDate
       sortDate
       showSidebar
+      image {
+        ...ImageFragment
+      }
       allOfficeLocales: _allOfficeLocales {
         locale
         value
@@ -201,7 +205,7 @@ export const AllJobPositionsRecordFragment = graphql(
       }
     }
   `,
-  [JobPositionContentFragment],
+  [JobPositionContentFragment, ImageFragment],
 );
 
 export type AllJobPositionsRecordFragmentType = FragmentOf<

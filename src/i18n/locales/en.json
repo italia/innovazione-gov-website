@@ -51,6 +51,7 @@
   "filter.noResults": "No items for this topic.",
   "filter.topic": "Topic: ",
   "footer.sectionLink": "Useful links section",
+  "footer.sitemap": "Sitemap",
   "header.hideMenu": "Hide navigation",
   "header.languageSelected": "Selected",
   "header.languageSelector": "Select language: selected language",
@@ -87,6 +88,7 @@
   "position.compensationPrefix": "Up to",
   "position.detail": "See the position",
   "position.label": "Job position",
+  "position.latestOpen": "Latest open positions",
   "position.loadMore": "Show more positions",
   "position.noOpen": "There are no open job positions at the moment",
   "position.noResults": "No position matches your search",
@@ -119,6 +121,5 @@
   "videoplayer.overlay.cookiePolicy": "cookie policy",
   "videoplayer.overlay.title": "Accept YouTube cookies to watch the video. You can manage your preferences in the",
   "videoplayer.remember": "Remember for all videos",
-  "videoplayer.transcription": "Transcript",
-  "footer.sitemap": "Sitemap"
+  "videoplayer.transcription": "Transcript"
 }

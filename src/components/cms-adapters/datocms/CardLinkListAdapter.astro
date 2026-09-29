@@ -1,11 +1,13 @@
 ---
 import type { CardEditorialNewsProps } from "@components/molecules/CardEditorialNews/types";
 import { ListCollection } from "@components/organisms/ListCollection";
+import { ListOpenPositions } from "@components/organisms/ListOpenPositions";
 import { ListWideCards } from "@components/organisms/ListWideCards";
 import type { CardLinkListFragmentType } from "@graphql/fragment/sectionFragments";
 import type { SiteLocale } from "@graphql/types";
 import { isDraftModeEnabled } from "@lib/draftMode";
 import { getLastItems } from "@lib/lastItems";
+import { getOpenPositions } from "@lib/openPositions";
 import type { SectionBackground } from "@utils/background";
 import { getCtaFields } from "@utils/getCtaFields";
 import { linkResolver } from "@utils/linkResolver";
@@ -28,9 +30,17 @@ const cardOrizzontali = (block.listContent ?? []).filter(
   (item) => item.componentName === "WideLinkCardRecord",
 );
 
+const mostraPosizioniAperte = block.lastItems === "job_position";
+
+const posizioniAperte = mostraPosizioniAperte
+  ? await getOpenPositions(lang as SiteLocale)
+  : [];
+
 let items: CardEditorialNewsProps[];
 
-if (cardOrizzontali.length > 0) {
+if (mostraPosizioniAperte) {
+  items = [];
+} else if (cardOrizzontali.length > 0) {
   items = [];
 } else if (block.lastItems) {
   items = await getLastItems(block.lastItems, {
@@ -67,7 +77,17 @@ const { labelButton, linkTo, openInNewTab } = getCtaFields(
 ---
 
 {
-  cardOrizzontali.length > 0 ? (
+  mostraPosizioniAperte ? (
+    <ListOpenPositions
+      title={block.title ?? ""}
+      paragraph={block.paragraph}
+      items={posizioniAperte}
+      background={block.backgroundColor as SectionBackground}
+      labelButton={labelButton}
+      linkTo={linkTo}
+      openInNewTab={openInNewTab}
+    />
+  ) : cardOrizzontali.length > 0 ? (
     <ListWideCards
       title={block.title ?? ""}
       paragraph={block.paragraph}
