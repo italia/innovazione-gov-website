@@ -84,10 +84,18 @@ const textColorClass = isDark ? "text-white" : "";
                       <a href={item.linkTo}>
                         {item.title}
                         <svg
-                          class="icon icon-sm icon-primary"
+                          class="open-positions__icon"
+                          width="26"
+                          height="26"
+                          viewBox="0 0 26 26"
+                          fill="none"
                           aria-hidden="true"
+                          focusable="false"
                         >
-                          <use href="/bsi-svg/sprites.svg#it-arrow-right" />
+                          <path
+                            d="M12 3C12.4109 3.00798 12.742 3.33914 12.75 3.75C12.75 4.16421 12.4142 4.5 12 4.5H4.5C2.84315 4.5 1.5 5.84315 1.5 7.5V21C1.5 22.6569 2.84315 24 4.5 24H18.0146C19.6715 24 21.0146 22.6569 21.0146 21V12.75C21.0146 12.3359 21.3506 12.0002 21.7646 12C22.1672 12.008 22.492 12.3328 22.5 12.7354V21C22.5 23.4853 20.4853 25.5 18 25.5H4.5C2.01472 25.5 0 23.4853 0 21V7.5C0 5.01472 2.01472 3 4.5 3H12ZM24 0C24.8284 0 25.5 0.671573 25.5 1.5V9.75C25.5 10.1642 25.1642 10.5 24.75 10.5C24.3358 10.5 24 10.1642 24 9.75V2.4209L11.3066 15.1143C11.0138 15.4069 10.5389 15.407 10.2461 15.1143C9.95326 14.8214 9.95337 14.3466 10.2461 14.0537L22.7988 1.5H15.75C15.3358 1.5 15 1.16421 15 0.75C15 0.335786 15.3358 0 15.75 0H24Z"
+                            fill="currentColor"
+                          />
                         </svg>
                       </a>
                     </h4>
@@ -131,11 +139,12 @@ const textColorClass = isDark ? "text-white" : "";
   .open-positions__card {
     display: flex;
     flex-wrap: wrap;
-    align-items: stretch;
-    gap: 1.25rem;
-    border: 1px solid #e3ecf5;
+    align-items: center;
+    gap: 24px;
+    box-shadow: 0 4px 4px 0 rgb(0 0 0 / 15%);
+    border: 1px solid var(--color-border-subtle, #c5c7c9);
     background: #f2f7fc;
-    padding: 1.25rem;
+    padding: 16px;
   }
 
   .open-positions__media {
@@ -158,28 +167,29 @@ const textColorClass = isDark ? "text-white" : "";
 
   .open-positions__title {
     margin: 0 0 0.5rem;
-    font-size: 1.125rem;
-    line-height: 1.5;
+    font-size: 32px;
+    line-height: 40px;
   }
 
   .open-positions__title a {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: #06c;
+    color: var(--color-text-primary, #06c);
     font-weight: 700;
     text-decoration: underline;
     text-underline-offset: 0.25em;
   }
 
-  .open-positions__title .icon {
+  .open-positions__icon {
     flex: 0 0 auto;
-    fill: #06c;
+    align-self: center;
   }
 
   .open-positions__text {
     margin: 0;
     color: #1c1c1c;
+    font-size: 16px;
     line-height: 1.6;
   }
 
