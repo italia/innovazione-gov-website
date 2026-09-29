@@ -719,6 +719,7 @@ export const ListCardEditorialWithIconFragment = graphql(
   `
     fragment ListCardEditorialWithIconFragment on ListCardEditorialWithIconRecord
     @_unmask {
+      title
       items {
         ...CardEditorialWithIconFragment
       }

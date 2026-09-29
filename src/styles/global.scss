@@ -82,6 +82,10 @@ body {
   color: var(--color-primary-dark, #17334f);
 }
 
+.structured-text-container .container h3.list-card-label {
+  color: var(--color-text-base, #1a1a1a);
+}
+
 .structured-text-container .container :is(h1, h2, h3, h4, h5, h6) {
   margin-bottom: 1rem;
 }

@@ -23,4 +23,14 @@ const cardsData: CardEditorialWithIconProps[] = block?.items.map((item) => {
 });
 ---
 
+{block.title && <h3 class="list-card-label">{block.title}</h3>}
 <ListCard cards={cardsData} type="CardEditorialWithIcon" fullWidth />
+
+<style>
+  .list-card-label {
+    margin-bottom: 16px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+  }
+</style>

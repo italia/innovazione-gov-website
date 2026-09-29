@@ -5948,6 +5948,7 @@ type ListCardEditorialWithIconRecord implements RecordInterface {
   _updatedAt: DateTime!
   id: ItemId!
   items: [CardEditorialWithIconRecord!]!
+  title: String
 }
 
 """
