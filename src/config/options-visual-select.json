@@ -315,6 +315,24 @@
       "type": "image",
       "display": "https://www.datocms-assets.com/217545/1790237547-social-instagram-white.svg",
       "value": "https://www.datocms-assets.com/217545/1790237547-social-instagram-white.svg"
+    },
+    {
+      "name": "Grafico",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1790670569-grafico.svg",
+      "value": "https://www.datocms-assets.com/217545/1790670569-grafico.svg"
+    },
+    {
+      "name": "Persone",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1790670573-persone.svg",
+      "value": "https://www.datocms-assets.com/217545/1790670573-persone.svg"
+    },
+    {
+      "name": "Lampadina",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1790670576-lampadina.svg",
+      "value": "https://www.datocms-assets.com/217545/1790670576-lampadina.svg"
     }
   ]
 }
