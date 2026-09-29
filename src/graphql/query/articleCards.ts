@@ -23,6 +23,7 @@ export const AllArticleCardsQuery = graphql(
         firstPublishedAt: _firstPublishedAt
         tags {
           name
+          isCategory
         }
         image {
           ...ImageFragment

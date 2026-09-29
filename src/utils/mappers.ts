@@ -40,6 +40,10 @@ export const mapArticleToCardEditorialNewsProps = (
   const tags = (article.tags ?? [])
     .map((t) => t.name)
     .filter((name): name is string => !!name);
+  const filterCategories = (article.tags ?? [])
+    .filter((t) => t.isCategory)
+    .map((t) => t.name)
+    .filter((name): name is string => !!name);
   return {
     id: article.id,
     title: getLocaleValue(article.allTitleLocales, lang, "") ?? "",
@@ -50,6 +54,7 @@ export const mapArticleToCardEditorialNewsProps = (
     image: article.image ?? undefined,
     dateTime: article.firstPublishedAt ?? undefined,
     category: tags,
+    filterCategories,
     linkTo: linkResolver(article.id, lang),
     lang: lang,
     isExternal: false,

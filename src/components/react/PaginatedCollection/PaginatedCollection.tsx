@@ -45,6 +45,17 @@ type PaginatedCollectionProps =
       newsPageTabType: "measures";
     });
 
+type VoceFiltrabile = {
+  category?: string | string[];
+  filterCategories?: string[];
+};
+
+const valoriFiltro = (voce: VoceFiltrabile): string[] => {
+  const sorgente = voce.filterCategories ?? voce.category;
+  if (!sorgente) return [];
+  return Array.isArray(sorgente) ? sorgente : [sorgente];
+};
+
 export function PaginatedCollection({
   items,
   perPage = 12,
@@ -65,7 +76,7 @@ export function PaginatedCollection({
   const derivedCategories = Array.from(
     new Set(
       items
-        .flatMap((item) => item.category)
+        .flatMap(valoriFiltro)
         .filter((c): c is string => typeof c === "string"),
     ),
   );
@@ -94,7 +105,7 @@ export function PaginatedCollection({
   const filteredItems =
     selectedCategory === labelForAll
       ? items
-      : items.filter((item) => item.category?.includes(selectedCategory));
+      : items.filter((item) => valoriFiltro(item).includes(selectedCategory));
 
   const totalPages = Math.ceil(filteredItems.length / perPage);
   const start = (page - 1) * perPage;
