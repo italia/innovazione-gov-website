@@ -333,6 +333,24 @@
       "type": "image",
       "display": "https://www.datocms-assets.com/217545/1790670576-lampadina.svg",
       "value": "https://www.datocms-assets.com/217545/1790670576-lampadina.svg"
+    },
+    {
+      "name": "Rete di persone",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1790691665-rete-persone.svg",
+      "value": "https://www.datocms-assets.com/217545/1790691665-rete-persone.svg"
+    },
+    {
+      "name": "Chiave inglese",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1790691668-chiave.svg",
+      "value": "https://www.datocms-assets.com/217545/1790691668-chiave.svg"
+    },
+    {
+      "name": "Istituzione",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1790691672-istituzione.svg",
+      "value": "https://www.datocms-assets.com/217545/1790691672-istituzione.svg"
     }
   ]
 }
