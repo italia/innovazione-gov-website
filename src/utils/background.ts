@@ -1,15 +1,7 @@
 export type SectionBackground =
-  | "default"
-  | "primary"
-  | "dark"
-  | "lighter"
-  | "primary-light";
+  "default" | "primary" | "dark" | "lighter" | "primary-light";
 export type SectionBackgroundHero =
-  | "default"
-  | "primary"
-  | "lighter"
-  | "dark"
-  | "primary-light";
+  "default" | "primary" | "lighter" | "dark" | "primary-light";
 
 const BACKGROUND_COLOR_MAP: Record<SectionBackground, string> = {
   default: "it-section-bg-default dark",
