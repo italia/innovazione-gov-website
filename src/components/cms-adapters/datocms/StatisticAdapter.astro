@@ -28,7 +28,7 @@ if (block.statistics.length > 0) {
     return {
       info: item.info,
       title: item.title,
-      contentIcon: item.iconSelect,
+      contentIcon: item.iconSelect ?? undefined,
     };
   });
 }

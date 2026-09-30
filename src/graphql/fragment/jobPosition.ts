@@ -65,8 +65,10 @@ export const AllJobPositionsSlugFragment = graphql(
             value
           }
           parentPage {
-            id
-            ...PageLocalesFragment
+            ... on PageRecord {
+              id
+              ...PageLocalesFragment
+            }
           }
         }
         ... on PageRecord {

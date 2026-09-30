@@ -26,8 +26,10 @@ export const AllArticlesSlugFragment = graphql(
           id
           ...InsightLocalesFragment
           parentPage {
-            id
-            ...PageLocalesFragment
+            ... on PageRecord {
+              id
+              ...PageLocalesFragment
+            }
           }
         }
       }
@@ -61,8 +63,20 @@ export const AllInsightsSlugFragment = graphql(
       locales: _locales
       ...InsightLocalesFragment
       parentPage {
-        id
-        ...PageLocalesFragment
+        ... on PageRecord {
+          id
+          ...PageLocalesFragment
+        }
+        ... on InsightRecord {
+          id
+          ...InsightLocalesFragment
+          parentPage {
+            ... on PageRecord {
+              id
+              ...PageLocalesFragment
+            }
+          }
+        }
       }
     }
   `,
@@ -87,8 +101,10 @@ export const AllWebinarItemsSlugFragment = graphql(
         ... on IndexPageRecord {
           ...CatalogueLocalesFragment
           parentPage {
-            id
-            ...PageLocalesFragment
+            ... on PageRecord {
+              id
+              ...PageLocalesFragment
+            }
           }
         }
         ... on PageRecord {

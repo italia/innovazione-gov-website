@@ -74,6 +74,15 @@ body {
   > li
   a,
 .structured-text-container .container > .row > div > ol > li a {
+  color: var(--color-text-primary, #06c);
+}
+
+.structured-text-container:is(.it-section-bg-dark, .it-section-bg-primary)
+  .container
+  > .row
+  > div
+  :is(p, li)
+  a {
   color: inherit;
 }
 

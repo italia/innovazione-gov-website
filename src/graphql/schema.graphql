@@ -1450,7 +1450,7 @@ type DataContainerRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
-  iconSelect: String!
+  iconSelect: String
   id: ItemId!
   info: String!
   title: String!
@@ -4661,6 +4661,13 @@ enum InsightModelOrderBy {
   title_DESC
 }
 
+union InsightModelParentPageField = InsightRecord | PageRecord
+
+type InsightModelParentPageFieldMultiLocaleField {
+  locale: SiteLocale
+  value: InsightModelParentPageField
+}
+
 """Record of type Articoli e sottopagine (insight)"""
 type InsightRecord implements RecordInterface {
   _allAbstractLocales(
@@ -4689,7 +4696,7 @@ type InsightRecord implements RecordInterface {
     If you want to fallback to a default translation when a translation has not been found
     """
     fallbackLocales: [SiteLocale!]
-  ): [PageRecordMultiLocaleField!]
+  ): [InsightModelParentPageFieldMultiLocaleField!]
   _allSeoLocales(
     """
     If you want to fallback to a default translation when a translation has not been found
@@ -4774,7 +4781,7 @@ type InsightRecord implements RecordInterface {
     If you want to fallback to a default translation when a translation has not been found
     """
     fallbackLocales: [SiteLocale!]
-  ): PageRecord
+  ): InsightModelParentPageField
   sectionsNavLayout: String
   seo(
     """The locale to use to fetch the field's content"""

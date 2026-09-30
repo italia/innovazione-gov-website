@@ -25,13 +25,13 @@ const textColorClass = contentIcon ? theme.title : theme.text;
 ---
 
 <Fragment>
-  <p class=`body-sans-lg fw-semibold ${titleColorClass}`>
-    {title}
-  </p>
   <div class="d-flex align-items-center gap-3">
     {contentIcon && <IconContainer content={contentIcon} aria-hidden="true" />}
     <p class=`h1 align-middle m-0 ${textColorClass}`>
       {info}
     </p>
   </div>
+  <p class=`body-sans-lg fw-semibold mb-0 mt-2 ${titleColorClass}`>
+    {title}
+  </p>
 </Fragment>
