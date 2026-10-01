@@ -470,16 +470,31 @@ export const ImageBlockFragment = graphql(
 
 export type ImageBlockFragmentType = FragmentOf<typeof ImageBlockFragment>;
 
-export const AccordionFragment = graphql(`
-  fragment AccordionFragment on AccordionRecord @_unmask {
-    id
-    items {
+export const AccordionFragment = graphql(
+  `
+    fragment AccordionFragment on AccordionRecord @_unmask {
       id
-      body(markdown: true)
-      header
+      items {
+        id
+        body(markdown: true)
+        header
+        cta {
+          ... on RecordInterface {
+            id
+            componentName: __typename
+          }
+          ... on InternalLinkRecord {
+            ...InternalLinkFragment
+          }
+          ... on ExternalLinkRecord {
+            ...ExternalLinkFragment
+          }
+        }
+      }
     }
-  }
-`);
+  `,
+  [InternalLinkFragment, ExternalLinkFragment],
+);
 
 export type AccordionFragmentType = FragmentOf<typeof AccordionFragment>;
 

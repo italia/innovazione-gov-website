@@ -1,4 +1,7 @@
 ---
+import { Link } from "@components/atoms/Link";
+import type { SiteLocale } from "@graphql/types";
+import { getCtaFields } from "@utils/getCtaFields";
 import type { AccordionItemProps } from "./types";
 type Props = AccordionItemProps & {
   fullWidth?: boolean;
@@ -10,6 +13,7 @@ const {
   header,
   body,
   id,
+  cta,
   fullWidth = true,
   index,
   allOpen = true,
@@ -17,6 +21,14 @@ const {
 } = Astro.props;
 
 const isFirst = allOpen || index === 0;
+
+const { lang } = Astro.locals;
+const { labelButton, linkTo, openInNewTab } = getCtaFields(
+  cta
+    ? { ...cta, url: cta.url ?? undefined, linkTo: cta.linkTo ?? undefined }
+    : null,
+  lang as SiteLocale,
+);
 ---
 
 <div class="accordion-item bg-transparent">
@@ -45,6 +57,18 @@ const isFirst = allOpen || index === 0;
           <div set:html={body} />
         ) : (
           <div class="col-12 col-lg-7" set:html={body} />
+        )
+      }
+      {
+        labelButton && linkTo && (
+          <div class="accordion-item__cta mt-3">
+            <Link
+              label={labelButton}
+              linkTo={openInNewTab ? undefined : linkTo}
+              url={openInNewTab ? linkTo : undefined}
+              openInNewTab={openInNewTab}
+            />
+          </div>
         )
       }
     </div>
