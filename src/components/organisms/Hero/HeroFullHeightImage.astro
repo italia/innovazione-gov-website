@@ -2,6 +2,7 @@
 import { ButtonLink } from "@components/atoms/Button";
 import { Image } from "@components/atoms/Image";
 import { slugify } from "@utils/slugify";
+import { hasOnlyBreadcrumb } from "./hasOnlyBreadcrumb";
 import type { HeroProps } from "./types";
 type Props = HeroProps;
 
@@ -16,13 +17,15 @@ const {
   variantButton,
   openInNewTab = false,
 } = Astro.props;
+
+const onlyBreadcrumb = hasOnlyBreadcrumb(Astro.props);
 ---
 
 <style>
   @import "./style.scss";
 </style>
 <section
-  class=`it-hero-wrapper it-hero-wrapper-full-height-image xsmall-size ${bgClass}`
+  class=`it-hero-wrapper it-hero-wrapper-full-height-image xsmall-size ${bgClass} ${onlyBreadcrumb ? "only-breadcrumb" : ""}`
   aria-labelledby={title ? slugify(title) : undefined}
 >
   <div class="container">

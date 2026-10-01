@@ -2,6 +2,7 @@
 import { ButtonLink } from "@components/atoms/Button";
 import { Image } from "@components/atoms/Image";
 import { slugify } from "@utils/slugify";
+import { hasOnlyBreadcrumb } from "./hasOnlyBreadcrumb";
 import type { HeroProps } from "./types";
 
 type Props = HeroProps;
@@ -21,13 +22,7 @@ const {
 } = Astro.props;
 const sizeClass = variant === "small" ? "small-size" : "default-size";
 
-const onlyBreadcrumb =
-  showBreadcrumb &&
-  !title &&
-  !paragraph &&
-  !(labelButton && linkTo) &&
-  !image &&
-  !imageMobile;
+const onlyBreadcrumb = hasOnlyBreadcrumb(Astro.props);
 
 const immagineATuttaHero =
   variant === "default" && Boolean(image || imageMobile);
