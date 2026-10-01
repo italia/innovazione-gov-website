@@ -154,6 +154,7 @@ export const AllArticlesRecordFragment = graphql(
           url
           filename
           format
+          size
         }
       }
       links {

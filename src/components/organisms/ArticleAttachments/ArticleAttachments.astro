@@ -7,7 +7,12 @@ import { slugify } from "@utils/slugify";
 type Attachment = {
   id: string;
   fileTitle?: string | null;
-  file?: { url: string; filename: string; format: string } | null;
+  file?: {
+    url: string;
+    filename: string;
+    format: string;
+    size?: number | null;
+  } | null;
 };
 
 type Props = {
@@ -20,6 +25,15 @@ const t = getI18n(lang);
 
 const fileAttachments = attachments.filter((a) => a.file);
 const hasItems = fileAttachments.length > 0;
+
+const dettagliFile = (file: NonNullable<Attachment["file"]>) => {
+  const estensione = (file.format ?? "").toUpperCase();
+  const kilobyte = file.size ? Math.max(1, Math.round(file.size / 1024)) : null;
+  const parti = [estensione, kilobyte ? `${kilobyte} KB` : null].filter(
+    Boolean,
+  );
+  return parti.length ? ` (${parti.join(", ")})` : "";
+};
 ---
 
 {
@@ -36,7 +50,7 @@ const hasItems = fileAttachments.length > 0;
           {fileAttachments.map((attachment) => (
             <li>
               <Link
-                label={attachment.fileTitle ?? attachment.file!.filename}
+                label={`${attachment.fileTitle ?? attachment.file!.filename}${dettagliFile(attachment.file!)}`}
                 download={createDownloadUrl(attachment.file!)}
                 variant="dark"
               />
@@ -63,7 +77,7 @@ const hasItems = fileAttachments.length > 0;
     border-radius: 8px;
     padding: 1.5rem 2rem;
   }
-  .article-resources__card-title {
+  .article-resources__card .article-resources__card-title {
     color: #fff;
     font-weight: 700;
     font-size: 2rem;

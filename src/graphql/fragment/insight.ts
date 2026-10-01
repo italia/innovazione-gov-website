@@ -149,6 +149,7 @@ export const AllInsightsRecordFragment = graphql(
           url
           filename
           format
+          size
         }
       }
       links {

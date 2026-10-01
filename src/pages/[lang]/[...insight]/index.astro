@@ -34,7 +34,12 @@ export async function getStaticPaths() {
       attachments: {
         id: string;
         fileTitle: string | null;
-        file: { url: string; filename: string; format: string } | null;
+        file: {
+          url: string;
+          filename: string;
+          format: string;
+          size: number;
+        } | null;
       }[];
       links: {
         id: string;
