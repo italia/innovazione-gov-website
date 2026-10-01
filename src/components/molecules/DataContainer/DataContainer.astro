@@ -6,32 +6,35 @@ import type {
 } from "./types";
 
 type Props = DataContainerProps & { variant?: VariantTextDataContainerProps };
-type ColorTheme = {
-  title: string;
-  text: string;
-};
 
 const { info, title, contentIcon, variant = "light" } = Astro.props;
 
-const colors: Record<VariantTextDataContainerProps, ColorTheme> = {
-  dark: { title: "text-white", text: "text-accent" },
-  light: { title: "", text: "text-accent-dark" },
-};
-
-const theme = colors[variant];
-
-const titleColorClass = theme.title;
-const textColorClass = contentIcon ? theme.title : theme.text;
+const colorClass = variant === "dark" ? "text-white" : "";
 ---
 
 <Fragment>
   <div class="d-flex align-items-center gap-3">
     {contentIcon && <IconContainer content={contentIcon} aria-hidden="true" />}
-    <p class=`h1 align-middle m-0 ${textColorClass}`>
+    <p
+      class:list={["data-container__value", "align-middle", "m-0", colorClass]}
+    >
       {info}
     </p>
   </div>
-  <p class=`body-sans-lg fw-semibold mb-0 mt-2 ${titleColorClass}`>
+  <p class:list={["data-container__label", "mb-0", "mt-2", colorClass]}>
     {title}
   </p>
 </Fragment>
+
+<style>
+  .data-container__value {
+    color: var(--color-text-base, #1a1a1a);
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 32px;
+  }
+
+  .data-container__label {
+    font-weight: 600;
+  }
+</style>

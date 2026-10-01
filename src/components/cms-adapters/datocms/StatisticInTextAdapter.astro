@@ -1,0 +1,12 @@
+---
+import StatisticAdapter from "@components/cms-adapters/datocms/StatisticAdapter.astro";
+import type { StatisticBlockFragmentType } from "@graphql/fragment/commonFragments";
+
+type Props = {
+  block: StatisticBlockFragmentType;
+};
+
+const { block } = Astro.props;
+---
+
+<StatisticAdapter block={block} variant="light" />

@@ -23,6 +23,8 @@ type AccordionBlockRecord implements RecordInterface {
   title: String
 }
 
+union AccordionItemModelCtaField = ExternalLinkRecord | InternalLinkRecord
+
 """Block of type Accordion item (accordion_item)"""
 type AccordionItemRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -47,6 +49,7 @@ type AccordionItemRecord implements RecordInterface {
     """Process content as markdown"""
     markdown: Boolean
   ): String!
+  cta: AccordionItemModelCtaField
   header: String!
   id: ItemId!
 }
@@ -9423,7 +9426,7 @@ input StructuredTextFilter {
   exists: BooleanType
 }
 
-union StructuredTextModelContentBlocksField = AccordionBlockRecord | CalloutRecord | CardServiceRecord | DownloadLinkRecord | ExternalLinkRecord | ImageBlockRecord | InternalLinkRecord | ListBlockquoteRecord | ListCardEditorialWithIconRecord | ListCardInfoRecord | ListExternalLinkRecord | OrderedListRecord | QuickLinkCardRecord | SupportCtaSectionRecord | TopicsBlockRecord
+union StructuredTextModelContentBlocksField = AccordionBlockRecord | CalloutRecord | CardServiceRecord | DownloadLinkRecord | ExternalLinkRecord | ImageBlockRecord | InternalLinkRecord | ListBlockquoteRecord | ListCardEditorialWithIconRecord | ListCardInfoRecord | ListExternalLinkRecord | OrderedListRecord | QuickLinkCardRecord | StatisticBlockRecord | SupportCtaSectionRecord | TopicsBlockRecord
 
 type StructuredTextModelContentField {
   blocks: [StructuredTextModelContentBlocksField!]!

@@ -1,8 +1,14 @@
 .statistics-container {
   display: grid;
-  gap: 32px;
+  gap: 1.5rem;
   padding: 0;
   margin: 0;
+}
+
+@media (min-width: 992px) {
+  .statistics-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .statistics-item {
@@ -11,4 +17,17 @@
   border-radius: 4px;
   background: var(--color-blue-97, #f2f7fc);
   padding: 24px;
+}
+
+.statistics-inline {
+  display: grid;
+  gap: 1.5rem;
+  padding: 0;
+  margin: 0;
+}
+
+@media (min-width: 992px) {
+  .statistics-inline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }

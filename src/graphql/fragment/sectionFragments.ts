@@ -419,10 +419,14 @@ export const StructuredTextFragment = graphql(
         ... on AccordionBlockRecord {
           ...AccordionBlockFragment
         }
+        ... on StatisticBlockRecord {
+          ...StatisticBlockFragment
+        }
       }
     }
   `,
   [
+    StatisticBlockFragment,
     AccordionBlockFragment,
     ListCardEditorialWithIconFragment,
     ExternalLinkFragment,
