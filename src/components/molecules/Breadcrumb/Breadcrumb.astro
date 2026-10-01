@@ -19,4 +19,14 @@ const t = getI18n(lang);
   .breadcrumb-container {
     --bs-breadcrumb-font-size: 1.125rem;
   }
+
+  .breadcrumb-container .breadcrumb {
+    flex-wrap: nowrap;
+  }
+
+  .breadcrumb-container .breadcrumb :global(li),
+  .breadcrumb-container .breadcrumb :global(a),
+  .breadcrumb-container .breadcrumb :global(span) {
+    white-space: nowrap;
+  }
 </style>
