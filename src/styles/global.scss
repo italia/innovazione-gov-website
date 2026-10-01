@@ -65,6 +65,16 @@ body {
   margin-bottom: 0;
 }
 
+.structured-text-container
+  .container
+  > .row
+  > div
+  > ul:not(.it-card-list, .statistics-container, .statistics-inline)
+  > li,
+.structured-text-container .container > .row > div > ol > li {
+  margin-bottom: 0.75rem;
+}
+
 .structured-text-container .container > .row > div > p a,
 .structured-text-container
   .container
