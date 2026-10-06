@@ -6,4 +6,5 @@ export type TextDonutProps = {
   description?: string;
   background?: SectionBackground;
   sectionTitleId?: string;
+  altText?: string;
 };

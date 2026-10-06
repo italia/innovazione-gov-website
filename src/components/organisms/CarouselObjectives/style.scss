@@ -75,22 +75,23 @@
       margin: 0;
       gap: 6px;
 
+      // WCAG 1.4.11: entrambi gli stati hanno un contrasto di 5,17:1 con lo
+      // sfondo della sezione (#f3f7fc); il precedente rgba($primary, 0.3) si
+      // fermava a 1,56:1. WCAG 1.4.1: selezionato e non selezionato si
+      // distinguono per campitura (pieno / solo bordo), non solo per colore.
       &__page {
         display: block;
-        background: rgba(0, 102, 204, 0.3);
-        width: 8px;
-        height: 8px;
+        background: transparent;
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
-        border: none;
+        border: 2px solid $primary;
         padding: 0;
         cursor: pointer;
-        transition:
-          background 0.2s,
-          transform 0.2s;
+        transition: background 0.2s;
 
         &.is-active {
           background: $primary;
-          transform: scale(1.3);
         }
       }
     }
