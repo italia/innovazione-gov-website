@@ -1,6 +1,6 @@
 ---
-import { Link } from "@components/atoms/Link";
 import type { AttachmentsBoxFragmentType } from "@graphql/fragment/commonFragments";
+import ItIcon from "@static/assets/ItIcon.astro";
 import { createDownloadUrl } from "@utils/createDownloadUrl";
 
 type Props = {
@@ -10,24 +10,37 @@ type Props = {
 const { block } = Astro.props;
 
 const files = (block.downloads ?? []).filter((download) => download.doc);
+
+const dettagli = (doc: { format?: string | null; size?: number | null }) => {
+  const estensione = (doc.format ?? "").toUpperCase();
+  const megabyte = doc.size ? (doc.size / 1024 / 1024).toFixed(1) : null;
+  if (!estensione && !megabyte) return "";
+  return megabyte ? `${estensione} (${megabyte}mb)` : estensione;
+};
 ---
 
 {
   files.length > 0 && (
-    <div class="attachments-box">
-      <p class="attachments-box__title">{block.title}</p>
+    <section class="attachments-box">
+      <h3 class="attachments-box__title">{block.title}</h3>
       <ul class="attachments-box__list">
         {files.map((download) => (
-          <li>
-            <Link
-              label={download.label ?? download.doc!.filename}
-              download={createDownloadUrl(download.doc!)}
-              variant="dark"
-            />
+          <li class="attachments-box__item">
+            <span class="attachments-box__icon" aria-hidden="true">
+              <ItIcon name="it-file" />
+            </span>
+            <a
+              class="attachments-box__link"
+              href={createDownloadUrl(download.doc!)}
+              download
+            >
+              {download.label ?? download.doc!.filename}
+            </a>
+            <span class="attachments-box__meta">{dettagli(download.doc!)}</span>
           </li>
         ))}
       </ul>
-    </div>
+    </section>
   )
 }
 
@@ -51,24 +64,30 @@ const files = (block.downloads ?? []).filter((download) => download.doc);
     margin: 0;
     padding: 0;
   }
-  .attachments-box__list li + li {
-    border-top: 1px solid rgb(255 255 255 / 0.25);
-  }
-  .attachments-box__list li {
+  .attachments-box__item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
     padding: 0.75rem 0;
   }
-  .attachments-box__list :global(a) {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    color: #fff;
+  .attachments-box__item + .attachments-box__item {
+    border-top: 1px solid rgb(255 255 255 / 0.25);
   }
-  .attachments-box__list :global(a .fw-semibold) {
+  .attachments-box__icon :global(svg) {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: #fff;
+  }
+  .attachments-box__link {
+    color: #fff;
+    font-weight: 600;
     text-decoration: underline;
   }
-  .attachments-box__list :global(svg) {
-    fill: #fff;
-    flex-shrink: 0;
+  .attachments-box__meta {
+    color: #fff;
+    font-size: 0.875rem;
+    white-space: nowrap;
   }
 </style>

@@ -1,0 +1,38 @@
+---
+import { AccordionShowcase } from "@components/organisms/AccordionShowcase";
+import type { AccordionShowcaseFragmentType } from "@graphql/fragment/sectionFragments";
+import { getCtaFields } from "@utils/getCtaFields";
+
+type Props = {
+  block: AccordionShowcaseFragmentType;
+};
+
+const { block } = Astro.props;
+const { lang } = Astro.locals;
+
+const cta = getCtaFields(block.cta, lang);
+
+const items = (block.items ?? []).map((voce) => {
+  const link = getCtaFields(voce.cta, lang);
+  return {
+    id: voce.id,
+    header: voce.header,
+    body: voce.body,
+    image: voce.image ?? block.image,
+    linkLabel: link.labelButton,
+    linkTo: link.linkTo,
+  };
+});
+---
+
+{
+  items.length > 0 && (
+    <AccordionShowcase
+      id={block.id}
+      title={block.title}
+      items={items}
+      ctaLabel={cta.labelButton}
+      ctaTo={cta.linkTo}
+    />
+  )
+}

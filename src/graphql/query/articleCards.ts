@@ -4,7 +4,10 @@ import { graphql, type ResultOf } from "@graphql/graphql";
 export const AllArticleCardsQuery = graphql(
   `
     query AllArticleCards {
-      allArticles(first: 2500, orderBy: _firstPublishedAt_DESC) {
+      allArticles(
+        first: 2500
+        orderBy: [dateShown_DESC, _firstPublishedAt_DESC]
+      ) {
         id
         articleType
         undersecretary
@@ -20,9 +23,11 @@ export const AllArticleCardsQuery = graphql(
           locale
           value
         }
+        dateShown
         firstPublishedAt: _firstPublishedAt
         tags {
           name
+          slug
           isCategory
         }
         image {

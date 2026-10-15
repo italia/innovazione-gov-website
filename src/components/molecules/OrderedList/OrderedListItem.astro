@@ -8,7 +8,8 @@ type Props = ListItemProps & {
 };
 const { title, paragraph, index, variant, resources } = Astro.props;
 
-const titleClass = variant === "small" ? "fs-4 m-0 fw-semibold" : "fs-3 h3";
+const titleClass =
+  variant === "small" ? "fs-4 m-0 fw-semibold" : "ordered-list__title";
 const textClass = variant === "small" ? "text-secondary" : "";
 
 const align = variant === "small" ? "center" : "top";
@@ -18,13 +19,13 @@ const align = variant === "small" ? "center" : "top";
   @import "./style.scss";
 </style>
 
-<li class="mb-4">
+<li class="ordered-list__item">
   <div class=`item-row align-items-${align}`>
     <div class="it-rounded-icon">
       <NumberContainer content={index.toString()} />
     </div>
     <div class="item-text">
-      <h3 class=`${titleClass} text-dark`>{title}</h3>
+      <h3 class={titleClass}>{title}</h3>
       <div class=`${textClass} m-0` set:html={paragraph} />
       {
         resources && (

@@ -1,0 +1,138 @@
+---
+import { SectionContainer } from "@components/organisms/SectionContainer";
+import { getSectionBgClass } from "@utils/background";
+import type { SectionBackground } from "@utils/background";
+import { slugify } from "@utils/slugify";
+
+type HighlightedTopic = {
+  name: string;
+  path: string;
+  description?: string | null;
+};
+
+type Props = {
+  title?: string | null;
+  topics: HighlightedTopic[];
+  background?: SectionBackground;
+};
+
+const { title, topics, background = "dark" } = Astro.props;
+
+const titleId = title ? slugify(title) : undefined;
+
+const inizialeDi = (nome: string) =>
+  nome.trim().normalize("NFD").replace(/[̀-ͯ]/g, "").charAt(0).toUpperCase();
+---
+
+<SectionContainer
+  className={`topic-highlight ${getSectionBgClass(background)}`}
+  sectionTitleId={titleId}
+>
+  {
+    title && (
+      <h2 class="topic-highlight__title text-white mb-4" id={titleId}>
+        {title}
+      </h2>
+    )
+  }
+  <ul class="topic-highlight__grid">
+    {
+      topics.map((topic) => (
+        <li class="topic-highlight__item">
+          <article class="topic-highlight__card">
+            <p class="topic-highlight__initial" aria-hidden="true">
+              {inizialeDi(topic.name)}
+            </p>
+            <div class="topic-highlight__body">
+              <h3 class="topic-highlight__name">
+                <a href={topic.path}>{topic.name}</a>
+              </h3>
+              {topic.description && (
+                <p class="topic-highlight__text">{topic.description}</p>
+              )}
+            </div>
+          </article>
+        </li>
+      ))
+    }
+  </ul>
+</SectionContainer>
+
+<style>
+  .topic-highlight__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  :global(.topic-highlight.it-section-bg-dark) {
+    background-color: var(--color-primary-dark, #17334f) !important;
+  }
+
+  .topic-highlight__title {
+    color: var(--color-text-inverse, #fff);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 56px;
+    letter-spacing: -2px;
+  }
+
+  .topic-highlight__card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .topic-highlight__initial {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    background: #e5effa;
+    aspect-ratio: 16 / 9;
+    color: #93b7e3;
+    font-weight: 700;
+    font-size: 5rem;
+    line-height: 1;
+  }
+
+  .topic-highlight__body {
+    padding: 1.5rem;
+  }
+
+  .topic-highlight__name {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .topic-highlight__name a {
+    color: #06c;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .topic-highlight__name a:hover,
+  .topic-highlight__name a:focus-visible {
+    text-decoration: underline;
+  }
+
+  .topic-highlight__text {
+    margin: 0;
+    color: #2f475e;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .topic-highlight__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

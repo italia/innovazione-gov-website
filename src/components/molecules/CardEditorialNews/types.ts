@@ -7,6 +7,7 @@ export type CardEditorialNewsProps = {
   image?: ImageProps;
   linkTo: string;
   category?: string | string[];
+  categoryLinks?: Record<string, string>;
   filterCategories?: string[];
   dateTime?: string;
   action?: string;

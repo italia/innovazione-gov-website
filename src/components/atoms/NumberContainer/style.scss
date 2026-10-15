@@ -8,11 +8,11 @@
   justify-content: center;
   align-items: center;
   border-radius: 4px;
-  background: $accent-color;
+  background: var(--color-text-primary, #06c);
 }
 
 .number-container.icon-text {
-  color: $primary-darker;
+  color: var(--icon-inverse, #fff);
   font-family: "Titillium Web";
   font-size: 40px;
   font-style: normal;

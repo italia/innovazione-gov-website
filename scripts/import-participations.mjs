@@ -13,8 +13,15 @@ const limitFlagIndex = process.argv.indexOf("--limit");
 const LIMIT =
   limitFlagIndex === -1 ? null : Number(process.argv[limitFlagIndex + 1]);
 
+const SLUG_RICHIESTI = new Set(
+  process.argv
+    .filter((arg) => arg.startsWith("--slug="))
+    .map((arg) => arg.slice("--slug=".length)),
+);
+
 const TARGET_ENV = "website-astro-2026";
 const SOURCE_MODEL = "participation";
+const UNDERSECRETARY_OWNER_ID = "56031174";
 const ARTICLE_TYPE = "participation";
 const LOCALE = "it";
 const GALLERY_RATIO = "16x9";
@@ -268,7 +275,12 @@ async function run() {
     `destinazione: ${existingByType.length} articoli article_type=${ARTICLE_TYPE} già presenti`,
   );
 
-  const records = LIMIT ? sourceRecords.slice(0, LIMIT) : sourceRecords;
+  const selezionati = SLUG_RICHIESTI.size
+    ? sourceRecords.filter((record) =>
+        SLUG_RICHIESTI.has(localeValue(record.slug)),
+      )
+    : sourceRecords;
+  const records = LIMIT ? selezionati.slice(0, LIMIT) : selezionati;
   let created = 0;
   let updated = 0;
   let published = 0;
@@ -321,7 +333,7 @@ async function run() {
     const payload = {
       item_type: { id: targetTypeIdByKey.article, type: "item_type" },
       article_type: ARTICLE_TYPE,
-      undersecretary: true,
+      undersecretary: (record.owners ?? []).includes(UNDERSECRETARY_OWNER_ID),
       parent_page: { [LOCALE]: null },
       paragraph: { [LOCALE]: abstract },
       description: { [LOCALE]: abstract },

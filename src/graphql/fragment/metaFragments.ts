@@ -50,6 +50,26 @@ export type CatalogueLocalesFragmentType = FragmentOf<
   typeof CatalogueLocalesFragment
 >;
 
+export const SearchLocalesFragment = graphql(
+  `
+    fragment SearchLocalesFragment on SearchRecord @_unmask {
+      allSlugLocales: _allSlugLocales {
+        locale
+        value
+      }
+      allTitleLocales: _allTitleLocales {
+        locale
+        value
+      }
+    }
+  `,
+  [],
+);
+
+export type SearchLocalesFragmentType = FragmentOf<
+  typeof SearchLocalesFragment
+>;
+
 export const ArticleLocalesFragment = graphql(
   `
     fragment ArticleLocalesFragment on ArticleRecord @_unmask {

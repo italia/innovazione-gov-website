@@ -22,7 +22,11 @@ const classInline = showInline
   @import "./style.scss";
 </style>
 
-<ul class={`list-unstyled ${classInline}`} role="list">
+<ul
+  class={`list-unstyled ${classInline}`}
+  style={`--statistiche: ${items.length}`}
+  role="list"
+>
   {
     items.map((item) => (
       <li class="statistics-item">

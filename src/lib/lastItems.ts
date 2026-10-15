@@ -4,6 +4,19 @@ import { graphql } from "@graphql/graphql";
 import type { SiteLocale } from "@graphql/types";
 import { executeQuery } from "@lib/datocms";
 import { linkResolver } from "@utils/linkResolver";
+import { topicPath } from "@utils/topicRoutes";
+
+const legamiArgomenti = (
+  tags: { name?: string | null; slug?: string | null }[] | null | undefined,
+  locale: SiteLocale,
+): Record<string, string> => {
+  const legami: Record<string, string> = {};
+  for (const tag of tags ?? []) {
+    if (!tag.name || !tag.slug) continue;
+    legami[tag.name] = topicPath(locale, tag.slug);
+  }
+  return legami;
+};
 
 type Options = {
   locale: SiteLocale;
@@ -40,6 +53,7 @@ const LastArticlesQuery = graphql(
         firstPublishedAt: _firstPublishedAt
         tags {
           name
+          slug
           isCategory
         }
         image {
@@ -98,6 +112,7 @@ export async function getLastItems(
         category: (r.tags ?? [])
           .map((t) => t.name)
           .filter((v): v is string => !!v),
+        categoryLinks: legamiArgomenti(r.tags, locale),
         filterCategories: filterCategoriesOf(r.tags),
         linkTo: linkResolver(r.id, locale),
       }),
@@ -133,6 +148,7 @@ export async function getLastItems(
       category: isProject
         ? []
         : (r.tags ?? []).map((t) => t.name).filter((v): v is string => !!v),
+      categoryLinks: isProject ? {} : legamiArgomenti(r.tags, locale),
       filterCategories: filterCategoriesOf(r.tags),
       linkTo: linkResolver(r.id, locale),
     }))

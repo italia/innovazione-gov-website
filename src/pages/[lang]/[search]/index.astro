@@ -19,6 +19,7 @@ export async function getStaticPaths() {
       seoMeta: TagFragmentType[];
       content: SearchPageContentFragmentType[];
       id: string;
+      publishedAt: string;
     };
   };
 
@@ -47,6 +48,7 @@ export async function getStaticPaths() {
         props: {
           seoMeta: seoRes?.metaTags || [],
           id: page.id,
+          publishedAt: seoRes?.updatedAt || page.updatedAt || page.publishedAt,
           content: getLocaleValue(page.allContentLocales, lang, null),
         },
       };
@@ -57,13 +59,13 @@ export async function getStaticPaths() {
   return paths.filter((path): path is PathItem => !!path.params.lang);
 }
 
-const { id, content, seoMeta } = Astro.props;
+const { id, content, seoMeta, publishedAt } = Astro.props;
 const { lang } = Astro.params;
 
 Astro.locals.lang = lang;
 Astro.locals.recordId = id;
 ---
 
-<Layout pageSeo={seoMeta} showFeedback={false}>
+<Layout pageSeo={seoMeta} datePublished={publishedAt}>
   <PageAdapter content={content} />
 </Layout>

@@ -31,6 +31,7 @@ const variantTextColorBreadcrumb = () => {
 };
 
 const { labelButton, linkTo, openInNewTab } = getCtaFields(block.cta, lang);
+const secondaria = getCtaFields(block.ctaSecondary, lang);
 ---
 
 <Hero
@@ -45,6 +46,9 @@ const { labelButton, linkTo, openInNewTab } = getCtaFields(block.cta, lang);
   labelButton={labelButton}
   linkTo={linkTo}
   openInNewTab={openInNewTab}
+  labelButtonSecondary={secondaria.labelButton}
+  linkToSecondary={secondaria.linkTo}
+  openInNewTabSecondary={secondaria.openInNewTab}
 >
   <Breadcrumb
     items={itemsBreadcrumb}

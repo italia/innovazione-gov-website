@@ -1,5 +1,6 @@
 ---
 import AccordionAdapter from "@components/cms-adapters/datocms/AccordionAdapter.astro";
+import ArticleIntroAdapter from "@components/cms-adapters/datocms/ArticleIntroAdapter.astro";
 import CalloutAdapter from "@components/cms-adapters/datocms/CalloutAdapter.astro";
 import CardServiceAdapter from "@components/cms-adapters/datocms/CardServiceAdapter.astro";
 import DownloadLinkAdapter from "@components/cms-adapters/datocms/DownloadLinkAdapter.astro";
@@ -43,6 +44,7 @@ const { block } = Astro.props;
     QuickLinkCardRecord: QuickLinkCardAdapter,
     SupportCtaSectionRecord: SupportCTASectionAdapter,
     TopicsBlockRecord: TopicsAdapter,
+    ArticleIntroRecord: ArticleIntroAdapter,
     ListCardInfoRecord: ListCardInfoAdapter,
     ListBlockquoteRecord: ListBlockquoteAdapter,
     RelatedArticleRecord: RelatedArticleAdapter,

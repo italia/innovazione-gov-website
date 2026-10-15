@@ -39,6 +39,9 @@ import type { SearchPageContentFragmentType } from "@graphql/fragment/search";
 import type { WebinarContentFragmentType } from "@graphql/fragment/webinar";
 import { DatoBlockModel } from "@utils/cmsMapper";
 import TopicListAdapter from "@components/cms-adapters/datocms/TopicListAdapter.astro";
+import TopicHighlightAdapter from "@components/cms-adapters/datocms/TopicHighlightAdapter.astro";
+import HighlightCarouselAdapter from "@components/cms-adapters/datocms/HighlightCarouselAdapter.astro";
+import AccordionShowcaseAdapter from "@components/cms-adapters/datocms/AccordionShowcaseAdapter.astro";
 import LinkMenuAdapter from "@components/cms-adapters/datocms/LinkMenuAdapter.astro";
 
 type ContentType =
@@ -95,6 +98,12 @@ const lastStructuredTextIndex = content.reduce(
         return <UseCaseContainerAdapter block={block} />;
       case DatoBlockModel.TopicFilter:
         return <TopicFilterAdapter block={block} />;
+      case DatoBlockModel.TopicHighlight:
+        return <TopicHighlightAdapter block={block} />;
+      case DatoBlockModel.HighlightCarousel:
+        return <HighlightCarouselAdapter block={block} />;
+      case DatoBlockModel.AccordionShowcase:
+        return <AccordionShowcaseAdapter block={block} />;
       case DatoBlockModel.ThirdPartyCookie:
         return <ThirdPartyCookieAdapter block={block} />;
       case DatoBlockModel.SupportCta:

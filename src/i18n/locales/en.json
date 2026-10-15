@@ -1,5 +1,8 @@
 {
   "article.detail": "News detail",
+  "highlight.readMore": "Read more",
+  "timeline.showMore": "Show more",
+  "topicList.jumpToLetter": "Jump to letter",
   "article.topics": "Topics",
   "breadcrumb": "Breadcrumb",
   "breadcrumb.root": "Innovation",
@@ -90,7 +93,6 @@
   "position.detail": "See the position",
   "position.label": "Job position",
   "position.latestOpen": "Latest open positions",
-  "position.loadMore": "Show more positions",
   "position.noOpen": "There are no open job positions at the moment",
   "position.noResults": "No position matches your search",
   "position.office": "Reference structure",

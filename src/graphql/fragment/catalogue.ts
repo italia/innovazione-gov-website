@@ -4,6 +4,7 @@ import {
   HeroFragment,
   TextAndImageFragment,
   TextOnlyFragment,
+  TopicHighlightFragment,
   TopicListFragment,
 } from "@graphql/fragment/sectionFragments";
 import { graphql, type FragmentOf } from "@graphql/graphql";
@@ -30,6 +31,9 @@ export const CatalogueContentFragment = graphql(
       ... on TopicListRecord {
         ...TopicListFragment
       }
+      ... on TopicHighlightRecord {
+        ...TopicHighlightFragment
+      }
       ... on TextImageRecord {
         ...TextAndImageFragment
       }
@@ -40,6 +44,7 @@ export const CatalogueContentFragment = graphql(
     CatalogueFeedFragment,
     CalloutLinkFragment,
     TextOnlyFragment,
+    TopicHighlightFragment,
     TopicListFragment,
     TextAndImageFragment,
   ],

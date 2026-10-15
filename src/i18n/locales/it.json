@@ -1,5 +1,8 @@
 {
   "article.detail": "Dettaglio notizia",
+  "highlight.readMore": "Leggi di più",
+  "timeline.showMore": "Vedi di più",
+  "topicList.jumpToLetter": "Vai alla lettera",
   "article.topics": "Argomenti",
   "breadcrumb": "Percorso di navigazione",
   "breadcrumb.root": "Innovazione",
@@ -90,7 +93,6 @@
   "position.detail": "Scopri la posizione",
   "position.label": "Posizione lavorativa",
   "position.latestOpen": "Ultime posizioni aperte",
-  "position.loadMore": "Mostra altre posizioni",
   "position.noOpen": "Al momento non ci sono posizioni lavorative aperte",
   "position.noResults": "Nessuna posizione corrisponde alla ricerca",
   "position.office": "Struttura di riferimento",

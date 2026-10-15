@@ -1,0 +1,222 @@
+---
+import { ButtonLink } from "@components/atoms/Button";
+import { Image } from "@components/atoms/Image";
+import type { ImageProps } from "@components/atoms/Image/types";
+import { SectionContainer } from "@components/organisms/SectionContainer";
+import { getI18n } from "@i18n/microcopy";
+import { slugify } from "@utils/slugify";
+
+type Slide = {
+  id: string;
+  title: string;
+  paragraph?: string | null;
+  image?: ImageProps | null;
+  linkTo: string;
+};
+
+type Props = {
+  id: string;
+  title?: string | null;
+  slides: Slide[];
+};
+
+const { id: blockId, title: eyebrow, slides: items } = Astro.props;
+
+const { lang } = Astro.locals;
+const t = getI18n(lang);
+
+const idPannello = (indice: number) => `evidenza-${blockId}-${indice}`;
+const idComando = (indice: number) => `evidenza-${blockId}-tab-${indice}`;
+const etichettaSezione = eyebrow ? slugify(eyebrow) : undefined;
+---
+
+<SectionContainer
+  className="highlight-carousel it-section-bg-dark"
+  sectionTitleId={etichettaSezione}
+>
+  <div class="highlight-carousel__slides">
+    {
+      items.map((slide, indice) => (
+        <div
+          class="highlight-carousel__slide row align-items-center"
+          id={idPannello(indice)}
+          role="tabpanel"
+          aria-labelledby={idComando(indice)}
+          hidden={indice > 0}
+        >
+          <div class="col-12 col-lg-6">
+            {eyebrow && (
+              <p
+                class="highlight-carousel__eyebrow"
+                id={indice === 0 ? etichettaSezione : undefined}
+              >
+                {eyebrow}
+              </p>
+            )}
+            <h2 class="highlight-carousel__title">{slide.title}</h2>
+            {slide.paragraph && (
+              <div
+                class="highlight-carousel__text"
+                set:html={slide.paragraph}
+              />
+            )}
+            <div class="highlight-carousel__cta">
+              <ButtonLink
+                size="small"
+                label={t["highlight.readMore"]}
+                variant="light"
+                linkTo={slide.linkTo}
+              />
+            </div>
+          </div>
+          {slide.image && (
+            <div class="col-12 col-lg-6">
+              <div class="highlight-carousel__media">
+                <Image {...slide.image} />
+              </div>
+            </div>
+          )}
+        </div>
+      ))
+    }
+  </div>
+
+  {
+    items.length > 1 && (
+      <div
+        class="highlight-carousel__dots"
+        role="tablist"
+        aria-label={eyebrow ?? t["highlight.readMore"]}
+      >
+        {items.map((slide, indice) => (
+          <button
+            type="button"
+            class="highlight-carousel__dot"
+            id={idComando(indice)}
+            role="tab"
+            aria-controls={idPannello(indice)}
+            aria-selected={indice === 0 ? "true" : "false"}
+            tabindex={indice === 0 ? 0 : -1}
+          >
+            <span class="visually-hidden">{slide.title}</span>
+          </button>
+        ))}
+      </div>
+    )
+  }
+</SectionContainer>
+
+<script>
+  const attiva = (lista: Element, indice: number) => {
+    const comandi = [
+      ...lista.querySelectorAll<HTMLButtonElement>("[role=tab]"),
+    ];
+    comandi.forEach((comando, i) => {
+      const scelto = i === indice;
+      comando.setAttribute("aria-selected", scelto ? "true" : "false");
+      comando.tabIndex = scelto ? 0 : -1;
+      const pannello = document.getElementById(
+        comando.getAttribute("aria-controls") ?? "",
+      );
+      if (pannello) pannello.hidden = !scelto;
+    });
+    comandi[indice]?.focus();
+  };
+
+  document.querySelectorAll(".highlight-carousel__dots").forEach((lista) => {
+    const comandi = [
+      ...lista.querySelectorAll<HTMLButtonElement>("[role=tab]"),
+    ];
+    comandi.forEach((comando, indice) => {
+      comando.addEventListener("click", () => attiva(lista, indice));
+      comando.addEventListener("keydown", (evento) => {
+        const passo =
+          evento.key === "ArrowRight" ? 1 : evento.key === "ArrowLeft" ? -1 : 0;
+        if (!passo) return;
+        evento.preventDefault();
+        attiva(lista, (indice + passo + comandi.length) % comandi.length);
+      });
+    });
+  });
+</script>
+
+<style>
+  .highlight-carousel__eyebrow {
+    margin-bottom: 1.5rem;
+    color: var(--color-text-inverse, #fff);
+    text-transform: uppercase;
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .highlight-carousel__title {
+    margin-bottom: 1rem;
+    color: var(--color-text-inverse, #fff);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .highlight-carousel__text {
+    margin-bottom: 1.5rem;
+    color: rgb(255 255 255 / 0.8);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  .highlight-carousel__text :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .highlight-carousel__media :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .highlight-carousel__dots {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+
+  .highlight-carousel__dot {
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    position: relative;
+  }
+
+  .highlight-carousel__dot::before {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+    width: 1.25rem;
+    height: 0.25rem;
+    border-radius: 2px;
+    background: rgb(255 255 255 / 0.45);
+  }
+
+  .highlight-carousel__dot[aria-selected="true"]::before {
+    background: #fff;
+  }
+
+  .highlight-carousel__dot:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+  }
+
+  @media (min-width: 992px) {
+    .highlight-carousel__media {
+      padding-left: 2rem;
+    }
+  }
+</style>

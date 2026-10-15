@@ -1,7 +1,9 @@
 ---
 import { SectionContainer } from "@components/organisms/SectionContainer";
-import { getSectionBgClass } from "@utils/background";
+import { getI18n } from "@i18n/microcopy";
 import type { SectionBackground } from "@utils/background";
+import { getSectionBgClass } from "@utils/background";
+import { slugify } from "@utils/slugify";
 
 type Topic = {
   name: string;
@@ -11,15 +13,62 @@ type Topic = {
 
 type Props = {
   title?: string | null;
+  paragraph?: string | null;
   topics: Topic[];
   background?: SectionBackground;
   showCount?: boolean;
 };
 
-const { title, topics, background = "default", showCount = true } = Astro.props;
+const {
+  title,
+  paragraph,
+  topics,
+  background = "default",
+  showCount = true,
+} = Astro.props;
+
+const { lang } = Astro.locals;
+const t = getI18n(lang);
 
 const textColorClass =
   background === "primary" || background === "dark" ? "text-white" : "";
+
+const ALFABETO = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+const inizialeDi = (nome: string) => {
+  const lettera = nome
+    .trim()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .charAt(0)
+    .toUpperCase();
+  return /[A-Z]/.test(lettera) ? lettera : "#";
+};
+
+const perLettera = new Map<string, Topic[]>();
+for (const topic of topics) {
+  const lettera = inizialeDi(topic.name);
+  perLettera.set(lettera, [...(perLettera.get(lettera) ?? []), topic]);
+}
+
+const gruppi = [...perLettera]
+  .map(([lettera, voci]) => ({
+    lettera,
+    voci: [...voci].sort((a, b) => a.name.localeCompare(b.name, "it")),
+    id: `argomenti-${slugify(lettera === "#" ? "altri" : lettera)}`,
+  }))
+  .sort((a, b) =>
+    a.lettera === "#"
+      ? 1
+      : b.lettera === "#"
+        ? -1
+        : a.lettera.localeCompare(b.lettera, "it"),
+  );
+
+const idPerLettera = new Map(gruppi.map((g) => [g.lettera, g.id]));
+const lettereNavigabili = [...ALFABETO, "#"].filter((lettera) =>
+  idPerLettera.has(lettera),
+);
 ---
 
 <SectionContainer
@@ -27,51 +76,178 @@ const textColorClass =
   sectionTitleId={title ?? undefined}
 >
   {title && <h2 class:list={["mb-4", textColorClass]}>{title}</h2>}
-  <ul class:list={["topic-list", textColorClass]}>
+  {
+    paragraph && (
+      <div
+        class:list={["topic-list__intro", textColorClass]}
+        set:html={paragraph}
+      />
+    )
+  }
+
+  <nav class="topic-list__alphabet" aria-label={t["topicList.jumpToLetter"]}>
+    <p class:list={["topic-list__alphabet-label", textColorClass]}>
+      {t["topicList.jumpToLetter"]}
+    </p>
+    <ul class="topic-list__letters">
+      {
+        lettereNavigabili.map((lettera) => (
+          <li>
+            <a
+              class="topic-list__letter"
+              href={`#${idPerLettera.get(lettera)}`}
+            >
+              {lettera}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</SectionContainer>
+
+<SectionContainer className={getSectionBgClass("default")}>
+  <div class="topic-list__groups">
     {
-      topics.map((topic) => (
-        <li>
-          <a href={topic.path}>
-            {topic.name}
-            {showCount && <span class="topic-list__count">{topic.count}</span>}
-          </a>
-        </li>
+      gruppi.map((gruppo) => (
+        <section
+          class="topic-list__group"
+          id={gruppo.id}
+          aria-labelledby={`${gruppo.id}-titolo`}
+        >
+          <h3 class="topic-list__letter-title" id={`${gruppo.id}-titolo`}>
+            {gruppo.lettera}
+          </h3>
+          <ul class="topic-list__items">
+            {gruppo.voci.map((topic) => (
+              <li>
+                <a href={topic.path}>
+                  {topic.name}
+                  {showCount && (
+                    <span class="topic-list__count">{topic.count}</span>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
       ))
     }
-  </ul>
+  </div>
 </SectionContainer>
 
 <style>
-  .topic-list {
+  .topic-list__intro {
+    max-width: 48rem;
+    margin-bottom: 2rem;
+  }
+
+  .topic-list__intro :global(p) {
+    margin-bottom: 0.5rem;
+  }
+
+  .topic-list__alphabet {
+    margin-bottom: 2.5rem;
+  }
+
+  .topic-list__alphabet-label {
+    margin-bottom: 0.5rem;
+    color: var(--color-background-primary, #06c);
+    text-transform: uppercase;
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  .topic-list__letters {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.45rem;
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  .topic-list a {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    border: 1px solid #d4d8dc;
-    border-radius: 4px;
+
+  .topic-list__letter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    border: 1px solid var(--color-primary-dark, #17334f);
+    border-radius: 6px;
     background: #fff;
-    padding: 0.75rem 1rem;
     color: #06c;
     font-weight: 600;
-    font-size: 1.125rem;
-    line-height: 1.5rem;
     text-decoration: none;
   }
-  .topic-list a:hover,
-  .topic-list a:focus-visible {
-    background: #f0f6fc;
-    text-decoration: underline;
+
+  .topic-list__letter:hover,
+  .topic-list__letter:focus-visible {
+    background: var(--color-primary-dark, #17334f);
+    color: #fff;
   }
+
+  .topic-list__group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem 2rem;
+    border-top: 1px solid #d4d8dc;
+    padding-block: 2.5rem;
+    scroll-margin-top: 7rem;
+  }
+
+  .topic-list__group:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .topic-list__letter-title {
+    margin: -0.33em 0 -0.25em;
+    color: var(--color-text-primary, #06c);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 700;
+    font-size: 5rem;
+    line-height: 1.27;
+  }
+
+  .topic-list__items {
+    columns: 1;
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .topic-list__items li {
+    margin-bottom: 1.5rem;
+    break-inside: avoid;
+  }
+
+  .topic-list__items a {
+    color: #06c;
+    font-weight: 600;
+  }
+
   .topic-list__count {
+    margin-left: 0.5rem;
     color: #2f475e;
     font-weight: 400;
     font-size: 0.875rem;
+  }
+
+  @media (min-width: 768px) {
+    .topic-list__group {
+      grid-template-columns: 150px 1fr;
+      padding-block: 4rem;
+    }
+
+    .topic-list__items {
+      columns: 2;
+      column-gap: 2rem;
+    }
+
+    .topic-list__letter-title {
+      font-size: 150px;
+    }
   }
 </style>

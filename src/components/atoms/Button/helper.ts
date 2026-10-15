@@ -14,7 +14,7 @@ export function getButtonClasses(
   const variantMap: Record<ButtonVariantProps, string> = {
     light: "btn-primary",
     "outline-light": "btn-outline-primary",
-    dark: "btn-light text-primary",
+    dark: "btn-light",
     "outline-dark": "border border-2 text-white border-white",
     link: "text-uppercase text-primary",
   };

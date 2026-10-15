@@ -16,6 +16,7 @@ const {
   category,
   dateTime,
   action,
+  categoryLinks = {},
   fullHeight = true,
   isExternal = true,
   imageFit = "cover",
@@ -79,11 +80,17 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
         {categories.length > 0 && (
           <div class="it-card-taxonomy d-flex flex-wrap gap-2">
             <span class="visually-hidden">{t["card.topic"]}</span>
-            {categories.map((c) => (
-              <div class="chip chip-simple">
-                <span class="chip-label">{c}</span>
-              </div>
-            ))}
+            {categories.map((c) =>
+              categoryLinks[c] ? (
+                <a class="chip chip-simple chip-link" href={categoryLinks[c]}>
+                  <span class="chip-label">{c}</span>
+                </a>
+              ) : (
+                <div class="chip chip-simple">
+                  <span class="chip-label">{c}</span>
+                </div>
+              ),
+            )}
           </div>
         )}
         {dateTime && <DateTime className="it-card-date" value={dateTime} />}
@@ -99,7 +106,20 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
     padding: 1.5rem;
   }
 
-  .it-card-taxonomy .chip {
+  .it-card-taxonomy .chip:not(.chip-link) {
     pointer-events: none;
+  }
+
+  .it-card-taxonomy .chip-link {
+    text-decoration: none;
+  }
+
+  .it-card-taxonomy .chip-link .chip-label {
+    color: var(--color-text-secondary, #2f475e);
+  }
+
+  .it-card-taxonomy .chip-link:hover .chip-label,
+  .it-card-taxonomy .chip-link:focus-visible .chip-label {
+    text-decoration: underline;
   }
 </style>

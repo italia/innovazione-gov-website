@@ -4,12 +4,20 @@
   display: flex;
   width: 56px;
   height: 56px;
-  padding: 12px;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+  padding: 5px;
   justify-content: center;
   align-items: center;
   border-radius: 4px;
-  // background: $accent-color;
   background: #f2f7fc;
+}
+
+.icon-container :global(.dynamic-icon) {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  aspect-ratio: 1 / 1;
 }
 
 .icon-container.icon-text {

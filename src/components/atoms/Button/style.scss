@@ -5,3 +5,107 @@
 .btn-outline-white:active {
   background-color: hsla(0, 0%, 100%, 0.25);
 }
+
+.btn.btn-light {
+  color: var(--color-background-primary, #06c);
+  background-color: var(--color-white, #fff);
+  border: 1px solid var(--color-white, #fff);
+  text-align: center;
+  font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  transition:
+    background-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
+}
+
+.btn.btn-light:hover,
+.btn.btn-light:focus-visible {
+  color: #004d99;
+  background-color: #e6f0fa;
+  border-color: #e6f0fa;
+}
+
+.btn.btn-light:active {
+  color: #004d99;
+  background-color: #cfe2f3;
+  border-color: #cfe2f3;
+}
+
+.btn.btn-light:focus-visible {
+  outline: 3px solid var(--color-white, #fff);
+  outline-offset: 3px;
+}
+
+.btn.border-white {
+  transition:
+    background-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out;
+}
+
+.btn.border-white:hover {
+  background-color: hsla(0, 0%, 100%, 0.12);
+}
+
+.btn.border-white:active {
+  background-color: hsla(0, 0%, 100%, 0.24);
+}
+
+.btn.border-white:focus-visible {
+  outline: 3px solid var(--color-white, #fff);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn.btn-light,
+  .btn.border-white {
+    transition: none;
+  }
+}
+
+:global(.it-section-bg-dark) .btn.btn-primary,
+:global(.it-section-bg-dark) .btn.btn-outline-primary {
+  transition:
+    background-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
+}
+
+:global(.it-section-bg-dark) .btn.btn-primary:hover,
+:global(.it-section-bg-dark) .btn.btn-primary:focus-visible {
+  color: #004d99;
+  background-color: #e6f0fa;
+  border-color: #e6f0fa;
+}
+
+:global(.it-section-bg-dark) .btn.btn-primary:active {
+  color: #004d99;
+  background-color: #cfe2f3;
+  border-color: #cfe2f3;
+}
+
+:global(.it-section-bg-dark) .btn.btn-outline-primary:hover,
+:global(.it-section-bg-dark) .btn.btn-outline-primary:focus-visible {
+  color: var(--color-white, #fff);
+  background-color: hsla(0, 0%, 100%, 0.12);
+  border-color: var(--color-white, #fff);
+}
+
+:global(.it-section-bg-dark) .btn.btn-outline-primary:active {
+  background-color: hsla(0, 0%, 100%, 0.24);
+}
+
+:global(.it-section-bg-dark) .btn.btn-primary:focus-visible,
+:global(.it-section-bg-dark) .btn.btn-outline-primary:focus-visible {
+  outline: 3px solid var(--color-white, #fff);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(.it-section-bg-dark) .btn.btn-primary,
+  :global(.it-section-bg-dark) .btn.btn-outline-primary {
+    transition: none;
+  }
+}

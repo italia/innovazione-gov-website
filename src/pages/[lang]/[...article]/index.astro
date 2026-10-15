@@ -33,6 +33,7 @@ export async function getStaticPaths() {
       sidebar: SidebarFragmentType;
       showSidebar: boolean;
       paragraph: string;
+      description: string;
       title: string;
       articleType: string | null;
       dateTime: string | null;
@@ -79,6 +80,7 @@ export async function getStaticPaths() {
             content: getLocaleValue(page.allContentLocales, lang, null),
             title: getLocaleValue(page.allTitleLocales, lang, ""),
             paragraph: getLocaleValue(page.allParagraphLocales, lang, ""),
+            description: getLocaleValue(page.allDescriptionLocales, lang, ""),
             articleType: page.articleType ?? null,
             dateTime: page.dateShown ?? null,
             topics: (page.tags ?? [])
@@ -106,6 +108,7 @@ const {
   sidebar,
   showSidebar,
   paragraph,
+  description,
   title,
   articleType,
   dateTime,
@@ -139,6 +142,7 @@ const jsonLd: JsonLdPageData = {
   <ArticleHero
     title={title}
     paragraph={paragraph}
+    description={description}
     dateTime={dateTime}
     topics={topics}
     image={image}
@@ -151,6 +155,7 @@ const jsonLd: JsonLdPageData = {
         sidebar={sidebar}
         showSidebar={showSidebar}
         content={content}
+        articleType={articleType}
       />
     )
   }

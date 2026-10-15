@@ -6,15 +6,34 @@ type Props = CardInfoProps;
 const { title, description } = Astro.props;
 ---
 
-<div class="it-card rounded shadow-sm border">
-  <h3 class="it-card-title it-card-title-icon">
-    <span class="fs-3">
-      {title}
-    </span>
-  </h3>
-  <div class="it-card-body">
-    <p class="it-card-text">
-      {description}
-    </p>
-  </div>
-</div>
+<article class="card-info">
+  <h3 class="card-info__title">{title}</h3>
+  {description && <p class="card-info__text">{description}</p>}
+</article>
+
+<style>
+  .card-info {
+    height: 100%;
+    border: 1px solid #c5c7c9;
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.08);
+    padding: 1.5rem;
+  }
+
+  .card-info .card-info__title {
+    margin-bottom: 0.5rem;
+    color: var(--color-text-base, #1a1a1a);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 32px;
+  }
+
+  .card-info .card-info__text {
+    margin: 0;
+    color: var(--color-secondary, #2f475e);
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+import { ArticleIntro } from "@components/organisms/ArticleIntro";
+import type { ArticleIntroDetail } from "@components/organisms/ArticleIntro/types";
+import type { ArticleIntroFragmentType } from "@graphql/fragment/commonFragments";
+
+type Props = {
+  block: ArticleIntroFragmentType;
+};
+
+const { block } = Astro.props;
+
+const details: ArticleIntroDetail[] = (block.details ?? []).map((detail) => ({
+  label: detail.label,
+  paragraph: detail.paragraph ?? "",
+}));
+
+const topics = (block.topics ?? [])
+  .map((topic) => topic.name)
+  .filter((name): name is string => !!name);
+---
+
+<ArticleIntro
+  title={block.title}
+  paragraph={block.paragraph}
+  topicsTitle={block.topicsTitle}
+  topics={topics}
+  details={details}
+/>

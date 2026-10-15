@@ -6,6 +6,7 @@ import {
   WideLinkCardFragment,
   ExternalLinkFragment,
   ImageBlockFragment,
+  AltImageFragment,
   ImageFragment,
   InternalLinkFragment,
   ListBlockquoteFragment,
@@ -14,6 +15,7 @@ import {
   OrderedListFragment,
   QuickLinkCardFragment,
   RelatedArticleFragment,
+  ArticleIntroFragment,
   TopicsBlockFragment,
 } from "@graphql/fragment/commonFragments";
 import { SupportCTASectionFragment } from "@graphql/fragment/sectionFragments";
@@ -50,6 +52,9 @@ export const ArticleContentFragment = graphql(
         }
         ... on TopicsBlockRecord {
           ...TopicsBlockFragment
+        }
+        ... on ArticleIntroRecord {
+          ...ArticleIntroFragment
         }
         ... on RelatedArticleRecord {
           ...RelatedArticleFragment
@@ -98,6 +103,7 @@ export const ArticleContentFragment = graphql(
     CalloutFragment,
     QuickLinkCardFragment,
     SupportCTASectionFragment,
+    ArticleIntroFragment,
     TopicsBlockFragment,
     RelatedArticleFragment,
     ImageBlockFragment,
@@ -131,6 +137,10 @@ export const AllArticlesRecordFragment = graphql(
         locale
         value
       }
+      allDescriptionLocales: _allDescriptionLocales {
+        locale
+        value
+      }
       allImageLocales: _allImageLocales {
         locale
         value {
@@ -146,6 +156,11 @@ export const AllArticlesRecordFragment = graphql(
       tags {
         name
         slug
+        description
+        isCategory
+        previewImage {
+          ...AltImageFragment
+        }
       }
       attachments {
         id
@@ -171,7 +186,7 @@ export const AllArticlesRecordFragment = graphql(
       }
     }
   `,
-  [ArticleContentFragment, ImageFragment],
+  [ArticleContentFragment, ImageFragment, AltImageFragment],
 );
 
 export type AllArticlesRecordFragmentType = FragmentOf<

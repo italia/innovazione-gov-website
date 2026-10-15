@@ -11,6 +11,7 @@ import type { ArticleCard } from "@graphql/query/articleCards";
 import type { SiteLocale } from "@graphql/types";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { linkResolver } from "@utils/linkResolver";
+import { topicPath } from "@utils/topicRoutes";
 import { createDownloadUrl } from "@utils/createDownloadUrl";
 
 export const mapNewsToCardEditorialNewsProps = (
@@ -44,6 +45,11 @@ export const mapArticleToCardEditorialNewsProps = (
     .filter((t) => t.isCategory)
     .map((t) => t.name)
     .filter((name): name is string => !!name);
+  const categoryLinks: Record<string, string> = {};
+  for (const tag of article.tags ?? []) {
+    if (!tag.name || !tag.slug) continue;
+    categoryLinks[tag.name] = topicPath(lang, tag.slug);
+  }
   return {
     id: article.id,
     title: getLocaleValue(article.allTitleLocales, lang, "") ?? "",
@@ -52,8 +58,9 @@ export const mapArticleToCardEditorialNewsProps = (
         getLocaleValue(article.allDescriptionLocales, lang, "")) ??
       "",
     image: article.image ?? undefined,
-    dateTime: article.firstPublishedAt ?? undefined,
+    dateTime: article.dateShown ?? article.firstPublishedAt ?? undefined,
     category: tags,
+    categoryLinks,
     filterCategories,
     linkTo: linkResolver(article.id, lang),
     lang: lang,

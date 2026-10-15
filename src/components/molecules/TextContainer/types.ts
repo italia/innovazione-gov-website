@@ -4,6 +4,9 @@ export type TextContainerProps = {
   variant?: TextContainerVariant;
   labelButton?: string;
   linkTo?: string;
+  labelButtonSecondary?: string;
+  linkToSecondary?: string;
+  openInNewTabSecondary?: boolean;
   heading?: HeadingTag;
   openInNewTab?: boolean;
 };

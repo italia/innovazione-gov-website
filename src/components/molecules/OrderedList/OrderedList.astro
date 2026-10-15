@@ -6,7 +6,11 @@ type Props = ListProps;
 const { variant = "default", items } = Astro.props;
 ---
 
-<div class="it-list-wrapper">
+<style>
+  @import "./style.scss";
+</style>
+
+<div class="it-list-wrapper ordered-list">
   <ol class="it-list">
     {
       items.map((item, index) => (

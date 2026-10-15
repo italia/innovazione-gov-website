@@ -61,6 +61,18 @@ export const HeroFragment = graphql(
           ...ExternalLinkFragment
         }
       }
+      ctaSecondary {
+        ... on RecordInterface {
+          id
+          componentName: __typename
+        }
+        ... on InternalLinkRecord {
+          ...InternalLinkFragment
+        }
+        ... on ExternalLinkRecord {
+          ...ExternalLinkFragment
+        }
+      }
     }
   `,
   [ImageFragment, InternalLinkFragment, ExternalLinkFragment],
@@ -829,6 +841,7 @@ export const TopicListFragment = graphql(
     fragment TopicListFragment on TopicListRecord @_unmask {
       id
       title
+      paragraph(markdown: true)
       backgroundColor
       order
       showCount
@@ -838,6 +851,116 @@ export const TopicListFragment = graphql(
 );
 
 export type TopicListFragmentType = FragmentOf<typeof TopicListFragment>;
+
+export const TopicHighlightFragment = graphql(
+  `
+    fragment TopicHighlightFragment on TopicHighlightRecord @_unmask {
+      id
+      title
+      cardsCount
+      backgroundColor
+    }
+  `,
+  [],
+);
+
+export type TopicHighlightFragmentType = FragmentOf<
+  typeof TopicHighlightFragment
+>;
+
+export const HighlightCarouselFragment = graphql(
+  `
+    fragment HighlightCarouselFragment on HighlightCarouselRecord @_unmask {
+      id
+      title
+      paragraph(markdown: true)
+      items {
+        ... on HighlightItemRecord {
+          id
+          label
+          paragraph(markdown: true)
+          image {
+            ...AltImageFragment
+          }
+          pointsTo {
+            ... on RecordInterface {
+              id
+            }
+            ... on ArticleRecord {
+              title
+              articleParagraph: paragraph
+              articleImage: image {
+                ...ImageFragment
+              }
+            }
+            ... on PageRecord {
+              title
+            }
+            ... on InsightRecord {
+              title
+            }
+          }
+        }
+      }
+    }
+  `,
+  [ImageFragment, AltImageFragment],
+);
+
+export type HighlightCarouselFragmentType = FragmentOf<
+  typeof HighlightCarouselFragment
+>;
+
+export const AccordionShowcaseFragment = graphql(
+  `
+    fragment AccordionShowcaseFragment on AccordionShowcaseRecord @_unmask {
+      id
+      title
+      image {
+        ...AltImageFragment
+      }
+      cta {
+        ... on RecordInterface {
+          id
+          componentName: __typename
+        }
+        ... on InternalLinkRecord {
+          ...InternalLinkFragment
+        }
+        ... on ExternalLinkRecord {
+          ...ExternalLinkFragment
+        }
+      }
+      items {
+        ... on ShowcaseItemRecord {
+          id
+          header
+          body(markdown: true)
+          image {
+            ...AltImageFragment
+          }
+          cta {
+            ... on RecordInterface {
+              id
+              componentName: __typename
+            }
+            ... on InternalLinkRecord {
+              ...InternalLinkFragment
+            }
+            ... on ExternalLinkRecord {
+              ...ExternalLinkFragment
+            }
+          }
+        }
+      }
+    }
+  `,
+  [AltImageFragment, InternalLinkFragment, ExternalLinkFragment],
+);
+
+export type AccordionShowcaseFragmentType = FragmentOf<
+  typeof AccordionShowcaseFragment
+>;
 
 export const JobPositionListFragment = graphql(
   `

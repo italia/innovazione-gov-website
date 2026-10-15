@@ -50,6 +50,7 @@ const topics = [...perSlug]
   topics.length > 0 && (
     <TopicList
       title={block.title}
+      paragraph={block.paragraph}
       topics={topics}
       background={block.backgroundColor as SectionBackground}
       showCount={block.showCount ?? true}

@@ -17,6 +17,9 @@ const {
   bgClass,
   labelButton,
   linkTo,
+  labelButtonSecondary,
+  linkToSecondary,
+  openInNewTabSecondary = false,
   variantButton,
   openInNewTab = false,
 } = Astro.props;
@@ -75,7 +78,7 @@ const layoutClass = immagineATuttaHero
           {paragraph && <p class="font-sans-serif">{paragraph}</p>}
           {
             labelButton && linkTo && (
-              <div class="it-btn-container">
+              <div class="it-btn-container d-flex flex-wrap gap-3">
                 <ButtonLink
                   size="small"
                   label={labelButton}
@@ -83,6 +86,19 @@ const layoutClass = immagineATuttaHero
                   linkTo={linkTo}
                   openInNewTab={openInNewTab}
                 />
+                {labelButtonSecondary && linkToSecondary && (
+                  <ButtonLink
+                    size="small"
+                    label={labelButtonSecondary}
+                    variant={
+                      variantButton === "dark"
+                        ? "outline-dark"
+                        : "outline-light"
+                    }
+                    linkTo={linkToSecondary}
+                    openInNewTab={openInNewTabSecondary}
+                  />
+                )}
               </div>
             )
           }

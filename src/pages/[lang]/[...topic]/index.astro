@@ -1,6 +1,7 @@
 ---
 import { ButtonLink } from "@components/atoms/Button";
 import { Breadcrumb } from "@components/molecules/Breadcrumb";
+import { CardTopicEntry } from "@components/molecules/CardTopicEntry";
 import { DateTime } from "@components/atoms/DateTime";
 import TextAndImageAdapter from "@components/cms-adapters/datocms/TextAndImageAdapter.astro";
 import { Hero } from "@components/organisms/Hero";
@@ -8,14 +9,23 @@ import { SectionContainer } from "@components/organisms/SectionContainer";
 import type { SiteLocale } from "@graphql/types";
 import Layout from "@layouts/Layout.astro";
 import { createBreadcrumb } from "@utils/createBreadcrumb";
+import { getSectionBgClass } from "@utils/background";
 import { buildTopicPaths } from "@lib/topics";
 
 export async function getStaticPaths() {
   return buildTopicPaths(["it"]);
 }
 
-const { indiceArgomentiId, slug, nome, descrizione, sezioni, bloccoChiusura } =
-  Astro.props;
+const {
+  indiceArgomentiId,
+  slug,
+  nome,
+  descrizione,
+  seoMeta: seoDalCms,
+  immagineAnteprima,
+  sezioni,
+  bloccoChiusura,
+} = Astro.props;
 const { lang } = Astro.params;
 const locale = lang as SiteLocale;
 
@@ -27,7 +37,7 @@ const breadcrumb = createBreadcrumb(indiceArgomentiId, locale).map((voce) => ({
 }));
 breadcrumb.push({ label: nome, linkTo: "#", active: true, id: nome });
 
-const seoMeta = [
+const seoCostruito = [
   { tag: "title", content: `${nome} | Argomenti`, attributes: null },
   {
     tag: "meta",
@@ -41,8 +51,7 @@ const seoMeta = [
   },
 ];
 
-const indicePerSezione = (indice: string) =>
-  `${breadcrumb[1]?.linkTo ?? ""}/${indice}`;
+const seoMeta = seoDalCms?.length ? seoDalCms : seoCostruito;
 
 const dateArticoli = sezioni
   .flatMap((sezione) => sezione.articoli)
@@ -60,8 +69,9 @@ const ultimoAggiornamento = dateArticoli.length
   <Hero
     title={nome}
     paragraph={descrizione ?? undefined}
+    image={immagineAnteprima ?? undefined}
     variant="small"
-    backgroundColor="lighter"
+    backgroundColor="default"
     showBreadcrumb={true}
   >
     <Breadcrumb slot="breadcrumb" items={breadcrumb} />
@@ -69,33 +79,64 @@ const ultimoAggiornamento = dateArticoli.length
 
   {
     sezioni.map((sezione) => (
-      <SectionContainer sectionTitleId={sezione.titolo}>
+      <SectionContainer
+        className={getSectionBgClass(sezione.sfondo)}
+        sectionTitleId={sezione.titolo}
+      >
         <div class="row">
-          <div class="col-12 col-lg-8">
+          <div class:list={["col-12", !sezione.aCard && "col-lg-8"]}>
             <h2>{sezione.titolo}</h2>
-            <ul class="topic-articles">
-              {sezione.articoli.map((articolo) => (
-                <li>
-                  <a href={articolo.path}>{articolo.title}</a>
-                  <p>
+            {sezione.sottotitolo && (
+              <p class="topic-section__subtitle">{sezione.sottotitolo}</p>
+            )}
+            {sezione.aCard ? (
+              <ul class="topic-cards">
+                {sezione.articoli.map((articolo) => (
+                  <li>
+                    <CardTopicEntry
+                      id={articolo.id}
+                      title={articolo.title}
+                      paragraph={articolo.paragraph}
+                      image={articolo.immagine}
+                      linkTo={articolo.path}
+                    />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ul class="topic-articles">
+                {sezione.articoli.map((articolo) => (
+                  <li>
+                    <p class="topic-articles__heading">
+                      <a href={articolo.path}>{articolo.title}</a>
+                      {sezione.conBadge && articolo.tipo && (
+                        <span class="topic-articles__badge">
+                          {articolo.tipo}
+                        </span>
+                      )}
+                    </p>
+                    {articolo.paragraph && (
+                      <p class="topic-articles__text">{articolo.paragraph}</p>
+                    )}
                     {articolo.dateShown && (
                       <DateTime
                         className="topic-articles__date"
                         value={articolo.dateShown}
                       />
                     )}
-                    {articolo.paragraph && <span> – {articolo.paragraph}</span>}
-                  </p>
-                </li>
-              ))}
-            </ul>
-            {sezione.totale > sezione.articoli.length && (
-              <ButtonLink
-                size="small"
-                label={sezione.etichettaCta}
-                linkTo={`${indicePerSezione(sezione.indice)}?filter=${slug}`}
-              />
+                  </li>
+                ))}
+              </ul>
             )}
+            {sezione.percorsoIndice &&
+              sezione.etichettaCta &&
+              sezione.totale > sezione.articoli.length && (
+                <ButtonLink
+                  size="small"
+                  label={sezione.etichettaCta}
+                  linkTo={`${sezione.percorsoIndice}?filter=${slug}`}
+                />
+              )}
           </div>
         </div>
       </SectionContainer>
@@ -106,24 +147,73 @@ const ultimoAggiornamento = dateArticoli.length
 </Layout>
 
 <style>
+  .topic-section__subtitle {
+    margin-bottom: 2rem;
+  }
+
+  .topic-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 1.5rem;
+    margin: 0 0 2rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 992px) {
+    .topic-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
   .topic-articles {
     margin: 0 0 2rem;
     padding: 0;
     list-style: none;
   }
   .topic-articles li {
-    border-bottom: 1px solid #d4d8dc;
-    padding-block: 1rem;
+    padding-block: 1.25rem;
   }
   .topic-articles a {
     font-weight: 600;
     font-size: 1.125rem;
     line-height: 1.5rem;
   }
-  .topic-articles p {
-    margin: 0.25rem 0 0;
-    color: #2f475e;
+  .topic-articles__heading {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin: 0;
+  }
+  .topic-articles__heading a {
+    min-width: 0;
+  }
+  .topic-articles__badge {
+    flex: 0 0 auto;
+    border-radius: 4px;
+    background: #526c84;
+    padding: 0.25rem 0.625rem;
+    color: var(--color-text-inverse, #fff);
+    text-transform: uppercase;
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    white-space: nowrap;
+  }
+  .topic-articles__text {
+    margin: 0.5rem 0 0;
+    color: var(--color-text-base, #1a1a1a);
     font-size: 1rem;
     line-height: 1.5rem;
+  }
+  .topic-articles :global(.topic-articles__date) {
+    display: block;
+    margin-top: 0.5rem;
+    color: #5a6673;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   }
 </style>

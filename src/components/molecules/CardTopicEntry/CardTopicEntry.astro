@@ -1,0 +1,82 @@
+---
+import { Image } from "@components/atoms/Image";
+import type { ImageProps } from "@components/atoms/Image/types";
+import { getI18n } from "@i18n/microcopy";
+
+type Props = {
+  id: string;
+  title: string;
+  paragraph?: string | null;
+  image?: ImageProps | null;
+  linkTo: string;
+};
+
+const { id, title, paragraph, image, linkTo } = Astro.props;
+
+const cardTitleId = `card-topic-${id}`;
+const { lang } = Astro.locals;
+const t = getI18n(lang);
+---
+
+<article class="card-topic" aria-labelledby={cardTitleId}>
+  <div class="card-topic__media">{image && <Image {...image} />}</div>
+  <div class="card-topic__body">
+    <h3 class="card-topic__title" id={cardTitleId}>
+      <a href={linkTo}>
+        {title}
+        <span class="visually-hidden">{t["link.internal"]}</span>
+      </a>
+    </h3>
+    {paragraph && <p class="card-topic__text">{paragraph}</p>}
+  </div>
+</article>
+
+<style>
+  .card-topic {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    align-items: center;
+    border: 1px solid #c5c7c9;
+    border-radius: 4px;
+    background: #fff;
+    padding: 1.5rem;
+  }
+
+  .card-topic__media {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .card-topic__media :global(img) {
+    width: 100%;
+    max-height: 180px;
+    object-fit: contain;
+  }
+
+  .card-topic__title {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .card-topic__title a {
+    color: var(--color-text-primary, #06c);
+    font-weight: 700;
+  }
+
+  .card-topic__text {
+    margin: 0;
+    color: var(--color-text-base, #1a1a1a);
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  @media (min-width: 576px) {
+    .card-topic {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      gap: 1.5rem;
+    }
+  }
+</style>

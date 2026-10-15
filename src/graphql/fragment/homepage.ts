@@ -9,10 +9,13 @@ import {
 import {
   CardLinkListFragment,
   HeroFragment,
+  AccordionShowcaseFragment,
+  HighlightCarouselFragment,
   NewsFeedFragment,
   SupportChannelsSectionFragment,
   TextAndImageFragment,
   TextAndStatisticsFragment,
+  TextAndAccordionFragment,
   TextAndUseCasesFragment,
   TextDonutFragment,
   TextOnlyFragment,
@@ -30,6 +33,12 @@ export const HomepageModelContentFragment = graphql(
       ... on HeroRecord {
         ...HeroFragment
       }
+      ... on HighlightCarouselRecord {
+        ...HighlightCarouselFragment
+      }
+      ... on AccordionShowcaseRecord {
+        ...AccordionShowcaseFragment
+      }
       ... on NewsFeedRecord {
         ...NewsFeedFragment
       }
@@ -41,6 +50,9 @@ export const HomepageModelContentFragment = graphql(
       }
       ... on TextStatisticRecord {
         ...TextAndStatisticsFragment
+      }
+      ... on TextAccordionRecord {
+        ...TextAndAccordionFragment
       }
       ... on TextImageRecord {
         ...TextAndImageFragment
@@ -89,10 +101,13 @@ export const HomepageModelContentFragment = graphql(
   `,
   [
     HeroFragment,
+    AccordionShowcaseFragment,
+    HighlightCarouselFragment,
     NewsFeedFragment,
     SupportChannelsSectionFragment,
     TextAndImageFragment,
     TextAndStatisticsFragment,
+    TextAndAccordionFragment,
     TextAndUseCasesFragment,
     TextOnlyFragment,
     CardLinkListFragment,

@@ -3,6 +3,7 @@ import {
   CatalogueLocalesFragment,
   InsightLocalesFragment,
   PageLocalesFragment,
+  SearchLocalesFragment,
   WebinarItemLocalesFragment,
 } from "@graphql/fragment/metaFragments";
 import { graphql, type FragmentOf } from "@graphql/graphql";
@@ -105,6 +106,10 @@ export const AllWebinarItemsSlugFragment = graphql(
               id
               ...PageLocalesFragment
             }
+            ... on SearchRecord {
+              id
+              ...SearchLocalesFragment
+            }
           }
         }
         ... on PageRecord {
@@ -113,7 +118,12 @@ export const AllWebinarItemsSlugFragment = graphql(
       }
     }
   `,
-  [PageLocalesFragment, CatalogueLocalesFragment, WebinarItemLocalesFragment],
+  [
+    PageLocalesFragment,
+    CatalogueLocalesFragment,
+    SearchLocalesFragment,
+    WebinarItemLocalesFragment,
+  ],
 );
 
 export type AllWebinarItemsSlugFragmentType = FragmentOf<
@@ -127,12 +137,18 @@ export const AllCataloguesSlugFragment = graphql(
       locales: _locales
       ...CatalogueLocalesFragment
       parentPage {
-        id
-        ...PageLocalesFragment
+        ... on PageRecord {
+          id
+          ...PageLocalesFragment
+        }
+        ... on SearchRecord {
+          id
+          ...SearchLocalesFragment
+        }
       }
     }
   `,
-  [CatalogueLocalesFragment, PageLocalesFragment],
+  [CatalogueLocalesFragment, PageLocalesFragment, SearchLocalesFragment],
 );
 
 export type AllCataloguesSlugFragmentType = FragmentOf<

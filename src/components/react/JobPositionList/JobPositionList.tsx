@@ -1,6 +1,7 @@
 import type { SiteLocale } from "@graphql/types";
 import { getI18n } from "@i18n/microcopy";
-import { useMemo, useState } from "react";
+import { Pagination } from "@components/react/Pagination";
+import { useMemo, useRef, useState } from "react";
 
 export type JobPositionItemProps = {
   id: string;
@@ -24,9 +25,10 @@ export function JobPositionList({
   lang,
 }: JobPositionListProps) {
   const t = getI18n(lang);
-  const [shown, setShown] = useState(perPage);
+  const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
   const [showClosed, setShowClosed] = useState(false);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const openItems = useMemo(
     () => items.filter((item) => item.status === "open"),
@@ -45,8 +47,23 @@ export function JobPositionList({
       );
   }, [items, query, showClosed]);
 
-  const paginated = visibleItems.slice(0, shown);
-  const remaining = visibleItems.length - paginated.length;
+  const totalPages = Math.ceil(visibleItems.length / perPage);
+  const currentPage = Math.min(page, Math.max(totalPages, 1));
+  const start = (currentPage - 1) * perPage;
+  const paginated = visibleItems.slice(start, start + perPage);
+
+  const handlePageChange = (nextPage: number) => {
+    setPage(nextPage);
+    const results = resultsRef.current;
+    if (!results) return;
+    results.focus({ preventScroll: true });
+    results.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+      block: "start",
+    });
+  };
 
   return (
     <div className="container position-list">
@@ -72,7 +89,7 @@ export function JobPositionList({
                 value={query}
                 onChange={(event) => {
                   setQuery(event.target.value);
-                  setShown(perPage);
+                  setPage(1);
                 }}
               />
             </div>
@@ -88,7 +105,7 @@ export function JobPositionList({
                   checked={showClosed}
                   onChange={(event) => {
                     setShowClosed(event.target.checked);
-                    setShown(perPage);
+                    setPage(1);
                   }}
                 />
                 <span className="lever" />
@@ -97,47 +114,44 @@ export function JobPositionList({
           </div>
         </div>
 
-        {paginated.length === 0 ? (
-          openItems.length > 0 || showClosed || query ? (
-            <p className="position-list__empty">{t["position.noResults"]}</p>
-          ) : null
-        ) : (
-          <ul className="list-unstyled position-list__items">
-            {paginated.map((item) => (
-              <li className="position-item" key={item.id}>
-                <p className="position-item__head">
-                  <a className="position-item__link" href={item.linkTo}>
-                    {item.title}
-                    <svg
-                      className="icon icon-sm icon-primary"
-                      aria-hidden="true"
-                    >
-                      <use href="/bsi-svg/sprites.svg#it-arrow-right" />
-                    </svg>
-                  </a>
-                  <span className="position-item__badge">
-                    {item.statusLabel}
-                  </span>
-                </p>
-                {item.description && (
-                  <p className="position-item__text">{item.description}</p>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
+        <div ref={resultsRef} tabIndex={-1} className="collection-results">
+          {paginated.length === 0 ? (
+            openItems.length > 0 || showClosed || query ? (
+              <p className="position-list__empty">{t["position.noResults"]}</p>
+            ) : null
+          ) : (
+            <ul className="list-unstyled position-list__items">
+              {paginated.map((item) => (
+                <li className="position-item" key={item.id}>
+                  <p className="position-item__head">
+                    <a className="position-item__link" href={item.linkTo}>
+                      {item.title}
+                      <svg
+                        className="icon icon-sm icon-primary"
+                        aria-hidden="true"
+                      >
+                        <use href="/bsi-svg/sprites.svg#it-arrow-right" />
+                      </svg>
+                    </a>
+                    <span className="position-item__badge">
+                      {item.statusLabel}
+                    </span>
+                  </p>
+                  {item.description && (
+                    <p className="position-item__text">{item.description}</p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
-        {remaining > 0 && (
-          <div className="position-list__more">
-            <button
-              type="button"
-              className="btn btn-outline-primary"
-              onClick={() => setShown(shown + perPage)}
-            >
-              {t["position.loadMore"]} ({remaining})
-            </button>
-          </div>
-        )}
+        <Pagination
+          lang={lang}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

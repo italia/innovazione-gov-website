@@ -1,0 +1,116 @@
+---
+import { Topics } from "@components/molecules/Topics";
+import type { ArticleIntroProps } from "./types";
+
+type Props = ArticleIntroProps;
+
+const {
+  title,
+  paragraph,
+  topicsTitle,
+  topics = [],
+  details = [],
+} = Astro.props;
+---
+
+<div class="article-intro it-section-bg-light dark">
+  <div class="row justify-content-between">
+    <div class="col-12 col-lg-5">
+      {title && <h2 class="article-intro__title">{title}</h2>}
+      {paragraph && <div class="article-intro__text" set:html={paragraph} />}
+      {
+        topics.length > 0 && (
+          <div class="article-intro__topics">
+            <Topics
+              title={topicsTitle ?? undefined}
+              topics={topics}
+              variant="column"
+            />
+          </div>
+        )
+      }
+    </div>
+
+    <div class="col-12 col-lg-6 article-intro__details">
+      {
+        details.map((detail) => (
+          <div class="article-intro__detail">
+            <p class="article-intro__label">{detail.label}</p>
+            <div class="article-intro__text" set:html={detail.paragraph} />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .article-intro {
+    margin-block: 0 2.5rem;
+    margin-inline: calc(50% - 50vw);
+    padding-block: 2.5rem;
+    padding-inline: max(1.5rem, calc((100vw - 1320px) / 2));
+  }
+
+  .article-intro:first-child {
+    margin-top: -3rem;
+  }
+
+  .article-intro__title {
+    margin-bottom: 1rem;
+  }
+
+  .article-intro__text :global(p) {
+    margin-bottom: 0;
+  }
+
+  .article-intro__text :global(p + p) {
+    margin-top: 0.75rem;
+  }
+
+  .article-intro__topics {
+    margin-top: 2rem;
+  }
+
+  .article-intro__detail + .article-intro__detail {
+    margin-top: 2rem;
+  }
+
+  .article-intro__label {
+    margin-bottom: 0.25rem;
+    color: var(--color-text-secondary, #2f475e);
+    text-transform: uppercase;
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  .article-intro :global(.chip) {
+    border: 1px solid var(--color-text-primary, #06c);
+    background: transparent;
+  }
+
+  .article-intro :global(.chip.chip-simple .chip-label),
+  .article-intro :global(.chip.chip-simple.chip-disabled .chip-label) {
+    color: var(--color-text-primary, #06c);
+  }
+
+  @media (min-width: 992px) {
+    .article-intro {
+      padding-block: 3.5rem;
+    }
+
+    .article-intro__details {
+      margin-top: 2rem;
+    }
+
+    .article-intro:first-child {
+      margin-top: -5rem;
+    }
+
+    .article-intro__detail + .article-intro__detail {
+      margin-top: 2.5rem;
+    }
+  }
+</style>

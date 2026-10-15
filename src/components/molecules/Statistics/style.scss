@@ -1,33 +1,14 @@
-.statistics-container {
-  display: grid;
-  gap: 1.5rem;
-  padding: 0;
-  margin: 0;
-}
-
-@media (min-width: 992px) {
-  .statistics-container {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.statistics-item {
-  box-shadow: 0 4px 4px 0 rgb(0 0 0 / 15%);
-  border: 1px solid var(--color-border-subtle, #c5c7c9);
-  border-radius: 4px;
-  background: var(--color-blue-97, #f2f7fc);
-  padding: 24px;
-}
-
+.statistics-container,
 .statistics-inline {
   display: grid;
-  gap: 1.5rem;
+  gap: 2.5rem;
   padding: 0;
   margin: 0;
 }
 
 @media (min-width: 992px) {
   .statistics-inline {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--statistiche, 3), minmax(0, 1fr));
+    column-gap: 2rem;
   }
 }

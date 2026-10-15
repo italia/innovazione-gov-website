@@ -10,9 +10,10 @@ type Props = {
   sidebar: SidebarFragmentType;
   content: ArticleContentFragmentType;
   showSidebar?: boolean;
+  articleType?: string | null;
 };
 
-const { content, showSidebar = true } = Astro.props;
+const { content, showSidebar = true, articleType } = Astro.props;
 const { lang } = Astro.locals;
 const t = getI18n(lang);
 
@@ -33,12 +34,12 @@ const tocItems = headings.map((heading) => ({
           )}
         </div>
         <div class="col-12 col-lg-8 px-lg-0">
-          <ArticleAdapter content={content} />
+          <ArticleAdapter content={content} articleType={articleType} />
         </div>
       </div>
     </div>
   ) : (
-    <ArticleAdapter content={content} fullWidth />
+    <ArticleAdapter content={content} articleType={articleType} fullWidth />
   )
 }
 

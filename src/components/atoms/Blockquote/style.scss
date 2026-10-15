@@ -1,5 +1,28 @@
 @import "@styles/palette";
 
 .border-left-primary {
-  border-left-color: #00a99d !important;
+  border-left-color: #004d99 !important;
+  border-left-width: 8px !important;
+}
+
+.blockquote-card {
+  background: $white;
+
+  .blockquote-footer {
+    margin-top: 0.5rem;
+    color: var(--color-slate-44, #5c6f82);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 16px;
+
+    &::before {
+      content: none;
+    }
+  }
+
+  .blockquote-footer cite {
+    font-style: inherit;
+  }
 }

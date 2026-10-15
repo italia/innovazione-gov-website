@@ -9,6 +9,7 @@ import { createBreadcrumb } from "@utils/createBreadcrumb";
 type Props = {
   title: string;
   paragraph?: string | null;
+  description?: string | null;
   dateTime?: string | null;
   topics?: string[];
   image?: ImageProps | null;
@@ -19,6 +20,7 @@ type Props = {
 const {
   title,
   paragraph,
+  description,
   dateTime,
   topics = [],
   image,
@@ -30,10 +32,15 @@ const t = getI18n(lang);
 
 const rawBreadcrumb = createBreadcrumb(recordId, lang);
 const isProject = articleType === "project";
+const isFocus = articleType === "focus";
 const lastLabel = isProject ? title : t["article.detail"];
-const shownTopics = isProject ? [] : topics;
-const shownDate = isProject ? null : dateTime;
-const shownParagraph = isProject ? paragraph?.trim() : null;
+const shownTopics = isProject || isFocus ? [] : topics;
+const shownDate = isProject || isFocus ? null : dateTime;
+const shownParagraph = isProject
+  ? paragraph?.trim()
+  : isFocus
+    ? description?.trim()
+    : null;
 const shownImage = (isProject ? (logo ?? image) : image) ?? null;
 const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
   ...item,
@@ -41,7 +48,14 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
 }));
 ---
 
-<section class="it-hero-wrapper it-hero-wrapper--split article-hero">
+<section
+  class:list={[
+    "it-hero-wrapper",
+    "it-hero-wrapper--split",
+    "article-hero",
+    isFocus && "article-hero--focus",
+  ]}
+>
   <div class="container">
     <div class="row align-items-center">
       <div class="col-12 col-lg-7">
@@ -89,6 +103,23 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
   .article-hero {
     padding-block: 2.5rem;
     background-color: #f2f7fc;
+  }
+  .article-hero--focus {
+    background-color: #004d99;
+  }
+  .article-hero--focus .article-hero__title,
+  .article-hero--focus .article-hero__paragraph {
+    color: #fff !important;
+  }
+  .article-hero--focus
+    :global(.breadcrumb-container .breadcrumb .breadcrumb-item a) {
+    color: #fff;
+  }
+  .article-hero--focus
+    :global(.breadcrumb-container .breadcrumb .breadcrumb-item),
+  .article-hero--focus
+    :global(.breadcrumb-container .breadcrumb .breadcrumb-item .separator) {
+    color: #e8f1fb;
   }
   .article-hero :global(.breadcrumb-container) {
     margin-bottom: 32px !important;

@@ -134,6 +134,28 @@ export const TopicsBlockFragment = graphql(`
 
 export type TopicsBlockFragmentType = FragmentOf<typeof TopicsBlockFragment>;
 
+export const ArticleIntroFragment = graphql(`
+  fragment ArticleIntroFragment on ArticleIntroRecord @_unmask {
+    id
+    title
+    paragraph(markdown: true)
+    topicsTitle
+    topics {
+      id
+      name
+    }
+    details {
+      ... on IntroDetailRecord {
+        id
+        label
+        paragraph(markdown: true)
+      }
+    }
+  }
+`);
+
+export type ArticleIntroFragmentType = FragmentOf<typeof ArticleIntroFragment>;
+
 export const ChartFragment = graphql(`
   fragment ChartFragment on SettingsChartRecord @_unmask {
     id
@@ -405,6 +427,18 @@ export const TextBlockFragment = graphql(
       title
       paragraph(markdown: true)
       cta {
+        ... on RecordInterface {
+          id
+          componentName: __typename
+        }
+        ... on InternalLinkRecord {
+          ...InternalLinkFragment
+        }
+        ... on ExternalLinkRecord {
+          ...ExternalLinkFragment
+        }
+      }
+      ctaSecondary {
         ... on RecordInterface {
           id
           componentName: __typename

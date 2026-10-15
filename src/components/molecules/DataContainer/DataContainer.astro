@@ -13,28 +13,31 @@ const colorClass = variant === "dark" ? "text-white" : "";
 ---
 
 <Fragment>
+  <p class:list={["data-container__label", "mb-2", colorClass]}>
+    {title}
+  </p>
   <div class="d-flex align-items-center gap-3">
     {contentIcon && <IconContainer content={contentIcon} aria-hidden="true" />}
-    <p
-      class:list={["data-container__value", "align-middle", "m-0", colorClass]}
-    >
+    <p class:list={["data-container__value", "m-0", colorClass]}>
       {info}
     </p>
   </div>
-  <p class:list={["data-container__label", "mb-0", "mt-2", colorClass]}>
-    {title}
-  </p>
 </Fragment>
 
 <style>
   .data-container__value {
     color: var(--color-text-base, #1a1a1a);
-    font-weight: 600;
-    font-size: 28px;
-    line-height: 32px;
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 56px;
+    letter-spacing: -2px;
   }
 
   .data-container__label {
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
     font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
   }
 </style>

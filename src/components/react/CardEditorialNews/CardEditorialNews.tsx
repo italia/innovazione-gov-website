@@ -11,6 +11,7 @@ export type CardEditorialNewsProps = {
   image?: ImageProps;
   linkTo: string;
   category?: string | string[];
+  categoryLinks?: Record<string, string>;
   filterCategories?: string[];
   dateTime?: string;
   action?: string;
@@ -26,6 +27,7 @@ export function CardEditorialNews({
   image,
   linkTo,
   category,
+  categoryLinks = {},
   dateTime,
   action,
   fullHeight = true,
@@ -72,11 +74,21 @@ export function CardEditorialNews({
           {categories.length > 0 && (
             <div className="it-card-taxonomy d-flex flex-wrap gap-2">
               <span className="visually-hidden">{t["card.topic"]}</span>
-              {categories.map((cat) => (
-                <div className="chip chip-simple" key={cat}>
-                  <span className="chip-label">{cat}</span>
-                </div>
-              ))}
+              {categories.map((cat) =>
+                categoryLinks[cat] ? (
+                  <a
+                    className="chip chip-simple chip-link"
+                    href={categoryLinks[cat]}
+                    key={cat}
+                  >
+                    <span className="chip-label">{cat}</span>
+                  </a>
+                ) : (
+                  <div className="chip chip-simple" key={cat}>
+                    <span className="chip-label">{cat}</span>
+                  </div>
+                ),
+              )}
             </div>
           )}
           {dateTime && (

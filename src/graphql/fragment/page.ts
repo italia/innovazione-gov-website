@@ -13,6 +13,8 @@ import {
   FaqSectionRecordFragment,
   GraphitaliaDashboardRecordFragment,
   HeroFragment,
+  AccordionShowcaseFragment,
+  HighlightCarouselFragment,
   NewsFeedFragment,
   SupportChannelsSectionFragment,
   SupportCTASectionFragment,
@@ -23,6 +25,7 @@ import {
   TextOnlyFragment,
   TimelineFragment,
   ThirdPartyCookieFragment,
+  TopicHighlightFragment,
   TopicListFragment,
   TopicFilterFragment,
   UseCaseContainerFragment,
@@ -51,6 +54,12 @@ export const PageContentFragment = graphql(
       }
       ... on HeroRecord {
         ...HeroFragment
+      }
+      ... on HighlightCarouselRecord {
+        ...HighlightCarouselFragment
+      }
+      ... on AccordionShowcaseRecord {
+        ...AccordionShowcaseFragment
       }
       ... on NewsFeedRecord {
         ...NewsFeedFragment
@@ -103,6 +112,9 @@ export const PageContentFragment = graphql(
       ... on TopicListRecord {
         ...TopicListFragment
       }
+      ... on TopicHighlightRecord {
+        ...TopicHighlightFragment
+      }
       ... on ThirdPartyCookieRecord {
         ...ThirdPartyCookieFragment
       }
@@ -132,6 +144,8 @@ export const PageContentFragment = graphql(
   `,
   [
     HeroFragment,
+    AccordionShowcaseFragment,
+    HighlightCarouselFragment,
     NewsFeedFragment,
     SupportChannelsSectionFragment,
     FaqSectionRecordFragment,
@@ -148,6 +162,7 @@ export const PageContentFragment = graphql(
     CardLinkListFragment,
     TextAndStatisticsFragment,
     TimelineFragment,
+    TopicHighlightFragment,
     TopicListFragment,
     ThirdPartyCookieFragment,
     ImageFragment,

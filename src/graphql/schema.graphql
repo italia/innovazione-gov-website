@@ -103,6 +103,35 @@ type AccordionRecord implements RecordInterface {
   items: [AccordionItemRecord!]!
 }
 
+union AccordionShowcaseModelCtaField = ExternalLinkRecord | InternalLinkRecord
+
+"""Block of type Approfondimenti con immagine (accordion_showcase)"""
+type AccordionShowcaseRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  cta: AccordionShowcaseModelCtaField
+  id: ItemId!
+  image: AltFileField
+  items: [ShowcaseItemRecord!]!
+  title: String
+}
+
 """Block of type Webinar transcript (action_card)"""
 type ActionCardRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -289,6 +318,37 @@ type AnchorLinkRecord implements RecordInterface {
   label: String
 }
 
+"""Block of type Introduzione con argomenti (article_intro)"""
+type ArticleIntroRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  details: [IntroDetailRecord!]!
+  id: ItemId!
+  paragraph(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+  title: String!
+  topics: [TagRecord!]!
+  topicsTitle: String
+}
+
 """Block of type Article list (article_list)"""
 type ArticleListRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -313,7 +373,7 @@ type ArticleListRecord implements RecordInterface {
   relatedArticles: [MenuArticleItemRecord!]!
 }
 
-union ArticleModelContentBlocksField = AccordionBlockRecord | AttachmentsBoxRecord | CalloutRecord | CardServiceRecord | DownloadLinkRecord | ExternalLinkRecord | ImageBlockRecord | InternalLinkRecord | ListBlockquoteRecord | ListCardEditorialWithIconRecord | ListCardInfoRecord | ListExternalLinkRecord | OrderedListRecord | QuickLinkCardRecord | RelatedArticleRecord | SupportCtaSectionRecord | TopicsBlockRecord | WideLinkCardRecord
+union ArticleModelContentBlocksField = AccordionBlockRecord | ArticleIntroRecord | AttachmentsBoxRecord | CalloutRecord | CardServiceRecord | DownloadLinkRecord | ExternalLinkRecord | ImageBlockRecord | InternalLinkRecord | ListBlockquoteRecord | ListCardEditorialWithIconRecord | ListCardInfoRecord | ListExternalLinkRecord | OrderedListRecord | QuickLinkCardRecord | RelatedArticleRecord | SupportCtaSectionRecord | TopicsBlockRecord | WideLinkCardRecord
 
 type ArticleModelContentField {
   blocks: [ArticleModelContentBlocksField!]!
@@ -2236,6 +2296,8 @@ type GraphitaliaDashboardRecord implements RecordInterface {
 
 union HeroModelCtaField = ExternalLinkRecord | InternalLinkRecord
 
+union HeroModelCtaSecondaryField = ExternalLinkRecord | InternalLinkRecord
+
 """Block of type Hero (hero)"""
 type HeroRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -2260,6 +2322,7 @@ type HeroRecord implements RecordInterface {
   backgroundImage: FileField
   backgroundImageForMobile: FileField
   cta: HeroModelCtaField
+  ctaSecondary: HeroModelCtaSecondaryField
   id: ItemId!
   paragraph(
     """Process content as markdown"""
@@ -2268,6 +2331,67 @@ type HeroRecord implements RecordInterface {
   showBreadcrumb: BooleanType!
   title: String
   variant: String
+}
+
+"""Block of type Carosello in evidenza (highlight_carousel)"""
+type HighlightCarouselRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  id: ItemId!
+  items: [HighlightItemRecord!]!
+  paragraph(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+  title: String
+}
+
+union HighlightItemModelPointsToField = ArticleRecord | InsightRecord | PageRecord
+
+"""Block of type Contenuto in evidenza (highlight_item)"""
+type HighlightItemRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  id: ItemId!
+  image: AltFileField
+  label: String
+  paragraph(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+  pointsTo: HighlightItemModelPointsToField!
 }
 
 """Block of type Highlight (highlight)"""
@@ -2300,7 +2424,7 @@ type HighlightRecord implements RecordInterface {
   title: String!
 }
 
-union HomepageModelContentField = CardLinkListRecord | CarouselRecord | HeroRecord | ListCardEditorialWithIconWrapperRecord | NewsFeedRecord | SettingsChartRecord | SettingsKpiRecord | SupportChannelsSectionRecord | TextDonutRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | TextUseCaseRecord
+union HomepageModelContentField = AccordionShowcaseRecord | CardLinkListRecord | CarouselRecord | HeroRecord | HighlightCarouselRecord | ListCardEditorialWithIconWrapperRecord | NewsFeedRecord | SettingsChartRecord | SettingsKpiRecord | SupportChannelsSectionRecord | TextAccordionRecord | TextDonutRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | TextUseCaseRecord
 
 type HomepageModelContentFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
@@ -4447,7 +4571,7 @@ input InUseFilter {
   eq: BooleanType
 }
 
-union IndexPageModelContentField = CalloutLinkRecord | CatalogueFeedRecord | HeroRecord | TextImageRecord | TextOnlyRecord | TopicListRecord
+union IndexPageModelContentField = CalloutLinkRecord | CatalogueFeedRecord | HeroRecord | TextImageRecord | TextOnlyRecord | TopicHighlightRecord | TopicListRecord
 
 type IndexPageModelContentFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
@@ -4500,6 +4624,13 @@ enum IndexPageModelOrderBy {
   title_DESC
 }
 
+union IndexPageModelParentPageField = PageRecord | SearchRecord
+
+type IndexPageModelParentPageFieldMultiLocaleField {
+  locale: SiteLocale
+  value: IndexPageModelParentPageField
+}
+
 """Record of type Pagine indice (index_page)"""
 type IndexPageRecord implements RecordInterface {
   _allContentLocales(
@@ -4513,7 +4644,7 @@ type IndexPageRecord implements RecordInterface {
     If you want to fallback to a default translation when a translation has not been found
     """
     fallbackLocales: [SiteLocale!]
-  ): [PageRecordMultiLocaleField!]
+  ): [IndexPageModelParentPageFieldMultiLocaleField!]
   _allSeoLocales(
     """
     If you want to fallback to a default translation when a translation has not been found
@@ -4571,7 +4702,7 @@ type IndexPageRecord implements RecordInterface {
     If you want to fallback to a default translation when a translation has not been found
     """
     fallbackLocales: [SiteLocale!]
-  ): PageRecord
+  ): IndexPageModelParentPageField
   position: IntType
   seo(
     """The locale to use to fetch the field's content"""
@@ -5003,6 +5134,34 @@ type IntroArticleRecord implements RecordInterface {
   id: ItemId!
   list: IconListBlockRecord!
   text: TextBlockRecord!
+}
+
+"""Block of type Voce introduzione (intro_detail)"""
+type IntroDetailRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  id: ItemId!
+  label: String!
+  paragraph(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String!
 }
 
 scalar ItemId
@@ -7037,7 +7196,7 @@ type OwnerRecord implements RecordInterface {
   ): String!
 }
 
-union PageModelContentField = CardLinkListRecord | CarouselRecord | DataSectionRecord | FaqSectionRecord | GraphitaliaDashboardRecord | HeroRecord | LinkMenuRecord | ListCardEditorialWithIconWrapperRecord | NewsFeedRecord | SettingsChartRecord | SettingsKpiRecord | StructuredTextRecord | SupportChannelsSectionRecord | SupportCtaSectionRecord | TextAccordionRecord | TextDonutRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | ThirdPartyCookieRecord | TimelineRecord | TopicFilterRecord | TopicListRecord | UseCaseContainerRecord
+union PageModelContentField = AccordionShowcaseRecord | CardLinkListRecord | CarouselRecord | DataSectionRecord | FaqSectionRecord | GraphitaliaDashboardRecord | HeroRecord | HighlightCarouselRecord | LinkMenuRecord | ListCardEditorialWithIconWrapperRecord | NewsFeedRecord | SettingsChartRecord | SettingsKpiRecord | StructuredTextRecord | SupportChannelsSectionRecord | SupportCtaSectionRecord | TextAccordionRecord | TextDonutRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | ThirdPartyCookieRecord | TimelineRecord | TopicFilterRecord | TopicHighlightRecord | TopicListRecord | UseCaseContainerRecord
 
 type PageModelContentFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
@@ -7182,11 +7341,6 @@ type PageRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): String!
-}
-
-type PageRecordMultiLocaleField {
-  locale: SiteLocale
-  value: PageRecord
 }
 
 """Block of type Panel (panel)"""
@@ -8882,7 +9036,7 @@ type SearchBarRecord implements RecordInterface {
   title: String!
 }
 
-union SearchModelContentField = HeroRecord | SearchBarRecord
+union SearchModelContentField = CardLinkListRecord | CarouselRecord | DataSectionRecord | FaqSectionRecord | GraphitaliaDashboardRecord | HeroRecord | HighlightCarouselRecord | LinkMenuRecord | ListCardEditorialWithIconWrapperRecord | NewsFeedRecord | SearchBarRecord | SettingsChartRecord | SettingsKpiRecord | StructuredTextRecord | SupportChannelsSectionRecord | SupportCtaSectionRecord | TextAccordionRecord | TextDonutRecord | TextImageRecord | TextOnlyRecord | TextStatisticRecord | ThirdPartyCookieRecord | TimelineRecord | TopicFilterRecord | TopicHighlightRecord | TopicListRecord | UseCaseContainerRecord
 
 type SearchModelContentFieldListListNonNullMultiLocaleField {
   locale: SiteLocale
@@ -9101,6 +9255,38 @@ type SettingsKpiRecord implements RecordInterface {
   selectKpi: [KpiElementRecord!]!
   subtitle: String
   title: String
+}
+
+union ShowcaseItemModelCtaField = ExternalLinkRecord | InternalLinkRecord
+
+"""Block of type Voce approfondimento (showcase_item)"""
+type ShowcaseItemRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  body(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+  cta: ShowcaseItemModelCtaField
+  header: String!
+  id: ItemId!
+  image: AltFileField
 }
 
 union SidebarForArticleModelMenuField = AccordionMenuRecord | MenuArticleItemRecord
@@ -9567,6 +9753,8 @@ input TagModelFilter {
   description: TextFilter
   isCategory: BooleanFilter
   name: StringFilter
+  previewImage: FileFilter
+  seo: SeoFilter
   slug: StringFilter
   OR: [TagModelFilter]
   AND: [TagModelFilter]
@@ -9626,6 +9814,8 @@ type TagRecord implements RecordInterface {
   id: ItemId!
   isCategory: BooleanType!
   name: String
+  previewImage: AltFileField
+  seo: SeoField
   slug: String
 }
 
@@ -9741,6 +9931,8 @@ type TextAccordionRecord implements RecordInterface {
 
 union TextBlockModelCtaField = ExternalLinkRecord | InternalLinkRecord
 
+union TextBlockModelCtaSecondaryField = ExternalLinkRecord | InternalLinkRecord
+
 """Block of type Text block (text_block)"""
 type TextBlockRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -9762,6 +9954,7 @@ type TextBlockRecord implements RecordInterface {
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
   cta: TextBlockModelCtaField
+  ctaSecondary: TextBlockModelCtaSecondaryField
   id: ItemId!
   paragraph(
     """Process content as markdown"""
@@ -10062,6 +10255,32 @@ type TopicFilterRecord implements RecordInterface {
   titleFilter: String!
 }
 
+"""Block of type Argomenti in evidenza (topic_highlight)"""
+type TopicHighlightRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  backgroundColor: String
+  cardsCount: IntType
+  id: ItemId!
+  title: String!
+}
+
 """Block of type Elenco argomenti (topic_list)"""
 type TopicListRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -10085,6 +10304,10 @@ type TopicListRecord implements RecordInterface {
   backgroundColor: String!
   id: ItemId!
   order: String!
+  paragraph(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
   showCount: BooleanType!
   title: String
 }

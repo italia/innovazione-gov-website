@@ -14,9 +14,17 @@
   }
 }
 
+.it-hero-wrapper .it-hero-text-wrapper h1 {
+  max-width: 90%;
+}
+
 .it-hero-wrapper .it-hero-text-wrapper p {
   font-size: 1.125rem;
   line-height: 1.75rem;
+}
+
+.it-hero-wrapper.it-section-bg-dark .it-hero-text-wrapper p {
+  max-width: 640px;
 }
 
 @media (min-width: 992px) {
@@ -131,5 +139,19 @@
       right: 0 !important;
       height: 100%;
     }
+  }
+}
+
+@media (min-width: 1440px) {
+  .it-hero-wrapper.default-size {
+    min-height: clamp(440px, 30.55vw, 800px) !important;
+  }
+
+  .it-hero-wrapper.small-size {
+    min-height: clamp(400px, 27.77vw, 720px) !important;
+  }
+
+  .it-hero-wrapper.xsmall-size {
+    min-height: clamp(340px, 23.61vw, 620px) !important;
   }
 }

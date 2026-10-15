@@ -10,6 +10,9 @@ const {
   paragraph,
   labelButton,
   linkTo,
+  labelButtonSecondary,
+  linkToSecondary,
+  openInNewTabSecondary = false,
   variant = "light",
   heading: TitleTag = "h2",
   openInNewTab = false,
@@ -39,7 +42,7 @@ const variantButton =
   <Fragment set:html={paragraph} />
   {
     labelButton && linkTo && (
-      <div class="mt-4">
+      <div class="text-container__actions mt-4">
         <ButtonLink
           size="small"
           label={labelButton}
@@ -48,7 +51,27 @@ const variantButton =
           openInNewTab={openInNewTab}
           icon={openInNewTab ? "it-external-link" : undefined}
         />
+        {labelButtonSecondary && linkToSecondary && (
+          <ButtonLink
+            size="small"
+            label={labelButtonSecondary}
+            variant={
+              variantButton === "dark" ? "outline-dark" : "outline-light"
+            }
+            linkTo={linkToSecondary}
+            openInNewTab={openInNewTabSecondary}
+            icon={openInNewTabSecondary ? "it-external-link" : undefined}
+          />
+        )}
       </div>
     )
   }
 </div>
+
+<style>
+  .text-container__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+</style>

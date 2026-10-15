@@ -1,0 +1,307 @@
+---
+import { ButtonLink } from "@components/atoms/Button";
+import { Image } from "@components/atoms/Image";
+import type { ImageProps } from "@components/atoms/Image/types";
+import { Link } from "@components/atoms/Link";
+import { SectionContainer } from "@components/organisms/SectionContainer";
+import { slugify } from "@utils/slugify";
+
+type Voce = {
+  id: string;
+  header: string;
+  body?: string | null;
+  image?: ImageProps | null;
+  linkLabel?: string;
+  linkTo?: string;
+};
+
+type Props = {
+  id: string;
+  title?: string | null;
+  items: Voce[];
+  ctaLabel?: string;
+  ctaTo?: string;
+};
+
+const { id, title, items, ctaLabel, ctaTo } = Astro.props;
+
+const titleId = title ? slugify(title) : undefined;
+const idVoce = (indice: number) => `showcase-${id}-${indice}`;
+---
+
+<SectionContainer className="accordion-showcase" sectionTitleId={titleId}>
+  {
+    title && (
+      <h2 class="accordion-showcase__title" id={titleId}>
+        {title}
+      </h2>
+    )
+  }
+
+  <div class="row accordion-showcase__grid">
+    <div class="col-12 col-lg-5">
+      <ul class="accordion-showcase__list">
+        {
+          items.map((voce, indice) => (
+            <li class="accordion-showcase__item">
+              <details
+                class="accordion-showcase__details"
+                name={`showcase-${id}`}
+                open={indice === 0}
+                data-indice={indice}
+              >
+                <summary class="accordion-showcase__summary">
+                  <span class="accordion-showcase__header">{voce.header}</span>
+                  <svg
+                    class="accordion-showcase__chevron"
+                    width="14"
+                    height="8"
+                    viewBox="0 0 14 8"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M1 1L7 7L13 1"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </summary>
+                <div class="accordion-showcase__panel">
+                  {voce.body && (
+                    <div
+                      class="accordion-showcase__text"
+                      set:html={voce.body}
+                    />
+                  )}
+                  {voce.linkLabel && voce.linkTo && (
+                    <Link
+                      label={voce.linkLabel}
+                      linkTo={voce.linkTo}
+                      isIcon={true}
+                    />
+                  )}
+                </div>
+              </details>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="col-12 col-lg-7">
+      <div class="accordion-showcase__media" data-media={id}>
+        {
+          items.map((voce, indice) => (
+            <figure
+              class="accordion-showcase__figure"
+              id={idVoce(indice)}
+              data-indice={indice}
+              hidden={indice !== 0}
+            >
+              {voce.image && <Image {...voce.image} />}
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  {
+    ctaLabel && ctaTo && (
+      <div class="accordion-showcase__cta">
+        <ButtonLink size="small" label={ctaLabel} linkTo={ctaTo} />
+      </div>
+    )
+  }
+</SectionContainer>
+
+<script>
+  document.querySelectorAll(".accordion-showcase__grid").forEach((griglia) => {
+    const dettagli = [
+      ...griglia.querySelectorAll<HTMLDetailsElement>(
+        ".accordion-showcase__details",
+      ),
+    ];
+    const figure = [
+      ...griglia.querySelectorAll<HTMLElement>(".accordion-showcase__figure"),
+    ];
+    if (figure.length === 0) return;
+
+    const mostra = (indice: number) =>
+      figure.forEach((figura) => {
+        figura.hidden = Number(figura.dataset.indice) !== indice;
+      });
+
+    dettagli.forEach((dettaglio, indice) => {
+      dettaglio.addEventListener("toggle", () => {
+        if (dettaglio.open) mostra(indice);
+      });
+    });
+  });
+</script>
+
+<style>
+  .accordion-showcase__title {
+    margin-bottom: 3rem;
+  }
+
+  .accordion-showcase__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .accordion-showcase__item {
+    border-bottom: 1px solid #c5c7c9;
+  }
+
+  .accordion-showcase__item:first-child {
+    border-top: 1px solid #c5c7c9;
+  }
+
+  .accordion-showcase__item:has(.accordion-showcase__details[open]) {
+    border-color: transparent;
+  }
+
+  .accordion-showcase__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    cursor: pointer;
+    padding: 40px 1.5rem;
+    list-style: none;
+    color: var(--color-text-primary, #06c);
+  }
+
+  .accordion-showcase__details[open] .accordion-showcase__summary {
+    padding-bottom: 1rem;
+  }
+
+  .accordion-showcase__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .accordion-showcase__summary:focus-visible {
+    outline: 3px solid var(--color-text-primary, #06c);
+    outline-offset: -3px;
+  }
+
+  .accordion-showcase__header {
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    text-decoration: underline;
+  }
+
+  .accordion-showcase__chevron {
+    flex: 0 0 auto;
+    transition: transform 0.2s ease;
+  }
+
+  .accordion-showcase__details[open] .accordion-showcase__chevron {
+    transform: rotate(180deg);
+  }
+
+  .accordion-showcase__details[open] {
+    background: var(--color-blue-97, #f2f7fc);
+  }
+
+  .accordion-showcase__panel {
+    padding: 0 1.5rem 1.5rem;
+  }
+
+  .accordion-showcase__text,
+  .accordion-showcase__text :global(p) {
+    color: var(--color-text-secondary, #2f475e);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .accordion-showcase__text :global(p:last-child) {
+    margin-bottom: 1.5rem;
+  }
+
+  .accordion-showcase__panel :global(a) {
+    color: #17324d;
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: none;
+    text-underline-position: from-font;
+  }
+
+  .accordion-showcase__panel :global(a svg) {
+    fill: #17324d;
+  }
+
+  .accordion-showcase__media :global(img) {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .accordion-showcase__figure {
+    margin: 0;
+    height: 100%;
+  }
+
+  .accordion-showcase__cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .accordion-showcase__chevron {
+      transition: none;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .accordion-showcase__grid {
+      --bs-gutter-x: 0;
+      align-items: stretch;
+    }
+
+    .accordion-showcase__list {
+      display: flex;
+      flex-direction: column;
+      min-height: 570px;
+    }
+
+    .accordion-showcase__item {
+      display: flex;
+      flex: 1 1 auto;
+    }
+
+    .accordion-showcase__item:has(.accordion-showcase__details[open]) {
+      flex: 0 0 auto;
+    }
+
+    .accordion-showcase__item > .accordion-showcase__details {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .accordion-showcase__summary {
+      flex: 1 1 auto;
+    }
+
+    .accordion-showcase__media {
+      height: 100%;
+      min-height: 570px;
+    }
+  }
+</style>

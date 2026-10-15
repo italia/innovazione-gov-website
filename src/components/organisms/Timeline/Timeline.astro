@@ -4,11 +4,17 @@ import { Link } from "@components/atoms/Link";
 import { SplitContent } from "@components/layout/SplitContent";
 import TextContainer from "@components/molecules/TextContainer/TextContainer.astro";
 import ItIcon from "@static/assets/ItIcon.astro";
+import { getI18n } from "@i18n/microcopy";
 import type { TimelineProps } from "./types";
 
 type Props = TimelineProps;
 
 const { title, paragraph, items } = Astro.props;
+const { lang } = Astro.locals;
+const t = getI18n(lang);
+
+const haApprofondimento = (item: TimelineProps["items"][number]) =>
+  Boolean(item.paragraph || item.image || (item.linkLabel && item.linkTo));
 ---
 
 <SplitContent
@@ -26,42 +32,77 @@ const { title, paragraph, items } = Astro.props;
       {
         items.map((item) => (
           <li class="timeline__item">
-            <p class="timeline__marker">
-              <span class="timeline__icon">
-                <ItIcon name="it-code-circle" />
-              </span>
-              <span class="timeline__period">{item.period}</span>
-            </p>
-            <div class="timeline__content">
-              <h3 class="timeline__title">{item.title}</h3>
-              {item.paragraph && (
-                <div class="timeline__text" set:html={item.paragraph} />
-              )}
-              {item.image && (
-                <div class="timeline__image">
-                  <Image {...item.image} />
+            {haApprofondimento(item) ? (
+              <details class="timeline__details">
+                <summary class="timeline__summary">
+                  <span class="timeline__marker">
+                    <span class="timeline__icon">
+                      <ItIcon name="it-code-circle" />
+                    </span>
+                    <span class="timeline__period">{item.period}</span>
+                    <span class="timeline__toggle">
+                      {t["timeline.showMore"]}
+                      <svg
+                        class="timeline__chevron"
+                        width="14"
+                        height="8"
+                        viewBox="0 0 14 8"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M1 1L7 7L13 1"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  </span>
+                  <h3 class="timeline__title">{item.title}</h3>
+                </summary>
+                <div class="timeline__panel">
+                  {item.paragraph && (
+                    <div class="timeline__text" set:html={item.paragraph} />
+                  )}
+                  {item.image && (
+                    <div class="timeline__image">
+                      <Image {...item.image} />
+                    </div>
+                  )}
+                  {item.linkLabel && item.linkTo && (
+                    <div class="timeline__link">
+                      <Link
+                        label={item.linkLabel}
+                        linkTo={item.openInNewTab ? undefined : item.linkTo}
+                        url={item.openInNewTab ? item.linkTo : undefined}
+                        openInNewTab={item.openInNewTab}
+                      />
+                    </div>
+                  )}
                 </div>
-              )}
-              {item.linkLabel && item.linkTo && (
-                <div class="timeline__link">
-                  <Link
-                    label={item.linkLabel}
-                    linkTo={item.openInNewTab ? undefined : item.linkTo}
-                    url={item.openInNewTab ? item.linkTo : undefined}
-                    openInNewTab={item.openInNewTab}
-                  />
-                </div>
-              )}
-            </div>
+              </details>
+            ) : (
+              <div class="timeline__content">
+                <span class="timeline__marker">
+                  <span class="timeline__icon">
+                    <ItIcon name="it-code-circle" />
+                  </span>
+                  <span class="timeline__period">{item.period}</span>
+                </span>
+                <h3 class="timeline__title">{item.title}</h3>
+              </div>
+            )}
           </li>
         ))
       }
       <li class="timeline__item timeline__item--end" aria-hidden="true">
-        <p class="timeline__marker">
+        <span class="timeline__marker">
           <span class="timeline__icon">
             <ItIcon name="it-code-circle" />
           </span>
-        </p>
+        </span>
       </li>
     </ol>
   </div>
@@ -151,6 +192,48 @@ const { title, paragraph, items } = Astro.props;
     gap: 0.75rem;
     margin: 0 0 1.25rem -4rem;
   }
+
+  .timeline__details {
+    margin: 0;
+  }
+  .timeline__summary {
+    display: block;
+    cursor: pointer;
+    list-style: none;
+  }
+  .timeline__summary::-webkit-details-marker {
+    display: none;
+  }
+  .timeline__summary:focus-visible {
+    outline: 3px solid var(--timeline-on, #06c);
+    outline-offset: 3px;
+  }
+  .timeline__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+    min-height: 2.75rem;
+    padding-inline: 0.25rem;
+    color: var(--timeline-on, #06c);
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: underline;
+  }
+  .timeline__chevron {
+    transition: transform 0.2s ease;
+  }
+  .timeline__details:global([open]) .timeline__chevron {
+    transform: rotate(180deg);
+  }
+  .timeline__panel {
+    padding-top: 0.25rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .timeline__chevron {
+      transition: none;
+    }
+  }
   .timeline__item--end .timeline__marker {
     margin-bottom: 0;
   }
@@ -205,11 +288,12 @@ const { title, paragraph, items } = Astro.props;
     border-right-color: var(--timeline-on);
   }
   .timeline__title {
-    margin-bottom: 0.75rem;
-    color: var(--timeline-off);
-    font-size: 1.125rem;
-    font-weight: 700;
-    line-height: 1.3;
+    margin-bottom: 0;
+    color: var(--color-text-secondary, #2f475e);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
     text-transform: uppercase;
   }
   .timeline__text {

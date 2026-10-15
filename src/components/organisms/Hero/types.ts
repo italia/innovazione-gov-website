@@ -13,6 +13,9 @@ export type HeroProps = {
   bgClass?: string;
   labelButton?: string;
   linkTo?: string;
+  labelButtonSecondary?: string;
+  linkToSecondary?: string;
+  openInNewTabSecondary?: boolean;
   variantButton?: ButtonVariantProps;
   openInNewTab?: boolean;
 };

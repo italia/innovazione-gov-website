@@ -6,13 +6,15 @@ import type { ArticleContentFragmentType } from "@graphql/fragment/article";
 type Props = {
   content: ArticleContentFragmentType;
   fullWidth?: boolean;
+  articleType?: string | null;
 };
 
-const { content, fullWidth = false } = Astro.props;
+const { content, fullWidth = false, articleType } = Astro.props;
+const classeFocus = articleType === "focus" ? " article-body--focus" : "";
 ---
 
 <SectionContainer
-  className={`structured-text-container${fullWidth ? " structured-text-container--narrow" : " ps-lg-4"}`}
+  className={`structured-text-container font-serif-p article-body${classeFocus}${fullWidth ? " structured-text-container--narrow" : " ps-lg-4"}`}
 >
   <StructuredTextAdapter block={content} />
 </SectionContainer>
