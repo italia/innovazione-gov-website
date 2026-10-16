@@ -146,6 +146,10 @@ body {
   color: var(--color-primary-dark, #17334f);
 }
 
+.text-container.text-white h3 {
+  color: inherit;
+}
+
 .structured-text-container .container h3.list-card-label {
   color: var(--color-text-base, #1a1a1a);
 }

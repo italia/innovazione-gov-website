@@ -33,10 +33,7 @@ const variantButton =
   @import "./style.scss";
 </style>
 <div class=`text-container mb-4 mb-lg-0 ${colorClass}`>
-  <TitleTag
-    class:list={["mb-3", TitleTag === "h1" ? undefined : "h2"]}
-    id={slugify(title)}
-  >
+  <TitleTag class="mb-3" id={slugify(title)}>
     {title}
   </TitleTag>
   <Fragment set:html={paragraph} />

@@ -143,15 +143,11 @@
 }
 
 @media (min-width: 1440px) {
-  .it-hero-wrapper.default-size {
+  .it-hero-wrapper--full-image.default-size {
     min-height: clamp(440px, 30.55vw, 800px) !important;
   }
 
-  .it-hero-wrapper.small-size {
-    min-height: clamp(400px, 27.77vw, 720px) !important;
-  }
-
-  .it-hero-wrapper.xsmall-size {
+  .it-hero-wrapper.it-hero-wrapper-full-height-image.xsmall-size {
     min-height: clamp(340px, 23.61vw, 620px) !important;
   }
 }
