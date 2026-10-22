@@ -387,10 +387,6 @@ body {
   pointer-events: none;
 }
 
-.it-card-list.row:not(.cards-grid) {
-  align-items: flex-start;
-}
-
 main#main {
   overflow-x: clip;
 }
@@ -463,4 +459,57 @@ main#main {
   font-weight: 600;
   font-size: 14px;
   line-height: 16px;
+}
+
+.select-wrapper label.form-label {
+  position: static;
+  transform: none;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-base, #1a1a1a);
+  font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.select-wrapper select {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 40px;
+  border: 1px solid #526477;
+  border-radius: 4px;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 14 8' fill='none'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%231a1a1a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+  background-size: 12px 7px;
+  padding: 0 2.25rem 0 8px;
+  color: var(--color-text-base, #1a1a1a);
+}
+
+.select-wrapper select:focus-visible {
+  outline: 3px solid var(--color-text-primary, #06c);
+  outline-offset: 2px;
+}
+
+.quick-link-card__title,
+.structured-text-container .container h3.quick-link-card__title {
+  color: var(--color-text-base, #1a1a1a);
+}
+
+.structured-text-container
+  .container
+  .attachments-box:not(.attachments-box--primary, .attachments-box--dark)
+  h3.attachments-box__title {
+  color: var(--color-text-base, #1a1a1a);
+}
+
+.chip.chip-simple {
+  align-items: center;
+  padding-block: 0;
+}
+
+.chip.chip-simple .chip-label {
+  transform: none;
 }

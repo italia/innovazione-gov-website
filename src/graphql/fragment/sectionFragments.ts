@@ -421,6 +421,7 @@ export const StructuredTextFragment = graphql(
           ...ImageBlockFragment
         }
         ... on ListExternalLinkRecord {
+          title
           links {
             ...ExternalLinkFragment
           }
@@ -795,6 +796,8 @@ export const CardLinkListFragment = graphql(
       backgroundColor
       showInlineCard
       showFilterOnCategory
+      onlyArchived
+      cardsCount
       category {
         id
         name

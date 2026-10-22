@@ -88,7 +88,7 @@ const buttonVariant =
             const hidden = withFilter && index >= visibleCount;
             return showInline ? (
               <li
-                class="col-12 col-lg-6 mb-3"
+                class="col-12 col-lg-6"
                 data-categories={categoryData}
                 hidden={hidden}
               >
@@ -96,7 +96,7 @@ const buttonVariant =
               </li>
             ) : (
               <li
-                class:list={["col-12", colonnaCard, "mb-3"]}
+                class:list={["col-12", colonnaCard]}
                 data-categories={categoryData}
                 hidden={hidden}
               >
@@ -146,6 +146,36 @@ const buttonVariant =
     }
   </div>
 </SectionContainer>
+
+<style>
+  .it-card-list {
+    --bs-gutter-x: 0;
+    gap: 2.5rem;
+  }
+
+  .it-card-list > li {
+    display: flex;
+    margin-bottom: 0;
+    padding: 0;
+  }
+
+  .it-card-list > li :global(.it-card) {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (min-width: 992px) {
+    .it-card-list > li.col-lg-4 {
+      flex: 0 0 calc((100% - 5rem) / 3);
+      max-width: calc((100% - 5rem) / 3);
+    }
+
+    .it-card-list > li.col-lg-6 {
+      flex: 0 0 calc((100% - 2.5rem) / 2);
+      max-width: calc((100% - 2.5rem) / 2);
+    }
+  }
+</style>
 
 <script>
   const applyFilter = (select: HTMLSelectElement) => {

@@ -10,6 +10,7 @@ const ariaCurrent = active ? "page" : undefined;
   id={id}
   class={`breadcrumb-item ${active && "active"}`}
   aria-current={ariaCurrent}
+  title={active ? label : undefined}
 >
   {!active && <a href={linkTo}>{label}</a>}
   {!active && <span class="separator mb-0">/</span>}

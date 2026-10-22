@@ -2,6 +2,7 @@
 import type { AttachmentsBoxFragmentType } from "@graphql/fragment/commonFragments";
 import ItIcon from "@static/assets/ItIcon.astro";
 import { createDownloadUrl } from "@utils/createDownloadUrl";
+import { slugify } from "@utils/slugify";
 
 type Props = {
   block: AttachmentsBoxFragmentType;
@@ -10,6 +11,9 @@ type Props = {
 const { block } = Astro.props;
 
 const files = (block.downloads ?? []).filter((download) => download.doc);
+
+const sfondo = block.backgroundColor ?? "primary";
+const senzaRiquadro = sfondo === "default";
 
 const dettagli = (doc: { format?: string | null; size?: number | null }) => {
   const estensione = (doc.format ?? "").toUpperCase();
@@ -21,8 +25,10 @@ const dettagli = (doc: { format?: string | null; size?: number | null }) => {
 
 {
   files.length > 0 && (
-    <section class="attachments-box">
-      <h3 class="attachments-box__title">{block.title}</h3>
+    <section class:list={["attachments-box", `attachments-box--${sfondo}`]}>
+      <h3 class="attachments-box__title" id={slugify(block.title)}>
+        {block.title}
+      </h3>
       <ul class="attachments-box__list">
         {files.map((download) => (
           <li class="attachments-box__item">
@@ -48,46 +54,101 @@ const dettagli = (doc: { format?: string | null; size?: number | null }) => {
   .attachments-box {
     margin-block: 2rem;
     border-radius: 8px;
-    background: #06c;
     padding: 2rem;
-    color: #fff;
   }
+
+  .attachments-box--default {
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .attachments-box--lighter {
+    background: var(--color-blue-97, #f2f7fc);
+  }
+
+  .attachments-box--primary-light {
+    background: #bfdfff;
+  }
+
+  .attachments-box--primary {
+    background: #06c;
+  }
+
+  .attachments-box--dark {
+    background: #17324d;
+  }
+
   .attachments-box__title {
     margin-bottom: 1.5rem;
-    color: #fff;
-    font-size: 2rem;
+    color: var(--color-text-base, #1a1a1a);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-size: 40px;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 48px;
   }
+
+  .attachments-box--primary .attachments-box__title,
+  .attachments-box--dark .attachments-box__title {
+    color: #fff;
+  }
+
   .attachments-box__list {
     list-style: none;
     margin: 0;
     padding: 0;
   }
+
   .attachments-box__item {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: 1rem;
-    padding: 0.75rem 0;
+    padding: 1rem 0;
   }
+
   .attachments-box__item + .attachments-box__item {
-    border-top: 1px solid rgb(255 255 255 / 0.25);
+    border-top: 1px solid var(--color-border-subtle, #c5c7c9);
   }
+
+  .attachments-box--primary .attachments-box__item + .attachments-box__item,
+  .attachments-box--dark .attachments-box__item + .attachments-box__item {
+    border-top-color: rgb(255 255 255 / 0.25);
+  }
+
   .attachments-box__icon :global(svg) {
     display: block;
     width: 1.5rem;
     height: 1.5rem;
+    fill: var(--color-text-primary, #06c);
+  }
+
+  .attachments-box--primary .attachments-box__icon :global(svg),
+  .attachments-box--dark .attachments-box__icon :global(svg) {
     fill: #fff;
   }
+
   .attachments-box__link {
-    color: #fff;
+    color: var(--color-text-primary, #06c);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-size: 18px;
     font-weight: 600;
+    line-height: 28px;
     text-decoration: underline;
   }
-  .attachments-box__meta {
+
+  .attachments-box--primary .attachments-box__link,
+  .attachments-box--dark .attachments-box__link {
     color: #fff;
+  }
+
+  .attachments-box__meta {
+    color: var(--color-text-secondary, #5b6f82);
     font-size: 0.875rem;
     white-space: nowrap;
+  }
+
+  .attachments-box--primary .attachments-box__meta,
+  .attachments-box--dark .attachments-box__meta {
+    color: #fff;
   }
 </style>

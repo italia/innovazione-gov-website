@@ -105,7 +105,7 @@ type AccordionRecord implements RecordInterface {
 
 union AccordionShowcaseModelCtaField = ExternalLinkRecord | InternalLinkRecord
 
-"""Block of type Approfondimenti con immagine (accordion_showcase)"""
+"""Block of type Accordion showcase (accordion_showcase)"""
 type AccordionShowcaseRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -293,7 +293,7 @@ type AltFileField implements FileFieldInterface {
   width: IntType
 }
 
-"""Block of type Link ancora (anchor_link)"""
+"""Block of type Anchor link (anchor_link)"""
 type AnchorLinkRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -318,7 +318,7 @@ type AnchorLinkRecord implements RecordInterface {
   label: String
 }
 
-"""Block of type Introduzione con argomenti (article_intro)"""
+"""Block of type Article intro with topics (article_intro)"""
 type ArticleIntroRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -400,17 +400,20 @@ input ArticleModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   _locales: LocalesFilter
+  archived: BooleanFilter
   articleType: StringFilter
   attachments: LinksFilter
   content: StructuredTextFilter
   dateShown: DateTimeFilter
   description: TextFilter
   descriptionTitle: StringFilter
+  duration: StringFilter
   image: FileFilter
   links: LinksFilter
   logo: FileFilter
   paragraph: TextFilter
   parentPage: LinkFilter
+  relatedProjects: LinksFilter
   seo: SeoFilter
   showSidebar: BooleanFilter
   slug: SlugFilter
@@ -443,12 +446,16 @@ enum ArticleModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
+  archived_ASC
+  archived_DESC
   articleType_ASC
   articleType_DESC
   dateShown_ASC
   dateShown_DESC
   descriptionTitle_ASC
   descriptionTitle_DESC
+  duration_ASC
+  duration_DESC
   showSidebar_ASC
   showSidebar_DESC
   title_ASC
@@ -584,6 +591,7 @@ type ArticleRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  archived: BooleanType!
   articleType: String
   attachments: [AttachmentRecord!]!
   children: [ArticleRecord!]!
@@ -618,6 +626,7 @@ type ArticleRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): String
+  duration: String
   id: ItemId!
   image(
     """The locale to use to fetch the field's content"""
@@ -661,6 +670,7 @@ type ArticleRecord implements RecordInterface {
     fallbackLocales: [SiteLocale!]
   ): ArticleModelParentPageField
   position: IntType
+  relatedProjects: [ArticleRecord!]!
   seo(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -849,7 +859,7 @@ type AttachmentRecord implements RecordInterface {
   id: ItemId!
 }
 
-"""Block of type Box allegati (attachments_box)"""
+"""Block of type Attachments box (attachments_box)"""
 type AttachmentsBoxRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -869,6 +879,7 @@ type AttachmentsBoxRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  backgroundColor: String
   downloads: [DownloadLinkRecord!]!
   id: ItemId!
   title: String!
@@ -906,7 +917,7 @@ input BenefitModelFilter {
   AND: [BenefitModelFilter]
 }
 
-"""Block of type Beneficio (benefit)"""
+"""Block of type Benefit (benefit)"""
 type BenefitRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -1144,12 +1155,14 @@ type CardLinkListRecord implements RecordInterface {
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
   backgroundColor: String!
+  cardsCount: IntType
   category: TagRecord
   cta: CardLinkListModelCtaField
   id: ItemId!
   lastItems: String
   listContent: [CardLinkListModelListContentField!]!
   menuLabel: String
+  onlyArchived: BooleanType!
   paragraph(
     """Process content as markdown"""
     markdown: Boolean
@@ -1780,7 +1793,7 @@ enum FetchItemModelOrderBy {
   myFetchValue_DESC
 }
 
-"""Record of type fetch item (fetch_item)"""
+"""Record of type Fetch item (fetch_item)"""
 type FetchItemRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -2044,7 +2057,7 @@ scalar FloatType
 
 union FooterColumnModelLinksField = ExternalLinkRecord | InternalLinkRecord
 
-"""Block of type Colonna del footer (footer_column)"""
+"""Block of type Footer column (footer_column)"""
 type FooterColumnRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -2244,7 +2257,7 @@ enum GoalsAchivedModelOrderBy {
   totalGoal_DESC
 }
 
-"""Record of type Obiettivi raggiunti (goals_achived)"""
+"""Record of type Goals achieved (goals_achived)"""
 type GoalsAchivedRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -2333,7 +2346,7 @@ type HeroRecord implements RecordInterface {
   variant: String
 }
 
-"""Block of type Carosello in evidenza (highlight_carousel)"""
+"""Block of type Highlight carousel (highlight_carousel)"""
 type HighlightCarouselRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -2364,7 +2377,7 @@ type HighlightCarouselRecord implements RecordInterface {
 
 union HighlightItemModelPointsToField = ArticleRecord | InsightRecord | PageRecord
 
-"""Block of type Contenuto in evidenza (highlight_item)"""
+"""Block of type Highlight item (highlight_item)"""
 type HighlightItemRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -4997,7 +5010,7 @@ enum InsightTopicModelOrderBy {
   label_DESC
 }
 
-"""Record of type Categoria articoli e sottopagine (insight_topic)"""
+"""Record of type Articles and subpages category (insight_topic)"""
 type InsightTopicRecord implements RecordInterface {
   _allLabelLocales(
     """
@@ -5136,7 +5149,7 @@ type IntroArticleRecord implements RecordInterface {
   text: TextBlockRecord!
 }
 
-"""Block of type Voce introduzione (intro_detail)"""
+"""Block of type Intro detail (intro_detail)"""
 type IntroDetailRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -5187,7 +5200,7 @@ enum ItemStatus {
   published
 }
 
-"""Block of type Elenco posizioni lavorative (job_position_list)"""
+"""Block of type Job position list (job_position_list)"""
 type JobPositionListRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -6227,6 +6240,7 @@ type ListExternalLinkRecord implements RecordInterface {
   _updatedAt: DateTime!
   id: ItemId!
   links: [ExternalLinkRecord!]!
+  title: String
 }
 
 """Block of type List internal link (list_internal_link)"""
@@ -6975,7 +6989,7 @@ type NewsItemRecord implements RecordInterface {
   ): NewsTopicRecord!
 }
 
-"""Block of type Tab contenuto esterno (news_tab)"""
+"""Block of type External content tab (news_tab)"""
 type NewsTabRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -9197,7 +9211,7 @@ input SeoFilter {
   exists: BooleanType
 }
 
-"""Block of type Impostazioni grafico (settings_chart)"""
+"""Block of type Chart settings (settings_chart)"""
 type SettingsChartRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -9231,7 +9245,7 @@ type SettingsChartRecord implements RecordInterface {
   title: String
 }
 
-"""Block of type Impostazioni Kpi (settings_kpi)"""
+"""Block of type Kpi settings (settings_kpi)"""
 type SettingsKpiRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -9259,7 +9273,7 @@ type SettingsKpiRecord implements RecordInterface {
 
 union ShowcaseItemModelCtaField = ExternalLinkRecord | InternalLinkRecord
 
-"""Block of type Voce approfondimento (showcase_item)"""
+"""Block of type Showcase item (showcase_item)"""
 type ShowcaseItemRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -9511,7 +9525,7 @@ input StatusFilter {
 
 union StoryTabModelNewsField = ArticleRecord | InsightRecord | WebinarItemRecord
 
-"""Block of type Tab contenuto interno (story_tab)"""
+"""Block of type Internal content tab (story_tab)"""
 type StoryTabRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -10255,7 +10269,7 @@ type TopicFilterRecord implements RecordInterface {
   titleFilter: String!
 }
 
-"""Block of type Argomenti in evidenza (topic_highlight)"""
+"""Block of type Topic highlight (topic_highlight)"""
 type TopicHighlightRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -10281,7 +10295,7 @@ type TopicHighlightRecord implements RecordInterface {
   title: String!
 }
 
-"""Block of type Elenco argomenti (topic_list)"""
+"""Block of type Topic list (topic_list)"""
 type TopicListRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -11020,7 +11034,7 @@ enum WebinarAuthorModelOrderBy {
   role_DESC
 }
 
-"""Record of type Relatori (webinar_author)"""
+"""Record of type Speakers (webinar_author)"""
 type WebinarAuthorRecord implements RecordInterface {
   _allRoleLocales(
     """
@@ -11150,7 +11164,7 @@ type WebinarItemModelParentPageFieldMultiLocaleField {
   value: WebinarItemModelParentPageField
 }
 
-"""Record of type Webinar ed eventi (webinar_item)"""
+"""Record of type Webinars and events (webinar_item)"""
 type WebinarItemRecord implements RecordInterface {
   _allContentLocales(
     """
@@ -11344,7 +11358,7 @@ enum WebinarTopicModelOrderBy {
   label_DESC
 }
 
-"""Record of type Categoria webinar ed eventi (webinar_topic)"""
+"""Record of type Webinars and events category (webinar_topic)"""
 type WebinarTopicRecord implements RecordInterface {
   _allLabelLocales(
     """
@@ -11388,7 +11402,7 @@ type WebinarTopicRecordNonNullMultiLocaleField {
   value: WebinarTopicRecord!
 }
 
-"""Block of type Card collegamento (wide_link_card)"""
+"""Block of type Wide link card (wide_link_card)"""
 type WideLinkCardRecord implements RecordInterface {
   _createdAt: DateTime!
 

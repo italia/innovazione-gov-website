@@ -39,7 +39,7 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
 ---
 
 <article
-  class=`it-card it-card-image ${fullHeight && "it-card-height-full"} rounded shadow-sm border`
+  class=`it-card it-card-image ${fullHeight && "it-card-height-full"}`
   aria-labelledby={cardTitleId}
 >
   <h3 class="it-card-title" id={cardTitleId}>
@@ -101,9 +101,14 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
 </article>
 
 <style>
+  .it-card {
+    border: 1px solid var(--color-border-subtle, #c5c7c9);
+    border-radius: 4px;
+    box-shadow: 0 4px 4px 0 rgb(0 0 0 / 15%);
+  }
+
   .it-card-image-wrapper--logo :global(figure img) {
     object-fit: contain !important;
-    padding: 1.5rem;
   }
 
   .it-card-taxonomy .chip:not(.chip-link) {

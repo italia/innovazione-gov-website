@@ -4,7 +4,7 @@ import { ArticleHero } from "@components/organisms/ArticleHero";
 import { ArticleRelated } from "@components/organisms/ArticleRelated";
 import type { ArticleContentFragmentType } from "@graphql/fragment/article";
 import { getArticles } from "@lib/dataFetcher";
-import { getRelatedArticles } from "@lib/relatedArticles";
+import { getRelatedArticles, schedaProgetto } from "@lib/relatedArticles";
 import type {
   ImageFragmentType,
   TagFragmentType,
@@ -36,6 +36,9 @@ export async function getStaticPaths() {
       description: string;
       title: string;
       articleType: string | null;
+      archived: boolean;
+      duration: string | null;
+      relatedProjectIds: string[];
       dateTime: string | null;
       topics: string[];
       image: ImageFragmentType | null;
@@ -82,6 +85,11 @@ export async function getStaticPaths() {
             paragraph: getLocaleValue(page.allParagraphLocales, lang, ""),
             description: getLocaleValue(page.allDescriptionLocales, lang, ""),
             articleType: page.articleType ?? null,
+            archived: page.archived ?? false,
+            duration: page.duration ?? null,
+            relatedProjectIds: (page.relatedProjects ?? []).map(
+              (progetto) => progetto.id,
+            ),
             dateTime: page.dateShown ?? null,
             topics: (page.tags ?? [])
               .map((tag) => tag.name)
@@ -111,6 +119,9 @@ const {
   description,
   title,
   articleType,
+  archived,
+  duration,
+  relatedProjectIds,
   dateTime,
   topics,
   image,
@@ -123,12 +134,22 @@ const { lang } = Astro.params;
 Astro.locals.lang = lang;
 Astro.locals.recordId = id;
 
-const relatedItems = getRelatedArticles(await getArticles(false), {
-  currentId: id,
-  tags: topics,
-  articleType,
-  locale: lang,
-});
+const attivitaConclusa = articleType === "project" && archived;
+const tutteLeSchede = await getArticles(false);
+const scelteAMano = relatedProjectIds
+  .map((idProgetto) => tutteLeSchede.find((scheda) => scheda.id === idProgetto))
+  .filter((scheda) => scheda !== undefined)
+  .map((scheda) => schedaProgetto(scheda, lang));
+const relatedItems =
+  scelteAMano.length > 0
+    ? scelteAMano
+    : getRelatedArticles(tutteLeSchede, {
+        currentId: id,
+        tags: topics,
+        articleType,
+        locale: lang,
+        onlyArchivedProjects: attivitaConclusa,
+      });
 const jsonLd: JsonLdPageData = {
   pageType: ["content"],
   seo: seo || undefined,
@@ -148,6 +169,8 @@ const jsonLd: JsonLdPageData = {
     image={image}
     logo={logo}
     articleType={articleType}
+    archived={archived}
+    duration={duration}
   />
   {
     content && (

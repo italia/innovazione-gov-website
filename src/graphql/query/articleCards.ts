@@ -10,6 +10,7 @@ export const AllArticleCardsQuery = graphql(
       ) {
         id
         articleType
+        archived
         undersecretary
         allTitleLocales: _allTitleLocales {
           locale

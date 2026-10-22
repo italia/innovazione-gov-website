@@ -32,6 +32,12 @@
     max-width: 50vw;
   }
 
+  .it-hero-wrapper
+    .row:has(.img-container, .hero-split__image, .img-responsive-wrapper)
+    > [class*="col-"]:has(.it-hero-text-wrapper) {
+    padding-right: 3rem;
+  }
+
   .default-size {
     min-height: 440px !important;
   }

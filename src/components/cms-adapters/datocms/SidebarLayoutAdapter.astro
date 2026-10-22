@@ -4,7 +4,7 @@ import { ArticleToc } from "@components/organisms/ArticleToc";
 import type { ArticleContentFragmentType } from "@graphql/fragment/article";
 import type { SidebarFragmentType } from "@graphql/fragment/layout";
 import { getI18n } from "@i18n/microcopy";
-import { extractHeadings } from "@utils/extractHeadings";
+import { extractIndice } from "@utils/extractHeadings";
 
 type Props = {
   sidebar: SidebarFragmentType;
@@ -17,7 +17,7 @@ const { content, showSidebar = true, articleType } = Astro.props;
 const { lang } = Astro.locals;
 const t = getI18n(lang);
 
-const headings = extractHeadings(content.value, [3]);
+const headings = extractIndice(content.value, content.blocks ?? []);
 const tocItems = headings.map((heading) => ({
   id: heading.id,
   label: heading.text,

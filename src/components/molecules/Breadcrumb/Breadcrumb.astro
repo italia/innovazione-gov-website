@@ -29,4 +29,10 @@ const t = getI18n(lang);
   .breadcrumb-container .breadcrumb :global(span) {
     white-space: nowrap;
   }
+
+  .breadcrumb-container .breadcrumb :global(.breadcrumb-item.active) {
+    max-width: 20ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 </style>

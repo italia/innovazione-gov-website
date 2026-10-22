@@ -10,6 +10,7 @@ type RelatedOptions = {
   tags: string[];
   articleType: string | null;
   locale: SiteLocale;
+  onlyArchivedProjects?: boolean;
 };
 
 function toCard(
@@ -29,7 +30,10 @@ function toCard(
       getLocaleValue(article.allDescriptionLocales, locale, "") ||
       "",
     image: article.image ?? undefined,
-    dateTime: article.dateShown ?? article.firstPublishedAt ?? undefined,
+    dateTime:
+      article.articleType === "project"
+        ? undefined
+        : (article.dateShown ?? article.firstPublishedAt ?? undefined),
     category: (article.tags ?? [])
       .map((tag) => tag.name)
       .filter((name): name is string => !!name),
@@ -41,7 +45,13 @@ function toCard(
 
 export function getRelatedArticles(
   all: ArticleCard[],
-  { currentId, tags, articleType, locale }: RelatedOptions,
+  {
+    currentId,
+    tags,
+    articleType,
+    locale,
+    onlyArchivedProjects = false,
+  }: RelatedOptions,
 ): CardEditorialNewsProps[] {
   const dataDiRiferimento = (article: ArticleCard) =>
     article.dateShown ?? article.firstPublishedAt ?? "";
@@ -49,36 +59,28 @@ export function getRelatedArticles(
   const byDateDesc = (a: ArticleCard, b: ArticleCard) =>
     dataDiRiferimento(b).localeCompare(dataDiRiferimento(a));
 
-  const others = all.filter(
+  const tagSet = new Set(tags);
+  const tagInComune = (article: ArticleCard) =>
+    (article.tags ?? []).filter((tag) => tag.name && tagSet.has(tag.name))
+      .length;
+
+  const stessaTipologia = all.filter(
     (article) =>
       article.id !== currentId &&
-      !!getLocaleValue(article.allTitleLocales, locale, ""),
+      !!getLocaleValue(article.allTitleLocales, locale, "") &&
+      article.articleType === articleType &&
+      (!onlyArchivedProjects || article.archived),
   );
 
-  const tagSet = new Set(tags);
-  const picked = others
-    .filter((article) =>
-      (article.tags ?? []).some((tag) => tag.name && tagSet.has(tag.name)),
-    )
-    .sort(byDateDesc);
+  return stessaTipologia
+    .sort((a, b) => tagInComune(b) - tagInComune(a) || byDateDesc(a, b))
+    .slice(0, 3)
+    .map((article) => toCard(article, locale));
+}
 
-  const pushMissing = (candidates: ArticleCard[]) => {
-    const seen = new Set(picked.map((article) => article.id));
-    for (const article of candidates) {
-      if (!seen.has(article.id)) picked.push(article);
-    }
-  };
-
-  if (picked.length < 3 && articleType) {
-    pushMissing(
-      others
-        .filter((article) => article.articleType === articleType)
-        .sort(byDateDesc),
-    );
-  }
-  if (picked.length < 3) {
-    pushMissing([...others].sort(byDateDesc));
-  }
-
-  return picked.slice(0, 3).map((article) => toCard(article, locale));
+export function schedaProgetto(
+  progetto: ArticleCard,
+  locale: SiteLocale,
+): CardEditorialNewsProps {
+  return { ...toCard(progetto, locale), category: [], dateTime: undefined };
 }

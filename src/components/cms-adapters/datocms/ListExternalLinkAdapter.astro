@@ -10,7 +10,7 @@ type DatoRecord = ExternalLinkFragmentType[] & {
 };
 
 type Props = {
-  block: { links: DatoRecord };
+  block: { title?: string | null; links: DatoRecord };
 };
 
 const { block } = Astro.props;
@@ -32,4 +32,8 @@ const links: ListLinkItemProps[] = block.links.map((link) => {
 });
 ---
 
-<QuickLinkCard links={links} background={"lighter"} />
+<QuickLinkCard
+  title={block.title ?? undefined}
+  links={links}
+  background={"lighter"}
+/>

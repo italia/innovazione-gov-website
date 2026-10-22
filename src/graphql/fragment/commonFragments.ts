@@ -657,6 +657,7 @@ export const AttachmentsBoxFragment = graphql(
     fragment AttachmentsBoxFragment on AttachmentsBoxRecord @_unmask {
       id
       title
+      backgroundColor
       downloads {
         ...DownloadLinkFragment
       }

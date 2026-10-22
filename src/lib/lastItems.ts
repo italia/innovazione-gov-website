@@ -23,6 +23,7 @@ type Options = {
   includeDrafts: boolean;
   limit?: number;
   categoryIds?: string[];
+  onlyArchived?: boolean;
 };
 
 const ARTICLE_TYPE_BY_SELECTION: Record<string, string> = {
@@ -38,10 +39,14 @@ const ARTICLE_TYPE_BY_SELECTION: Record<string, string> = {
 
 const LastArticlesQuery = graphql(
   `
-    query LastArticles($locale: SiteLocale, $filter: ArticleModelFilter) {
+    query LastArticles(
+      $locale: SiteLocale
+      $filter: ArticleModelFilter
+      $first: IntType = 20
+    ) {
       records: allArticles(
         orderBy: [dateShown_DESC, _firstPublishedAt_DESC]
-        first: 20
+        first: $first
         locale: $locale
         filter: $filter
       ) {
@@ -93,7 +98,7 @@ const filterCategoriesOf = (
 
 export async function getLastItems(
   selection: string,
-  { locale, includeDrafts, limit = 3, categoryIds }: Options,
+  { locale, includeDrafts, limit = 3, categoryIds, onlyArchived }: Options,
 ): Promise<CardEditorialNewsProps[]> {
   if (selection === "articles") {
     const articlesRes = await executeQuery(LastArticlesQuery, {
@@ -122,15 +127,19 @@ export async function getLastItems(
   }
 
   const articleType = ARTICLE_TYPE_BY_SELECTION[selection];
+  const isProject = articleType === "project";
   const filter = {
     ...(articleType ? { articleType: { eq: articleType } } : {}),
     ...(categoryIds?.length ? { tags: { anyIn: categoryIds } } : {}),
+    ...(isProject ? { archived: { eq: Boolean(onlyArchived) } } : {}),
   };
 
-  const isProject = articleType === "project";
-
   const { records } = await executeQuery(LastArticlesQuery, {
-    variables: { locale, filter },
+    variables: {
+      locale,
+      filter,
+      first: Math.min(Math.max(limit, isProject ? 100 : 20), 100),
+    },
     includeDrafts,
   });
 
@@ -149,7 +158,9 @@ export async function getLastItems(
         ? []
         : (r.tags ?? []).map((t) => t.name).filter((v): v is string => !!v),
       categoryLinks: isProject ? {} : legamiArgomenti(r.tags, locale),
-      filterCategories: filterCategoriesOf(r.tags),
+      filterCategories: isProject
+        ? (r.tags ?? []).map((t) => t.name).filter((v): v is string => !!v)
+        : filterCategoriesOf(r.tags),
       linkTo: linkResolver(r.id, locale),
     }))
     .sort((a, b) => (isProject ? a.title.localeCompare(b.title) : 0))

@@ -75,6 +75,7 @@ export const ArticleContentFragment = graphql(
           ...InternalLinkFragment
         }
         ... on ListExternalLinkRecord {
+          title
           links {
             ...ExternalLinkFragment
           }
@@ -127,6 +128,8 @@ export const AllArticlesRecordFragment = graphql(
       updatedAt: _updatedAt
       publishedAt: _publishedAt
       articleType
+      archived
+      duration
       showSidebar
       dateShown
       allTitleLocales: _allTitleLocales {
@@ -177,6 +180,9 @@ export const AllArticlesRecordFragment = graphql(
         title
         link
         description
+      }
+      relatedProjects {
+        id
       }
       allContentLocales: _allContentLocales {
         locale
