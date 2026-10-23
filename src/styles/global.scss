@@ -70,11 +70,77 @@ body {
 }
 
 .structured-text-container.font-serif-p .container .article-intro p,
+.structured-text-container.font-serif-p .container .card-info p.card-info__text,
 .structured-text-container.font-serif-p
   .container
-  .card-info
-  p.card-info__text {
+  .statistiche-nel-testo
+  p.data-container__label,
+.structured-text-container.font-serif-p
+  .container
+  .statistiche-nel-testo
+  p.data-container__value,
+.structured-text-container.font-serif-p .container .it-list-wrapper p,
+.structured-text-container.font-serif-p .container p.it-label,
+.structured-text-container.font-serif-p .container .it-card p.it-card-text,
+.structured-text-container.font-serif-p
+  .container
+  .it-card
+  p.card-with-icon__title {
   font-family: "Titillium Web", Geneva, Tahoma, sans-serif !important;
+}
+
+.structured-text-container.article-body .container .it-card p.it-card-text {
+  color: var(--color-text-secondary, #2f475e);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.structured-text-container.article-body
+  .container
+  .it-card
+  p.card-with-icon__title {
+  color: var(--color-text-secondary, #2f475e);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.structured-text-container .container .it-list-wrapper .dynamic-icon {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background-color: var(--color-primary-light, #bfdfff);
+  background-size: 14px 14px;
+  width: 28px;
+  height: 28px;
+}
+
+.structured-text-container.article-body
+  .container
+  .statistiche-nel-testo
+  p.data-container__label {
+  color: var(--color-text-secondary, #2f475e);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.structured-text-container.article-body
+  .container
+  .statistiche-nel-testo--bar
+  p.data-container__label {
+  color: var(--color-text-primary, #06c);
+  font-weight: 600;
+}
+
+.structured-text-container.article-body
+  .container
+  .statistiche-nel-testo
+  p.data-container__value {
+  color: var(--color-text-secondary, #2f475e);
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 48px;
 }
 
 .structured-text-container.article-body .container .card-info .card-info__text {

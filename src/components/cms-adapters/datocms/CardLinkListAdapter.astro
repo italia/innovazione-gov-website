@@ -1,5 +1,6 @@
 ---
 import type { CardEditorialNewsProps } from "@components/molecules/CardEditorialNews/types";
+import { ArchiveList } from "@components/organisms/ArchiveList";
 import { ListCollection } from "@components/organisms/ListCollection";
 import { ListOpenPositions } from "@components/organisms/ListOpenPositions";
 import { ListWideCards } from "@components/organisms/ListWideCards";
@@ -116,6 +117,18 @@ const { labelButton, linkTo, openInNewTab } = getCtaFields(
       cards={cardOrizzontali}
       background={block.backgroundColor as SectionBackground}
     />
+  ) : block.onlyArchived ? (
+    items.length > 0 && (
+      <ArchiveList
+        title={block.title ?? ""}
+        paragraph={block.paragraph}
+        items={items}
+        background={block.backgroundColor as SectionBackground}
+        labelButton={labelButton}
+        linkTo={linkTo}
+        openInNewTab={openInNewTab}
+      />
+    )
   ) : (
     items.length > 0 && (
       <ListCollection

@@ -13,5 +13,6 @@ export type CardEditorialNewsProps = {
   action?: string;
   fullHeight?: boolean;
   imageFit?: "cover" | "contain";
+  duration?: string | null;
   isExternal?: boolean;
 };

@@ -11,8 +11,10 @@ import {
   InternalLinkFragment,
   ListBlockquoteFragment,
   ListCardEditorialWithIconFragment,
+  IconListBlockFragment,
   ListCardInfoFragment,
   OrderedListFragment,
+  StatisticBlockFragment,
   QuickLinkCardFragment,
   RelatedArticleFragment,
   ArticleIntroFragment,
@@ -86,6 +88,12 @@ export const ArticleContentFragment = graphql(
         ... on WideLinkCardRecord {
           ...WideLinkCardFragment
         }
+        ... on StatisticBlockRecord {
+          ...StatisticBlockFragment
+        }
+        ... on IconListBlockRecord {
+          ...IconListBlockFragment
+        }
         ... on AttachmentsBoxRecord {
           ...AttachmentsBoxFragment
         }
@@ -113,6 +121,8 @@ export const ArticleContentFragment = graphql(
     DownloadLinkFragment,
     WideLinkCardFragment,
     AttachmentsBoxFragment,
+    StatisticBlockFragment,
+    IconListBlockFragment,
   ],
 );
 

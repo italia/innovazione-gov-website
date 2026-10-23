@@ -9,6 +9,8 @@ const CARTELLA = process.argv[2];
 const COMMIT = process.argv.includes("--commit");
 
 const NOMI = {
+  "bandiera.svg": "Bandiera (bianca)",
+  "spunta.svg": "Spunta",
   "tre-persone.svg": "Tre persone",
   "interoperabilita.svg": "Interoperabilità",
   "cloud.svg": "Cloud",

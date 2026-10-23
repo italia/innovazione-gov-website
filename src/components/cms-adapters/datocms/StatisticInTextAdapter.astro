@@ -7,6 +7,66 @@ type Props = {
 };
 
 const { block } = Astro.props;
+const presentazione = block.layout ?? "plain";
 ---
 
-<StatisticAdapter block={block} variant="light" />
+<div
+  class:list={[
+    "statistiche-nel-testo",
+    `statistiche-nel-testo--${presentazione}`,
+  ]}
+>
+  <StatisticAdapter block={block} variant="light" />
+</div>
+
+<style>
+  .statistiche-nel-testo {
+    margin-block: 3rem;
+  }
+
+  .statistiche-nel-testo--box :global(.statistics-item) {
+    border: 1px solid var(--color-border-subtle, #c5c7c9);
+    border-radius: 4px;
+    background: var(--color-blue-97, #f2f7fc);
+    padding: 1.5rem;
+  }
+
+  .statistiche-nel-testo--bar :global(.statistics-item) {
+    border-left: 3px solid var(--color-text-primary, #06c);
+    padding-left: 1rem;
+  }
+
+  .statistiche-nel-testo--bar :global(.data-container__label) {
+    color: var(--color-text-primary, #06c);
+  }
+
+  .statistiche-nel-testo--box :global(.data-container__label),
+  .statistiche-nel-testo--box :global(.data-container__value),
+  .statistiche-nel-testo--bar :global(.data-container__value) {
+    color: var(--color-text-secondary, #2f475e);
+  }
+
+  .statistiche-nel-testo--box :global(.data-container__value),
+  .statistiche-nel-testo--bar :global(.data-container__value) {
+    font-size: 40px;
+    line-height: 48px;
+  }
+
+  .statistiche-nel-testo--box :global(.data-container__label) {
+    font-weight: 400;
+  }
+
+  .statistiche-nel-testo--bar :global(.statistics-container),
+  .statistiche-nel-testo--bar :global(.statistics-inline) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .statistiche-nel-testo--box :global(.statistics-container),
+    .statistiche-nel-testo--box :global(.statistics-inline) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+  }
+</style>

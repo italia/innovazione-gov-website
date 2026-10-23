@@ -17,6 +17,7 @@ type Props = {
   articleType?: string | null;
   archived?: boolean;
   duration?: string | null;
+  relatedProjects?: { title: string; linkTo: string }[];
 };
 
 const {
@@ -30,6 +31,7 @@ const {
   articleType,
   archived = false,
   duration,
+  relatedProjects = [],
 } = Astro.props;
 const { recordId, lang } = Astro.locals;
 const t = getI18n(lang);
@@ -59,6 +61,7 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
     "it-hero-wrapper--split",
     "article-hero",
     isFocus && "article-hero--focus",
+    attivitaConclusa && "article-hero--archived",
   ]}
 >
   <div class="container">
@@ -66,9 +69,18 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
       <div class="col-12 col-lg-7">
         <div class="it-hero-text-wrapper px-0 py-0">
           <Breadcrumb items={breadcrumbItems} />
+          {
+            attivitaConclusa && (
+              <p class="article-hero__badge-riga">
+                <span class="article-hero__status-badge">
+                  {t["archive.chip"]}
+                </span>
+              </p>
+            )
+          }
           <h1 class="article-hero__title">{title}</h1>
           {
-            shownParagraph && (
+            shownParagraph && !attivitaConclusa && (
               <p class="article-hero__paragraph">{shownParagraph}</p>
             )
           }
@@ -78,15 +90,24 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
             )
           }
           {
-            attivitaConclusa && (
-              <p class="article-hero__status">
-                <span class="article-hero__status-badge">
-                  {t["article.archived"]}
+            attivitaConclusa && duration && (
+              <p class="article-hero__meta">
+                <span class="article-hero__meta-label">
+                  {t["article.duration"]}:
+                </span>{" "}
+                <span class="article-hero__meta-value">{duration}</span>
+              </p>
+            )
+          }
+          {
+            attivitaConclusa && relatedProjects.length > 0 && (
+              <p class="article-hero__meta article-hero__meta--lista">
+                <span class="article-hero__meta-label">
+                  {t["article.relatedInactive"]}:
                 </span>
-                {duration && (
-                  <span class="article-hero__duration">
-                    {t["article.duration"]}: {duration}
-                  </span>
+                {relatedProjects.map((progetto) =>
+                  // prettier-ignore
+                  <a class="article-hero__meta-link" href={progetto.linkTo}>{progetto.title}</a>,
                 )}
               </p>
             )
@@ -119,32 +140,55 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
 </section>
 
 <style>
-  .article-hero__status {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 1rem;
-    margin-bottom: 0;
+  .article-hero--archived .it-hero-text-wrapper .article-hero__badge-riga {
+    margin-bottom: 0.75rem;
+  }
+  .article-hero--archived .it-hero-text-wrapper .article-hero__title {
+    margin-bottom: 1rem !important;
+  }
+  .article-hero .it-hero-text-wrapper .article-hero__meta-value {
+    color: inherit;
+    font-size: inherit;
+    font-weight: 700;
+    line-height: inherit;
   }
   .article-hero__status-badge {
+    display: inline-block;
     border-radius: 4px;
-    background: #17324d;
-    padding: 0.25rem 0.75rem;
+    background: var(--color-background-secondary, #5c6f82);
+    padding: 0.125rem 0.75rem;
     color: #fff;
     font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
     font-weight: 600;
     font-size: 14px;
-    line-height: 20px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-  .article-hero .it-hero-text-wrapper .article-hero__duration {
-    color: #2f475e;
-    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
-    font-weight: 600;
-    font-size: 16px;
     line-height: 24px;
+  }
+  .article-hero .it-hero-text-wrapper .article-hero__meta {
+    margin-bottom: 0.25rem;
+    color: var(--color-text-secondary, #2f475e);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+  }
+  .article-hero__meta--lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  .article-hero .it-hero-text-wrapper .article-hero__meta-label {
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+  }
+  .article-hero .it-hero-text-wrapper .article-hero__meta-link {
+    color: var(--color-text-primary, #06c);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+  .article-hero__meta-link:not(:last-child)::after {
+    content: ",";
   }
 
   .article-hero {

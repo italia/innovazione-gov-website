@@ -55,6 +55,7 @@ const LastArticlesQuery = graphql(
         description
         paragraph
         dateShown
+        duration
         firstPublishedAt: _firstPublishedAt
         tags {
           name
@@ -72,6 +73,30 @@ const LastArticlesQuery = graphql(
   `,
   [ImageFragment],
 );
+
+const MESI = [
+  "gennaio",
+  "febbraio",
+  "marzo",
+  "aprile",
+  "maggio",
+  "giugno",
+  "luglio",
+  "agosto",
+  "settembre",
+  "ottobre",
+  "novembre",
+  "dicembre",
+];
+
+function fineAttivita(durata?: string | null): number {
+  if (!durata) return 0;
+  const coda = durata.split(/[-–—]/).pop()?.trim().toLowerCase() ?? "";
+  const anno = Number(coda.match(/\d{4}/)?.[0] ?? 0);
+  if (!anno) return 0;
+  const mese = MESI.findIndex((nome) => coda.includes(nome));
+  return anno * 12 + (mese === -1 ? 12 : mese + 1);
+}
 
 function dedupeSortTop(
   items: CardEditorialNewsProps[],
@@ -161,8 +186,13 @@ export async function getLastItems(
       filterCategories: isProject
         ? (r.tags ?? []).map((t) => t.name).filter((v): v is string => !!v)
         : filterCategoriesOf(r.tags),
+      duration: isProject ? r.duration : undefined,
       linkTo: linkResolver(r.id, locale),
     }))
-    .sort((a, b) => (isProject ? a.title.localeCompare(b.title) : 0))
+    .sort((a, b) => {
+      if (!isProject) return 0;
+      if (!onlyArchived) return a.title.localeCompare(b.title);
+      return fineAttivita(b.duration) - fineAttivita(a.duration);
+    })
     .slice(0, limit);
 }

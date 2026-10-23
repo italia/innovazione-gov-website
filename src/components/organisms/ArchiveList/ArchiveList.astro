@@ -1,0 +1,144 @@
+---
+import { ButtonLink } from "@components/atoms/Button";
+import { SectionContainer } from "@components/organisms/SectionContainer";
+import { getI18n } from "@i18n/microcopy";
+import ItArrowRight from "@static/assets/ItArrowRight.astro";
+import { getSectionBgClass } from "@utils/background";
+import { slugify } from "@utils/slugify";
+import type { ArchiveListProps } from "./types";
+
+type Props = ArchiveListProps;
+
+const {
+  title,
+  paragraph,
+  items,
+  background = "default",
+  labelButton,
+  linkTo,
+  openInNewTab = false,
+} = Astro.props;
+
+const { lang } = Astro.locals;
+const t = getI18n(lang);
+---
+
+<SectionContainer
+  className={getSectionBgClass(background)}
+  sectionTitleId={title}
+>
+  {
+    title && (
+      <h2 class="visually-hidden" id={slugify(title)}>
+        {title}
+      </h2>
+    )
+  }
+
+  <ul class="archive-list">
+    {
+      items.map((item) => (
+        <li class="archive-list__item">
+          <p class="archive-list__head">
+            <a class="archive-list__link" href={item.linkTo}>
+              {item.title}
+              <ItArrowRight color="primary" size="sm" />
+            </a>
+            <span class="archive-list__chip">{t["archive.chip"]}</span>
+          </p>
+          {item.duration && (
+            <p class="archive-list__duration">{item.duration}</p>
+          )}
+          {item.description && (
+            <p class="archive-list__text">{item.description}</p>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+
+  {
+    labelButton && linkTo && (
+      <div class="archive-list__cta">
+        <ButtonLink
+          size="small"
+          label={labelButton}
+          linkTo={linkTo}
+          openInNewTab={openInNewTab}
+        />
+      </div>
+    )
+  }
+</SectionContainer>
+
+<style>
+  .archive-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .archive-list__item + .archive-list__item {
+    margin-top: 2.5rem;
+  }
+
+  .archive-list__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .archive-list__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text-primary, #06c);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .archive-list__link:hover,
+  .archive-list__link:focus-visible {
+    text-decoration: underline;
+  }
+
+  .archive-list__chip {
+    border-radius: 4px;
+    background: var(--color-background-secondary, #5c6f82);
+    padding: 0.125rem 0.75rem;
+    color: var(--color-text-inverse, #fff);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 24px;
+  }
+
+  .archive-list__duration {
+    margin-bottom: 0.5rem;
+    color: var(--color-text-base, #1a1a1a);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 24px;
+  }
+
+  .archive-list__text {
+    max-width: 70ch;
+    margin-bottom: 0;
+    color: var(--color-text-secondary, #2f475e);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+
+  .archive-list__cta {
+    margin-top: 2.5rem;
+  }
+</style>

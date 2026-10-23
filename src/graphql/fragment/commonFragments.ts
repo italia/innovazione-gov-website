@@ -474,6 +474,7 @@ export const StatisticBlockFragment = graphql(
   `
     fragment StatisticBlockFragment on StatisticBlockRecord @_unmask {
       id
+      layout
       statistics {
         ...DataContainerFragment
       }

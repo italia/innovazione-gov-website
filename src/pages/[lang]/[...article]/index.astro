@@ -171,6 +171,10 @@ const jsonLd: JsonLdPageData = {
     articleType={articleType}
     archived={archived}
     duration={duration}
+    relatedProjects={scelteAMano.map((scheda) => ({
+      title: scheda.title,
+      linkTo: scheda.linkTo,
+    }))}
   />
   {
     content && (
