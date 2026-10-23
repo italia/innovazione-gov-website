@@ -1,4 +1,5 @@
 ---
+import { getArgomentiInEvidenza } from "@lib/argomentiInEvidenza";
 import { Footer } from "@components/organisms/Footer";
 import type {
   FooterColumnProps,
@@ -8,19 +9,18 @@ import type {
   MailingListFormProps,
 } from "@components/organisms/Footer/types";
 import type { FooterFragmentType } from "@graphql/fragment/layout";
+import type { SiteLocale } from "@graphql/types";
 import { DatoBlockModel } from "@utils/cmsMapper";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { linkResolver } from "@utils/linkResolver";
 
 type Props = FooterFragmentType & {
-  /** Logo e nome del sito, gli stessi dell'header (campi logo_select e site_name). */
   logoSelect?: string | null;
   siteName?: string | null;
   homeRecordId?: string;
 };
 
 const {
-  _allOrganizationsLocales,
   _allUtilityTitleLocales,
   _allUtilityLocales,
   _allSmallPrintLocales,
@@ -36,11 +36,6 @@ const {
 
 const { lang } = Astro.locals;
 
-// Il logo del footer è il primo Brand di `organizations` (il lockup con il
-// nome del Dipartimento, come nel design); senza, si ripiega su logo e nome
-// dell'header.
-const organization = getLocaleValue(_allOrganizationsLocales, lang, null)?.[0];
-const organizationLogo = organization?.logo;
 const utilityTitle = getLocaleValue(_allUtilityTitleLocales, lang, "") ?? "";
 const utility = getLocaleValue(_allUtilityLocales, lang, null);
 const smallPrint = getLocaleValue(_allSmallPrintLocales, lang, null);
@@ -56,7 +51,6 @@ const escapeHtml = (text: string) =>
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 
-// L'indirizzo è un campo di testo semplice: ogni riga va a capo nel footer.
 const contacts: FooterContactsProps | undefined = contactAddress?.trim()
   ? {
       title: contactTitle ?? "",
@@ -76,8 +70,6 @@ const socialItems: FooterLinkSupportingBrandProps[] =
 
 type CmsLink = NonNullable<typeof smallPrint>[number];
 
-// Un link interno può puntare a una sezione della pagina (es. la gestione
-// dei cookie in fondo alla privacy policy) tramite il campo `anchor`.
 const toFooterLink = (link: CmsLink): FooterLinkProps => {
   if (link.componentName === DatoBlockModel.ExternalLink) {
     return { label: link.label, url: link.url };
@@ -91,8 +83,6 @@ const toFooterLink = (link: CmsLink): FooterLinkProps => {
   };
 };
 
-// Le colonne di link titolate (Altri siti web, Trasparenza, ...) arrivano dal
-// campo `footer_columns`; quelle senza link non si mostrano.
 const columns: FooterColumnProps[] =
   footerColumns
     ?.map((column) => ({
@@ -102,6 +92,12 @@ const columns: FooterColumnProps[] =
     .filter((column) => column.links.length > 0) || [];
 
 const smallPrints: FooterLinkProps[] = smallPrint?.map(toFooterLink) || [];
+
+const ARGOMENTI_NEL_FOOTER = 5;
+
+const argomenti = (await getArgomentiInEvidenza(lang as SiteLocale))
+  .slice(0, ARGOMENTI_NEL_FOOTER)
+  .map((argomento) => ({ name: argomento.name, path: argomento.path }));
 
 const mailingListForm: MailingListFormProps | undefined = mailingList
   ? {
@@ -115,24 +111,14 @@ const mailingListForm: MailingListFormProps | undefined = mailingList
 ---
 
 <Footer
-  brand={organizationLogo
-    ? {
-        logo: {
-          url: organizationLogo.url,
-          width: organizationLogo.width,
-          height: organizationLogo.height,
-        },
-        name: siteName ?? "",
-        linkTo: linkResolver(homeRecordId, lang),
-        nameInLogo: true,
-      }
-    : {
-        logo: logoSelect
-          ? { url: logoSelect, width: null, height: null }
-          : undefined,
-        name: siteName ?? "",
-        linkTo: linkResolver(homeRecordId, lang),
-      }}
+  topics={argomenti}
+  brand={{
+    logo: logoSelect
+      ? { url: logoSelect, width: null, height: null }
+      : undefined,
+    name: siteName ?? "",
+    linkTo: linkResolver(homeRecordId, lang),
+  }}
   contacts={contacts}
   social={{ title: utilityTitle, items: socialItems }}
   columns={columns}

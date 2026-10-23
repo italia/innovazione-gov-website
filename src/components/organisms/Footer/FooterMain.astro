@@ -3,41 +3,55 @@ import { SubscribeMailingList } from "@components/react/SubscribeMailingList";
 import FooterBrand from "./FooterBrand.astro";
 import FooterLink from "./FooterLink.astro";
 import FooterLinkSupportingBrand from "./FooterLinkSupportingBrand.astro";
+import { getI18n } from "@i18n/microcopy";
 import type { FooterProps } from "./types";
 
 type Props = Omit<FooterProps, "smallPrints">;
-const { brand, contacts, social, columns = [], mailingListForm } = Astro.props;
+const {
+  brand,
+  contacts,
+  social,
+  columns = [],
+  mailingListForm,
+  topics = [],
+} = Astro.props;
 const lang = Astro.locals.lang || "it";
+const t = getI18n(lang);
 ---
 
 <div class="it-footer-main" id="footer">
+  <div class="footer-banda-marchio">
+    <div class="container">
+      <FooterBrand {...brand} />
+    </div>
+  </div>
+
   <div class="container">
-    <FooterBrand {...brand} />
-    <section class="px-0">
+    {
+      topics.length > 0 && (
+        <section class="footer-argomenti px-0">
+          <h4 class="footer-heading-title">{t["footer.topics"]}</h4>
+          <ul class="footer-chip-list">
+            {topics.map((argomento) => (
+              <li>
+                <a class="footer-chip" href={argomento.path}>
+                  {argomento.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+    <section class="footer-colonne px-0">
       <div class="row">
         {
-          contacts && (
-            <div class="col-12 col-md-6 col-lg-4 pb-4">
-              <h4 class="footer-heading-title">{contacts.title}</h4>
-              {contacts.icon && (
-                <svg class="icon icon-sm icon-white mb-3" aria-hidden="true">
-                  <use href={`/bsi-svg/sprites.svg#${contacts.icon}`} />
-                </svg>
-              )}
-              <p
-                class="fw-semibold mb-0 footer-address"
-                set:html={contacts.address}
-              />
-            </div>
-          )
-        }
-        {
           social && social.items.length > 0 && (
-            <div class="col-12 col-md-6 col-lg-2 pb-4">
+            <div class="col-12 col-lg-6 pb-4">
               <h4 class="footer-heading-title">{social.title}</h4>
-              <ul class="list-inline mb-0 d-flex flex-wrap footer-social">
+              <ul class="footer-social">
                 {social.items.map((item) => (
-                  <li class="list-inline-item">
+                  <li>
                     <FooterLinkSupportingBrand {...item} />
                   </li>
                 ))}
@@ -47,12 +61,12 @@ const lang = Astro.locals.lang || "it";
         }
         {
           columns.map((column) => (
-            <div class="col-12 col-md-6 col-lg-3 pb-4">
+            <div class="col-12 col-lg-6 pb-4">
               {column.title && (
                 <h4 class="footer-heading-title">{column.title}</h4>
               )}
               <div class="link-list-wrapper">
-                <ul class="footer-list link-list clearfix">
+                <ul class="footer-list">
                   {column.links.map((link) => (
                     <li>
                       <FooterLink
@@ -60,7 +74,6 @@ const lang = Astro.locals.lang || "it";
                         {...link}
                         openInNewTab={!!link.url}
                         isIcon={true}
-                        externalIcon={false}
                       />
                     </li>
                   ))}
@@ -71,70 +84,255 @@ const lang = Astro.locals.lang || "it";
         }
       </div>
     </section>
-    {
-      mailingListForm && (
-        <section class="py-4 border-white border-top px-0">
-          <div class="row">
-            <div class="col-12 col-lg-6">
-              <div class="pb-4 d-flex align-items-center justify-content-between">
-                <p class="h4">{mailingListForm.title}</p>
+    <section class="footer-fondo px-0">
+      <div class="row">
+        {
+          contacts && (
+            <div class="col-12 col-lg-6 pb-4">
+              <h4 class="footer-heading-title">{contacts.title}</h4>
+              <p
+                class="fw-semibold mb-0 footer-address"
+                set:html={contacts.address}
+              />
+            </div>
+          )
+        }
+        {
+          mailingListForm && (
+            <div class="col-12 col-lg-6 footer-newsletter">
+              <div class="footer-newsletter__intro">
+                <h4 class="footer-heading-title footer-heading-title--newsletter mb-0">
+                  {mailingListForm.title}
+                </h4>
                 <a
-                  class="text-white mb-2"
-                  target="_blank"
-                  rel="noreferrer"
+                  class="footer-newsletter__privacy"
                   href={mailingListForm.privacyPolicy.linkTo}
                 >
                   {mailingListForm.privacyPolicy.label}
                 </a>
               </div>
-              <span class="bg-dark">
-                <SubscribeMailingList
-                  client:visible
-                  lang={lang}
-                  idForm="idNewsletterForm"
-                />
-              </span>
+              <SubscribeMailingList
+                client:visible
+                lang={lang}
+                idForm="idNewsletterForm"
+              />
             </div>
-          </div>
-        </section>
-      )
-    }
+          )
+        }
+      </div>
+    </section>
   </div>
 </div>
 
 <style>
-  /* Il design usa lo stile dei titoli BI per le colonne del footer, in
-     maiuscolo per i primi tre e in tondo per "Trasparenza": la differenza è
-     editoriale, quindi qui restano tutti uguali. */
   .footer-heading-title {
     font-size: 1rem;
+    line-height: 1.5;
     font-weight: 600;
     text-transform: uppercase;
-    margin-bottom: 1rem;
+    margin-bottom: 1.75rem;
   }
+
+  .footer-heading-title--newsletter {
+    line-height: 28px;
+  }
+
   .footer-address {
     white-space: nowrap;
   }
-  /* Griglia di icone da 24px, tre per riga, con lo spazio del design. */
+
+  .footer-banda-marchio {
+    background: #003366;
+    padding-block: 3rem;
+  }
+
+  .it-footer-main .footer-banda-marchio :global(.it-brand-wrapper) {
+    padding: 0;
+  }
+
+  .footer-argomenti {
+    padding-block: 2.5rem 2rem;
+  }
+
+  .footer-chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .footer-chip {
+    display: inline-block;
+    border: 1px solid #fff;
+    border-radius: 999px;
+    padding: 0.25rem 1rem;
+    color: #fff;
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    text-decoration: none;
+  }
+
+  .footer-chip:hover,
+  .footer-chip:focus-visible {
+    background: rgb(255 255 255 / 0.12);
+    color: #fff;
+  }
+
+  .footer-colonne {
+    border-top: 1px solid rgb(255 255 255 / 0.6);
+    padding-block: 2.5rem 1rem;
+  }
+
+  .footer-fondo {
+    border-top: 1px solid rgb(255 255 255 / 0.6);
+    padding-block: 2.5rem 3.5rem;
+  }
+
+  .footer-fondo .footer-heading-title {
+    margin-bottom: 1rem;
+  }
+
+  .footer-fondo .footer-heading-title--newsletter {
+    margin-bottom: 0;
+  }
+
+  .footer-social,
+  .footer-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   .footer-social {
-    gap: 0 0.5rem;
-    max-width: 7rem;
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    gap: 0.75rem 2.25rem;
   }
-  .footer-social .list-inline-item {
-    margin-right: 0;
+
+  @media (min-width: 768px) {
+    .footer-social {
+      grid-template-columns: repeat(3, max-content);
+    }
   }
-  .footer-list li {
-    padding: 0 0 0.75rem;
+
+  .footer-list {
+    gap: 0.5rem 1rem;
   }
-  /* BI colora i link delle liste con il primary, che sul blu non si legge:
-     il design li vuole in azzurro chiaro e in grassetto, senza icona. */
+
+  @media (min-width: 768px) {
+    .footer-list {
+      display: grid;
+      grid-template-columns: repeat(2, max-content);
+    }
+  }
+
+  .it-footer-main .footer-list :global(a) {
+    gap: 0.75rem !important;
+  }
+
+  .it-footer-main .footer-list :global(a .icon) {
+    width: 16px;
+    height: 16px;
+  }
+
   .it-footer-main .link-list-wrapper .footer-list :global(a),
   .it-footer-main .link-list-wrapper .footer-list :global(a span) {
-    color: var(--footer-link-color);
-    font-weight: 600;
+    color: #fff;
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 400;
+    text-decoration: none;
+    margin-right: 0;
   }
+
   .it-footer-main .link-list-wrapper .footer-list :global(a:hover),
   .it-footer-main .link-list-wrapper .footer-list :global(a:hover span) {
+    text-decoration: underline;
+  }
+
+  .footer-newsletter__intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (min-width: 992px) {
+    .footer-newsletter__intro {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+  }
+
+  .footer-newsletter__privacy {
+    flex: none;
     color: #fff;
+    font-size: 14px;
+    line-height: 24px;
+    text-decoration: none;
+  }
+
+  .footer-newsletter__privacy:hover {
+    text-decoration: underline;
+  }
+
+  .footer-newsletter :global(.footer-newsletter__form) {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .footer-newsletter :global(.footer-newsletter__input) {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 42px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    background: #fff;
+    padding: 0 1rem;
+    color: #1a1a1a;
+    font-size: 14px;
+  }
+
+  .footer-newsletter :global(.footer-newsletter__input::placeholder) {
+    color: #5c6f82;
+    opacity: 1;
+  }
+
+  .footer-newsletter :global(.footer-newsletter__button) {
+    flex: none;
+    height: 42px;
+    padding: 0 1rem;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .footer-newsletter :global(.footer-newsletter__input:focus-visible),
+  .footer-newsletter :global(.footer-newsletter__button:focus-visible) {
+    outline: 3px solid #a2f0ef;
+    outline-offset: 2px;
+  }
+
+  .footer-newsletter :global(.footer-newsletter__button:hover) {
+    background: #fff;
+    color: #003366;
+  }
+
+  .footer-newsletter :global(.footer-newsletter__feedback) {
+    margin-top: 0.75rem;
+    color: #fff;
+    font-size: 14px;
+    line-height: 24px;
   }
 </style>

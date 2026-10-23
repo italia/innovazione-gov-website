@@ -9,9 +9,6 @@ const { icon, label, url } = Astro.props;
 const { lang } = Astro.locals;
 const t = getI18n(lang);
 
-// Le icone possono essere immagini caricate su DatoCMS (brandLogo) oppure
-// id dello sprite di Bootstrap Italia: nel design sono sole icone, il nome
-// del social resta per gli screen reader.
 const isSprite = !!icon && icon.startsWith("it-");
 ---
 
@@ -30,7 +27,23 @@ const isSprite = !!icon && icon.startsWith("it-");
       icon && <Icon icon={icon} className="icon-sm text-white" />
     )
   }
-  <span class="visually-hidden">
-    {label} - {t["link.external"]}
-  </span>
+  <span class="footer-social__label">{label}</span>
+  <span class="visually-hidden">{t["link.external"]}</span>
 </a>
+
+<style>
+  a {
+    text-decoration: none;
+  }
+
+  a:hover .footer-social__label {
+    text-decoration: underline;
+  }
+
+  .footer-social__label {
+    margin-left: 0.75rem;
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+  }
+</style>

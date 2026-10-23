@@ -17,7 +17,7 @@ const StateClass = Object.freeze({
 
 type SubscribeData = {
   email?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 export function SubscribeMailingList({ idForm, lang }: SubscribeProps) {
@@ -51,47 +51,39 @@ export function SubscribeMailingList({ idForm, lang }: SubscribeProps) {
 
   return (
     <>
-      <form id={idForm} onSubmit={onSubmit} className="form-group mb-0 ">
-        <div className="d-flex flex-row align-items-center">
-          <div className="flex-grow-1 flex-grow-1 me-sm-4 w-100">
-            <label
-              htmlFor={`${idForm}_InputMail`}
-              className="active text-white"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              className="form-control "
-              id={`${idForm}_InputMail`}
-              required
-              name="email"
-            />
-          </div>
-          <div>
-            <button
-              type="submit"
-              className="btn btn-outline-primary ms-3 ms-lg-0"
-              disabled={state === StateClass.LOADING}
-            >
-              {state === StateClass.LOADING ? (
-                <>
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  <span className="sr-only">{t["loading"]}</span>
-                </>
-              ) : (
-                <span>{t["subscribe.button"]}</span>
-              )}
-            </button>
-          </div>
-        </div>
+      <form id={idForm} onSubmit={onSubmit} className="footer-newsletter__form">
+        <label className="visually-hidden" htmlFor={`${idForm}_InputMail`}>
+          Email
+        </label>
+        <input
+          type="email"
+          className="footer-newsletter__input"
+          id={`${idForm}_InputMail`}
+          placeholder="Email"
+          required
+          name="email"
+        />
+        <button
+          type="submit"
+          className="footer-newsletter__button"
+          disabled={state === StateClass.LOADING}
+        >
+          {state === StateClass.LOADING ? (
+            <>
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                role="status"
+                aria-hidden="true"
+              />
+              <span className="visually-hidden">{t["loading"]}</span>
+            </>
+          ) : (
+            <span>{t["subscribe.button"]}</span>
+          )}
+        </button>
       </form>
-      <div
-        className={`alert alert-${state.className} bg-light mt-2`}
+      <p
+        className="footer-newsletter__feedback"
         style={{
           visibility:
             state === StateClass.SUCCESS || state === StateClass.ERROR
@@ -101,7 +93,7 @@ export function SubscribeMailingList({ idForm, lang }: SubscribeProps) {
         role="alert"
       >
         {message}
-      </div>
+      </p>
     </>
   );
 }

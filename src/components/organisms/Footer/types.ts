@@ -1,8 +1,15 @@
 import type { ImageProps } from "@components/atoms/Image/types";
 import type { LinkProps } from "@components/atoms/Link/types";
 
+export type FooterTopicProps = {
+  name: string;
+  path: string;
+};
+
 export type FooterProps = {
   brand: FooterBrandProps;
+  /** Chip degli argomenti in evidenza, sopra le colonne. */
+  topics?: FooterTopicProps[];
   /** Colonna "Contatti": arriva da DatoCMS al passaggio 2, per ora opzionale. */
   contacts?: FooterContactsProps;
   social?: FooterSocialProps;

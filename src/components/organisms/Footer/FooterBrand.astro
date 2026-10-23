@@ -11,42 +11,39 @@ const t = getI18n(lang);
 
 <section class="px-0">
   <div class="it-brand-wrapper">
-    <a href={linkTo} aria-label={t["header.logo"]} class="text-white">
+    <a href={linkTo} aria-label={t["header.logo"]} class="footer-brand">
       {
         logo?.url && (
           <img
             src={logo.url}
             alt={nameInLogo ? name : (logo.alt ?? "")}
-            width={logo.width ?? undefined}
-            height={logo.height ?? undefined}
-            class:list={["it-brand-logo", nameInLogo && "footer-brand-lockup"]}
+            class="footer-brand__logo"
           />
         )
       }
-      {
-        !nameInLogo && (
-          <div class="it-brand-text">
-            <div class="it-brand-title text-white">{name}</div>
-          </div>
-        )
-      }
+      {!nameInLogo && <span class="footer-brand__name">{name}</span>}
     </a>
   </div>
 </section>
 
 <style>
-  /* Il lockup (emblema + D + nome su tre righe) è largo: sugli schermi
-     stretti si riduce senza deformarsi. */
-  .footer-brand-lockup {
-    max-width: 100%;
-    object-fit: contain;
-    object-position: left center;
+  .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    color: #fff;
+    text-decoration: none;
   }
 
-  @media (min-width: 992px) {
-    .footer-brand-lockup {
-      width: 275px;
-      height: auto;
-    }
+  .footer-brand__logo {
+    height: 44px;
+    width: auto;
+  }
+
+  .footer-brand__name {
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 400;
   }
 </style>

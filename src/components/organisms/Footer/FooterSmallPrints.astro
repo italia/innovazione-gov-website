@@ -15,11 +15,11 @@ const t = getI18n(lang);
   <div class="container">
     <p class="visually-hidden">{t["footer.sectionLink"]}</p>
     <ul
-      class="it-footer-small-prints-list list-inline mb-0 d-flex flex-column flex-md-row px-0"
+      class="it-footer-small-prints-list list-unstyled mb-0 d-flex flex-column flex-md-row px-0"
     >
       {
         showSitemap && (
-          <li class="list-inline-item d-flex align-items-center gap-2">
+          <li class="d-flex align-items-center gap-2">
             <FooterLink
               label={t["footer.sitemap"]}
               linkTo={"/sitemap-index.xml"}
@@ -32,7 +32,7 @@ const t = getI18n(lang);
       }
       {
         links.map((link) => (
-          <li class="list-inline-item d-flex align-items-center gap-2">
+          <li class="d-flex align-items-center gap-2">
             <FooterLink
               {...link}
               openInNewTab={!!link.url}
@@ -47,17 +47,27 @@ const t = getI18n(lang);
 </div>
 
 <style>
-  .it-footer-small-prints-list :global(a) {
-    color: var(--footer-link-color);
+  .it-footer-small-prints-list {
+    gap: 0.75rem 1.625rem;
+  }
+
+  .it-footer-small-prints-list li {
+    padding: 0;
+  }
+  .it-footer-small-prints-list :global(a),
+  .it-footer-small-prints-list :global(a span) {
+    color: #fff;
+    font-size: 14px;
+    line-height: 24px;
     text-decoration: underline;
   }
-  .it-footer-small-prints-list :global(a:hover) {
-    color: #fff;
-  }
   .it-footer-small-prints-list :global(a .icon) {
-    fill: var(--footer-link-color);
-  }
-  .it-footer-small-prints-list :global(a:hover .icon) {
     fill: #fff;
+    width: 16px;
+    height: 16px;
+  }
+  .it-footer-small-prints-list :global(a:hover),
+  .it-footer-small-prints-list :global(a:hover span) {
+    text-decoration: none;
   }
 </style>
