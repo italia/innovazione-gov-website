@@ -18,7 +18,7 @@ const items: CardEditorialNewsProps[] = block.content.map((item) => {
     id: item.id,
     title: getLocaleValue(item.allTitleLocales, lang, ""),
     description: getLocaleValue(item.allParagraphLocales, lang, ""),
-    image: item.image,
+    image: item.image ?? undefined,
     linkTo: linkResolver(item.id, lang),
     category: getLocaleValue(topicRecord?._allLabelLocales, lang, ""),
     isExternal: false,

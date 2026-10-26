@@ -9,9 +9,17 @@ type Props = {
 const { block } = Astro.props;
 ---
 
-<Accordion
-  {...block.accordion}
-  label={block.title || undefined}
-  variant="background-active"
-  allOpen={false}
-/>
+<div class="accordion-nel-testo">
+  <Accordion
+    {...block.accordion}
+    label={block.title || undefined}
+    variant="background-active"
+    allOpen={false}
+  />
+</div>
+
+<style>
+  .accordion-nel-testo {
+    margin-block: 3rem;
+  }
+</style>
