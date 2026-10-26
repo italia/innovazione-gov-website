@@ -812,6 +812,16 @@ export const CalloutFragment = graphql(`
 
 export type CalloutFragmentType = FragmentOf<typeof CalloutFragment>;
 
+export const NoteBoxFragment = graphql(`
+  fragment NoteBoxFragment on NoteBoxRecord @_unmask {
+    id
+    title
+    paragraph(markdown: true)
+  }
+`);
+
+export type NoteBoxFragmentType = FragmentOf<typeof NoteBoxFragment>;
+
 export const ListInternalLinkFragment = graphql(
   `
     fragment ListInternalLinkFragment on ListInternalLinkRecord @_unmask {

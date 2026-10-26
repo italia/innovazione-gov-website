@@ -6,6 +6,7 @@ import {
   ArticleCardPreviewFragment,
   AuthorListFragment,
   CalloutFragment,
+  NoteBoxFragment,
   CardLinkFragment,
   ChannelFragment,
   ChartFragment,
@@ -385,6 +386,9 @@ export const StructuredTextFragment = graphql(
         ... on CalloutRecord {
           ...CalloutFragment
         }
+        ... on NoteBoxRecord {
+          ...NoteBoxFragment
+        }
         ... on OrderedListRecord {
           ...OrderedListFragment
         }
@@ -446,6 +450,7 @@ export const StructuredTextFragment = graphql(
     InternalLinkFragment,
     OrderedListFragment,
     CalloutFragment,
+    NoteBoxFragment,
     QuickLinkCardFragment,
     SupportCTASectionFragment,
     TopicsBlockFragment,

@@ -1,0 +1,67 @@
+---
+import ItInfoCircle from "@static/assets/ItInfoCircle.astro";
+import type { NoteBoxProps } from "./types";
+
+type Props = NoteBoxProps;
+
+const { title, paragraph } = Astro.props;
+---
+
+<div class="note-box">
+  <span class="note-box__legenda">
+    <ItInfoCircle />
+    <span>{title}</span>
+  </span>
+  <div class="note-box__contenuto" set:html={paragraph} />
+</div>
+
+<style>
+  .note-box {
+    position: relative;
+    margin-block: 3rem;
+    border: 2px solid var(--color-text-primary, #06c);
+    border-radius: 8px;
+    padding: 3rem 1.5rem 2.5rem;
+  }
+
+  .note-box__legenda {
+    position: absolute;
+    top: 0;
+    left: 3.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transform: translateY(-50%);
+    margin: 0;
+    background: #fff;
+    padding-inline: 1.75rem;
+    color: var(--color-text-primary, #06c);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
+    text-transform: uppercase;
+  }
+
+  .note-box__legenda :global(.icon) {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-text-primary, #06c);
+  }
+
+  .note-box__contenuto {
+    color: var(--color-black, #000);
+    font-family: "Lora", Georgia, serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  .note-box__contenuto :global(> *:first-child) {
+    margin-top: 0;
+  }
+
+  .note-box__contenuto :global(> *:last-child) {
+    margin-bottom: 0;
+  }
+</style>
