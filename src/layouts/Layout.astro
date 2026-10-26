@@ -33,7 +33,7 @@ type Props = {
   showFeedback?: boolean;
 };
 
-const isPreview = import.meta.env.DEV && isDraftModeEnabled(Astro.cookies);
+const isPreview = !Astro.isPrerendered && isDraftModeEnabled(Astro.cookies);
 const {
   pageSeo = [],
   redirectUrl,

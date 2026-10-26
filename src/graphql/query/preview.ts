@@ -1,6 +1,6 @@
 import { ArticleContentFragment } from "@graphql/fragment/article";
 import { CatalogueContentFragment } from "@graphql/fragment/catalogue";
-import { TagFragment } from "@graphql/fragment/commonFragments";
+import { ImageFragment, TagFragment } from "@graphql/fragment/commonFragments";
 import { InsightContentFragment } from "@graphql/fragment/insight";
 import { PageContentFragment } from "@graphql/fragment/page";
 import { WebinarContentFragment } from "@graphql/fragment/webinar";
@@ -49,6 +49,31 @@ export const ArticleByIdQuery = graphql(
     query ArticleByIdQuery($id: ItemId!, $locale: SiteLocale!) {
       article(filter: { id: { eq: $id } }, locale: $locale) {
         id
+        title
+        paragraph
+        description
+        articleType
+        archived
+        duration
+        showSidebar
+        dateShown
+        parentPage {
+          ... on PageRecord {
+            id
+          }
+          ... on InsightRecord {
+            id
+          }
+        }
+        tags {
+          name
+        }
+        image {
+          ...ImageFragment
+        }
+        logo {
+          ...ImageFragment
+        }
         seo: _seoMetaTags {
           ...TagFragment
         }
@@ -58,7 +83,7 @@ export const ArticleByIdQuery = graphql(
       }
     }
   `,
-  [ArticleContentFragment, TagFragment],
+  [ArticleContentFragment, TagFragment, ImageFragment],
 );
 
 export const WebinarByIdQuery = graphql(

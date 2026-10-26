@@ -1,5 +1,6 @@
 ---
 import PageAdapter from "@components/cms-adapters/datocms/PageAdapter.astro";
+import { ArticleHero } from "@components/organisms/ArticleHero";
 import SidebarAdapter from "@components/cms-adapters/datocms/SidebarAdapter.astro";
 import SidebarLayoutAdapter from "@components/cms-adapters/datocms/SidebarLayoutAdapter.astro";
 import DraftModeQueryListener from "@components/DraftModeQueryListener.astro";
@@ -137,7 +138,27 @@ if (slugProduction !== "#") {
       redirectUrl={redirectUrl}
       pageSeo={dataRecord?.seo}
     >
-      <SidebarLayoutAdapter sidebar={sidebarData} content={content as any} />
+      <ArticleHero
+        title={dataRecord.title ?? ""}
+        paragraph={dataRecord.paragraph}
+        description={dataRecord.description}
+        dateTime={dataRecord.dateShown}
+        topics={(dataRecord.tags ?? [])
+          .map((tag: { name: string | null }) => tag.name)
+          .filter((nome: string | null): nome is string => !!nome)}
+        image={dataRecord.image}
+        logo={dataRecord.logo}
+        articleType={dataRecord.articleType}
+        sectionPage={!!dataRecord.parentPage}
+        archived={dataRecord.archived ?? false}
+        duration={dataRecord.duration}
+      />
+      <SidebarLayoutAdapter
+        sidebar={sidebarData}
+        showSidebar={dataRecord.showSidebar ?? true}
+        content={content as any}
+        articleType={dataRecord.articleType}
+      />
     </Layout>
   )
 }

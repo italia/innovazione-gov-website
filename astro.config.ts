@@ -75,6 +75,18 @@ export default defineConfig({
     },
   },
   vite: {
+    server: {
+      // Vite answers the CORS preflight itself and, since v6, drops the
+      // Access-Control-Allow-Origin header for cross-origin callers: the
+      // DatoCMS Web Previews plugin fetches /api/preview-links from the
+      // editor's browser, so its origins have to be allowed explicitly.
+      cors: {
+        origin: [
+          "https://plugins-cdn.datocms.com",
+          /^https:\/\/[a-z0-9-]+\.admin\.datocms\.com$/,
+        ],
+      },
+    },
     define: {
       // Bakes the landing/full-site mode into every bundle, including the
       // serverless routes where runtime env vars are not configurable.

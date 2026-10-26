@@ -36,7 +36,7 @@ const tabsItems = tabs.map((tab, index) => ({
   active: index === 0,
 }));
 
-const isPreview = import.meta.env.DEV && isDraftModeEnabled(Astro.cookies);
+const isPreview = !Astro.isPrerendered && isDraftModeEnabled(Astro.cookies);
 
 const news = await getNews(isPreview);
 const webinars = await getWebinars(isPreview);

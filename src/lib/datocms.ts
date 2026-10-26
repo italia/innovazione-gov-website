@@ -16,12 +16,13 @@ export async function executeQuery<Result, Variables>(
 
   const getEnv = (key: string) => metaEnv?.[key] ?? process.env[key];
 
-  const token = options?.includeDrafts
-    ? getEnv("DATOCMS_DRAFT_API_TOKEN")
-    : (getEnv("DATOCMS_MANAGEMENT_API_TOKEN") ?? getEnv("DATOCMS_API_TOKEN"));
+  const token = getEnv("DATOCMS_API_TOKEN");
 
-  const excludeInvalid =
-    options?.excludeInvalid ?? (options?.includeDrafts ? false : true);
+  // Strict mode stays on for drafts too: the generated schema (and every
+  // fragment written against it, AltImageFragment included) only knows the
+  // narrowed types the API exposes with X-Exclude-Invalid, so turning it off
+  // made the preview queries invalid.
+  const excludeInvalid = options?.excludeInvalid ?? true;
 
   const result = await libExecuteQuery(query, {
     variables: options?.variables,
@@ -46,12 +47,13 @@ export async function executeAutoPagingQuery<Result, Variables>(
 
   const getEnv = (key: string) => metaEnv?.[key] ?? process.env[key];
 
-  const token = options?.includeDrafts
-    ? getEnv("DATOCMS_DRAFT_API_TOKEN")
-    : (getEnv("DATOCMS_MANAGEMENT_API_TOKEN") ?? getEnv("DATOCMS_API_TOKEN"));
+  const token = getEnv("DATOCMS_API_TOKEN");
 
-  const excludeInvalid =
-    options?.excludeInvalid ?? (options?.includeDrafts ? false : true);
+  // Strict mode stays on for drafts too: the generated schema (and every
+  // fragment written against it, AltImageFragment included) only knows the
+  // narrowed types the API exposes with X-Exclude-Invalid, so turning it off
+  // made the preview queries invalid.
+  const excludeInvalid = options?.excludeInvalid ?? true;
 
   const result = await executeQueryWithAutoPagination(query, {
     variables: options?.variables,

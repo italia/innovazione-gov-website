@@ -20,7 +20,7 @@ type Props = {
 const { block } = Astro.props;
 const { lang } = Astro.locals;
 
-const isPreview = import.meta.env.DEV && isDraftModeEnabled(Astro.cookies);
+const isPreview = !Astro.isPrerendered && isDraftModeEnabled(Astro.cookies);
 
 const categoryIds = block.category ? [block.category.id] : [];
 const onlyOneCategory = categoryIds.length > 0;
