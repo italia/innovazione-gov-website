@@ -15,6 +15,7 @@ type Props = {
   image?: ImageProps | null;
   logo?: ImageProps | null;
   articleType?: string | null;
+  sectionPage?: boolean;
   archived?: boolean;
   duration?: string | null;
   relatedProjects?: { title: string; linkTo: string }[];
@@ -29,6 +30,7 @@ const {
   image,
   logo,
   articleType,
+  sectionPage = false,
   archived = false,
   duration,
   relatedProjects = [],
@@ -40,7 +42,8 @@ const rawBreadcrumb = createBreadcrumb(recordId, lang);
 const isProject = articleType === "project";
 const attivitaConclusa = isProject && archived;
 const isFocus = articleType === "focus";
-const lastLabel = isProject ? title : t["article.detail"];
+const focusDiSezione = isFocus && sectionPage;
+const lastLabel = isProject || isFocus ? title : t["article.detail"];
 const shownTopics = isProject || isFocus ? [] : topics;
 const shownDate = isProject || isFocus ? null : dateTime;
 const shownParagraph = isProject
@@ -60,7 +63,7 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
     "it-hero-wrapper",
     "it-hero-wrapper--split",
     "article-hero",
-    isFocus && "article-hero--focus",
+    isFocus && !focusDiSezione && "article-hero--focus",
     attivitaConclusa && "article-hero--archived",
   ]}
 >

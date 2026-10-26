@@ -122,7 +122,9 @@ async function generateLinkMap() {
 
   for (const article of publishedOnly(articlesRes.allArticles)) {
     const sectionPath = SECTION_PATH_BY_TYPE[article.articleType ?? ""];
-    if (!sectionPath) continue;
+    const sottoIlGenitore =
+      article.articleType === "focus" && !!article.parentPage;
+    if (!sectionPath || sottoIlGenitore) continue;
     for (const locale of article.locales) {
       const section = findSectionEntry(locale, sectionPath);
       const current = linkMap[article.id]?.[locale];
@@ -152,6 +154,25 @@ async function generateLinkMap() {
   collectionCategoryPages.forEach((collection) =>
     processItemsCategoryPages(collection, linkMap, home),
   );
+
+  for (const article of publishedOnly(articlesRes.allArticles)) {
+    const genitore =
+      article.articleType === "focus" ? article.parentPage?.id : undefined;
+    if (!genitore) continue;
+    for (const locale of article.locales) {
+      const parent = linkMap[genitore]?.[locale];
+      const current = linkMap[article.id]?.[locale];
+      if (!parent || !current) continue;
+      const articleSlug = current.path.split("/").pop();
+      linkMap[article.id][locale] = {
+        path: `${parent.path}/${articleSlug}`,
+        breadcrumb: [
+          ...parent.breadcrumb,
+          { title: getTitle(article, locale), id: article.id },
+        ],
+      };
+    }
+  }
 
   const collectionTabPages = [publishedOnly(webinarsRes.allWebinarItems)];
 

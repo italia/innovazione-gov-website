@@ -56,6 +56,14 @@ const LastArticlesQuery = graphql(
         paragraph
         dateShown
         duration
+        parentPage {
+          ... on PageRecord {
+            id
+          }
+          ... on InsightRecord {
+            id
+          }
+        }
         firstPublishedAt: _firstPublishedAt
         tags {
           name
@@ -153,10 +161,12 @@ export async function getLastItems(
 
   const articleType = ARTICLE_TYPE_BY_SELECTION[selection];
   const isProject = articleType === "project";
+  const soloFocusDiNovita = articleType === "focus" && !categoryIds?.length;
   const filter = {
     ...(articleType ? { articleType: { eq: articleType } } : {}),
     ...(categoryIds?.length ? { tags: { anyIn: categoryIds } } : {}),
     ...(isProject ? { archived: { eq: Boolean(onlyArchived) } } : {}),
+    ...(soloFocusDiNovita ? { parentPage: { exists: false } } : {}),
   };
 
   const { records } = await executeQuery(LastArticlesQuery, {
@@ -169,26 +179,31 @@ export async function getLastItems(
   });
 
   return records
-    .map((r) => ({
-      id: r.id,
-      isExternal: false,
-      title: r.title ?? "",
-      description: r.paragraph || r.description || "",
-      image: (isProject ? (r.logo ?? r.image) : r.image) ?? undefined,
-      imageFit: isProject && r.logo ? ("contain" as const) : undefined,
-      dateTime: isProject
-        ? undefined
-        : (r.dateShown ?? r.firstPublishedAt ?? undefined),
-      category: isProject
-        ? []
-        : (r.tags ?? []).map((t) => t.name).filter((v): v is string => !!v),
-      categoryLinks: isProject ? {} : legamiArgomenti(r.tags, locale),
-      filterCategories: isProject
-        ? (r.tags ?? []).map((t) => t.name).filter((v): v is string => !!v)
-        : filterCategoriesOf(r.tags),
-      duration: isProject ? r.duration : undefined,
-      linkTo: linkResolver(r.id, locale),
-    }))
+    .map((r) => {
+      const paginaDiSezione = articleType === "focus" && !!r.parentPage;
+      const senzaMetadati = isProject || paginaDiSezione;
+
+      return {
+        id: r.id,
+        isExternal: false,
+        title: r.title ?? "",
+        description: r.paragraph || r.description || "",
+        image: (isProject ? (r.logo ?? r.image) : r.image) ?? undefined,
+        imageFit: isProject && r.logo ? ("contain" as const) : undefined,
+        dateTime: senzaMetadati
+          ? undefined
+          : (r.dateShown ?? r.firstPublishedAt ?? undefined),
+        category: senzaMetadati
+          ? []
+          : (r.tags ?? []).map((t) => t.name).filter((v): v is string => !!v),
+        categoryLinks: senzaMetadati ? {} : legamiArgomenti(r.tags, locale),
+        filterCategories: isProject
+          ? (r.tags ?? []).map((t) => t.name).filter((v): v is string => !!v)
+          : filterCategoriesOf(r.tags),
+        duration: isProject ? r.duration : undefined,
+        linkTo: linkResolver(r.id, locale),
+      };
+    })
     .sort((a, b) => {
       if (!isProject) return 0;
       if (!onlyArchived) return a.title.localeCompare(b.title);

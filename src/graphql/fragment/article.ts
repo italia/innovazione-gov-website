@@ -1,6 +1,7 @@
 import {
   AccordionBlockFragment,
   CalloutFragment,
+  NoteBoxFragment,
   DownloadLinkFragment,
   AttachmentsBoxFragment,
   WideLinkCardFragment,
@@ -45,6 +46,9 @@ export const ArticleContentFragment = graphql(
         }
         ... on CalloutRecord {
           ...CalloutFragment
+        }
+        ... on NoteBoxRecord {
+          ...NoteBoxFragment
         }
         ... on QuickLinkCardRecord {
           ...QuickLinkCardFragment
@@ -110,6 +114,7 @@ export const ArticleContentFragment = graphql(
     ExternalLinkFragment,
     OrderedListFragment,
     CalloutFragment,
+    NoteBoxFragment,
     QuickLinkCardFragment,
     SupportCTASectionFragment,
     ArticleIntroFragment,
@@ -137,6 +142,14 @@ export const AllArticlesRecordFragment = graphql(
       locales: _locales
       updatedAt: _updatedAt
       publishedAt: _publishedAt
+      parentPage {
+        ... on PageRecord {
+          id
+        }
+        ... on InsightRecord {
+          id
+        }
+      }
       articleType
       archived
       duration

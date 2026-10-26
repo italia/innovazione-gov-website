@@ -373,7 +373,7 @@ type ArticleListRecord implements RecordInterface {
   relatedArticles: [MenuArticleItemRecord!]!
 }
 
-union ArticleModelContentBlocksField = AccordionBlockRecord | ArticleIntroRecord | AttachmentsBoxRecord | CalloutRecord | CardServiceRecord | DownloadLinkRecord | ExternalLinkRecord | IconListBlockRecord | ImageBlockRecord | InternalLinkRecord | ListBlockquoteRecord | ListCardEditorialWithIconRecord | ListCardInfoRecord | ListExternalLinkRecord | OrderedListRecord | QuickLinkCardRecord | RelatedArticleRecord | StatisticBlockRecord | SupportCtaSectionRecord | TopicsBlockRecord | WideLinkCardRecord
+union ArticleModelContentBlocksField = AccordionBlockRecord | ArticleIntroRecord | AttachmentsBoxRecord | CalloutRecord | CardServiceRecord | DownloadLinkRecord | ExternalLinkRecord | IconListBlockRecord | ImageBlockRecord | InternalLinkRecord | ListBlockquoteRecord | ListCardEditorialWithIconRecord | ListCardInfoRecord | ListExternalLinkRecord | NoteBoxRecord | OrderedListRecord | QuickLinkCardRecord | RelatedArticleRecord | StatisticBlockRecord | SupportCtaSectionRecord | TopicsBlockRecord | WideLinkCardRecord
 
 type ArticleModelContentField {
   blocks: [ArticleModelContentBlocksField!]!
@@ -2019,11 +2019,6 @@ interface FileFieldInterface {
 type FileFieldMultiLocaleField {
   locale: SiteLocale
   value: FileField
-}
-
-type FileFieldNonNullMultiLocaleField {
-  locale: SiteLocale
-  value: FileField!
 }
 
 """Specifies how to filter Single-file/image fields"""
@@ -4837,7 +4832,7 @@ type InsightRecord implements RecordInterface {
     If you want to fallback to a default translation when a translation has not been found
     """
     fallbackLocales: [SiteLocale!]
-  ): [FileFieldNonNullMultiLocaleField!]
+  ): [FileFieldMultiLocaleField!]
   _allParentPageLocales(
     """
     If you want to fallback to a default translation when a translation has not been found
@@ -4918,7 +4913,7 @@ type InsightRecord implements RecordInterface {
     If you want to fallback to a default translation when a translation has not been found
     """
     fallbackLocales: [SiteLocale!]
-  ): FileField!
+  ): FileField
   links: [LinkExternalRecord!]!
   parentPage(
     """The locale to use to fetch the field's content"""
@@ -7095,6 +7090,34 @@ type NewsTopicRecord implements RecordInterface {
 type NewsTopicRecordNonNullMultiLocaleField {
   locale: SiteLocale
   value: NewsTopicRecord!
+}
+
+"""Block of type Note box (note_box)"""
+type NoteBoxRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  id: ItemId!
+  paragraph(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String!
+  title: String!
 }
 
 union OrderedListModelItemsField = ListItemRecord | ListItemResourceRecord
@@ -9627,7 +9650,7 @@ input StructuredTextFilter {
   exists: BooleanType
 }
 
-union StructuredTextModelContentBlocksField = AccordionBlockRecord | CalloutRecord | CardServiceRecord | DownloadLinkRecord | ExternalLinkRecord | ImageBlockRecord | InternalLinkRecord | ListBlockquoteRecord | ListCardEditorialWithIconRecord | ListCardInfoRecord | ListExternalLinkRecord | OrderedListRecord | QuickLinkCardRecord | StatisticBlockRecord | SupportCtaSectionRecord | TopicsBlockRecord
+union StructuredTextModelContentBlocksField = AccordionBlockRecord | CalloutRecord | CardServiceRecord | DownloadLinkRecord | ExternalLinkRecord | ImageBlockRecord | InternalLinkRecord | ListBlockquoteRecord | ListCardEditorialWithIconRecord | ListCardInfoRecord | ListExternalLinkRecord | NoteBoxRecord | OrderedListRecord | QuickLinkCardRecord | StatisticBlockRecord | SupportCtaSectionRecord | TopicsBlockRecord
 
 type StructuredTextModelContentField {
   blocks: [StructuredTextModelContentBlocksField!]!
