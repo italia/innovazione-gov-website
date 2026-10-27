@@ -50,7 +50,7 @@ const { labelButton, linkTo, openInNewTab } = getCtaFields(
   <div
     id={`collapse-${id}`}
     class:list={["accordion-collapse collapse", { show: isFirst || false }]}
-    data-bs-parent={`#${idParent}`}
+    data-bs-parent={allOpen ? undefined : `#${idParent}`}
     role="region"
     aria-labelledby={`heading-${id}`}
   >
