@@ -13,39 +13,40 @@ const {
   ariaLabelTopic = "",
 } = Astro.props;
 const listId = `list-topics-${Math.random().toString(36).substring(2, 9)}`;
+const hasTopics = topics.length > 0;
 ---
 
-<div
-  class=`it-list-wrapper d-lg-flex ${variant === "column" ? "flex-column" : "align-items-center "} `
->
-  {
-    title && (
-      <span
-        id={listId}
-        class={`text-uppercase text-dark fw-semibold mt-1 me-3 ${variant === "column" ? "fs-6" : ""}`}
-        aria-hidden="true"
+{
+  hasTopics && (
+    <div
+      class={`it-list-wrapper d-lg-flex ${variant === "column" ? "flex-column" : "align-items-center "} `}
+    >
+      {title && (
+        <span
+          id={listId}
+          class={`text-uppercase text-dark fw-semibold mt-1 me-3 ${variant === "column" ? "fs-6" : ""}`}
+          aria-hidden="true"
+        >
+          {title}
+        </span>
+      )}
+      <ul
+        class="it-list d-flex flex-wrap"
+        aria-labelledby={title ? listId : undefined}
+        aria-label={!title ? "Argomenti correlati" : undefined}
       >
-        {title}
-      </span>
-    )
-  }
-  <ul
-    class="it-list d-flex flex-wrap"
-    aria-labelledby={title ? listId : undefined}
-    aria-label={!title ? "Argomenti correlati" : undefined}
-  >
-    {
-      topics.map((topic) => (
-        <li class="list-item border-bottom-0 me-3 mt-2">
-          <Chip
-            visuallyHidden={ariaLabelTopic}
-            disabled={disabled}
-            label={topic}
-            size={sizeChip}
-            variant={variantChip}
-          />
-        </li>
-      ))
-    }
-  </ul>
-</div>
+        {topics.map((topic) => (
+          <li class="list-item border-bottom-0 me-3 mt-2">
+            <Chip
+              visuallyHidden={ariaLabelTopic}
+              disabled={disabled}
+              label={topic}
+              size={sizeChip}
+              variant={variantChip}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
