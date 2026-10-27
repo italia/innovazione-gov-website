@@ -40,6 +40,9 @@ const toggleId = `megamenu-toggle-${id}`;
       >
         <>
           <span>{title}</span>
+          <svg role="img" class="icon icon-xs ms-1" aria-hidden="true">
+            <use href="/bsi-svg/sprites.svg#it-expand" />
+          </svg>
         </>
       </button>
       <div
@@ -165,12 +168,6 @@ const toggleId = `megamenu-toggle-${id}`;
       > .nav-link.active {
       border-bottom-color: currentColor !important;
       text-decoration: none;
-    }
-    .nav-item.megamenu > .dropdown-menu {
-      margin-top: 3rem !important;
-    }
-    .nav-item.megamenu > button.dropdown-toggle::before {
-      bottom: -2.8rem !important;
     }
   }
 </style>
