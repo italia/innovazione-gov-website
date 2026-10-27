@@ -19,11 +19,22 @@ export const getNews = async (isPreview: boolean) => {
   return await getCollection("news_item");
 };
 
-export const getArticles = async (isPreview: boolean) => {
+const fetchArticleCards = async (includeDrafts: boolean) => {
   const res = await executeAutoPagingQuery(AllArticleCardsQuery, {
-    includeDrafts: isPreview,
+    includeDrafts,
   });
   return res?.allArticles ?? [];
+};
+
+let publishedArticleCards: ReturnType<typeof fetchArticleCards> | null = null;
+
+export const getArticles = async (isPreview: boolean) => {
+  if (isPreview) return fetchArticleCards(true);
+  publishedArticleCards ??= fetchArticleCards(false).catch((error) => {
+    publishedArticleCards = null;
+    throw error;
+  });
+  return publishedArticleCards;
 };
 
 export const getWebinars = async (isPreview: boolean) => {
