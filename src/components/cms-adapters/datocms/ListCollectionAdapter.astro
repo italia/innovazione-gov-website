@@ -12,18 +12,14 @@ type Props = {
 const { block } = Astro.props;
 const { lang } = Astro.locals;
 
-const items: CardEditorialNewsProps[] = block.content.map((item) => {
-  const topicRecord = getLocaleValue(item.allTopicLocales, lang, null);
-  return {
-    id: item.id,
-    title: getLocaleValue(item.allTitleLocales, lang, ""),
-    description: getLocaleValue(item.allParagraphLocales, lang, ""),
-    image: item.image ?? undefined,
-    linkTo: linkResolver(item.id, lang),
-    category: getLocaleValue(topicRecord?._allLabelLocales, lang, ""),
-    isExternal: false,
-  };
-});
+const items: CardEditorialNewsProps[] = block.content.map((item) => ({
+  id: item.id,
+  title: getLocaleValue(item.allTitleLocales, lang, ""),
+  description: getLocaleValue(item.allParagraphLocales, lang, ""),
+  image: item.image ?? undefined,
+  linkTo: linkResolver(item.id, lang),
+  isExternal: false,
+}));
 ---
 
 <ListCollection title={block.title} items={items} />

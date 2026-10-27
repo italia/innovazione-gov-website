@@ -25,9 +25,9 @@ const useCases: UseCaseCardProps[] = block.useCases.map((useCase) => {
     listTopics: {
       title: listTopics?.title || "",
       topics:
-        listTopics?.topics.map((topic) =>
-          getLocaleValue(topic._allLabelLocales, lang, ""),
-        ) || [],
+        listTopics?.topics
+          .map((topic) => topic.name)
+          .filter((name): name is string => !!name) || [],
     },
     descriptionTitle:
       getLocaleValue(useCase.allDescriptionTitleLocales, lang, "") || undefined,

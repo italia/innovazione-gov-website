@@ -1,7 +1,6 @@
 ---
 import { Topics } from "@components/molecules/Topics";
 import type { TopicsBlockFragmentType } from "@graphql/fragment/commonFragments";
-import { getLocaleValue } from "@utils/getLocaleValue";
 
 type DatoRecord = TopicsBlockFragmentType & {
   __typename: string;
@@ -13,12 +12,11 @@ type Props = {
 };
 
 const { block } = Astro.props;
-const { lang } = Astro.locals;
 ---
 
 <Topics
   title={block.title || undefined}
-  topics={block.topics.map((topic) =>
-    getLocaleValue(topic._allLabelLocales, lang, ""),
-  )}
+  topics={block.topics
+    .map((topic) => topic.name)
+    .filter((name): name is string => !!name)}
 />

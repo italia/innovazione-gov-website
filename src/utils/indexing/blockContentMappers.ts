@@ -7,6 +7,7 @@ import type {
   ListCardEditorialWithIconFragmentType,
   ListCardInfoFragmentType,
   OrderedListFragmentType,
+  TopicsBlockFragmentType,
 } from "@graphql/fragment/commonFragments";
 import type { InsightContentFragmentType } from "@graphql/fragment/insight";
 import type { PageContentFragmentType } from "@graphql/fragment/page";
@@ -91,8 +92,8 @@ export const getSearchRenderOptions = () => ({
         return flattenListCardInfo(record);
       case DatoBlockModel.OrderedList:
         return flattenOrderedList(record);
-      /* case DatoBlockModel.TopicsBlock:
-              return flattenTopicsBlock(record); */
+      case DatoBlockModel.TopicsBlock:
+        return flattenTopicsBlock(record);
       case DatoBlockModel.ExternalLink:
         return flattenExternalLink(record);
       case DatoBlockModel.SupportCta:
@@ -326,17 +327,17 @@ const flattenListCardEditorialWithIcon = (
   return cleanJoin(parts);
 };
 
-/* const flattenTopicsBlock = (record: TopicsBlockFragmentType): string => {
+const flattenTopicsBlock = (record: TopicsBlockFragmentType): string => {
   const parts: string[] = [];
 
   if (record.title) parts.push(record.title);
 
   record.topics?.forEach((topic) => {
-    if (topic.label) parts.push(topic.label);
+    if (topic.name) parts.push(topic.name);
   });
 
   return cleanJoin(parts);
-}; */
+};
 
 const flattenExternalLink = (record: ExternalLinkFragmentType): string => {
   const parts: string[] = [];

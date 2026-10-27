@@ -124,10 +124,7 @@ export const TopicsBlockFragment = graphql(`
     title
     topics {
       id
-      _allLabelLocales {
-        locale
-        value
-      }
+      name
     }
   }
 `);
@@ -357,15 +354,6 @@ export const InsightCardFragment = graphql(
       allParagraphLocales: _allAbstractLocales {
         locale
         value
-      }
-      allTopicLocales: _allTopicLocales {
-        locale
-        value {
-          _allLabelLocales {
-            locale
-            value
-          }
-        }
       }
       image {
         ...ImageFragment

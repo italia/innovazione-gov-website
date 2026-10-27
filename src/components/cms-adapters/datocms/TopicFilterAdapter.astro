@@ -18,27 +18,18 @@ const contentCollection: ContentCollectionProps[] = block.content.map(
     // nell'array in build published): filtriamo e usiamo optional chaining per
     // non crashare sul primo elemento.
     const collectionItems = (content.content ?? []).filter(Boolean);
-    const topicSlug = getLocaleValue(
-      collectionItems[0]?.allTopicLocales,
-      lang,
-      null,
-    );
     return {
       title: content.title,
-      topicSlug: getLocaleValue(topicSlug?._allLabelLocales, lang, ""),
+      topicSlug: "",
       paragraph: content.paragraph || undefined,
-      items: collectionItems.map((item) => {
-        const topicRecord = getLocaleValue(item.allTopicLocales, lang, null);
-        return {
-          id: item.id,
-          title: getLocaleValue(item.allTitleLocales, lang, ""),
-          description: getLocaleValue(item.allParagraphLocales, lang, ""),
-          image: item.image ?? undefined,
-          linkTo: linkResolver(item.id, lang),
-          category: getLocaleValue(topicRecord?._allLabelLocales, lang, ""),
-          isExternal: false,
-        };
-      }),
+      items: collectionItems.map((item) => ({
+        id: item.id,
+        title: getLocaleValue(item.allTitleLocales, lang, ""),
+        description: getLocaleValue(item.allParagraphLocales, lang, ""),
+        image: item.image ?? undefined,
+        linkTo: linkResolver(item.id, lang),
+        isExternal: false,
+      })),
     };
   },
 );

@@ -97,12 +97,6 @@ export const InsightLocalesFragment = graphql(
         locale
         value
       }
-      allTopicLocales: _allTopicLocales {
-        locale
-        value {
-          label
-        }
-      }
     }
   `,
   [],
