@@ -1,8 +1,11 @@
+export type AccordionHeadingLevel = "h2" | "h3" | "h4" | "h5";
+
 export type AccordionProps = {
   id: string;
   items: AccordionItemProps[];
   variant?: VariantAccordionProps;
   label?: string;
+  headingLevel?: AccordionHeadingLevel;
 };
 
 export type AccordionItemCta = {

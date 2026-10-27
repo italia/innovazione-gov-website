@@ -2,12 +2,13 @@
 import { Link } from "@components/atoms/Link";
 import type { SiteLocale } from "@graphql/types";
 import { getCtaFields } from "@utils/getCtaFields";
-import type { AccordionItemProps } from "./types";
+import type { AccordionHeadingLevel, AccordionItemProps } from "./types";
 type Props = AccordionItemProps & {
   fullWidth?: boolean;
   index: number;
   allOpen?: boolean;
   idParent?: string;
+  headingLevel?: AccordionHeadingLevel;
 };
 const {
   header,
@@ -18,9 +19,11 @@ const {
   index,
   allOpen = true,
   idParent,
+  headingLevel = "h2",
 } = Astro.props;
 
 const isFirst = allOpen || index === 0;
+const Heading = headingLevel;
 
 const { lang } = Astro.locals;
 const { labelButton, linkTo, openInNewTab } = getCtaFields(
@@ -32,7 +35,7 @@ const { labelButton, linkTo, openInNewTab } = getCtaFields(
 ---
 
 <div class="accordion-item bg-transparent">
-  <p class="accordion-header" id={`heading-${id}`}>
+  <Heading class="accordion-header" id={`heading-${id}`}>
     <button
       class:list={["accordion-button", { collapsed: !isFirst }]}
       type="button"
@@ -43,7 +46,7 @@ const { labelButton, linkTo, openInNewTab } = getCtaFields(
     >
       {header}
     </button>
-  </p>
+  </Heading>
   <div
     id={`collapse-${id}`}
     class:list={["accordion-collapse collapse", { show: isFirst || false }]}
