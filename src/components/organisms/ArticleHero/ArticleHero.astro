@@ -146,8 +146,10 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
   .article-hero--archived .it-hero-text-wrapper .article-hero__badge-riga {
     margin-bottom: 0.75rem;
   }
-  .article-hero--archived .it-hero-text-wrapper .article-hero__title {
-    margin-bottom: 1rem !important;
+  .article-hero.article-hero--archived
+    .it-hero-text-wrapper
+    .article-hero__title {
+    margin-bottom: 1rem;
   }
   .article-hero .it-hero-text-wrapper .article-hero__meta-value {
     color: inherit;
@@ -201,9 +203,11 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
   .article-hero--focus {
     background-color: #004d99;
   }
-  .article-hero--focus .article-hero__title,
-  .article-hero--focus .article-hero__paragraph {
-    color: #fff !important;
+  .article-hero.article-hero--focus .it-hero-text-wrapper .article-hero__title,
+  .article-hero.article-hero--focus
+    .it-hero-text-wrapper
+    .article-hero__paragraph {
+    color: #fff;
   }
   .article-hero--focus
     :global(.breadcrumb-container .breadcrumb .breadcrumb-item a) {
@@ -215,39 +219,38 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
     :global(.breadcrumb-container .breadcrumb .breadcrumb-item .separator) {
     color: #e8f1fb;
   }
-  .article-hero :global(.breadcrumb-container) {
-    margin-bottom: 32px !important;
+  .article-hero .it-hero-text-wrapper :global(.breadcrumb-container) {
+    margin-bottom: 32px;
   }
   .article-hero :global(.breadcrumb) {
     font-size: 1.125rem;
   }
-  .article-hero__title {
+  .article-hero .it-hero-text-wrapper .article-hero__title {
     margin-top: 0;
-    margin-bottom: 0.5rem !important;
-    color: #1a1a1a !important;
+    margin-bottom: 0.5rem;
+    color: #1a1a1a;
   }
   .article-hero :global(.article-hero__date) {
     display: block;
     color: #5b6f82;
     font-size: 0.875rem;
   }
-  .article-hero__paragraph {
+  .article-hero .it-hero-text-wrapper .article-hero__paragraph {
     margin-top: 1.5rem;
-    margin-bottom: 0;
-    color: #1a1a1a !important;
-    font-size: 1.125rem !important;
-    line-height: 1.75rem !important;
+    color: #1a1a1a;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
   }
   .article-hero__topics {
     margin-top: 1.5rem;
   }
-  .article-hero__topics-label {
+  .article-hero .it-hero-text-wrapper .article-hero__topics-label {
     text-transform: uppercase;
     font-weight: 600;
     letter-spacing: 0.03em;
-    font-size: 0.875rem !important;
-    margin-bottom: 0.75rem !important;
-    color: #1a1a1a !important;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+    color: #1a1a1a;
   }
   .article-hero__chips {
     list-style: none;

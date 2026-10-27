@@ -57,3 +57,22 @@ in uso (`rounded-2 px-4`, `border-0 border-bottom`, `py-3`) invece di `accordion
 il refactor doveva togliere la duplicazione, non cambiare l'aspetto. Verificato
 con un confronto pixel a pixel, zero differenze. Se si vorrà allineare anche la
 spaziatura, è una modifica visibile da decidere a parte.
+
+### D-05 — I valori di design dell'ArticleHero stanno nella specificità, non in `!important`
+
+I colori e le dimensioni dell'hero degli articoli sono una scelta di design
+approvata e restano quelli. Erano però imposti con undici `!important`, perché
+la regola della libreria (`.it-hero-wrapper .it-hero-text-wrapper h1`) è più
+specifica di una classe sola. Ora i selettori passano dal contenitore
+(`.article-hero .it-hero-text-wrapper .article-hero__title`), vincono per
+specificità e l'`!important` non serve più: le stesse regole tornano
+sovrascrivibili da chi sta più in basso nella cascata.
+
+Il breadcrumb aveva l'utility `mb-4` nel markup, che bootstrap genera con
+`!important`: nessuna regola poteva batterla senza esserlo a sua volta. Ora il
+margine di default (stesso valore, 1.5rem) è nello stile del componente, quindi
+un contesto può cambiarlo normalmente — è così che l'hero arriva a 32px.
+
+Verificato su tutte e tre le varianti dell'hero (base, focus, archiviato):
+stili calcolati identici e screenshot con zero pixel di differenza. Il margine
+del breadcrumb resta 24px su tutte le pagine fuori dall'hero.
