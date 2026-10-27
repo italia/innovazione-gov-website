@@ -28,6 +28,7 @@ const buttonLabel = block.cta?.label;
   linkTo={buttonLink}
   backgroundColor={block.backgroundColor as SectionBackground}
   tabs={block.tabs.map((tab) => {
+    const tabTitle = tab.title;
     switch (tab.componentName) {
       case DatoBlockModel.NewsTab:
         return {
@@ -80,7 +81,7 @@ const buttonLabel = block.cta?.label;
       default:
         return {
           componentName: "CardEditorialNews",
-          title: tab.title,
+          title: tabTitle,
           news: [],
         };
     }

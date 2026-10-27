@@ -1,6 +1,6 @@
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
-import astroParser from "astro-eslint-parser";
+import * as astroParser from "astro-eslint-parser";
 import astroPlugin from "eslint-plugin-astro";
 import unusedImports from "eslint-plugin-unused-imports";
 

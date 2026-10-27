@@ -1,8 +1,8 @@
 diff --git a/dist/index.esm.js b/dist/index.esm.js
-index 4938397d468109c991895434991d7b6757988d0a..e7dbbb4ef84a42fcf770ea4ed57249982c87bb98 100644
+index d78c642f6cc7e539ee6076e5944211dd25690209..0e87d1732f8eb8a9859bc0e33b28e4abf94a667c 100644
 --- a/dist/index.esm.js
 +++ b/dist/index.esm.js
-@@ -1005,7 +1005,7 @@ function BasicChart({ data, setEchartInstance, rowHeight, isMobile = false, hFac
+@@ -713,7 +713,7 @@ function BasicChart({ data, setEchartInstance, rowHeight, isMobile = false, hFac
          const colorOpt = ((_d = config.colors) === null || _d === void 0 ? void 0 : _d.length) ? { color: config.colors } : {};
          const aria = {
              enabled: true,
@@ -11,7 +11,7 @@ index 4938397d468109c991895434991d7b6757988d0a..e7dbbb4ef84a42fcf770ea4ed5724998
              label: { enabled: true, description: config.title || config.description || "" },
          };
          let options = Object.assign(Object.assign(Object.assign(Object.assign({}, colorOpt), axis), { grid,
-@@ -1100,7 +1100,7 @@ function GeoMapChart({ data, id, setEchartInstance, hFactor = 1, rowHeight, }) {
+@@ -808,7 +808,7 @@ function GeoMapChart({ data, id, setEchartInstance, hFactor = 1, rowHeight, }) {
              },
              aria: {
                  enabled: true,
@@ -20,7 +20,7 @@ index 4938397d468109c991895434991d7b6757988d0a..e7dbbb4ef84a42fcf770ea4ed5724998
                  label: { enabled: true, description: (config === null || config === void 0 ? void 0 : config.title) || (config === null || config === void 0 ? void 0 : config.description) || "" },
              },
              tooltip,
-@@ -1286,7 +1286,7 @@ function PieChart({ id, data, setEchartInstance, isMobile = false, rowHeight, hF
+@@ -994,7 +994,7 @@ function PieChart({ id, data, setEchartInstance, isMobile = false, rowHeight, hF
                  },
              } }, colorOpt), { aria: {
                  enabled: true,
@@ -30,10 +30,10 @@ index 4938397d468109c991895434991d7b6757988d0a..e7dbbb4ef84a42fcf770ea4ed5724998
              }, series: Object.assign(Object.assign({}, dataSource.series), { labelLine: {
                      show: showLabels && config.labeLine,
 diff --git a/dist/index.js b/dist/index.js
-index f1cf308ea67e969bcde9ad1fda21b5aa260230d5..c465aac2759b11888f60b4d6166b35d09c46fd2b 100644
+index 52494fbaf91f78ce92c6355b59d6234c082c1e3b..beb9751fde914ae8baf6d19fee605d910a0ba599 100644
 --- a/dist/index.js
 +++ b/dist/index.js
-@@ -1026,7 +1026,7 @@ function BasicChart({ data, setEchartInstance, rowHeight, isMobile = false, hFac
+@@ -734,7 +734,7 @@ function BasicChart({ data, setEchartInstance, rowHeight, isMobile = false, hFac
          const colorOpt = ((_d = config.colors) === null || _d === void 0 ? void 0 : _d.length) ? { color: config.colors } : {};
          const aria = {
              enabled: true,
@@ -42,7 +42,7 @@ index f1cf308ea67e969bcde9ad1fda21b5aa260230d5..c465aac2759b11888f60b4d6166b35d0
              label: { enabled: true, description: config.title || config.description || "" },
          };
          let options = Object.assign(Object.assign(Object.assign(Object.assign({}, colorOpt), axis), { grid,
-@@ -1121,7 +1121,7 @@ function GeoMapChart({ data, id, setEchartInstance, hFactor = 1, rowHeight, }) {
+@@ -829,7 +829,7 @@ function GeoMapChart({ data, id, setEchartInstance, hFactor = 1, rowHeight, }) {
              },
              aria: {
                  enabled: true,
@@ -51,7 +51,7 @@ index f1cf308ea67e969bcde9ad1fda21b5aa260230d5..c465aac2759b11888f60b4d6166b35d0
                  label: { enabled: true, description: (config === null || config === void 0 ? void 0 : config.title) || (config === null || config === void 0 ? void 0 : config.description) || "" },
              },
              tooltip,
-@@ -1307,7 +1307,7 @@ function PieChart({ id, data, setEchartInstance, isMobile = false, rowHeight, hF
+@@ -1015,7 +1015,7 @@ function PieChart({ id, data, setEchartInstance, isMobile = false, rowHeight, hF
                  },
              } }, colorOpt), { aria: {
                  enabled: true,

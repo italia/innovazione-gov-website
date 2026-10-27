@@ -25,47 +25,48 @@
     "a11y:best": "axe http://localhost:4321 --tags best-practice --exit"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.9",
-    "@astrojs/react": "^4.4.2",
-    "@astrojs/sitemap": "^3.7.3",
-    "@astrojs/ts-plugin": "^1.10.9",
-    "@astrojs/vercel": "^9.0.5",
-    "@datocms/astro": "^0.6.12",
-    "@datocms/cda-client": "^0.2.10",
-    "@datocms/cma-client": "^5.4.21",
-    "@opensearch-project/opensearch": "^3.6.0",
-    "@types/react": "^19.2.15",
-    "@types/react-dom": "^19.2.3",
-    "astro": "^5.18.2",
-    "bootstrap-italia": "^2.18.1",
-    "datocms-structured-text-to-plain-text": "^5.1.16",
+    "@astrojs/check": "^0.9.12",
+    "@astrojs/react": "^7.1.1",
+    "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/ts-plugin": "^1.10.12",
+    "@astrojs/vercel": "^11.0.16",
+    "@datocms/astro": "^0.6.16",
+    "@datocms/cda-client": "^0.3.2",
+    "@datocms/cma-client": "^6.8.0",
+    "@opensearch-project/opensearch": "^3.9.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "astro": "^7.4.2",
+    "bootstrap-italia": "^2.18.3",
+    "datocms-structured-text-to-plain-text": "^6.0.0",
     "dotenv": "^17.4.2",
-    "gql.tada": "^1.9.2",
-    "graph-italia-components": "^0.3.27",
+    "gql.tada": "^1.11.4",
+    "graph-italia-components": "^0.3.29",
     "jsonwebtoken": "^9.0.3",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "react-grid-layout": "^2.2.3",
-    "react-resizable": "^4.0.1"
+    "oxc-transform-react": "^0.156.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-grid-layout": "^2.3.0",
+    "react-resizable": "^4.0.2"
   },
   "devDependencies": {
-    "@datocms/cli": "^3.1.16",
+    "@datocms/cli": "^4.0.29",
     "@types/axe-core": "^3.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@typescript-eslint/eslint-plugin": "^8.60.0",
-    "@typescript-eslint/parser": "^8.60.0",
-    "astro-eslint-parser": "^1.4.0",
-    "axe-core": "^4.12.1",
+    "@typescript-eslint/eslint-plugin": "^8.72.1",
+    "@typescript-eslint/parser": "^8.72.1",
+    "astro-eslint-parser": "^3.2.0",
+    "axe-core": "^4.14.0",
     "dotenv-cli": "^11.0.0",
-    "eslint": "^9.39.4",
-    "eslint-plugin-astro": "^1.7.0",
+    "eslint": "^10.13.0",
+    "eslint-plugin-astro": "^3.2.1",
     "eslint-plugin-unused-imports": "^4.4.1",
     "husky": "^9.1.7",
-    "lint-staged": "15",
-    "prettier": "3.8.3",
+    "lint-staged": "17",
+    "prettier": "3.9.10",
     "prettier-plugin-astro": "^0.14.1",
-    "sass-embedded": "^1.100.0",
-    "typescript": "^5.9.3"
+    "sass-embedded": "^1.106.1",
+    "typescript": "^6.0.3"
   },
   "lint-staged": {
     "**/*.{js,mjs,ts,tsx,astro,scss}": [
@@ -74,6 +75,6 @@
     ]
   },
   "patchedDependencies": {
-    "graph-italia-components@0.3.27": "patches/graph-italia-components@0.3.27.patch"
+    "graph-italia-components@0.3.29": "patches/graph-italia-components@0.3.29.patch"
   }
 }

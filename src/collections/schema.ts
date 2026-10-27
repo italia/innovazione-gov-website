@@ -31,7 +31,7 @@ import type { SearchMenuFragmentType } from "@graphql/fragment/sectionFragments"
 import type { SeoFieldFragmentType } from "@graphql/fragment/seoFragments";
 import type { AllWebinarRecordFragmentType } from "@graphql/fragment/webinar";
 import type { SiteLocale } from "@graphql/types";
-import { z } from "astro:content";
+import { z } from "astro/zod";
 
 export const newsSchema = z.custom<NewsItemFragmentType>();
 

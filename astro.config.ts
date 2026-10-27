@@ -3,6 +3,27 @@ import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 import { defineConfig } from "astro/config";
 import { resolve } from "path";
+import { pathToFileURL } from "node:url";
+
+const scssAliases: Record<string, string> = {
+  "@styles": resolve("./src/styles"),
+  "@bootstrap-src": resolve("./node_modules/bootstrap-italia/src"),
+  "@splidejs/splide/src/css/core/index": resolve(
+    "./node_modules/@splidejs/splide/src/css/core/index.scss",
+  ),
+};
+
+const scssAliasImporter = {
+  findFileUrl(url: string): URL | null {
+    const exact = scssAliases[url];
+    if (exact) return pathToFileURL(exact);
+    const alias = Object.keys(scssAliases).find((prefix) =>
+      url.startsWith(`${prefix}/`),
+    );
+    if (!alias) return null;
+    return pathToFileURL(`${scssAliases[alias]}${url.slice(alias.length)}`);
+  },
+};
 
 const SANDBOX_BRANCH = "website-astro-2026";
 const SANDBOX_DATOCMS_ENVIRONMENT = "website-astro-2026";
@@ -15,11 +36,13 @@ if (process.env.VERCEL_GIT_COMMIT_REF === SANDBOX_BRANCH) {
 // https://astro.build/config
 export default defineConfig({
   site: process.env.SITE_URL,
+  compressHTML: true,
   i18n: {
     defaultLocale: "it",
     locales: ["it", "en"],
     routing: {
       prefixDefaultLocale: true,
+      redirectToDefaultLocale: true,
     },
   },
   integrations: [
@@ -95,14 +118,25 @@ export default defineConfig({
     ssr: {
       noExternal: ["graph-italia-components"],
     },
-    resolve: {
-      alias: {
-        "/^@(.*)$/": resolve("./src/*"),
-        "@splidejs/splide/src/css/core/index": resolve(
-          "node_modules/@splidejs/splide/src/css/core/index.scss",
-        ),
-        "@bootstrap-src": "/node_modules/bootstrap-italia/src",
+    css: {
+      preprocessorOptions: {
+        scss: {
+          importers: [scssAliasImporter],
+        },
       },
+    },
+    resolve: {
+      alias: [
+        {
+          find: "@splidejs/splide/src/css/core/index",
+          replacement: scssAliases["@splidejs/splide/src/css/core/index"],
+        },
+        {
+          find: /^@bootstrap-src\//,
+          replacement: `${scssAliases["@bootstrap-src"]}/`,
+        },
+        { find: /^@styles\//, replacement: `${scssAliases["@styles"]}/` },
+      ],
     },
   },
   build: {
