@@ -13,6 +13,8 @@ export const PageByIdQuery = graphql(
         id
         title
         slug
+        publishedAt: _publishedAt
+        updatedAt: _updatedAt
         seo: _seoMetaTags(locale: $locale) {
           ...TagFragment
         }
@@ -32,6 +34,8 @@ export const CatalogueByIdQuery = graphql(
         id
         title
         slug
+        publishedAt: _publishedAt
+        updatedAt: _updatedAt
         seo: _seoMetaTags(locale: $locale) {
           ...TagFragment
         }
@@ -74,6 +78,8 @@ export const ArticleByIdQuery = graphql(
         logo {
           ...ImageFragment
         }
+        publishedAt: _publishedAt
+        updatedAt: _updatedAt
         seo: _seoMetaTags {
           ...TagFragment
         }
@@ -91,6 +97,8 @@ export const WebinarByIdQuery = graphql(
     query WebinarByIdQuery($id: ItemId!, $locale: SiteLocale!) {
       webinarItem(filter: { id: { eq: $id } }, locale: $locale) {
         id
+        publishedAt: _publishedAt
+        updatedAt: _updatedAt
         seo: _seoMetaTags {
           ...TagFragment
         }
@@ -108,6 +116,8 @@ export const InsightByIdQuery = graphql(
     query InsightByIdQuery($id: ItemId!, $locale: SiteLocale!) {
       insight(filter: { id: { eq: $id } }, locale: $locale) {
         id
+        publishedAt: _publishedAt
+        updatedAt: _updatedAt
         seo: _seoMetaTags {
           ...TagFragment
         }

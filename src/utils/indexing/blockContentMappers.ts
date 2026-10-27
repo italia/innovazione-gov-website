@@ -120,7 +120,7 @@ const flattenTextImageSection = (record: TextAndImageFragmentType): string => {
 
   if (record.text) {
     parts.push(record.text.title);
-    parts.push(record.text.paragraph);
+    if (record.text.paragraph) parts.push(record.text.paragraph);
   }
 
   if (record.image) {
@@ -148,7 +148,8 @@ const flattenTextAccordionSection = (
   const parts: string[] = [];
 
   if (record.text) {
-    parts.push(record.text.title, record.text.paragraph);
+    parts.push(record.text.title);
+    if (record.text.paragraph) parts.push(record.text.paragraph);
   }
 
   if (record.accordion.title) parts.push(record.accordion.title);
@@ -220,7 +221,8 @@ const flattenWebinarDescription = (
 ): string => {
   const parts: string[] = [];
 
-  parts.push(record.text.title, record.text.paragraph);
+  parts.push(record.text.title);
+  if (record.text.paragraph) parts.push(record.text.paragraph);
   record.subjects.items.forEach((item) =>
     parts.push(item.title, item.paragraph),
   );
@@ -231,7 +233,8 @@ const flattenWebinarDescription = (
 const flattenSpeaker = (record: SpeakerFragmentType): string => {
   const parts: string[] = [];
 
-  parts.push(record.text.title, record.text.paragraph);
+  parts.push(record.text.title);
+  if (record.text.paragraph) parts.push(record.text.paragraph);
   record.list?.authors.forEach((item) => {
     parts.push(item.name);
     if (item.role) parts.push(item.role);
@@ -243,7 +246,8 @@ const flattenSpeaker = (record: SpeakerFragmentType): string => {
 const flattenIntroArticle = (record: IntroArticleFragmentType): string => {
   const parts: string[] = [];
 
-  parts.push(record.text.title, record.text.paragraph);
+  parts.push(record.text.title);
+  if (record.text.paragraph) parts.push(record.text.paragraph);
   record.list?.items?.items.forEach((item) => parts.push(item.label));
 
   return cleanJoin(parts);

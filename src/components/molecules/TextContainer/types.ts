@@ -1,6 +1,6 @@
 export type TextContainerProps = {
   title: string;
-  paragraph: string;
+  paragraph?: string | null;
   variant?: TextContainerVariant;
   labelButton?: string;
   linkTo?: string;

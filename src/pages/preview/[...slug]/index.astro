@@ -97,6 +97,11 @@ if (dataRecord) {
   Astro.locals.recordId = dataRecord?.id;
 }
 
+const dataAggiornamento =
+  ("publishedAt" in dataRecord && (dataRecord.publishedAt as string)) ||
+  ("updatedAt" in dataRecord && (dataRecord.updatedAt as string)) ||
+  undefined;
+
 let redirectUrl = "/";
 const slugProduction = linkResolver(id, lang);
 if (slugProduction !== "#") {
@@ -106,7 +111,11 @@ if (slugProduction !== "#") {
 
 {
   type === "layout" && (
-    <Layout showFeedback={false} redirectUrl={redirectUrl}>
+    <Layout
+      showFeedback={false}
+      redirectUrl={redirectUrl}
+      datePublished={dataAggiornamento}
+    >
       <div class="container">
         <div class="row">
           <div class="col">CONTENT PAGE</div>
@@ -118,7 +127,11 @@ if (slugProduction !== "#") {
 
 {
   type === "sidebar_for_article" && sidebarData && (
-    <Layout showFeedback={false} redirectUrl={redirectUrl}>
+    <Layout
+      showFeedback={false}
+      redirectUrl={redirectUrl}
+      datePublished={dataAggiornamento}
+    >
       <div class="container">
         <div class="row">
           <div class="col-12 col-lg-4 px-lg-0 pb-lg-5 border-end position-sticky">
@@ -137,6 +150,7 @@ if (slugProduction !== "#") {
       showFeedback={false}
       redirectUrl={redirectUrl}
       pageSeo={dataRecord?.seo}
+      datePublished={dataAggiornamento}
     >
       <ArticleHero
         title={dataRecord.title ?? ""}
@@ -175,6 +189,7 @@ if (slugProduction !== "#") {
       showFeedback={false}
       redirectUrl={redirectUrl}
       pageSeo={dataRecord?.seo}
+      datePublished={dataAggiornamento}
     >
       <PageAdapter content={content as any} />
     </Layout>

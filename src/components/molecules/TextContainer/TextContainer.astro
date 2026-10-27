@@ -36,7 +36,7 @@ const variantButton =
   <TitleTag class="mb-3" id={slugify(title)}>
     {title}
   </TitleTag>
-  <Fragment set:html={paragraph} />
+  {paragraph && <Fragment set:html={paragraph} />}
   {
     labelButton && linkTo && (
       <div class="text-container__actions mt-4">

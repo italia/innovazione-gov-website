@@ -9997,7 +9997,7 @@ type TextBlockRecord implements RecordInterface {
   paragraph(
     """Process content as markdown"""
     markdown: Boolean
-  ): String!
+  ): String
   title: String!
 }
 
