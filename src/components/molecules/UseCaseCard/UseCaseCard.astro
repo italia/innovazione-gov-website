@@ -1,5 +1,6 @@
 ---
 import { Image } from "@components/atoms/Image";
+import { Accordion } from "@components/molecules/Accordion";
 import { Topics } from "@components/molecules/Topics";
 import type { UseCaseCardProps } from "./types";
 
@@ -100,31 +101,17 @@ const cardTitleId = `card-title-${id}`;
 
       {
         (descriptionTitle || description) && (
-          <div class="accordion border-0" id={id}>
-            <div class="accordion-item rounded-2 px-4">
-              <h2 class="accordion-header" id={`heading-${id}`}>
-                <button
-                  class="accordion-button border-0 border-bottom"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target={`#collapse-${id}`}
-                  aria-expanded="true"
-                  aria-controls={`collapse-${id}`}
-                >
-                  {descriptionTitle}
-                </button>
-              </h2>
-              <div
-                id={`collapse-${id}`}
-                class="accordion-collapse collapse show"
-                data-bs-parent={`#${id}`}
-                role="region"
-                aria-labelledby={`heading-${id}`}
-              >
-                <div class="py-3" set:html={description} />
-              </div>
-            </div>
-          </div>
+          <Accordion
+            id={id}
+            variant="card"
+            items={[
+              {
+                id,
+                header: descriptionTitle ?? "",
+                body: description ?? "",
+              },
+            ]}
+          />
         )
       }
     </div>

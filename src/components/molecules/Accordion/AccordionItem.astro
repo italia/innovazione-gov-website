@@ -2,13 +2,18 @@
 import { Link } from "@components/atoms/Link";
 import type { SiteLocale } from "@graphql/types";
 import { getCtaFields } from "@utils/getCtaFields";
-import type { AccordionHeadingLevel, AccordionItemProps } from "./types";
+import type {
+  AccordionHeadingLevel,
+  AccordionItemProps,
+  VariantAccordionProps,
+} from "./types";
 type Props = AccordionItemProps & {
   fullWidth?: boolean;
   index: number;
   allOpen?: boolean;
   idParent?: string;
   headingLevel?: AccordionHeadingLevel;
+  variant?: VariantAccordionProps;
 };
 const {
   header,
@@ -20,7 +25,23 @@ const {
   allOpen = true,
   idParent,
   headingLevel = "h2",
+  variant = "default",
 } = Astro.props;
+
+const classiVariante: Record<VariantAccordionProps, Record<string, string>> = {
+  default: { item: "bg-transparent", button: "", body: "accordion-body" },
+  "background-active": {
+    item: "bg-transparent",
+    button: "",
+    body: "accordion-body",
+  },
+  card: {
+    item: "rounded-2 px-4",
+    button: "border-0 border-bottom",
+    body: "py-3",
+  },
+};
+const classi = classiVariante[variant];
 
 const isFirst = allOpen || index === 0;
 const Heading = headingLevel;
@@ -34,10 +55,10 @@ const { labelButton, linkTo, openInNewTab } = getCtaFields(
 );
 ---
 
-<div class="accordion-item bg-transparent">
+<div class:list={["accordion-item", classi.item]}>
   <Heading class="accordion-header" id={`heading-${id}`}>
     <button
-      class:list={["accordion-button", { collapsed: !isFirst }]}
+      class:list={["accordion-button", classi.button, { collapsed: !isFirst }]}
       type="button"
       data-bs-toggle="collapse"
       data-bs-target={`#collapse-${id}`}
@@ -54,7 +75,7 @@ const { labelButton, linkTo, openInNewTab } = getCtaFields(
     role="region"
     aria-labelledby={`heading-${id}`}
   >
-    <div class="accordion-body">
+    <div class:list={[classi.body]}>
       {
         fullWidth ? (
           <div set:html={body} />

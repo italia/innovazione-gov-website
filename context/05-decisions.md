@@ -46,3 +46,14 @@ Il markup ufficiale mette il bottone dentro un heading perché quei bottoni
 sono i titoli delle sezioni. `Accordion` accetta `headingLevel` (default `h2`)
 invece di fissare il livello: la documentazione ufficiale dice esplicitamente
 che il livello dipende dal contesto della pagina.
+
+### D-04 — La variante `card` dell'accordion tiene la spaziatura esistente
+
+`UseCaseCard` aveva una seconda copia del markup dell'accordion scritta a mano.
+Ora usa il componente con `variant="card"`, che porta le utility bootstrap già
+in uso (`rounded-2 px-4`, `border-0 border-bottom`, `py-3`) invece di `accordion-body`.
+
+`py-3` non è la spaziatura ufficiale del corpo, ma è quella che la card aveva:
+il refactor doveva togliere la duplicazione, non cambiare l'aspetto. Verificato
+con un confronto pixel a pixel, zero differenze. Se si vorrà allineare anche la
+spaziatura, è una modifica visibile da decidere a parte.

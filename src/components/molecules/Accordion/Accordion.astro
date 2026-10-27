@@ -12,8 +12,12 @@ const {
   headingLevel = "h2",
 } = Astro.props;
 
-const className =
-  variant === "background-active" ? "accordion-background-active" : "";
+const classiContenitore: Record<typeof variant, string> = {
+  default: "",
+  "background-active": "accordion-background-active",
+  card: "border-0",
+};
+const className = classiContenitore[variant];
 ---
 
 {label && <p class="it-label">{label}</p>}
@@ -27,6 +31,7 @@ const className =
         index={index}
         allOpen={allOpen}
         headingLevel={headingLevel}
+        variant={variant}
       />
     ))
   }

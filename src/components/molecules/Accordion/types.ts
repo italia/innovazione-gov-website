@@ -22,4 +22,4 @@ export type AccordionItemProps = {
   cta?: AccordionItemCta | null;
 };
 
-export type VariantAccordionProps = "default" | "background-active";
+export type VariantAccordionProps = "default" | "background-active" | "card";
