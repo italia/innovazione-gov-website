@@ -213,11 +213,58 @@ const etichettaSezione = eyebrow ? slugify(eyebrow) : undefined;
         });
       });
 
+    const slides = contenitore.querySelector<HTMLElement>(
+      ".highlight-carousel__slides",
+    );
+    if (slides) {
+      const soglia = 50;
+      let partenzaX = 0;
+      let partenzaY = 0;
+      let puntatore: number | null = null;
+
+      slides.addEventListener("pointerdown", (evento) => {
+        if (evento.pointerType === "mouse" && evento.button !== 0) return;
+        if ((evento.target as Element).closest("a, button, input, textarea"))
+          return;
+        puntatore = evento.pointerId;
+        partenzaX = evento.clientX;
+        partenzaY = evento.clientY;
+      });
+
+      slides.addEventListener("pointerup", (evento) => {
+        if (puntatore !== evento.pointerId) return;
+        puntatore = null;
+        const spostamentoX = evento.clientX - partenzaX;
+        const spostamentoY = evento.clientY - partenzaY;
+        if (Math.abs(spostamentoX) < soglia) return;
+        if (Math.abs(spostamentoX) <= Math.abs(spostamentoY)) return;
+        const prossimo = scelto() + (spostamentoX < 0 ? 1 : -1);
+        if (prossimo < 0 || prossimo > comandi.length - 1) return;
+        aggiorna(contenitore, prossimo);
+      });
+
+      slides.addEventListener("pointercancel", () => {
+        puntatore = null;
+      });
+
+      slides.addEventListener("dragstart", (evento) => {
+        if (puntatore !== null) evento.preventDefault();
+      });
+    }
+
     aggiorna(contenitore, Math.max(scelto(), 0));
   });
 </script>
 
 <style>
+  .highlight-carousel__slides {
+    touch-action: pan-y;
+  }
+
+  .highlight-carousel__slides :global(img) {
+    -webkit-user-drag: none;
+  }
+
   .highlight-carousel__eyebrow {
     margin-bottom: 1.5rem;
     color: var(--color-text-base, #1a1a1a);
