@@ -449,7 +449,7 @@ body {
   row-gap: 0.25rem;
 }
 
-.it-card-taxonomy .chip {
+.it-card-taxonomy .chip:not(.chip-link) {
   pointer-events: none;
 }
 
