@@ -2,6 +2,7 @@
 import { ArticleIntro } from "@components/organisms/ArticleIntro";
 import type { ArticleIntroDetail } from "@components/organisms/ArticleIntro/types";
 import type { ArticleIntroFragmentType } from "@graphql/fragment/commonFragments";
+import { topicLinks } from "@utils/topicRoutes";
 
 type Props = {
   block: ArticleIntroFragmentType;
@@ -24,5 +25,6 @@ const topics = (block.topics ?? [])
   paragraph={block.paragraph}
   topicsTitle={block.topicsTitle}
   topics={topics}
+  topicLinks={topicLinks(block.topics, Astro.locals.lang)}
   details={details}
 />

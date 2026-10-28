@@ -6,6 +6,7 @@ export type ArticleIntroDetail = {
 export type ArticleIntroProps = {
   title?: string | null;
   paragraph?: string | null;
+  topicLinks?: Record<string, string>;
   topicsTitle?: string | null;
   topics?: string[];
   details?: ArticleIntroDetail[];

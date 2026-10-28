@@ -125,6 +125,7 @@ export const TopicsBlockFragment = graphql(`
     topics {
       id
       name
+      slug
     }
   }
 `);
@@ -140,6 +141,7 @@ export const ArticleIntroFragment = graphql(`
     topics {
       id
       name
+      slug
     }
     details {
       ... on IntroDetailRecord {

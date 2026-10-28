@@ -3,17 +3,19 @@ type Props = {
   className?: string;
 };
 
-const { className } = Astro.props;
+const { className = "" } = Astro.props;
 ---
 
 <div
-  class=`it-carousel-wrapper it-carousel-landscape-abstract splide d-block d-lg-none ${className}`
+  class:list={[
+    "it-carousel-wrapper it-carousel-landscape-abstract splide d-block d-lg-none",
+    className,
+  ]}
   data-bs-carousel-splide
-  data-splide='{"gap":".5rem", "breakpoints":{"768":{"gap":".5rem"}, "992":{"gap":".5rem"}}}'
 >
   <div class="splide__track ps-lg-3 pe-lg-3">
-    <div class="splide__list it-carousel-all">
+    <ul class="splide__list it-carousel-all">
       <slot />
-    </div>
+    </ul>
   </div>
 </div>

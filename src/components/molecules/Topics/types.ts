@@ -6,6 +6,7 @@ import type {
 export type TopicsProps = {
   title?: string;
   topics: string[];
+  links?: Record<string, string>;
   ariaLabelTopic?: string;
   variant?: "row" | "column";
   disabled?: boolean;

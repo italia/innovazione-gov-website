@@ -1,11 +1,12 @@
 ---
-import { Chip } from "@components/atoms/Chip";
+import { Chip, ChipLink } from "@components/atoms/Chip";
 import type { TopicsProps } from "./types";
 
 type Props = TopicsProps;
 const {
   title,
   topics,
+  links = {},
   variant = "row",
   variantChip = "primary",
   sizeChip = "large",
@@ -37,13 +38,23 @@ const hasTopics = topics.length > 0;
       >
         {topics.map((topic) => (
           <li class="list-item border-bottom-0 me-3 mt-2">
-            <Chip
-              visuallyHidden={ariaLabelTopic}
-              disabled={disabled}
-              label={topic}
-              size={sizeChip}
-              variant={variantChip}
-            />
+            {links[topic] ? (
+              <ChipLink
+                visuallyHidden={ariaLabelTopic}
+                linkTo={links[topic]}
+                label={topic}
+                size={sizeChip}
+                variant={variantChip}
+              />
+            ) : (
+              <Chip
+                visuallyHidden={ariaLabelTopic}
+                disabled={disabled}
+                label={topic}
+                size={sizeChip}
+                variant={variantChip}
+              />
+            )}
           </li>
         ))}
       </ul>

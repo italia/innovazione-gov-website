@@ -9,6 +9,7 @@ const {
   paragraph,
   topicsTitle,
   topics = [],
+  topicLinks = {},
   details = [],
 } = Astro.props;
 ---
@@ -24,6 +25,7 @@ const {
             <Topics
               title={topicsTitle ?? undefined}
               topics={topics}
+              links={topicLinks}
               variant="column"
             />
           </div>

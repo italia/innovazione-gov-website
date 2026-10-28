@@ -1,5 +1,6 @@
 ---
 import { linkResolver } from "@utils/linkResolver";
+import { topicLinks } from "@utils/topicRoutes";
 
 import type { UseCaseCardProps } from "@components/molecules/UseCaseCard/types";
 import { UseCaseContainer } from "@components/organisms/UseCaseContainer";
@@ -28,6 +29,7 @@ const useCases: UseCaseCardProps[] = block.useCases.map((useCase) => {
         listTopics?.topics
           .map((topic) => topic.name)
           .filter((name): name is string => !!name) || [],
+      links: topicLinks(listTopics?.topics, lang),
     },
     descriptionTitle:
       getLocaleValue(useCase.allDescriptionTitleLocales, lang, "") || undefined,
