@@ -23,3 +23,17 @@ export function topicPath(locale: SiteLocale, slug: string): string {
   const index = findTopicIndex(locale);
   return index ? `${index.path}/${slug}` : "#";
 }
+
+export function topicLinks(
+  tags: { name?: string | null; slug?: string | null }[] | null | undefined,
+  locale: SiteLocale,
+): Record<string, string> {
+  const links: Record<string, string> = {};
+  for (const tag of tags ?? []) {
+    if (!tag.name || !tag.slug) continue;
+    const path = topicPath(locale, tag.slug);
+    if (path === "#") continue;
+    links[tag.name] = path;
+  }
+  return links;
+}

@@ -12,6 +12,7 @@ type Props = {
   description?: string | null;
   dateTime?: string | null;
   topics?: string[];
+  topicLinks?: Record<string, string>;
   image?: ImageProps | null;
   logo?: ImageProps | null;
   articleType?: string | null;
@@ -27,6 +28,7 @@ const {
   description,
   dateTime,
   topics = [],
+  topicLinks = {},
   image,
   logo,
   articleType,
@@ -121,7 +123,15 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
                 <p class="article-hero__topics-label">{t["article.topics"]}</p>
                 <ul class="article-hero__chips">
                   {shownTopics.map((topic) => (
-                    <li class="article-hero__tag">{topic}</li>
+                    <li>
+                      {topicLinks[topic] ? (
+                        <a class="article-hero__tag" href={topicLinks[topic]}>
+                          {topic}
+                        </a>
+                      ) : (
+                        <span class="article-hero__tag">{topic}</span>
+                      )}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -271,6 +281,18 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
     font-weight: 600;
     font-size: 0.9375rem;
     line-height: 1.4;
+  }
+  a.article-hero__tag {
+    text-decoration: none;
+  }
+  a.article-hero__tag:hover,
+  a.article-hero__tag:focus-visible {
+    background: #06c;
+    color: #fff;
+  }
+  a.article-hero__tag:focus-visible {
+    outline: 3px solid #06c;
+    outline-offset: 2px;
   }
   .article-hero__image :global(img) {
     width: 100%;

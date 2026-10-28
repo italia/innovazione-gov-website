@@ -23,6 +23,7 @@ import Layout from "@layouts/Layout.astro";
 import { executeQuery } from "@lib/datocms";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { linkResolver } from "@utils/linkResolver";
+import { topicLinks } from "@utils/topicRoutes";
 
 type QueryConfig<T = any, V = any> = {
   query: TypedDocumentNode<T, V>;
@@ -160,6 +161,7 @@ if (slugProduction !== "#") {
         topics={(dataRecord.tags ?? [])
           .map((tag: { name: string | null }) => tag.name)
           .filter((nome: string | null): nome is string => !!nome)}
+        topicLinks={topicLinks(dataRecord.tags, lang as SiteLocale)}
         image={dataRecord.image}
         logo={dataRecord.logo}
         articleType={dataRecord.articleType}

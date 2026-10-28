@@ -1,6 +1,7 @@
 ---
 import SidebarLayoutAdapter from "@components/cms-adapters/datocms/SidebarLayoutAdapter.astro";
 import { ArticleHero } from "@components/organisms/ArticleHero";
+import { topicLinks as buildTopicLinks } from "@utils/topicRoutes";
 import { ArticleRelated } from "@components/organisms/ArticleRelated";
 import type { ArticleContentFragmentType } from "@graphql/fragment/article";
 import { getArticles } from "@lib/dataFetcher";
@@ -42,6 +43,7 @@ export async function getStaticPaths() {
       relatedProjectIds: string[];
       dateTime: string | null;
       topics: string[];
+      topicLinks: Record<string, string>;
       image: ImageFragmentType | null;
       logo: ImageFragmentType | null;
       publishedAt: string;
@@ -96,6 +98,7 @@ export async function getStaticPaths() {
             topics: (page.tags ?? [])
               .map((tag) => tag.name)
               .filter((name): name is string => !!name),
+            topicLinks: buildTopicLinks(page.tags, lang),
             image: getLocaleValue(page.allImageLocales, lang, null),
             logo: getLocaleValue(page.allLogoLocales, lang, null),
             publishedAt: page.publishedAt,
@@ -127,6 +130,7 @@ const {
   relatedProjectIds,
   dateTime,
   topics,
+  topicLinks,
   image,
   logo,
   publishedAt,
@@ -169,6 +173,7 @@ const jsonLd: JsonLdPageData = {
     description={description}
     dateTime={dateTime}
     topics={topics}
+    topicLinks={topicLinks}
     image={image}
     logo={logo}
     articleType={articleType}
