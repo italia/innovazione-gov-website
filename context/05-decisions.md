@@ -76,3 +76,22 @@ un contesto può cambiarlo normalmente — è così che l'hero arriva a 32px.
 Verificato su tutte e tre le varianti dell'hero (base, focus, archiviato):
 stili calcolati identici e screenshot con zero pixel di differenza. Il margine
 del breadcrumb resta 24px su tutte le pagine fuori dall'hero.
+
+### D-06 — L'alt obbligatorio a schema va attivato dopo i testi, non prima
+
+Il sito interroga DatoCMS sempre in modalità strict (`X-Exclude-Invalid: true`).
+In quella modalità, se un campo immagine ha il validatore `required_alt_title`,
+l'API **restituisce un errore** per ogni asset il cui alt è nullo, invece di
+restituire `null`. Il campo cambia anche tipo GraphQL, da `FileField` a
+`AltFileField`, quindi tutte le query che lo selezionano vanno spostate da
+`ImageFragment` a `AltImageFragment`.
+
+Attivare il validatore prima di aver scritto gli alt **impedisce la build**: non
+è una segnalazione per i redattori, è il sito che non si genera più. Provato il
+28 ottobre 2026 su 15 campi e rimesso indietro subito.
+
+L'ordine corretto è: prima gli alt sugli asset, poi il validatore, campo per
+campo man mano che le immagini di quel campo sono coperte. I 5 campi che il
+validatore ce l'hanno già (`tag.preview_image`, `timeline_item.image`,
+`highlight_item.image`, `showcase_item.image`, `accordion_showcase.image`)
+funzionano proprio perché i loro asset l'alt ce l'hanno.
