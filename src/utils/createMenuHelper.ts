@@ -15,7 +15,7 @@ function menuItemAdapter(
   currentPath: string,
   locale: SiteLocale,
 ): MenuItemProps {
-  const pageId = item.pointsTo.id;
+  const pageId = item.pointsTo?.id;
   const finalHref = linkResolver(pageId, locale);
 
   const normalizedCurrent = currentPath.replace(/\/$/, "") || "/";
@@ -40,7 +40,7 @@ function menuItemAdapter(
   if ("subMenu" in item) {
     result.image = item.image ?? undefined;
     result.caption = item.caption ?? undefined;
-    result.subtitle = item.subtitle;
+    result.subtitle = item.subtitle ?? undefined;
     result.subMenuItems = item.subMenu?.map((menu) =>
       menuItemAdapter(menu, currentPath, locale),
     );

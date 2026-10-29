@@ -6481,9 +6481,9 @@ type MegaMenuItemRecord implements RecordInterface {
   ): String
   id: ItemId!
   image: FileField
-  pointsTo: MegaMenuItemModelPointsToField!
+  pointsTo: MegaMenuItemModelPointsToField
   subMenu: [MenuItemRecord!]!
-  subtitle: String!
+  subtitle: String
   title: String!
 }
 
