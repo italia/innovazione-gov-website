@@ -23,16 +23,26 @@ const { title, description, icon } = Astro.props;
   .it-card {
     border: 1px solid var(--color-border-subtle, #c5c7c9);
     border-radius: 4px;
-    background: var(--color-blue-97, #f2f7fc);
+    background: #fff;
   }
 
   .it-card :global(.icon-container) {
-    background: #fff;
+    background: var(--color-blue-97, #f2f7fc);
   }
 
   .it-card :global(.icon-container .dynamic-icon) {
     width: 32px;
     height: 32px;
+    background-color: var(--color-text-primary, #06c);
+    background-image: none;
+    mask-image: var(--icon-url);
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+    -webkit-mask-image: var(--icon-url);
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    -webkit-mask-position: center;
   }
 
   .it-card-body .it-card-subtitle.card-with-icon__title {
