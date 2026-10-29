@@ -96,6 +96,14 @@ export default defineConfig({
       status: 301,
       destination: "/sitemap-index.xml",
     },
+    "/it/innova-con-noi/attuazione-misure-pnrr": {
+      status: 301,
+      destination: "/it/attuazione-misure-pnrr",
+    },
+    "/it/italia-digitale-2026/attuazione-misure-pnrr": {
+      status: 301,
+      destination: "/it/attuazione-misure-pnrr",
+    },
   },
   vite: {
     server: {
