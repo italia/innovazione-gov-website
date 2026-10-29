@@ -30,6 +30,7 @@ const finalHref = disabled ? undefined : linkTo;
 const ariaDisabled = disabled ? "true" : "false";
 
 const className = `chip chip-simple ${chipVariant} ${disabledClass} ${sizeClass}`;
+const hiddenLabel = visuallyHidden.trim();
 ---
 
 <style>
@@ -37,6 +38,6 @@ const className = `chip chip-simple ${chipVariant} ${disabledClass} ${sizeClass}
 </style>
 
 <a class={className} href={finalHref} aria-disabled={ariaDisabled}>
-  <span class="visually-hidden">{visuallyHidden}</span>
+  {hiddenLabel && <span class="visually-hidden">{hiddenLabel}</span>}
   <span class="chip-label">{label}</span>
 </a>

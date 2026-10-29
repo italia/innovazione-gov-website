@@ -132,9 +132,9 @@ export const AllInsightsRecordFragment = graphql(
       updatedAt: _updatedAt
       showSectionsNav
       sectionsNavLayout
-      targets {
-        id
-        label
+      tags {
+        name
+        slug
       }
       allContentLocales: _allContentLocales {
         locale
