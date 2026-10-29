@@ -1,12 +1,7 @@
 ---
-type Props = {
-  label: string;
-  visuallyHidden: string;
-  disabled?: boolean;
-  active?: boolean;
-  variant?: "primary" | "standard" | "outline-white";
-  size?: "default" | "large";
-};
+import type { ChipProps } from "./types";
+
+type Props = ChipProps;
 
 const {
   label,
@@ -21,7 +16,6 @@ const sizeMap = {
   default: "",
   large: "chip-lg",
 };
-const sizeClass = sizeMap[size];
 
 const variantMap = {
   standard: "",
@@ -29,16 +23,22 @@ const variantMap = {
   primary: "chip-primary",
 };
 
-const chipVariant = variantMap[variant];
-const disabledClass = disabled ? "chip-disabled" : "";
-const className = `chip chip-simple ${chipVariant} ${disabledClass} ${sizeClass} ${active && "active"}`;
+const hiddenLabel = visuallyHidden.trim();
 ---
 
 <style>
   @import "./style.scss";
 </style>
 
-<button disabled={disabled} class={className}>
-  <span class="visually-hidden">{visuallyHidden}</span>
+<span
+  class:list={[
+    "chip",
+    "chip-simple",
+    variantMap[variant],
+    sizeMap[size],
+    { "chip-disabled": disabled, active },
+  ]}
+>
+  {hiddenLabel && <span class="visually-hidden">{hiddenLabel}</span>}
   <span class="chip-label">{label}</span>
-</button>
+</span>

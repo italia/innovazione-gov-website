@@ -577,5 +577,7 @@ main#main {
 }
 
 .chip.chip-simple .chip-label {
+  height: auto;
+  line-height: 1.5;
   transform: none;
 }

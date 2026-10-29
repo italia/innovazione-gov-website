@@ -11,6 +11,7 @@ export type ChipProps = {
   label: string;
   visuallyHidden: string;
   disabled?: boolean;
+  active?: boolean;
   variant?: VariantChipProps;
   size?: SizeChipProps;
 };
