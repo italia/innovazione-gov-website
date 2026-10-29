@@ -1,0 +1,137 @@
+---
+import ItIcon from "@static/assets/ItIcon.astro";
+import { slugify } from "@utils/slugify";
+import type { AttachmentsBoxProps } from "./types";
+
+type Props = AttachmentsBoxProps;
+
+const { title, items, background = "primary" } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <section class:list={["attachments-box", `attachments-box--${background}`]}>
+      <h3 class="attachments-box__title" id={slugify(title)}>
+        {title}
+      </h3>
+      <ul class="attachments-box__list">
+        {items.map((item) => (
+          <li class="attachments-box__item">
+            <span class="attachments-box__icon" aria-hidden="true">
+              <ItIcon name="it-file" />
+            </span>
+            <a class="attachments-box__link" href={item.href} download>
+              {item.label}
+            </a>
+            <span class="attachments-box__meta">{item.meta}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .attachments-box {
+    margin-block: 2rem;
+    border-radius: 8px;
+    padding: 2rem;
+  }
+
+  .attachments-box--default {
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .attachments-box--lighter {
+    background: var(--color-blue-97, #f2f7fc);
+  }
+
+  .attachments-box--primary-light {
+    background: #bfdfff;
+  }
+
+  .attachments-box--primary {
+    background: #06c;
+  }
+
+  .attachments-box--dark {
+    background: #17324d;
+  }
+
+  .attachments-box__title {
+    margin-bottom: 1.5rem;
+    color: var(--color-text-base, #1a1a1a);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 48px;
+  }
+
+  .attachments-box--primary .attachments-box__title,
+  .attachments-box--dark .attachments-box__title {
+    color: #fff;
+  }
+
+  .attachments-box__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .attachments-box__item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+
+  .attachments-box__item + .attachments-box__item {
+    border-top: 1px solid var(--color-border-subtle, #c5c7c9);
+  }
+
+  .attachments-box--primary .attachments-box__item + .attachments-box__item,
+  .attachments-box--dark .attachments-box__item + .attachments-box__item {
+    border-top-color: rgb(255 255 255 / 0.25);
+  }
+
+  .attachments-box__icon :global(svg) {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: var(--color-text-primary, #06c);
+  }
+
+  .attachments-box--primary .attachments-box__icon :global(svg),
+  .attachments-box--dark .attachments-box__icon :global(svg) {
+    fill: #fff;
+  }
+
+  .attachments-box__link {
+    color: var(--color-text-primary, #06c);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 32px;
+    text-decoration-line: underline;
+    text-decoration-skip-ink: none;
+    text-underline-position: from-font;
+  }
+
+  .attachments-box--primary .attachments-box__link,
+  .attachments-box--dark .attachments-box__link {
+    color: #fff;
+  }
+
+  .attachments-box__meta {
+    color: var(--color-text-secondary, #5b6f82);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  .attachments-box--primary .attachments-box__meta,
+  .attachments-box--dark .attachments-box__meta {
+    color: #fff;
+  }
+</style>

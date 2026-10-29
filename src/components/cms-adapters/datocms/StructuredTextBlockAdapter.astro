@@ -49,8 +49,8 @@ const tocItems = block.showPageIndex
 
 if (tocItems.length && attachments.some((attachment) => attachment.file))
   tocItems.push({
-    id: slugify(t["resources.title"]),
-    label: t["resources.title"],
+    id: slugify(t["resources.attachments"]),
+    label: t["resources.attachments"],
   });
 
 if (tocItems.length && links.some((link) => link.link))

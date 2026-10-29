@@ -27,83 +27,84 @@ const items = links.filter((link) => link.link);
       <h3 class="article-links__title" id={slugify(t["links.title"])}>
         {t["links.title"]}
       </h3>
-      <div class="article-links__grid">
+      <ul class="article-links__list">
         {items.map((item) => (
-          <a
-            class="article-links__card"
-            href={item.link!}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <div class="article-links__card-head">
-              <span class="article-links__card-title">
-                {item.title ?? item.link}
-              </span>
-              <ItExternalLink color="primary" size="lg" />
-            </div>
+          <li class="article-links__item">
+            <a
+              class="article-links__link"
+              href={item.link!}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {item.title ?? item.link}
+            </a>
+            <span class="article-links__icon" aria-hidden="true">
+              <ItExternalLink color="primary" />
+            </span>
             {item.description && (
-              <p class="article-links__card-desc">{item.description}</p>
+              <p class="article-links__description">{item.description}</p>
             )}
-          </a>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   )
 }
 
 <style>
   .article-links {
-    margin-top: 2.5rem;
+    margin-block: 2rem;
+    border-radius: 8px;
+    padding: 2rem;
+    background: var(--color-blue-97, #f2f7fc);
   }
+
   .article-links__title {
     margin-bottom: 1.5rem;
-  }
-  .article-links__grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  .article-links__card {
-    position: relative;
-    display: block;
-    max-width: 37.5rem;
-    background: #fff;
-    border: 1px solid #d4d8dc;
-    border-radius: 4px;
-    padding: 1.5rem 2rem;
-    text-decoration: none;
-  }
-  .article-links__card:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  }
-  .article-links__card-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  .article-links__card-head :global(.icon) {
-    flex-shrink: 0;
-    margin-top: 0.25rem;
-  }
-  .article-links__card-title {
-    color: #06c;
+    color: var(--color-text-base, #1a1a1a);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-size: 40px;
     font-weight: 700;
-    font-size: 2rem;
-    line-height: 1.25;
+    line-height: 48px;
+  }
+
+  .article-links__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .article-links__item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0 1rem;
+    padding: 1rem 0;
+  }
+
+  .article-links__item + .article-links__item {
+    border-top: 1px solid var(--color-border-subtle, #c5c7c9);
+  }
+
+  .article-links__link {
+    color: var(--color-text-primary, #06c);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 28px;
     text-decoration: underline;
   }
-  .article-links__card-desc {
-    color: #5b6f82;
-    font-size: 0.9375rem;
-    margin: 0.75rem 0 0;
+
+  .article-links__icon :global(svg) {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
   }
-  @media (max-width: 767px) {
-    .article-links__card {
-      padding: 1.25rem 1.25rem;
-    }
-    .article-links__card-title {
-      font-size: 1.375rem;
-    }
+
+  .article-links__description {
+    grid-column: 1 / -1;
+    margin: 0.25rem 0 0;
+    color: var(--color-text-secondary, #5b6f82);
+    font-size: 0.9375rem;
   }
 </style>
