@@ -9,69 +9,77 @@ type Props = {
 };
 
 const { locales } = Astro.props;
-const { lang: currentLocale, recordId: currentRecordId } = Astro.locals;
+const { lang: currentLocale, recordId } = Astro.locals;
 
-const getTranslatedHref = (targetLocale: string) => {
-  if (currentRecordId) {
-    const translatedHref = linkResolver(currentRecordId, targetLocale);
-    if (translatedHref !== "#") return translatedHref;
-  }
-  return `/${targetLocale}`;
-};
+const localeLinks = locales
+  .map((locale) => ({
+    locale: locale as SiteLocale,
+    href:
+      locale === currentLocale
+        ? Astro.url.pathname
+        : linkResolver(recordId, locale),
+  }))
+  .filter(({ locale, href }) => locale === currentLocale || href !== "#");
+
+const hasTranslatedPage = localeLinks.length > 1;
 
 const t = getI18n(currentLocale);
 ---
 
-<div class="nav-item dropdown">
-  <a
-    class="nav-link dropdown-toggle"
-    href="#"
-    role="button"
-    data-bs-toggle="dropdown"
-    aria-expanded="false"
-    id="languagesDropButton"
-  >
-    <span class="visually-hidden"
-      >{`${t["header.languageSelector"]} ${t["language"]}`}</span
-    >
-    <span lang={currentLocale} aria-hidden="true">{t["language.short"]}</span>
-    <ItExpand class="d-none d-lg-block" />
-  </a>
-  <div class="dropdown-menu">
-    <div class="row">
-      <div class="col-12">
-        <div class="link-list-wrapper">
-          <ul
-            id="languages"
-            class="link-list"
-            aria-labelledby="languagesDropButton"
-          >
-            {
-              locales.map((locale) => {
-                const t = getI18n(locale as SiteLocale);
-                return (
-                  <li>
-                    <a
-                      class={`dropdown-item list-item ${locale === currentLocale ? "active" : ""}`}
-                      href={getTranslatedHref(locale)}
-                      lang={locale}
-                    >
-                      <span>
-                        <span>{t["language"].toUpperCase()}</span>
-                        {locale === currentLocale && (
-                          <span class="visually-hidden">
-                            {t["header.languageSelected"]}
-                          </span>
-                        )}
-                      </span>
-                    </a>
-                  </li>
-                );
-              })
-            }
-          </ul>
+{
+  hasTranslatedPage && (
+    <div class="nav-item dropdown">
+      <a
+        class="nav-link dropdown-toggle"
+        href="#"
+        role="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+        id="languagesDropButton"
+      >
+        <span class="visually-hidden">{t["header.languageSelector"]}</span>
+        <span lang={currentLocale}>{t["language.short"]}</span>
+        <ItExpand class="d-none d-lg-block" />
+      </a>
+      <div class="dropdown-menu">
+        <div class="row">
+          <div class="col-12">
+            <div class="link-list-wrapper">
+              <ul
+                id="languages"
+                class="link-list"
+                aria-labelledby="languagesDropButton"
+              >
+                {localeLinks.map(({ locale, href }) => {
+                  const localeMicrocopy = getI18n(locale);
+                  const isCurrent = locale === currentLocale;
+
+                  return (
+                    <li>
+                      <a
+                        class={`dropdown-item list-item ${isCurrent ? "active" : ""}`}
+                        href={href}
+                        lang={locale}
+                        aria-current={isCurrent ? "true" : undefined}
+                      >
+                        <span>
+                          <span>{localeMicrocopy["language.short"]}</span>
+                          {isCurrent && (
+                            <span class="visually-hidden">
+                              {" "}
+                              {localeMicrocopy["header.languageSelected"]}
+                            </span>
+                          )}
+                        </span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
+  )
+}
