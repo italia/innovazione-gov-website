@@ -18,8 +18,17 @@ const { lang } = Astro.locals;
 const t = getI18n(lang);
 ---
 
-<article class="card-topic" aria-labelledby={cardTitleId}>
-  <div class="card-topic__media">{image && <Image {...image} />}</div>
+<article
+  class:list={["card-topic", !image && "card-topic--no-media"]}
+  aria-labelledby={cardTitleId}
+>
+  {
+    image && (
+      <div class="card-topic__media">
+        <Image {...image} />
+      </div>
+    )
+  }
   <div class="card-topic__body">
     <h3 class="card-topic__title" id={cardTitleId}>
       <a href={linkTo}>
@@ -33,14 +42,21 @@ const t = getI18n(lang);
 
 <style>
   .card-topic {
+    --card-topic-media: 180px;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1rem;
+    grid-template-rows: var(--card-topic-media) 1fr;
     align-items: center;
+    gap: 1rem;
+    height: 100%;
     border: 1px solid #c5c7c9;
     border-radius: 4px;
     background: #fff;
     padding: 1.5rem;
+  }
+
+  .card-topic--no-media {
+    grid-template-rows: 1fr;
   }
 
   .card-topic__media {
@@ -51,8 +67,12 @@ const t = getI18n(lang);
 
   .card-topic__media :global(img) {
     width: 100%;
-    max-height: 180px;
+    max-height: var(--card-topic-media);
     object-fit: contain;
+  }
+
+  .card-topic__body {
+    align-self: start;
   }
 
   .card-topic__title {
@@ -76,7 +96,12 @@ const t = getI18n(lang);
   @media (min-width: 576px) {
     .card-topic {
       grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      grid-template-rows: 1fr;
       gap: 1.5rem;
+    }
+
+    .card-topic--no-media {
+      grid-template-columns: 1fr;
     }
   }
 </style>
