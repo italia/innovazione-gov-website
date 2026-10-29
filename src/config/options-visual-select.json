@@ -189,6 +189,78 @@
       "type": "image",
       "display": "https://www.datocms-assets.com/217545/1790780349-bilancia.svg",
       "value": "https://www.datocms-assets.com/217545/1790780349-bilancia.svg"
+    },
+    {
+      "name": "Tre persone",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1792070401-tre-persone.svg",
+      "value": "https://www.datocms-assets.com/217545/1792070401-tre-persone.svg"
+    },
+    {
+      "name": "Interoperabilità",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1792070405-interoperabilita.svg",
+      "value": "https://www.datocms-assets.com/217545/1792070405-interoperabilita.svg"
+    },
+    {
+      "name": "Cloud",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1792070409-cloud.svg",
+      "value": "https://www.datocms-assets.com/217545/1792070409-cloud.svg"
+    },
+    {
+      "name": "Obiettivo raggiunto",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1792070413-obiettivo-raggiunto.svg",
+      "value": "https://www.datocms-assets.com/217545/1792070413-obiettivo-raggiunto.svg"
+    },
+    {
+      "name": "Livelli",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1792070416-livelli.svg",
+      "value": "https://www.datocms-assets.com/217545/1792070416-livelli.svg"
+    },
+    {
+      "name": "Sicurezza",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1792070420-sicurezza.svg",
+      "value": "https://www.datocms-assets.com/217545/1792070420-sicurezza.svg"
+    },
+    {
+      "name": "Bandiera (bianca)",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1792678348-bandiera.svg",
+      "value": "https://www.datocms-assets.com/217545/1792678348-bandiera.svg"
+    },
+    {
+      "name": "Spunta",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1792679555-spunta.svg",
+      "value": "https://www.datocms-assets.com/217545/1792679555-spunta.svg"
+    },
+    {
+      "name": "PA Locali",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1783068288-pa-locali.svg",
+      "value": "https://www.datocms-assets.com/217545/1783068288-pa-locali.svg"
+    },
+    {
+      "name": "ASL e aziende ospedaliere",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1783068288-asl.svg",
+      "value": "https://www.datocms-assets.com/217545/1783068288-asl.svg"
+    },
+    {
+      "name": "Connessione",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1793298446-connessione.svg",
+      "value": "https://www.datocms-assets.com/217545/1793298446-connessione.svg"
+    },
+    {
+      "name": "Libro",
+      "type": "image",
+      "display": "https://www.datocms-assets.com/217545/1793299393-libro.svg",
+      "value": "https://www.datocms-assets.com/217545/1793299393-libro.svg"
     }
   ]
 }
