@@ -335,7 +335,7 @@ async function ensureIndexPage(cat) {
     title: `Tutti i contenuti: ${cat.label.toLowerCase()}`,
     paragraph: `Esplora l'archivio completo dei contenuti del Sottosegretario nella sezione ${cat.label.toLowerCase()}.`,
     filter_style: JSON.stringify(["pills"]),
-    filter_title: "Filtra per argomento",
+    filter_title: "Argomenti in evidenza",
     label_for_all: "Tutti",
     news_page_tab_type: "story_item",
     story_type: "news",
