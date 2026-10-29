@@ -22,16 +22,15 @@ const tocItems = headings.map((heading) => ({
   id: heading.id,
   label: heading.text,
 }));
+const hasToc = tocItems.length > 0;
 ---
 
 {
-  showSidebar ? (
+  showSidebar && hasToc ? (
     <div class="container">
       <div class="row">
         <div class="col-12 col-lg-4 px-lg-0 pb-lg-5 border-end menu-column">
-          {tocItems.length > 0 && (
-            <ArticleToc header={t["toc.title"]} items={tocItems} />
-          )}
+          <ArticleToc header={t["toc.title"]} items={tocItems} />
         </div>
         <div class="col-12 col-lg-8 px-lg-0">
           <ArticleAdapter content={content} articleType={articleType} />
