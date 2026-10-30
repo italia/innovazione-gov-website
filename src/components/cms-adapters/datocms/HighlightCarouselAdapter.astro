@@ -33,8 +33,4 @@ const slides = (block.items ?? [])
   .filter((slide) => slide.title);
 ---
 
-{
-  slides.length > 0 && (
-    <HighlightCarousel id={block.id} title={block.title} slides={slides} />
-  )
-}
+{slides.length > 0 && <HighlightCarousel title={block.title} slides={slides} />}

@@ -15,254 +15,201 @@ type Slide = {
 };
 
 type Props = {
-  id: string;
   title?: string | null;
   slides: Slide[];
 };
 
-const { id: blockId, title: eyebrow, slides: items } = Astro.props;
+const { title: eyebrow, slides: items } = Astro.props;
 
 const { lang } = Astro.locals;
 const t = getI18n(lang);
 
-const idPannello = (indice: number) => `evidenza-${blockId}-${indice}`;
-const idComando = (indice: number) => `evidenza-${blockId}-tab-${indice}`;
 const etichettaSezione = eyebrow ? slugify(eyebrow) : undefined;
+
+const etichette = {
+  prev: t["carousel.previous"],
+  next: t["carousel.next"],
+  first: t["carousel.first"],
+  last: t["carousel.last"],
+  slideX: t["carousel.slideX"],
+  pageX: t["carousel.pageX"],
+  select: t["carousel.select"],
+  carousel: t["carousel.label"],
+  slide: t["carousel.slide"],
+  slideLabel: t["carousel.slideLabel"],
+};
 ---
 
 <SectionContainer
   className="highlight-carousel"
   sectionTitleId={etichettaSezione}
 >
-  <div class="highlight-carousel__slides">
-    {
-      items.map((slide, indice) => (
-        <div
-          class="highlight-carousel__slide row align-items-center"
-          id={idPannello(indice)}
-          role="tabpanel"
-          aria-labelledby={idComando(indice)}
-          hidden={indice > 0}
-        >
-          <div class="col-12 col-lg-6">
-            {eyebrow && (
-              <p
-                class="highlight-carousel__eyebrow"
-                id={indice === 0 ? etichettaSezione : undefined}
-              >
-                {eyebrow}
-              </p>
-            )}
-            <h2 class="highlight-carousel__title">{slide.title}</h2>
-            {slide.paragraph && (
-              <div
-                class="highlight-carousel__text"
-                set:html={slide.paragraph}
-              />
-            )}
-            <div class="highlight-carousel__cta">
-              <ButtonLink
-                size="small"
-                label={t["highlight.readMore"]}
-                linkTo={slide.linkTo}
-              />
-            </div>
-          </div>
-          {slide.image && (
-            <div class="col-12 col-lg-6">
-              <div class="highlight-carousel__media">
-                <Image {...slide.image} />
+  <div
+    class="splide highlight-carousel__splide"
+    data-etichette={JSON.stringify(etichette)}
+    aria-label={eyebrow ?? undefined}
+  >
+    <div class="splide__track">
+      <div class="splide__list">
+        {
+          items.map((slide, indice) => (
+            <div class="splide__slide">
+              <div class="highlight-carousel__slide row align-items-center">
+                <div class="col-12 col-lg-6">
+                  {eyebrow && (
+                    <p
+                      class="highlight-carousel__eyebrow"
+                      id={indice === 0 ? etichettaSezione : undefined}
+                    >
+                      {eyebrow}
+                    </p>
+                  )}
+                  <h2 class="highlight-carousel__title">{slide.title}</h2>
+                  {slide.paragraph && (
+                    <div
+                      class="highlight-carousel__text"
+                      set:html={slide.paragraph}
+                    />
+                  )}
+                  <div class="highlight-carousel__cta">
+                    <ButtonLink
+                      size="small"
+                      label={t["highlight.readMore"]}
+                      linkTo={slide.linkTo}
+                    />
+                  </div>
+                </div>
+                {slide.image && (
+                  <div class="col-12 col-lg-6">
+                    <div class="highlight-carousel__media">
+                      <Image {...slide.image} />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          )}
-        </div>
-      ))
-    }
-  </div>
+          ))
+        }
+      </div>
+    </div>
 
-  {
-    items.length > 1 && (
-      <div class="highlight-carousel__comandi">
-        <div class="highlight-carousel__frecce">
-          <button
-            type="button"
-            class="highlight-carousel__arrow"
-            data-passo="-1"
-            aria-label={t["carousel.previous"]}
-            disabled
-          >
-            <svg
-              width="8"
-              height="14"
-              viewBox="0 0 8 14"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M7 1L1 7L7 13"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </button>
-          <button
-            type="button"
-            class="highlight-carousel__arrow"
-            data-passo="1"
-            aria-label={t["carousel.next"]}
-          >
-            <svg
-              width="8"
-              height="14"
-              viewBox="0 0 8 14"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M1 1L7 7L1 13"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <div
-          class="highlight-carousel__dots"
-          role="tablist"
-          aria-label={eyebrow ?? t["highlight.readMore"]}
-        >
-          {items.map((slide, indice) => (
+    {
+      items.length > 1 && (
+        <div class="highlight-carousel__comandi">
+          <div class="splide__arrows highlight-carousel__frecce">
             <button
               type="button"
-              class="highlight-carousel__dot"
-              id={idComando(indice)}
-              role="tab"
-              aria-controls={idPannello(indice)}
-              aria-selected={indice === 0 ? "true" : "false"}
-              tabindex={indice === 0 ? 0 : -1}
+              class="splide__arrow splide__arrow--prev highlight-carousel__arrow"
             >
-              <span class="visually-hidden">{slide.title}</span>
+              <svg
+                width="8"
+                height="14"
+                viewBox="0 0 8 14"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M7 1L1 7L7 13"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
             </button>
-          ))}
+            <button
+              type="button"
+              class="splide__arrow splide__arrow--next highlight-carousel__arrow"
+            >
+              <svg
+                width="8"
+                height="14"
+                viewBox="0 0 8 14"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M1 1L7 7L1 13"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <ul class="splide__pagination highlight-carousel__dots" />
         </div>
-      </div>
-    )
-  }
+      )
+    }
+  </div>
 </SectionContainer>
 
 <script>
-  const aggiorna = (contenitore: Element, indice: number) => {
-    const comandi = [
-      ...contenitore.querySelectorAll<HTMLButtonElement>("[role=tab]"),
-    ];
-    comandi.forEach((comando, i) => {
-      const scelto = i === indice;
-      comando.setAttribute("aria-selected", scelto ? "true" : "false");
-      comando.tabIndex = scelto ? 0 : -1;
-      const pannello = document.getElementById(
-        comando.getAttribute("aria-controls") ?? "",
-      );
-      if (pannello) pannello.hidden = !scelto;
-    });
-    contenitore
-      .querySelectorAll<HTMLButtonElement>(".highlight-carousel__arrow")
-      .forEach((freccia) => {
-        const passo = Number(freccia.dataset.passo ?? 0);
-        const prossimo = indice + passo;
-        freccia.disabled = prossimo < 0 || prossimo > comandi.length - 1;
-      });
-    return comandi;
+  import Splide from "@splidejs/splide";
+
+  type EtichetteCarosello = {
+    prev: string;
+    next: string;
+    first: string;
+    last: string;
+    slideX: string;
+    pageX: string;
+    select: string;
+    carousel: string;
+    slide: string;
+    slideLabel: string;
   };
 
-  document.querySelectorAll(".highlight-carousel").forEach((contenitore) => {
-    const comandi = [
-      ...contenitore.querySelectorAll<HTMLButtonElement>("[role=tab]"),
-    ];
-    if (comandi.length === 0) return;
-    const scelto = () =>
-      comandi.findIndex(
-        (comando) => comando.getAttribute("aria-selected") === "true",
-      );
+  const chiavi: (keyof EtichetteCarosello)[] = [
+    "prev",
+    "next",
+    "first",
+    "last",
+    "slideX",
+    "pageX",
+    "select",
+    "carousel",
+    "slide",
+    "slideLabel",
+  ];
 
-    comandi.forEach((comando, indice) => {
-      comando.addEventListener("click", () => {
-        aggiorna(contenitore, indice)[indice]?.focus();
-      });
-      comando.addEventListener("keydown", (evento) => {
-        const passo =
-          evento.key === "ArrowRight" ? 1 : evento.key === "ArrowLeft" ? -1 : 0;
-        if (!passo) return;
-        evento.preventDefault();
-        const prossimo = (indice + passo + comandi.length) % comandi.length;
-        aggiorna(contenitore, prossimo)[prossimo]?.focus();
-      });
+  const sonoEtichette = (valore: unknown): valore is EtichetteCarosello => {
+    if (typeof valore !== "object" || valore === null) return false;
+    const voci = new Map(Object.entries(valore));
+    return chiavi.every((chiave) => typeof voci.get(chiave) === "string");
+  };
+
+  const leggiEtichette = (el: HTMLElement): EtichetteCarosello | undefined => {
+    const grezze = el.dataset.etichette;
+    if (!grezze) return undefined;
+    const valore: unknown = JSON.parse(grezze);
+    return sonoEtichette(valore) ? valore : undefined;
+  };
+
+  document
+    .querySelectorAll<HTMLElement>(".highlight-carousel__splide")
+    .forEach((el) => {
+      if (el.querySelectorAll(".splide__slide").length < 2) return;
+      new Splide(el, {
+        perPage: 1,
+        perMove: 1,
+        keyboard: "focused",
+        arrows: true,
+        pagination: true,
+        autoHeight: true,
+        gap: 0,
+        autoplay: false,
+        speed: 400,
+        i18n: leggiEtichette(el),
+      }).mount();
     });
-
-    contenitore
-      .querySelectorAll<HTMLButtonElement>(".highlight-carousel__arrow")
-      .forEach((freccia) => {
-        freccia.addEventListener("click", () => {
-          const prossimo = scelto() + Number(freccia.dataset.passo ?? 0);
-          if (prossimo < 0 || prossimo > comandi.length - 1) return;
-          aggiorna(contenitore, prossimo);
-        });
-      });
-
-    const slides = contenitore.querySelector<HTMLElement>(
-      ".highlight-carousel__slides",
-    );
-    if (slides) {
-      const soglia = 50;
-      let partenzaX = 0;
-      let partenzaY = 0;
-      let puntatore: number | null = null;
-
-      slides.addEventListener("pointerdown", (evento) => {
-        if (evento.pointerType === "mouse" && evento.button !== 0) return;
-        if ((evento.target as Element).closest("a, button, input, textarea"))
-          return;
-        puntatore = evento.pointerId;
-        partenzaX = evento.clientX;
-        partenzaY = evento.clientY;
-      });
-
-      slides.addEventListener("pointerup", (evento) => {
-        if (puntatore !== evento.pointerId) return;
-        puntatore = null;
-        const spostamentoX = evento.clientX - partenzaX;
-        const spostamentoY = evento.clientY - partenzaY;
-        if (Math.abs(spostamentoX) < soglia) return;
-        if (Math.abs(spostamentoX) <= Math.abs(spostamentoY)) return;
-        const prossimo = scelto() + (spostamentoX < 0 ? 1 : -1);
-        if (prossimo < 0 || prossimo > comandi.length - 1) return;
-        aggiorna(contenitore, prossimo);
-      });
-
-      slides.addEventListener("pointercancel", () => {
-        puntatore = null;
-      });
-
-      slides.addEventListener("dragstart", (evento) => {
-        if (puntatore !== null) evento.preventDefault();
-      });
-    }
-
-    aggiorna(contenitore, Math.max(scelto(), 0));
-  });
 </script>
 
 <style>
-  .highlight-carousel__slides {
-    touch-action: pan-y;
-  }
-
-  .highlight-carousel__slides :global(img) {
-    -webkit-user-drag: none;
+  .highlight-carousel__splide {
+    --highlight-carousel-dot: #d9dadb;
   }
 
   .highlight-carousel__eyebrow {
@@ -301,6 +248,7 @@ const etichettaSezione = eyebrow ? slugify(eyebrow) : undefined;
     width: 100%;
     height: auto;
     display: block;
+    -webkit-user-drag: none;
   }
 
   .highlight-carousel__comandi {
@@ -345,10 +293,13 @@ const etichettaSezione = eyebrow ? slugify(eyebrow) : undefined;
 
   .highlight-carousel__dots {
     display: flex;
+    justify-content: flex-start;
     gap: 0.25rem;
+    margin: 0;
+    padding: 0;
   }
 
-  .highlight-carousel__dot {
+  .highlight-carousel__dots :global(.splide__pagination__page) {
     width: 1.5rem;
     height: 1.5rem;
     border: 0;
@@ -357,7 +308,7 @@ const etichettaSezione = eyebrow ? slugify(eyebrow) : undefined;
     position: relative;
   }
 
-  .highlight-carousel__dot::before {
+  .highlight-carousel__dots :global(.splide__pagination__page::before) {
     content: "";
     position: absolute;
     inset: 50% auto auto 50%;
@@ -365,14 +316,15 @@ const etichettaSezione = eyebrow ? slugify(eyebrow) : undefined;
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
-    background: #d9dadb;
+    background: var(--highlight-carousel-dot);
   }
 
-  .highlight-carousel__dot[aria-selected="true"]::before {
+  .highlight-carousel__dots
+    :global(.splide__pagination__page.is-active::before) {
     background: var(--color-text-primary, #06c);
   }
 
-  .highlight-carousel__dot:focus-visible {
+  .highlight-carousel__dots :global(.splide__pagination__page:focus-visible) {
     outline: 3px solid var(--color-text-primary, #06c);
     outline-offset: 2px;
   }
