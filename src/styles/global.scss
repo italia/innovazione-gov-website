@@ -351,6 +351,36 @@ body {
   @extend .bg-medium;
 }
 
+$sfondi-sezione:
+  "it-section-bg-default", "it-section-bg-primary", "it-section-bg-dark",
+  "it-section-bg-light", "it-section-bg-medium";
+
+@mixin spazio-sezione-dimezzato($lato) {
+  > .py-5,
+  > * > .py-5 {
+    padding-#{$lato}: 1.5rem !important;
+  }
+
+  @media (min-width: 992px) {
+    > .py-lg-80,
+    > * > .py-lg-80 {
+      padding-#{$lato}: 40px !important;
+    }
+  }
+}
+
+@each $sfondo in $sfondi-sezione {
+  $sezione: "section.#{$sfondo}:not(.it-hero-wrapper)";
+
+  #{$sezione}:has(+ #{$sezione}) {
+    @include spazio-sezione-dimezzato(bottom);
+  }
+
+  #{$sezione} + #{$sezione} {
+    @include spazio-sezione-dimezzato(top);
+  }
+}
+
 .it-label {
   @extend .fw-semibold;
   @extend .fs-6;
