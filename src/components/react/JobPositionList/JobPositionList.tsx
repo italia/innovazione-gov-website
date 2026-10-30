@@ -27,25 +27,17 @@ export function JobPositionList({
   const t = getI18n(lang);
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
-  const [showClosed, setShowClosed] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
-
-  const openItems = useMemo(
-    () => items.filter((item) => item.status === "open"),
-    [items],
-  );
 
   const visibleItems = useMemo(() => {
     const cercato = query.trim().toLowerCase();
-    return items
-      .filter((item) => showClosed || item.status === "open")
-      .filter(
-        (item) =>
-          !cercato ||
-          item.title.toLowerCase().includes(cercato) ||
-          (item.description ?? "").toLowerCase().includes(cercato),
-      );
-  }, [items, query, showClosed]);
+    if (!cercato) return items;
+    return items.filter(
+      (item) =>
+        item.title.toLowerCase().includes(cercato) ||
+        (item.description ?? "").toLowerCase().includes(cercato),
+    );
+  }, [items, query]);
 
   const totalPages = Math.ceil(visibleItems.length / perPage);
   const currentPage = Math.min(page, Math.max(totalPages, 1));
@@ -68,10 +60,6 @@ export function JobPositionList({
   return (
     <div className="container position-list">
       <div className="position-list__column">
-        {openItems.length === 0 && (
-          <p className="position-list__intro">{t["position.noOpen"]}</p>
-        )}
-
         <div className="row position-list__filters">
           <div className="col-12">
             <div className="form-group mb-0">
@@ -94,31 +82,11 @@ export function JobPositionList({
               />
             </div>
           </div>
-
-          <div className="col-12">
-            <div className="toggles position-list__toggle">
-              <label htmlFor="position-show-closed">
-                {t["position.showClosed"]}
-                <input
-                  id="position-show-closed"
-                  type="checkbox"
-                  checked={showClosed}
-                  onChange={(event) => {
-                    setShowClosed(event.target.checked);
-                    setPage(1);
-                  }}
-                />
-                <span className="lever" />
-              </label>
-            </div>
-          </div>
         </div>
 
         <div ref={resultsRef} tabIndex={-1} className="collection-results">
           {paginated.length === 0 ? (
-            openItems.length > 0 || showClosed || query ? (
-              <p className="position-list__empty">{t["position.noResults"]}</p>
-            ) : null
+            <p className="position-list__empty">{t["position.noResults"]}</p>
           ) : (
             <ul className="list-unstyled position-list__items">
               {paginated.map((item) => (
