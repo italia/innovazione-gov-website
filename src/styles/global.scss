@@ -259,6 +259,13 @@ body {
     margin 0.2s ease;
 }
 
+.it-header-wrapper.it-header-sticky.is-sticky
+  .it-brand-wrapper.cloned-element
+  .it-brand-logo {
+  height: 2.6rem;
+  margin: 0.5rem 1rem 0.5rem 0;
+}
+
 @media (max-width: 991.98px) {
   .it-header-wrapper {
     position: sticky;
