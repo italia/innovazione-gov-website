@@ -2,10 +2,8 @@ import type { SiteLocale } from "@graphql/types";
 import { getI18n } from "@i18n/microcopy";
 import {
   getCataloguesMapCategory,
-  getCategoryName,
   getTitleByTypeNews,
   getTitleByTypeResourse,
-  resolveArticleCategory,
 } from "@utils/indexing/getCategory";
 import * as Mappers from "@utils/indexing/indexingMappers";
 import type { APIRoute } from "astro";
@@ -54,12 +52,11 @@ export const GET: APIRoute = async ({ params }) => {
     lang,
   );
 
-  const articleCategory = resolveArticleCategory(articles, lang);
-  const insightCategory = getCategoryName(insights[0]?.parentPage, lang);
+  // Routed records (pages, articles, insights, webinars) take their category
+  // from their own breadcrumb inside the mapper. Only the external ones
+  // (news, resources) still need a per-type label from the catalogues.
   const newsCategory =
     getTitleByTypeNews(cataloguesMapCategory, newsItems[0]?.modelApiKey) || "";
-  const webinarCategory =
-    getTitleByTypeNews(cataloguesMapCategory, webinars[0]?.modelApiKey) || "";
   const resourseCategory =
     getTitleByTypeResourse(cataloguesMapCategory, resourses[0]?.modelApiKey) ||
     "";
@@ -67,15 +64,9 @@ export const GET: APIRoute = async ({ params }) => {
   const allDocuments = [
     ...pages.map((item) => Mappers.getMapPages(item, lang)),
     ...newsItems.map((item) => Mappers.getMapNews(item, lang, newsCategory)),
-    ...articles.flatMap((item) =>
-      Mappers.getMapArticle(item, lang, articleCategory),
-    ),
-    ...insights.map((item) =>
-      Mappers.getMapInsight(item, lang, insightCategory),
-    ),
-    ...webinars.map((item) =>
-      Mappers.getMapWebinar(item, lang, webinarCategory),
-    ),
+    ...articles.map((item) => Mappers.getMapArticle(item, lang)),
+    ...insights.map((item) => Mappers.getMapInsight(item, lang)),
+    ...webinars.map((item) => Mappers.getMapWebinar(item, lang)),
     ...resourses
       .map((item) => Mappers.getMapResourse(item, lang, resourseCategory))
       .filter(Boolean),

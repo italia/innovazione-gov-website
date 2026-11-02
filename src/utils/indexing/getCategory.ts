@@ -1,36 +1,28 @@
-import type {
-  ArticleIndexingFragmentType,
-  CatalogueIndexingFragmentType,
-} from "@graphql/fragment/indexing";
-import type {
-  CatalogueLocalesFragmentType,
-  PageLocalesFragmentType,
-} from "@graphql/fragment/metaFragments";
+import type { CatalogueIndexingFragmentType } from "@graphql/fragment/indexing";
 import type { SiteLocale } from "@graphql/types";
 import { DatoBlockModel } from "@utils/cmsMapper";
 import { getLocaleValue } from "@utils/getLocaleValue";
+import { getBreadcrumbs } from "@utils/linkResolver";
 
 type tabType = { type: string; title: string };
 type catalogueMapCategory = { type: tabType[]; title?: string };
-export const getCategoryName = (
-  page: PageLocalesFragmentType | CatalogueLocalesFragmentType | null,
+
+/**
+ * Category of a routed record (article, insight, webinar, page), taken from
+ * its own breadcrumb in the link map: the sections between the homepage and
+ * the record itself, e.g. "Attività, Infrastrutture e Connettività".
+ * The search UI splits on "," and renders one badge per section.
+ */
+export const getCategoryFromBreadcrumb = (
+  id: string,
   lang: SiteLocale,
 ): string => {
-  if (!page) return "";
-  return getLocaleValue(page.allTitleLocales, lang, "");
+  return getBreadcrumbs(id, lang)
+    .slice(1, -1)
+    .map((step) => step.title.trim())
+    .filter(Boolean)
+    .join(", ");
 };
-
-export const resolveArticleCategory = (
-  items: ArticleIndexingFragmentType[],
-  lang: SiteLocale,
-): string => {
-  const firstValidParent = items.find((item) => item.parentPage)?.parentPage;
-
-  if (!firstValidParent) return "";
-
-  return getLocaleValue(firstValidParent.allTitleLocales, lang, "");
-};
-
 export const getTitleByTypeNews = (
   catalogues: catalogueMapCategory[],
   searchType: string,

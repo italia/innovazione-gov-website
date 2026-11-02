@@ -10,6 +10,7 @@ import type { SiteLocale } from "@graphql/types";
 import { DatoBlockModel } from "@utils/cmsMapper";
 import { createDownloadUrl } from "@utils/createDownloadUrl";
 import { getLocaleValue } from "@utils/getLocaleValue";
+import { getCategoryFromBreadcrumb } from "@utils/indexing/getCategory";
 import {
   flattenBlocks,
   getSearchRenderOptions,
@@ -20,7 +21,6 @@ import { render } from "datocms-structured-text-to-plain-text";
 export const getMapArticle = (
   article: ArticleIndexingFragmentType,
   lang: SiteLocale,
-  category: string,
 ) => {
   const structuredText = getLocaleValue(article.allContentLocales, lang, null);
 
@@ -29,7 +29,7 @@ export const getMapArticle = (
   return {
     type: "article",
     id: article.id,
-    category,
+    category: getCategoryFromBreadcrumb(article.id, lang),
     internalLink: linkResolver(article.id, lang),
     title: getLocaleValue(article.allTitleLocales, lang, ""),
     description: getLocaleValue(article.allParagraphLocales, lang, ""),
@@ -40,7 +40,6 @@ export const getMapArticle = (
 export const getMapInsight = (
   insight: InsightIndexingFragmentType,
   lang: SiteLocale,
-  category: string,
 ) => {
   const contentData = getLocaleValue(insight.allContentLocales, lang, null);
 
@@ -48,7 +47,7 @@ export const getMapInsight = (
   return {
     type: "insight",
     id: insight.id,
-    category,
+    category: getCategoryFromBreadcrumb(insight.id, lang),
     internalLink: linkResolver(insight.id, lang),
     title: getLocaleValue(insight.allTitleLocales, lang, ""),
     description: getLocaleValue(insight.allAbstractLocales, lang, ""),
@@ -59,7 +58,6 @@ export const getMapInsight = (
 export const getMapWebinar = (
   webinar: WebinarIndexingFragmentType,
   lang: SiteLocale,
-  category: string,
 ) => {
   const contentData = getLocaleValue(webinar.allContentLocales, lang, null);
   const content = flattenBlocks(contentData ?? []);
@@ -67,7 +65,7 @@ export const getMapWebinar = (
   return {
     type: "webinar",
     id: webinar.id,
-    category,
+    category: getCategoryFromBreadcrumb(webinar.id, lang),
     internalLink: linkResolver(webinar.id, lang),
     title: getLocaleValue(webinar.allTitleLocales, lang, ""),
     description: getLocaleValue(webinar.allParagraphLocales, lang, ""),
@@ -136,7 +134,7 @@ export const getMapPages = (
   return {
     type: "page",
     id: page.id,
-    category: "",
+    category: getCategoryFromBreadcrumb(page.id, lang),
     internalLink: linkResolver(page.id, lang),
     title: getLocaleValue(page.allTitleLocales, lang, ""),
     description: "",
