@@ -6302,7 +6302,7 @@ input MeasureModelBeneficiRaggiuntiFieldBlocksPresence {
 """Specify how to filter this specific Modular Content field instance"""
 input MeasureModelBeneficiRaggiuntiFieldFilter {
   """
-  Filter records containing at least one block matching the specified conditions
+  Filter records containing at least one block matching the specified conditions. All the conditions for a block model must match the same block
   """
   any: MeasureModelBeneficiRaggiuntiFieldBlocksConditions
 

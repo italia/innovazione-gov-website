@@ -20,4 +20,7 @@ export type UpdateTabSectionProps = {
 };
 
 export type ElementType =
-  "news_item" | "webinar_item" | "resource" | "measures";
+  | "news_item"
+  | "webinar_item"
+  | "resource"
+  | "measures";
