@@ -10,13 +10,32 @@ import type { SiteLocale } from "@graphql/types";
 import { DatoBlockModel } from "@utils/cmsMapper";
 import { createDownloadUrl } from "@utils/createDownloadUrl";
 import { getLocaleValue } from "@utils/getLocaleValue";
-import { getCategoryFromBreadcrumb } from "@utils/indexing/getCategory";
 import {
   flattenBlocks,
   getSearchRenderOptions,
 } from "@utils/indexing/blockContentMappers";
-import { linkResolver } from "@utils/linkResolver";
+import { getBreadcrumbs, linkResolver } from "@utils/linkResolver";
 import { render } from "datocms-structured-text-to-plain-text";
+
+/**
+ * Category of a routed record (article, insight, webinar, page), taken from
+ * its own breadcrumb in the link map: the sections between the homepage and
+ * the record itself, e.g. "Attività, Infrastrutture e Connettività".
+ * The search UI splits on "," and renders one badge per section.
+ *
+ * Kept here, not in getCategory.ts: that module is also imported by the
+ * link-map generator, which must not depend on the JSON it produces.
+ */
+export const getCategoryFromBreadcrumb = (
+  id: string,
+  lang: SiteLocale,
+): string => {
+  return getBreadcrumbs(id, lang)
+    .slice(1, -1)
+    .map((step) => step.title.trim())
+    .filter(Boolean)
+    .join(", ");
+};
 
 export const getMapArticle = (
   article: ArticleIndexingFragmentType,
