@@ -72,6 +72,32 @@ const TagsQuery = graphql(
   [TagFragment, AltImageFragment],
 );
 
+const TIPI_CON_PAGINA_ARGOMENTO = SEZIONI.flatMap(
+  (sezione) => sezione.articleTypes,
+);
+
+export async function argomentiConPagina(
+  locale: SiteLocale,
+): Promise<Set<string>> {
+  if (!findTopicIndex(locale)) return new Set();
+
+  const articoli = await getCollection("article");
+  const conPagina = new Set<string>();
+
+  for (const voce of articoli) {
+    const articolo = voce.data;
+    if (!TIPI_CON_PAGINA_ARGOMENTO.includes(articolo.articleType ?? "")) {
+      continue;
+    }
+    if (!articolo.locales.includes(locale)) continue;
+    for (const tag of articolo.tags ?? []) {
+      if (tag.slug) conPagina.add(tag.slug);
+    }
+  }
+
+  return conPagina;
+}
+
 const percorsiNoti = new Set(
   Object.values(rawLinkMap as SiteMap).flatMap((perLocale) =>
     Object.values(perLocale)

@@ -95,9 +95,9 @@ const smallPrints: FooterLinkProps[] = smallPrint?.map(toFooterLink) || [];
 
 const ARGOMENTI_NEL_FOOTER = 5;
 
-const argomenti = (await getArgomentiInEvidenza(lang as SiteLocale))
-  .slice(0, ARGOMENTI_NEL_FOOTER)
-  .map((argomento) => ({ name: argomento.name, path: argomento.path }));
+const argomenti = (
+  await getArgomentiInEvidenza(lang as SiteLocale, ARGOMENTI_NEL_FOOTER)
+).map((argomento) => ({ name: argomento.name, path: argomento.path }));
 
 const mailingListForm: MailingListFormProps | undefined = mailingList
   ? {

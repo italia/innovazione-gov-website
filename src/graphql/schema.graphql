@@ -9443,6 +9443,7 @@ input TagModelFilter {
   _isValid: BooleanFilter
   description: TextFilter
   isCategory: BooleanFilter
+  isHighlighted: BooleanFilter
   name: StringFilter
   previewImage: FileFilter
   seo: SeoFilter
@@ -9472,6 +9473,8 @@ enum TagModelOrderBy {
   _isValid_DESC
   isCategory_ASC
   isCategory_DESC
+  isHighlighted_ASC
+  isHighlighted_DESC
   name_ASC
   name_DESC
   slug_ASC
@@ -9504,6 +9507,7 @@ type TagRecord implements RecordInterface {
   ): String
   id: ItemId!
   isCategory: BooleanType!
+  isHighlighted: BooleanType!
   name: String
   previewImage: AltFileField
   seo: SeoField

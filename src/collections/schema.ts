@@ -28,6 +28,7 @@ import type {
 import type { PageFragmentType } from "@graphql/fragment/page";
 import type { SearchRecordFragmentType } from "@graphql/fragment/search";
 import type { SearchMenuFragmentType } from "@graphql/fragment/sectionFragments";
+import type { TagRecordFragmentType } from "@graphql/fragment/tag";
 import type { SeoFieldFragmentType } from "@graphql/fragment/seoFragments";
 import type { AllWebinarRecordFragmentType } from "@graphql/fragment/webinar";
 import type { SiteLocale } from "@graphql/types";
@@ -40,6 +41,8 @@ export const webinarSchema = z.custom<WebinarItemFragmentType>();
 export const resourceSchema = z.custom<ResourceFragmentType>();
 
 export const measureSchema = z.custom<MeasureFragmentType>();
+
+export const tagSchema = z.custom<TagRecordFragmentType>();
 
 export const pageSchema = z.custom<PageFragmentType>();
 

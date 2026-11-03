@@ -25,6 +25,7 @@ import { AllNewsQuery } from "@graphql/query/news";
 import { AllPagesContentQuery } from "@graphql/query/page";
 import { AllResourcesQuery } from "@graphql/query/resource";
 import { SearchPageContentQuery } from "@graphql/query/search";
+import { AllTagsQuery } from "@graphql/query/tag";
 import {
   ArticlesSeoQuery,
   CataloguesSeoQuery,
@@ -83,6 +84,11 @@ export const webinarsLoader = async () => {
 export const resourcesLoader = async () => {
   const response = await executeAutoPagingQuery(AllResourcesQuery);
   return response?.allResources || [];
+};
+
+export const tagsLoader = async () => {
+  const response = await executeAutoPagingQuery(AllTagsQuery);
+  return response?.allTags || [];
 };
 
 export const globalSettingsLoader = async () => {

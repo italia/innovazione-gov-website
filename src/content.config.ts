@@ -17,6 +17,7 @@ import {
   searchLoader,
   sidebarLoader,
   siteMetaTagsLoader,
+  tagsLoader,
   webinarContentLoader,
   webinarsLoader,
 } from "@collections/loader";
@@ -39,6 +40,7 @@ import {
   searchSchema,
   sidebarSchema,
   siteMetaTagsSchema,
+  tagSchema,
   webinarContentSchema,
   webinarSchema,
 } from "@collections/schema";
@@ -60,6 +62,10 @@ export const collections = {
   measure: defineCollection({
     schema: measureSchema,
     loader: measuresLoader,
+  }),
+  tag: defineCollection({
+    schema: tagSchema,
+    loader: tagsLoader,
   }),
   global_settings: defineCollection({
     schema: globalSettingsSchema,
