@@ -24,9 +24,13 @@
       color: $white;
     }
 
-    &:hover {
-      border: 1px solid $white;
+    &:hover:not(.chip-disabled) {
+      border-color: $white;
       background-color: $primary-a10;
+
+      .chip-label {
+        color: $white;
+      }
     }
 
     &:active {
@@ -40,9 +44,16 @@
 
   &.chip-primary {
     background-color: $white;
+    border-color: $primary;
 
+    .chip-label {
+      color: $primary;
+    }
+
+    &:hover:not(.chip-disabled),
     &.active {
       background-color: $primary;
+      border-color: $primary;
 
       .chip-label {
         color: $white;
