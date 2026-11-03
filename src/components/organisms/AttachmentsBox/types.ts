@@ -1,9 +1,5 @@
 export type AttachmentsBoxBackground =
-  | "default"
-  | "lighter"
-  | "primary-light"
-  | "primary"
-  | "dark";
+  "default" | "lighter" | "primary-light" | "primary" | "dark";
 
 export type AttachmentsBoxItem = {
   id: string;
