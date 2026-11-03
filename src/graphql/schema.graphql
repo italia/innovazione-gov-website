@@ -2229,6 +2229,7 @@ type HighlightCarouselRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  backgroundColor: String
   id: ItemId!
   items: [HighlightItemRecord!]!
   paragraph(

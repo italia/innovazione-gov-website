@@ -1,6 +1,7 @@
 ---
 import { HighlightCarousel } from "@components/organisms/HighlightCarousel";
 import type { HighlightCarouselFragmentType } from "@graphql/fragment/sectionFragments";
+import { toSectionBackground } from "@utils/background";
 import { linkResolver } from "@utils/linkResolver";
 
 type Props = {
@@ -33,4 +34,12 @@ const slides = (block.items ?? [])
   .filter((slide) => slide.title);
 ---
 
-{slides.length > 0 && <HighlightCarousel title={block.title} slides={slides} />}
+{
+  slides.length > 0 && (
+    <HighlightCarousel
+      title={block.title}
+      slides={slides}
+      background={toSectionBackground(block.backgroundColor)}
+    />
+  )
+}

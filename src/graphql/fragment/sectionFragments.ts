@@ -881,6 +881,7 @@ export const HighlightCarouselFragment = graphql(
     fragment HighlightCarouselFragment on HighlightCarouselRecord @_unmask {
       id
       title
+      backgroundColor
       paragraph(markdown: true)
       items {
         ... on HighlightItemRecord {

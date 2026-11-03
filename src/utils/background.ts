@@ -11,11 +11,6 @@ const BACKGROUND_COLOR_MAP: Record<SectionBackground, string> = {
   "primary-light": "it-section-bg-medium",
 };
 
-// const BACKGROUND_HERO_COLOR_MAP: Record<SectionBackgroundHero, string> = {
-//   default: "it-section-bg-default dark",
-//   primary: "it-section-bg-primary",
-//   lighter: "it-section-bg-light dark",
-// };
 const BACKGROUND_HERO_COLOR_MAP: Record<SectionBackgroundHero, string> = {
   default: "it-section-bg-default dark",
   primary: "it-section-bg-primary",
@@ -23,6 +18,20 @@ const BACKGROUND_HERO_COLOR_MAP: Record<SectionBackgroundHero, string> = {
   lighter: "it-section-bg-light dark",
   "primary-light": "it-section-bg-medium",
 };
+
+const SECTION_BACKGROUNDS: readonly SectionBackground[] = [
+  "default",
+  "primary",
+  "dark",
+  "lighter",
+  "primary-light",
+];
+
+const isSectionBackground = (value: unknown): value is SectionBackground =>
+  SECTION_BACKGROUNDS.some((background) => background === value);
+
+export const toSectionBackground = (value: unknown): SectionBackground =>
+  isSectionBackground(value) ? value : "default";
 
 export const getSectionBgClass = (
   bg: SectionBackground = "default",

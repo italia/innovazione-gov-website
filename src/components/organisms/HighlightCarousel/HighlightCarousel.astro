@@ -4,6 +4,8 @@ import { Image } from "@components/atoms/Image";
 import type { ImageProps } from "@components/atoms/Image/types";
 import { SectionContainer } from "@components/organisms/SectionContainer";
 import { getI18n } from "@i18n/microcopy";
+import type { SectionBackground } from "@utils/background";
+import { getSectionBgClass } from "@utils/background";
 import { slugify } from "@utils/slugify";
 
 type Slide = {
@@ -17,12 +19,22 @@ type Slide = {
 type Props = {
   title?: string | null;
   slides: Slide[];
+  background?: SectionBackground;
 };
 
-const { title: eyebrow, slides: items } = Astro.props;
+const { title: eyebrow, slides: items, background = "default" } = Astro.props;
 
 const { lang } = Astro.locals;
 const t = getI18n(lang);
+
+const suSfondoScuro = background === "primary" || background === "dark";
+
+const variantePulsante =
+  background === "primary"
+    ? "outline-dark"
+    : background === "dark"
+      ? "dark"
+      : undefined;
 
 const etichettaSezione = eyebrow ? slugify(eyebrow) : undefined;
 
@@ -41,11 +53,15 @@ const etichette = {
 ---
 
 <SectionContainer
-  className="highlight-carousel"
+  className={`highlight-carousel ${getSectionBgClass(background)}`}
   sectionTitleId={etichettaSezione}
 >
   <div
-    class="splide highlight-carousel__splide"
+    class:list={[
+      "splide",
+      "highlight-carousel__splide",
+      suSfondoScuro && "highlight-carousel__splide--inverso",
+    ]}
     data-etichette={JSON.stringify(etichette)}
     aria-label={eyebrow ?? undefined}
   >
@@ -76,6 +92,7 @@ const etichette = {
                       size="small"
                       label={t["highlight.readMore"]}
                       linkTo={slide.linkTo}
+                      variant={variantePulsante}
                     />
                   </div>
                 </div>
@@ -210,11 +227,21 @@ const etichette = {
 <style>
   .highlight-carousel__splide {
     --highlight-carousel-dot: #d9dadb;
+    --highlight-carousel-dot-active: var(--color-text-primary, #06c);
+    --highlight-carousel-text: var(--color-text-base, #1a1a1a);
+    --highlight-carousel-focus: var(--color-text-primary, #06c);
+  }
+
+  .highlight-carousel__splide--inverso {
+    --highlight-carousel-dot: hsla(0, 0%, 100%, 0.55);
+    --highlight-carousel-dot-active: var(--color-white, #fff);
+    --highlight-carousel-text: var(--color-white, #fff);
+    --highlight-carousel-focus: var(--color-white, #fff);
   }
 
   .highlight-carousel__eyebrow {
     margin-bottom: 1.5rem;
-    color: var(--color-text-base, #1a1a1a);
+    color: var(--highlight-carousel-text);
     text-transform: uppercase;
     font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
     font-weight: 400;
@@ -224,7 +251,7 @@ const etichette = {
 
   .highlight-carousel__title {
     margin-bottom: 1rem;
-    color: var(--color-text-base, #1a1a1a);
+    color: var(--highlight-carousel-text);
     font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
     font-weight: 700;
     font-size: 32px;
@@ -233,7 +260,7 @@ const etichette = {
 
   .highlight-carousel__text {
     margin-bottom: 1.5rem;
-    color: var(--color-text-base, #1a1a1a);
+    color: var(--highlight-carousel-text);
     font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
     font-weight: 400;
     font-size: 18px;
@@ -287,8 +314,24 @@ const etichette = {
   }
 
   .highlight-carousel__arrow:focus-visible {
-    outline: 3px solid var(--color-text-primary, #06c);
+    outline: 3px solid var(--highlight-carousel-focus);
     outline-offset: 2px;
+  }
+
+  .highlight-carousel__splide--inverso .highlight-carousel__arrow {
+    border-color: var(--color-white, #fff);
+    background: transparent;
+    color: var(--color-white, #fff);
+  }
+
+  .highlight-carousel__splide--inverso
+    .highlight-carousel__arrow:hover:not(:disabled) {
+    background: hsla(0, 0%, 100%, 0.12);
+  }
+
+  .highlight-carousel__splide--inverso .highlight-carousel__arrow:disabled {
+    border-color: hsla(0, 0%, 100%, 0.4);
+    color: hsla(0, 0%, 100%, 0.4);
   }
 
   .highlight-carousel__dots {
@@ -321,11 +364,11 @@ const etichette = {
 
   .highlight-carousel__dots
     :global(.splide__pagination__page.is-active::before) {
-    background: var(--color-text-primary, #06c);
+    background: var(--highlight-carousel-dot-active);
   }
 
   .highlight-carousel__dots :global(.splide__pagination__page:focus-visible) {
-    outline: 3px solid var(--color-text-primary, #06c);
+    outline: 3px solid var(--highlight-carousel-focus);
     outline-offset: 2px;
   }
 
