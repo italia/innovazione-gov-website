@@ -4,7 +4,7 @@ import type { CardEditorialWithIconProps } from "./types";
 
 type Props = CardEditorialWithIconProps;
 
-const { title, description, icon } = Astro.props;
+const { title, description, icon, heading: TitleTag = "p" } = Astro.props;
 ---
 
 <div class="it-card it-card-height-full rounded border">
@@ -14,7 +14,9 @@ const { title, description, icon } = Astro.props;
     </div>
   </div>
   <div class="it-card-body">
-    <p class="it-card-subtitle card-with-icon__title mb-2 mt-2">{title}</p>
+    <TitleTag class="it-card-subtitle card-with-icon__title mb-2 mt-2">
+      {title}
+    </TitleTag>
     <p class="it-card-text">{description}</p>
   </div>
 </div>
@@ -45,7 +47,7 @@ const { title, description, icon } = Astro.props;
     -webkit-mask-position: center;
   }
 
-  .it-card-body .it-card-subtitle.card-with-icon__title {
+  .it-card-body :global(.it-card-subtitle.card-with-icon__title) {
     color: var(--color-text-secondary, #2f475e);
     font-weight: 600;
     font-size: 20px;

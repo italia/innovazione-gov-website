@@ -9,12 +9,19 @@ const textLabelColorClass = variant === "light" ? "text-white" : undefined;
 ---
 
 <div class="row align-item-center justify-content-between pt-lg-5 pt-0">
-  {title && <p class={`it-label ${textLabelColorClass}`}>{title}</p>}
+  {title && <h3 class={`it-label ${textLabelColorClass}`}>{title}</h3>}
   {
     content.map((card) => (
       <div class="col-12 col-md-6 mb-3 mb-md-4 col-lg-4">
-        <CardEditorialWithIcon {...card} />
+        <CardEditorialWithIcon {...card} heading="h4" />
       </div>
     ))
   }
 </div>
+
+<style>
+  .it-label {
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+</style>

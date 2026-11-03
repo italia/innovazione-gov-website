@@ -1,4 +1,5 @@
 ---
+import type { CardHeadingTag } from "@components/molecules/WideLinkCard/types";
 import { WideLinkCard } from "@components/molecules/WideLinkCard";
 import type { WideLinkCardFragmentType } from "@graphql/fragment/commonFragments";
 import { linkResolver } from "@utils/linkResolver";
@@ -6,9 +7,10 @@ import { linkResolver } from "@utils/linkResolver";
 type Props = {
   block: WideLinkCardFragmentType;
   variant?: "default" | "compact";
+  heading?: CardHeadingTag;
 };
 
-const { block, variant = "default" } = Astro.props;
+const { block, variant = "default", heading = "p" } = Astro.props;
 const { lang } = Astro.locals;
 
 const article = block.article ?? null;
@@ -43,5 +45,6 @@ const dateTime = article
   isExternal={!!externalUrl}
   dateTime={dateTime}
   variant={variant}
+  heading={heading}
   imageBackground={block.imageBackground === "blu" ? "blu" : "chiaro"}
 />

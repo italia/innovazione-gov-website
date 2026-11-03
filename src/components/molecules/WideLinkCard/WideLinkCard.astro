@@ -2,6 +2,7 @@
 import { DateTime } from "@components/atoms/DateTime";
 import { Image } from "@components/atoms/Image";
 import type { ImageProps } from "@components/atoms/Image/types";
+import type { CardHeadingTag } from "./types";
 
 type Props = {
   title: string;
@@ -13,6 +14,7 @@ type Props = {
   dateTime?: string | null;
   fitImage?: "cover" | "contain";
   variant?: "default" | "compact";
+  heading?: CardHeadingTag;
   imageBackground?: "chiaro" | "blu";
 };
 
@@ -26,6 +28,7 @@ const {
   dateTime,
   fitImage = "contain",
   variant = "default",
+  heading: TitleTag = "p",
   imageBackground = "chiaro",
 } = Astro.props;
 
@@ -52,7 +55,7 @@ const isCompact = variant === "compact";
     )
   }
   <div class="wide-link-card__body">
-    <p class="wide-link-card__title">
+    <TitleTag class="wide-link-card__title">
       {
         linkTo ? (
           <a
@@ -66,7 +69,7 @@ const isCompact = variant === "compact";
           title
         )
       }
-    </p>
+    </TitleTag>
     {paragraph && <p class="wide-link-card__text">{paragraph}</p>}
     {
       !isCompact && (category || dateTime) && (

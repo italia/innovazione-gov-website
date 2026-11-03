@@ -14,16 +14,21 @@ const { title, cards, variant = "dark" } = Astro.props;
 <div class="additional-content-cards">
   {
     title && (
-      <p class:list={["it-label", variant === "light" && "text-white"]}>
+      <h3 class:list={["it-label", variant === "light" && "text-white"]}>
         {title}
-      </p>
+      </h3>
     )
   }
-  {cards.map((card) => <WideLinkCardAdapter block={card} variant="compact" />)}
+  {
+    cards.map((card) => (
+      <WideLinkCardAdapter block={card} variant="compact" heading="h4" />
+    ))
+  }
 </div>
 
 <style>
   .additional-content-cards :global(.it-label) {
+    margin-bottom: 1rem;
     font-size: 1.75rem !important;
     line-height: 2rem;
   }
