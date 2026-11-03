@@ -47,6 +47,9 @@ const posizioniAperte = mostraPosizioniAperte
   ? await getOpenPositions(lang as SiteLocale)
   : [];
 
+const cardScelteAMano =
+  !mostraPosizioniAperte && cardOrizzontali.length === 0 && !block.lastItems;
+
 let items: CardEditorialNewsProps[];
 
 if (mostraPosizioniAperte) {
@@ -138,7 +141,9 @@ const { labelButton, linkTo, openInNewTab } = getCtaFields(
         background={block.backgroundColor as SectionBackground}
         showInline={block.showInlineCard ?? undefined}
         showCategoryFilter={showCategoryFilter}
-        visibleCount={onlyOneCategory ? items.length : undefined}
+        visibleCount={
+          onlyOneCategory || cardScelteAMano ? items.length : undefined
+        }
         labelButton={labelButton}
         linkTo={linkTo}
         openInNewTab={openInNewTab}
