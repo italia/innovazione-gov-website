@@ -6,6 +6,7 @@ export const ARTICLE_TYPE_LABELS: Record<string, string> = {
   focus: "Focus",
   guida: "Guida",
   project: "Attività",
+  international: "Attività internazionali",
 };
 
 export function articleTypeLabel(type?: string | null): string {

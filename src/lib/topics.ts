@@ -39,6 +39,18 @@ const SEZIONI = [
     quanti: 4,
   },
   {
+    articleTypes: ["international"],
+    titolo: "Attività internazionali",
+    sottotitolo:
+      "La partecipazione del Dipartimento ai tavoli internazionali su questo argomento",
+    indice: null,
+    etichettaCta: null,
+    sfondo: "lighter" as const,
+    aCard: true,
+    conBadge: false,
+    quanti: 4,
+  },
+  {
     articleTypes: ["news", "press_release", "interview", "participation"],
     titolo: "Contenuti editoriali",
     sottotitolo:
