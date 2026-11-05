@@ -14,6 +14,12 @@ export function articleTypeLabel(type?: string | null): string {
   return ARTICLE_TYPE_LABELS[type] ?? type;
 }
 
+const ARTICLE_TYPES_WITHOUT_CARD_IMAGE = ["focus"];
+
+export function showsImageInCard(type?: string | null): boolean {
+  return !ARTICLE_TYPES_WITHOUT_CARD_IMAGE.includes(type ?? "");
+}
+
 const ARTICLE_TYPE_BY_TAB_TYPE: Record<string, string> = {
   article: "news",
   news: "news",

@@ -14,6 +14,7 @@ const {
   image,
   linkTo,
   category,
+  badge,
   dateTime,
   action,
   categoryLinks = {},
@@ -27,7 +28,7 @@ const categories = Array.isArray(category)
   : category
     ? [category]
     : [];
-const shouldShowFooter = categories.length > 0 || dateTime;
+const shouldShowFooter = categories.length > 0 || !!badge || !!dateTime;
 const hasLink = !!linkTo && linkTo !== "#";
 const cardTitleId = `card-title-${id}`;
 const { lang } = Astro.locals;
@@ -93,7 +94,17 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
             )}
           </div>
         )}
-        {dateTime && <DateTime className="it-card-date" value={dateTime} />}
+        {(badge || dateTime) && (
+          <div class="it-card-meta">
+            {badge && (
+              <span class="it-card-badge">
+                <span class="visually-hidden">{t["card.type"]}</span>
+                {badge}
+              </span>
+            )}
+            {dateTime && <DateTime className="it-card-date" value={dateTime} />}
+          </div>
+        )}
       </footer>
     )
   }

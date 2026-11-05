@@ -53,7 +53,8 @@ const shownParagraph = isProject
   : isFocus
     ? description?.trim()
     : null;
-const shownImage = (isProject ? (logo ?? image) : image) ?? null;
+const shownImage =
+  (isProject ? (logo ?? image) : isFocus ? (image ?? logo) : image) ?? null;
 const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
   ...item,
   label: index === arr.length - 1 ? lastLabel : item.label,

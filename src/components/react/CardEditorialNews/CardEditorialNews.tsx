@@ -13,6 +13,7 @@ export type CardEditorialNewsProps = {
   category?: string | string[];
   categoryLinks?: Record<string, string>;
   filterCategories?: string[];
+  badge?: string;
   dateTime?: string;
   action?: string;
   fullHeight?: boolean;
@@ -28,6 +29,7 @@ export function CardEditorialNews({
   linkTo,
   category,
   categoryLinks = {},
+  badge,
   dateTime,
   action,
   fullHeight = true,
@@ -39,7 +41,7 @@ export function CardEditorialNews({
       ? category
       : [category]
     : [];
-  const shouldShowFooter = categories.length > 0 || !!dateTime;
+  const shouldShowFooter = categories.length > 0 || !!badge || !!dateTime;
   const cardTitleId = `card-title-${id}`;
   const t = getI18n(lang);
   const ariaLabel = isExternal ? t["link.external"] : t["link.internal"];
@@ -91,8 +93,22 @@ export function CardEditorialNews({
               )}
             </div>
           )}
-          {dateTime && (
-            <DateTime className="it-card-date" value={dateTime} lang={lang} />
+          {(badge || dateTime) && (
+            <div className="it-card-meta">
+              {badge && (
+                <span className="it-card-badge">
+                  <span className="visually-hidden">{t["card.type"]}</span>
+                  {badge}
+                </span>
+              )}
+              {dateTime && (
+                <DateTime
+                  className="it-card-date"
+                  value={dateTime}
+                  lang={lang}
+                />
+              )}
+            </div>
           )}
         </footer>
       )}

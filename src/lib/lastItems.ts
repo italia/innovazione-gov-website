@@ -4,6 +4,7 @@ import { graphql } from "@graphql/graphql";
 import type { SiteLocale } from "@graphql/types";
 import { executeQuery } from "@lib/datocms";
 import { linkResolver } from "@utils/linkResolver";
+import { articleTypeLabel, showsImageInCard } from "@utils/storyClassification";
 import { topicLinks } from "@utils/topicRoutes";
 
 type Options = {
@@ -128,6 +129,7 @@ export async function getLastItems(
         title: r.title ?? "",
         description: r.paragraph || r.description || "",
         image: r.image ?? undefined,
+        badge: articleTypeLabel("news"),
         dateTime: r.dateShown ?? r.firstPublishedAt ?? undefined,
         category: (r.tags ?? [])
           .map((t) => t.name)
@@ -170,7 +172,9 @@ export async function getLastItems(
         isExternal: false,
         title: r.title ?? "",
         description: r.paragraph || r.description || "",
-        image: (isProject ? (r.logo ?? r.image) : r.image) ?? undefined,
+        image: showsImageInCard(articleType)
+          ? ((isProject ? (r.logo ?? r.image) : r.image) ?? undefined)
+          : undefined,
         imageFit: isProject && r.logo ? ("contain" as const) : undefined,
         dateTime: senzaMetadati
           ? undefined
@@ -179,6 +183,7 @@ export async function getLastItems(
           ? []
           : (r.tags ?? []).map((t) => t.name).filter((v): v is string => !!v),
         categoryLinks: senzaMetadati ? {} : topicLinks(r.tags, locale),
+        badge: articleTypeLabel(articleType),
         filterCategories: isProject
           ? (r.tags ?? []).map((t) => t.name).filter((v): v is string => !!v)
           : filterCategoriesOf(r.tags),

@@ -3,6 +3,7 @@ import type { ArticleCard } from "@graphql/query/articleCards";
 import type { SiteLocale } from "@graphql/types";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { linkResolver } from "@utils/linkResolver";
+import { articleTypeLabel, showsImageInCard } from "@utils/storyClassification";
 import { topicLinks } from "@utils/topicRoutes";
 
 type RelatedOptions = {
@@ -24,7 +25,10 @@ function toCard(
       getLocaleValue(article.allParagraphLocales, locale, "") ||
       getLocaleValue(article.allDescriptionLocales, locale, "") ||
       "",
-    image: article.image ?? undefined,
+    image: showsImageInCard(article.articleType)
+      ? (article.image ?? undefined)
+      : undefined,
+    badge: articleTypeLabel(article.articleType),
     dateTime:
       article.articleType === "project"
         ? undefined

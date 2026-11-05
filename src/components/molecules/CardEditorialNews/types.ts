@@ -9,6 +9,7 @@ export type CardEditorialNewsProps = {
   category?: string | string[];
   categoryLinks?: Record<string, string>;
   filterCategories?: string[];
+  badge?: string;
   dateTime?: string;
   action?: string;
   fullHeight?: boolean;

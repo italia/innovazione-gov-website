@@ -490,6 +490,33 @@ $sfondi-sezione:
   pointer-events: none;
 }
 
+.it-card-meta {
+  display: flex;
+  flex: 1 0 100%;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-top: 0.75rem;
+}
+
+.it-card-badge {
+  margin-inline-end: auto;
+  border-radius: 4px;
+  background: var(--color-background-secondary, #5c6f82);
+  padding: 0.125rem 0.75rem;
+  color: #fff;
+  font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+
+.it-card .it-card-meta .it-card-date {
+  margin: 0;
+}
+
 main#main {
   overflow-x: clip;
 }
