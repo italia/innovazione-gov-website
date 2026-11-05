@@ -9442,7 +9442,6 @@ input TagModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   description: TextFilter
-  isCategory: BooleanFilter
   isHighlighted: BooleanFilter
   name: StringFilter
   previewImage: FileFilter
@@ -9471,8 +9470,6 @@ enum TagModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
-  isCategory_ASC
-  isCategory_DESC
   isHighlighted_ASC
   isHighlighted_DESC
   name_ASC
@@ -9506,7 +9503,6 @@ type TagRecord implements RecordInterface {
     markdown: Boolean
   ): String
   id: ItemId!
-  isCategory: BooleanType!
   isHighlighted: BooleanType!
   name: String
   previewImage: AltFileField
@@ -9678,6 +9674,10 @@ type TextDonutRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  altText(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
   backgroundColor: String!
   description: String
   heading: String

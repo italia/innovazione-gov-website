@@ -42,7 +42,7 @@ export const mapArticleToCardEditorialNewsProps = (
     .map((t) => t.name)
     .filter((name): name is string => !!name);
   const filterCategories = (article.tags ?? [])
-    .filter((t) => t.isCategory)
+    .filter((t) => t.isHighlighted)
     .map((t) => t.name)
     .filter((name): name is string => !!name);
   return {

@@ -50,7 +50,7 @@ async function argomentiPiuUsati(
     if (!TIPI_PER_CONTEGGIO.includes(articolo.articleType ?? "")) continue;
     if (!articolo.locales.includes(locale)) continue;
     for (const tag of articolo.tags ?? []) {
-      if (!tag.slug || !tag.name || !tag.isCategory) continue;
+      if (!tag.slug || !tag.name) continue;
       const attuale = perSlug.get(tag.slug);
       perSlug.set(tag.slug, {
         name: tag.name,

@@ -183,7 +183,6 @@ export const AllArticlesRecordFragment = graphql(
         name
         slug
         description
-        isCategory
         previewImage {
           ...AltImageFragment
         }

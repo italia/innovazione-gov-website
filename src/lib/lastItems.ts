@@ -56,7 +56,6 @@ const LastArticlesQuery = graphql(
         tags {
           name
           slug
-          isCategory
         }
         image {
           ...ImageFragment
@@ -109,13 +108,8 @@ function dedupeSortTop(
     .slice(0, n);
 }
 
-const filterCategoriesOf = (
-  tags: { name: string | null; isCategory: boolean | null }[] | null,
-): string[] =>
-  (tags ?? [])
-    .filter((tag) => tag.isCategory)
-    .map((tag) => tag.name)
-    .filter((name): name is string => !!name);
+const filterCategoriesOf = (tags: { name: string | null }[] | null): string[] =>
+  (tags ?? []).map((tag) => tag.name).filter((name): name is string => !!name);
 
 export async function getLastItems(
   selection: string,

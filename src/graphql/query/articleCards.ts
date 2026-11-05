@@ -29,7 +29,7 @@ export const AllArticleCardsQuery = graphql(
         tags {
           name
           slug
-          isCategory
+          isHighlighted
         }
         image {
           ...ImageFragment

@@ -647,6 +647,7 @@ export const TextDonutFragment = graphql(
       heading
       percentage
       description
+      altText
       label(markdown: true)
       text {
         ...TextBlockFragment
