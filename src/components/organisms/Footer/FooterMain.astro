@@ -14,6 +14,7 @@ const {
   columns = [],
   mailingListForm,
   topics = [],
+  topicsIndexPath,
 } = Astro.props;
 const lang = Astro.locals.lang || "it";
 const t = getI18n(lang);
@@ -31,15 +32,22 @@ const t = getI18n(lang);
       topics.length > 0 && (
         <section class="footer-argomenti px-0">
           <h4 class="footer-heading-title">{t["footer.topics"]}</h4>
-          <ul class="footer-chip-list">
-            {topics.map((argomento) => (
-              <li>
-                <a class="footer-chip" href={argomento.path}>
-                  {argomento.name}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div class="footer-chip-row">
+            <ul class="footer-chip-list">
+              {topics.map((argomento) => (
+                <li>
+                  <a class="footer-chip" href={argomento.path}>
+                    {argomento.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            {topicsIndexPath && (
+              <a class="footer-chip" href={topicsIndexPath}>
+                {t["footer.allTopics"]}
+              </a>
+            )}
+          </div>
         </section>
       )
     }
@@ -152,6 +160,13 @@ const t = getI18n(lang);
 
   .footer-argomenti {
     padding-block: 2.5rem 2rem;
+  }
+
+  .footer-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
   }
 
   .footer-chip-list {

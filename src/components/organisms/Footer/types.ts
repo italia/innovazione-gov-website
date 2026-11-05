@@ -10,6 +10,7 @@ export type FooterProps = {
   brand: FooterBrandProps;
   /** Chip degli argomenti in evidenza, sopra le colonne. */
   topics?: FooterTopicProps[];
+  topicsIndexPath?: string | null;
   /** Colonna "Contatti": arriva da DatoCMS al passaggio 2, per ora opzionale. */
   contacts?: FooterContactsProps;
   social?: FooterSocialProps;

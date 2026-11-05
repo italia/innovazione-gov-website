@@ -1,5 +1,6 @@
 ---
 import { getArgomentiInEvidenza } from "@lib/argomentiInEvidenza";
+import { findTopicIndex } from "@utils/topicRoutes";
 import { Footer } from "@components/organisms/Footer";
 import type {
   FooterColumnProps,
@@ -99,6 +100,8 @@ const argomenti = (
   await getArgomentiInEvidenza(lang as SiteLocale, ARGOMENTI_NEL_FOOTER)
 ).map((argomento) => ({ name: argomento.name, path: argomento.path }));
 
+const indiceArgomenti = findTopicIndex(lang as SiteLocale)?.path ?? null;
+
 const mailingListForm: MailingListFormProps | undefined = mailingList
   ? {
       title: mailingList.title,
@@ -112,6 +115,7 @@ const mailingListForm: MailingListFormProps | undefined = mailingList
 
 <Footer
   topics={argomenti}
+  topicsIndexPath={indiceArgomenti}
   brand={{
     logo: logoSelect
       ? { url: logoSelect, width: null, height: null }
