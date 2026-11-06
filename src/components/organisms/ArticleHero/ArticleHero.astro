@@ -5,6 +5,7 @@ import type { ImageProps } from "@components/atoms/Image/types";
 import { Breadcrumb } from "@components/molecules/Breadcrumb";
 import { getI18n } from "@i18n/microcopy";
 import { createBreadcrumb } from "@utils/createBreadcrumb";
+import { isActivityType } from "@utils/storyClassification";
 
 type Props = {
   title: string;
@@ -45,16 +46,19 @@ const isProject = articleType === "project";
 const attivitaConclusa = isProject && archived;
 const isFocus = articleType === "focus";
 const focusDiSezione = isFocus && sectionPage;
-const lastLabel = isProject || isFocus ? title : t["article.detail"];
-const shownTopics = isProject || isFocus ? [] : topics;
-const shownDate = isProject || isFocus ? null : dateTime;
-const shownParagraph = isProject
+const paginaDiAttivita = isActivityType(articleType);
+const paginaSenzaMetadati = paginaDiAttivita || isFocus;
+const lastLabel = paginaSenzaMetadati ? title : t["article.detail"];
+const shownTopics = paginaSenzaMetadati ? [] : topics;
+const shownDate = paginaSenzaMetadati ? null : dateTime;
+const shownParagraph = paginaDiAttivita
   ? paragraph?.trim()
   : isFocus
     ? description?.trim()
     : null;
 const shownImage =
-  (isProject ? (logo ?? image) : isFocus ? (image ?? logo) : image) ?? null;
+  (paginaDiAttivita ? (logo ?? image) : isFocus ? (image ?? logo) : image) ??
+  null;
 const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
   ...item,
   label: index === arr.length - 1 ? lastLabel : item.label,

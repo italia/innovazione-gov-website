@@ -20,6 +20,7 @@ import {
 } from "@utils/linkMap/processItems";
 
 import { isRecordPublished, showAllPages } from "@config/publishedRecords";
+import { nestsUnderParentPage } from "@utils/storyClassification";
 
 import fs from "fs";
 import path from "path";
@@ -123,7 +124,7 @@ async function generateLinkMap() {
   for (const article of publishedOnly(articlesRes.allArticles)) {
     const sectionPath = SECTION_PATH_BY_TYPE[article.articleType ?? ""];
     const sottoIlGenitore =
-      article.articleType === "focus" && !!article.parentPage;
+      nestsUnderParentPage(article.articleType) && !!article.parentPage;
     if (!sectionPath || sottoIlGenitore) continue;
     for (const locale of article.locales) {
       const section = findSectionEntry(locale, sectionPath);
@@ -156,8 +157,9 @@ async function generateLinkMap() {
   );
 
   for (const article of publishedOnly(articlesRes.allArticles)) {
-    const genitore =
-      article.articleType === "focus" ? article.parentPage?.id : undefined;
+    const genitore = nestsUnderParentPage(article.articleType)
+      ? article.parentPage?.id
+      : undefined;
     if (!genitore) continue;
     for (const locale of article.locales) {
       const parent = linkMap[genitore]?.[locale];

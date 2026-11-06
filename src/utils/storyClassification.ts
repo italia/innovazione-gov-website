@@ -20,6 +20,18 @@ export function showsImageInCard(type?: string | null): boolean {
   return !ARTICLE_TYPES_WITHOUT_CARD_IMAGE.includes(type ?? "");
 }
 
+const ACTIVITY_ARTICLE_TYPES = ["project", "international"];
+
+export function isActivityType(type?: string | null): boolean {
+  return ACTIVITY_ARTICLE_TYPES.includes(type ?? "");
+}
+
+const ARTICLE_TYPES_UNDER_PARENT_PAGE = ["focus", "international"];
+
+export function nestsUnderParentPage(type?: string | null): boolean {
+  return ARTICLE_TYPES_UNDER_PARENT_PAGE.includes(type ?? "");
+}
+
 const ARTICLE_TYPE_BY_TAB_TYPE: Record<string, string> = {
   article: "news",
   news: "news",
