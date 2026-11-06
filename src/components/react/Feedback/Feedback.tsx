@@ -16,6 +16,7 @@ const ICON_CLOSE = {
   icon: "sprites.svg#it-close",
   color: "primary" as ColorIconProps,
   size: "lg" as SizeIconProps,
+  hidden: true,
 };
 
 const ICON_RESULT = {
