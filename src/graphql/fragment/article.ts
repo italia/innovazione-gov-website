@@ -206,6 +206,9 @@ export const AllArticlesRecordFragment = graphql(
       relatedProjects {
         id
       }
+      relatedArticles {
+        id
+      }
       allContentLocales: _allContentLocales {
         locale
         value {

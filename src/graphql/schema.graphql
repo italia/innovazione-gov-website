@@ -413,6 +413,7 @@ input ArticleModelFilter {
   logo: FileFilter
   paragraph: TextFilter
   parentPage: LinkFilter
+  relatedArticles: LinksFilter
   relatedProjects: LinksFilter
   seo: SeoFilter
   showSidebar: BooleanFilter
@@ -670,6 +671,7 @@ type ArticleRecord implements RecordInterface {
     fallbackLocales: [SiteLocale!]
   ): ArticleModelParentPageField
   position: IntType
+  relatedArticles: [ArticleRecord!]!
   relatedProjects: [ArticleRecord!]!
   seo(
     """The locale to use to fetch the field's content"""

@@ -5,7 +5,7 @@ import { topicLinks as buildTopicLinks } from "@utils/topicRoutes";
 import { ArticleRelated } from "@components/organisms/ArticleRelated";
 import type { ArticleContentFragmentType } from "@graphql/fragment/article";
 import { getArticles } from "@lib/dataFetcher";
-import { getRelatedArticles, schedaProgetto } from "@lib/relatedArticles";
+import { getRelatedArticles, schedaCorrelata } from "@lib/relatedArticles";
 import type {
   ImageFragmentType,
   TagFragmentType,
@@ -41,6 +41,7 @@ export async function getStaticPaths() {
       archived: boolean;
       duration: string | null;
       relatedProjectIds: string[];
+      relatedArticleIds: string[];
       dateTime: string | null;
       topics: string[];
       topicLinks: Record<string, string>;
@@ -94,6 +95,9 @@ export async function getStaticPaths() {
             relatedProjectIds: (page.relatedProjects ?? []).map(
               (progetto) => progetto.id,
             ),
+            relatedArticleIds: (page.relatedArticles ?? []).map(
+              (articolo) => articolo.id,
+            ),
             dateTime: page.dateShown ?? null,
             topics: (page.tags ?? [])
               .map((tag) => tag.name)
@@ -128,6 +132,7 @@ const {
   archived,
   duration,
   relatedProjectIds,
+  relatedArticleIds,
   dateTime,
   topics,
   topicLinks,
@@ -143,10 +148,19 @@ Astro.locals.recordId = id;
 
 const attivitaConclusa = articleType === "project" && archived;
 const tutteLeSchede = await getArticles(false);
-const scelteAMano = relatedProjectIds
-  .map((idProgetto) => tutteLeSchede.find((scheda) => scheda.id === idProgetto))
+const trovaScheda = (idScheda: string) =>
+  tutteLeSchede.find((scheda) => scheda.id === idScheda);
+const scelteAMano = relatedArticleIds
+  .map(trovaScheda)
   .filter((scheda) => scheda !== undefined)
-  .map((scheda) => schedaProgetto(scheda, lang));
+  .map((scheda) => schedaCorrelata(scheda, lang));
+const attivitaCollegate = relatedProjectIds
+  .map(trovaScheda)
+  .filter((scheda) => scheda !== undefined)
+  .map((scheda) => ({
+    title: getLocaleValue(scheda.allTitleLocales, lang, ""),
+    linkTo: linkResolver(scheda.id, lang),
+  }));
 const relatedItems =
   scelteAMano.length > 0
     ? scelteAMano
@@ -180,10 +194,7 @@ const jsonLd: JsonLdPageData = {
     sectionPage={sectionPage}
     archived={archived}
     duration={duration}
-    relatedProjects={scelteAMano.map((scheda) => ({
-      title: scheda.title,
-      linkTo: scheda.linkTo,
-    }))}
+    relatedProjects={attivitaCollegate}
   />
   {
     content && (

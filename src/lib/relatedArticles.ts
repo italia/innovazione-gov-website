@@ -77,9 +77,12 @@ export function getRelatedArticles(
     .map((article) => toCard(article, locale));
 }
 
-export function schedaProgetto(
-  progetto: ArticleCard,
+export function schedaCorrelata(
+  article: ArticleCard,
   locale: SiteLocale,
 ): CardEditorialNewsProps {
-  return { ...toCard(progetto, locale), category: [], dateTime: undefined };
+  const scheda = toCard(article, locale);
+  return article.articleType === "project"
+    ? { ...scheda, category: [], categoryLinks: {} }
+    : scheda;
 }
