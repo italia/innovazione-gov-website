@@ -15,6 +15,7 @@ import type { SeoFieldFragmentType } from "@graphql/fragment/seoFragments";
 import type { SiteLocale } from "@graphql/types";
 import Layout from "@layouts/Layout.astro";
 import { getLocaleValue } from "@utils/getLocaleValue";
+import { isActivityType } from "@utils/storyClassification";
 import { type JsonLdPageData } from "@utils/JsonLD/seoJsonLd";
 import { linkResolver } from "@utils/linkResolver";
 import { removeLang } from "@utils/pathHelper";
@@ -164,13 +165,15 @@ const attivitaCollegate = relatedProjectIds
 const relatedItems =
   scelteAMano.length > 0
     ? scelteAMano
-    : getRelatedArticles(tutteLeSchede, {
-        currentId: id,
-        tags: topics,
-        articleType,
-        locale: lang,
-        onlyArchivedProjects: attivitaConclusa,
-      });
+    : isActivityType(articleType)
+      ? []
+      : getRelatedArticles(tutteLeSchede, {
+          currentId: id,
+          tags: topics,
+          articleType,
+          locale: lang,
+          onlyArchivedProjects: attivitaConclusa,
+        });
 const jsonLd: JsonLdPageData = {
   pageType: ["content"],
   seo: seo || undefined,
@@ -206,5 +209,5 @@ const jsonLd: JsonLdPageData = {
       />
     )
   }
-  <ArticleRelated items={relatedItems} />
+  <ArticleRelated items={relatedItems} articleType={articleType} />
 </Layout>
