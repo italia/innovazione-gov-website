@@ -32,7 +32,8 @@ type GruppoArgomento = {
   etichettaCta: string | null;
   aCard: boolean;
   conBadge: boolean;
-  quanti: number;
+  /** Quanti articoli mostrare; null = tutti, senza bottone "vedi tutti". */
+  quanti: number | null;
 };
 
 type SezioneArgomento = {
@@ -85,11 +86,11 @@ const SEZIONI: SezioneArgomento[] = [
       {
         articleTypes: ["focus"],
         titolo: "Focus",
-        indice: "novita/focus",
-        etichettaCta: "Vedi tutti i focus",
+        indice: null,
+        etichettaCta: null,
         aCard: true,
         conBadge: false,
-        quanti: 4,
+        quanti: null,
       },
       {
         articleTypes: ["news", "press_release", "interview", "participation"],
@@ -220,7 +221,8 @@ export async function buildTopicPaths(locales: SiteLocale[]) {
                 : null,
               etichettaCta: gruppo.etichettaCta,
               totale: suoi.length,
-              articoli: suoi.slice(0, gruppo.quanti),
+              articoli:
+                gruppo.quanti === null ? suoi : suoi.slice(0, gruppo.quanti),
             };
           })
           .filter((gruppo) => gruppo.totale > 0);
