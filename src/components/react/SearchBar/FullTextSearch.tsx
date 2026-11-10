@@ -72,7 +72,7 @@ export const FullTextSearch = ({
   };
 
   return (
-    <div className="bg-white py-5 px-5 shadow rounded-2 border">
+    <div className="bg-white p-4 p-lg-5 shadow rounded-2 border">
       <SearchBar
         value={value}
         handleChange={handleChange}

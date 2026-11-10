@@ -645,3 +645,21 @@ main#main {
   line-height: 1.5;
   transform: none;
 }
+
+.search-main #searchForm {
+  margin-top: 1.5rem;
+}
+
+.search-main .form-control {
+  text-overflow: ellipsis;
+}
+
+.search-main .form-control::placeholder {
+  font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .search-main .form-control::placeholder {
+    font-size: inherit;
+  }
+}
