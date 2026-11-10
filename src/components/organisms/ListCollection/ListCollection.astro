@@ -2,7 +2,6 @@
 import ButtonLink from "@components/atoms/Button/ButtonLink.astro";
 import { CardEditorialNews } from "@components/molecules/CardEditorialNews";
 import { CardInlineMini } from "@components/molecules/CardInlineMini";
-import { Carousel, CarouselItem } from "@components/molecules/Carousel";
 import { SectionContainer } from "@components/organisms/SectionContainer";
 import { getI18n } from "@i18n/microcopy";
 import { getSectionBgClass } from "@utils/background";
@@ -80,7 +79,7 @@ const buttonVariant =
       )
     }
 
-    <div class:list={[!showInline && !withFilter ? "d-none d-lg-block" : ""]}>
+    <div>
       <ul class="it-card-list row" id={listId}>
         {
           shownItems.map((item, index) => {
@@ -118,18 +117,6 @@ const buttonVariant =
         )
       }
     </div>
-
-    {
-      !showInline && !withFilter && (
-        <Carousel>
-          {items.map((item) => (
-            <CarouselItem>
-              <CardEditorialNews {...item} />
-            </CarouselItem>
-          ))}
-        </Carousel>
-      )
-    }
 
     {
       labelButton && linkTo && (
