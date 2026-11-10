@@ -15,52 +15,92 @@ import type { SiteMap } from "@utils/linkResolver";
 import { findTopicIndex, topicPath } from "@utils/topicRoutes";
 import { getCollection } from "astro:content";
 
-const SEZIONI = [
+/**
+ * Struttura della pagina argomento. Segue la gerarchia del sito: Progetti e
+ * Attività internazionali sono "cose che facciamo" (Attività, Dipartimento),
+ * i Contenuti editoriali raccolgono tutto ciò che sta sotto Novità, Focus
+ * compresi: sono contenuti editoriali, solo più in evidenza.
+ *
+ * Ogni sezione è un H2 con sfondo proprio e contiene uno o più gruppi di
+ * articoli. Un gruppo con `titolo` diventa una sottosezione H3; senza titolo
+ * i suoi articoli stanno direttamente sotto l'H2.
+ */
+type GruppoArgomento = {
+  articleTypes: string[];
+  titolo: string | null;
+  indice: string | null;
+  etichettaCta: string | null;
+  aCard: boolean;
+  conBadge: boolean;
+  quanti: number;
+};
+
+type SezioneArgomento = {
+  titolo: string;
+  sottotitolo: string;
+  sfondo: "lighter" | "default";
+  gruppi: GruppoArgomento[];
+};
+
+const SEZIONI: SezioneArgomento[] = [
   {
-    articleTypes: ["project"],
     titolo: "Progetti",
     sottotitolo: "I progetti del Dipartimento che riguardano questo argomento",
-    indice: "attivita",
-    etichettaCta: "Vedi tutti i progetti",
-    sfondo: "lighter" as const,
-    aCard: true,
-    conBadge: false,
-    quanti: 4,
+    sfondo: "lighter",
+    gruppi: [
+      {
+        articleTypes: ["project"],
+        titolo: null,
+        indice: "attivita",
+        etichettaCta: "Vedi tutti i progetti",
+        aCard: true,
+        conBadge: false,
+        quanti: 4,
+      },
+    ],
   },
   {
-    articleTypes: ["focus"],
-    titolo: "Focus",
-    sottotitolo: "Approfondimenti e aggiornamenti su questo argomento",
-    indice: "novita/focus",
-    etichettaCta: "Vedi tutti i focus",
-    sfondo: "lighter" as const,
-    aCard: true,
-    conBadge: false,
-    quanti: 4,
-  },
-  {
-    articleTypes: ["international"],
     titolo: "Attività internazionali",
     sottotitolo:
       "La partecipazione del Dipartimento ai tavoli internazionali su questo argomento",
-    indice: null,
-    etichettaCta: null,
-    sfondo: "lighter" as const,
-    aCard: true,
-    conBadge: false,
-    quanti: 4,
+    sfondo: "lighter",
+    gruppi: [
+      {
+        articleTypes: ["international"],
+        titolo: null,
+        indice: null,
+        etichettaCta: null,
+        aCard: true,
+        conBadge: false,
+        quanti: 4,
+      },
+    ],
   },
   {
-    articleTypes: ["news", "press_release", "interview", "participation"],
     titolo: "Contenuti editoriali",
     sottotitolo:
       "Notizie, comunicati stampa, interviste e interventi su questo argomento",
-    indice: null,
-    etichettaCta: null,
-    sfondo: "default" as const,
-    aCard: false,
-    conBadge: true,
-    quanti: 6,
+    sfondo: "default",
+    gruppi: [
+      {
+        articleTypes: ["focus"],
+        titolo: "Focus",
+        indice: "novita/focus",
+        etichettaCta: "Vedi tutti i focus",
+        aCard: true,
+        conBadge: false,
+        quanti: 4,
+      },
+      {
+        articleTypes: ["news", "press_release", "interview", "participation"],
+        titolo: "Novità",
+        indice: null,
+        etichettaCta: null,
+        aCard: false,
+        conBadge: true,
+        quanti: 6,
+      },
+    ],
   },
 ];
 
@@ -84,8 +124,8 @@ const TagsQuery = graphql(
   [TagFragment, AltImageFragment],
 );
 
-const TIPI_CON_PAGINA_ARGOMENTO = SEZIONI.flatMap(
-  (sezione) => sezione.articleTypes,
+const TIPI_CON_PAGINA_ARGOMENTO = SEZIONI.flatMap((sezione) =>
+  sezione.gruppi.flatMap((gruppo) => gruppo.articleTypes),
 );
 
 export async function argomentiConPagina(
@@ -141,48 +181,57 @@ export async function buildTopicPaths(locales: SiteLocale[]) {
       if (!tag.slug || !tag.name) continue;
 
       const sezioni = SEZIONI.map((sezione) => {
-        const suoi = articoli
-          .filter((voce) => {
-            const articolo = voce.data;
-            if (!sezione.articleTypes.includes(articolo.articleType ?? ""))
-              return false;
-            if (!articolo.locales.includes(lingua)) return false;
-            return (articolo.tags ?? []).some((t) => t.slug === tag.slug);
+        const gruppi = sezione.gruppi
+          .map((gruppo) => {
+            const suoi = articoli
+              .filter((voce) => {
+                const articolo = voce.data;
+                if (!gruppo.articleTypes.includes(articolo.articleType ?? ""))
+                  return false;
+                if (!articolo.locales.includes(lingua)) return false;
+                return (articolo.tags ?? []).some((t) => t.slug === tag.slug);
+              })
+              .map((voce) => ({
+                id: voce.data.id,
+                tipo: articleTypeLabel(voce.data.articleType),
+                title: getLocaleValue(voce.data.allTitleLocales, lingua, ""),
+                paragraph: getLocaleValue(
+                  voce.data.allParagraphLocales,
+                  lingua,
+                  "",
+                ),
+                dateShown: voce.data.dateShown ?? voce.data.publishedAt ?? null,
+                immagine: showsImageInCard(voce.data.articleType)
+                  ? (getLocaleValue(voce.data.allLogoLocales, lingua, null) ??
+                    getLocaleValue(voce.data.allImageLocales, lingua, null))
+                  : null,
+                path: linkResolver(voce.data.id, lingua),
+              }))
+              .sort((a, b) =>
+                String(b.dateShown).localeCompare(String(a.dateShown)),
+              );
+
+            return {
+              titolo: gruppo.titolo,
+              aCard: gruppo.aCard,
+              conBadge: gruppo.conBadge,
+              percorsoIndice: gruppo.indice
+                ? percorsoEsistente(`/${lingua}/${gruppo.indice}`)
+                : null,
+              etichettaCta: gruppo.etichettaCta,
+              totale: suoi.length,
+              articoli: suoi.slice(0, gruppo.quanti),
+            };
           })
-          .map((voce) => ({
-            id: voce.data.id,
-            tipo: articleTypeLabel(voce.data.articleType),
-            title: getLocaleValue(voce.data.allTitleLocales, lingua, ""),
-            paragraph: getLocaleValue(
-              voce.data.allParagraphLocales,
-              lingua,
-              "",
-            ),
-            dateShown: voce.data.dateShown ?? voce.data.publishedAt ?? null,
-            immagine: showsImageInCard(voce.data.articleType)
-              ? (getLocaleValue(voce.data.allLogoLocales, lingua, null) ??
-                getLocaleValue(voce.data.allImageLocales, lingua, null))
-              : null,
-            path: linkResolver(voce.data.id, lingua),
-          }))
-          .sort((a, b) =>
-            String(b.dateShown).localeCompare(String(a.dateShown)),
-          );
+          .filter((gruppo) => gruppo.totale > 0);
 
         return {
           titolo: sezione.titolo,
           sottotitolo: sezione.sottotitolo,
-          aCard: sezione.aCard,
-          conBadge: sezione.conBadge,
-          percorsoIndice: sezione.indice
-            ? percorsoEsistente(`/${lingua}/${sezione.indice}`)
-            : null,
-          etichettaCta: sezione.etichettaCta,
           sfondo: sezione.sfondo,
-          totale: suoi.length,
-          articoli: suoi.slice(0, sezione.quanti),
+          gruppi,
         };
-      }).filter((sezione) => sezione.totale > 0);
+      }).filter((sezione) => sezione.gruppi.length > 0);
 
       if (!sezioni.length) continue;
 

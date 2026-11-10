@@ -9,9 +9,19 @@ type Props = {
   paragraph?: string | null;
   image?: ImageProps | null;
   linkTo: string;
+  /** Livello del titolo: h4 quando la scheda sta sotto una sottosezione h3. */
+  headingLevel?: "h3" | "h4";
 };
 
-const { id, title, paragraph, image, linkTo } = Astro.props;
+const {
+  id,
+  title,
+  paragraph,
+  image,
+  linkTo,
+  headingLevel = "h3",
+} = Astro.props;
+const Heading = headingLevel;
 
 const cardTitleId = `card-topic-${id}`;
 const { lang } = Astro.locals;
@@ -30,12 +40,12 @@ const t = getI18n(lang);
     )
   }
   <div class="card-topic__body">
-    <h3 class="card-topic__title" id={cardTitleId}>
+    <Heading class="card-topic__title" id={cardTitleId}>
       <a href={linkTo}>
         {title}
         <span class="visually-hidden">{t["link.internal"]}</span>
       </a>
-    </h3>
+    </Heading>
     {paragraph && <p class="card-topic__text">{paragraph}</p>}
   </div>
 </article>

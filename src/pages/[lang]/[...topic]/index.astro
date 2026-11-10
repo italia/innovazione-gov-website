@@ -10,6 +10,7 @@ import type { SiteLocale } from "@graphql/types";
 import Layout from "@layouts/Layout.astro";
 import { createBreadcrumb } from "@utils/createBreadcrumb";
 import { getSectionBgClass } from "@utils/background";
+import { slugify } from "@utils/slugify";
 import { buildTopicPaths } from "@lib/topics";
 
 export async function getStaticPaths() {
@@ -54,7 +55,8 @@ const seoCostruito = [
 const seoMeta = seoDalCms?.length ? seoDalCms : seoCostruito;
 
 const dateArticoli = sezioni
-  .flatMap((sezione) => sezione.articoli)
+  .flatMap((sezione) => sezione.gruppi)
+  .flatMap((gruppo) => gruppo.articoli)
   .map((articolo) => articolo.dateShown)
   .filter((data): data is string => Boolean(data));
 
@@ -84,61 +86,71 @@ const ultimoAggiornamento = dateArticoli.length
         sectionTitleId={sezione.titolo}
       >
         <div class="row">
-          <div class:list={["col-12", !sezione.aCard && "col-lg-8"]}>
-            <h2>{sezione.titolo}</h2>
+          <div class="col-12">
+            <h2 id={slugify(sezione.titolo)}>{sezione.titolo}</h2>
             {sezione.sottotitolo && (
               <p class="topic-section__subtitle">{sezione.sottotitolo}</p>
             )}
-            {sezione.aCard ? (
-              <ul class="topic-cards">
-                {sezione.articoli.map((articolo) => (
-                  <li>
-                    <CardTopicEntry
-                      id={articolo.id}
-                      title={articolo.title}
-                      paragraph={articolo.paragraph}
-                      image={articolo.immagine}
-                      linkTo={articolo.path}
-                    />
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <ul class="topic-articles">
-                {sezione.articoli.map((articolo) => (
-                  <li>
-                    <p class="topic-articles__heading">
-                      <a href={articolo.path}>{articolo.title}</a>
-                      {sezione.conBadge && articolo.tipo && (
-                        <span class="topic-articles__badge">
-                          {articolo.tipo}
-                        </span>
-                      )}
-                    </p>
-                    {articolo.paragraph && (
-                      <p class="topic-articles__text">{articolo.paragraph}</p>
-                    )}
-                    {articolo.dateShown && (
-                      <DateTime
-                        className="topic-articles__date"
-                        value={articolo.dateShown}
-                      />
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {sezione.percorsoIndice &&
-              sezione.etichettaCta &&
-              sezione.totale > sezione.articoli.length && (
-                <ButtonLink
-                  size="small"
-                  label={sezione.etichettaCta}
-                  linkTo={`${sezione.percorsoIndice}?filter=${slug}`}
-                />
-              )}
           </div>
         </div>
+        {sezione.gruppi.map((gruppo) => (
+          <div class="row topic-group">
+            <div class:list={["col-12", !gruppo.aCard && "col-lg-8"]}>
+              {gruppo.titolo && (
+                <h3 class="topic-group__title">{gruppo.titolo}</h3>
+              )}
+              {gruppo.aCard ? (
+                <ul class="topic-cards">
+                  {gruppo.articoli.map((articolo) => (
+                    <li>
+                      <CardTopicEntry
+                        id={articolo.id}
+                        title={articolo.title}
+                        paragraph={articolo.paragraph}
+                        image={articolo.immagine}
+                        linkTo={articolo.path}
+                        headingLevel={gruppo.titolo ? "h4" : "h3"}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <ul class="topic-articles">
+                  {gruppo.articoli.map((articolo) => (
+                    <li>
+                      <p class="topic-articles__heading">
+                        <a href={articolo.path}>{articolo.title}</a>
+                        {gruppo.conBadge && articolo.tipo && (
+                          <span class="topic-articles__badge">
+                            {articolo.tipo}
+                          </span>
+                        )}
+                      </p>
+                      {articolo.paragraph && (
+                        <p class="topic-articles__text">{articolo.paragraph}</p>
+                      )}
+                      {articolo.dateShown && (
+                        <DateTime
+                          className="topic-articles__date"
+                          value={articolo.dateShown}
+                        />
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {gruppo.percorsoIndice &&
+                gruppo.etichettaCta &&
+                gruppo.totale > gruppo.articoli.length && (
+                  <ButtonLink
+                    size="small"
+                    label={gruppo.etichettaCta}
+                    linkTo={`${gruppo.percorsoIndice}?filter=${slug}`}
+                  />
+                )}
+            </div>
+          </div>
+        ))}
       </SectionContainer>
     ))
   }
@@ -149,6 +161,16 @@ const ultimoAggiornamento = dateArticoli.length
 <style>
   .topic-section__subtitle {
     margin-bottom: 2rem;
+  }
+
+  .topic-group + .topic-group {
+    margin-top: 2.5rem;
+  }
+
+  .topic-group__title {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 
   .topic-cards {
