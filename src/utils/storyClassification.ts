@@ -26,6 +26,17 @@ export function isActivityType(type?: string | null): boolean {
   return ACTIVITY_ARTICLE_TYPES.includes(type ?? "");
 }
 
+const EDITORIAL_ARTICLE_TYPES = [
+  "news",
+  "press_release",
+  "interview",
+  "participation",
+];
+
+export function isEditorialType(type?: string | null): boolean {
+  return EDITORIAL_ARTICLE_TYPES.includes(type ?? "");
+}
+
 const ARTICLE_TYPES_UNDER_PARENT_PAGE = ["focus", "international"];
 
 export function nestsUnderParentPage(type?: string | null): boolean {

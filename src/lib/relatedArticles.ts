@@ -6,6 +6,7 @@ import { linkResolver } from "@utils/linkResolver";
 import {
   articleTypeLabel,
   isActivityType,
+  isEditorialType,
   showsImageInCard,
 } from "@utils/storyClassification";
 import { topicLinks } from "@utils/topicRoutes";
@@ -15,7 +16,6 @@ type RelatedOptions = {
   tags: string[];
   articleType: string | null;
   locale: SiteLocale;
-  onlyArchivedProjects?: boolean;
 };
 
 export function schedaCorrelata(
@@ -50,13 +50,7 @@ export function schedaCorrelata(
 
 export function getRelatedArticles(
   all: ArticleCard[],
-  {
-    currentId,
-    tags,
-    articleType,
-    locale,
-    onlyArchivedProjects = false,
-  }: RelatedOptions,
+  { currentId, tags, articleType, locale }: RelatedOptions,
 ): CardEditorialNewsProps[] {
   const dataDiRiferimento = (article: ArticleCard) =>
     article.dateShown ?? article.firstPublishedAt ?? "";
@@ -69,15 +63,18 @@ export function getRelatedArticles(
     (article.tags ?? []).filter((tag) => tag.name && tagSet.has(tag.name))
       .length;
 
-  const stessaTipologia = all.filter(
+  const perAttivita = isActivityType(articleType);
+
+  const candidati = all.filter(
     (article) =>
       article.id !== currentId &&
       !!getLocaleValue(article.allTitleLocales, locale, "") &&
-      article.articleType === articleType &&
-      (!onlyArchivedProjects || article.archived),
+      (perAttivita
+        ? isEditorialType(article.articleType) && tagInComune(article) > 0
+        : article.articleType === articleType),
   );
 
-  return stessaTipologia
+  return candidati
     .sort((a, b) => tagInComune(b) - tagInComune(a) || byDateDesc(a, b))
     .slice(0, 3)
     .map((article) => schedaCorrelata(article, locale));
