@@ -3,6 +3,8 @@ import { HighlightCarousel } from "@components/organisms/HighlightCarousel";
 import type { HighlightCarouselFragmentType } from "@graphql/fragment/sectionFragments";
 import { toSectionBackground } from "@utils/background";
 import { linkResolver } from "@utils/linkResolver";
+import { articleTypeLabel, isActivityType } from "@utils/storyClassification";
+import { topicLinks } from "@utils/topicRoutes";
 
 type Props = {
   block: HighlightCarouselFragmentType;
@@ -16,18 +18,30 @@ const slides = (block.items ?? [])
   .map((item) => {
     const collegato = item.pointsTo!;
     const titolo =
-      item.label ?? ("title" in collegato ? collegato.title : "") ?? "";
+      item.label || ("title" in collegato ? collegato.title : "") || "";
     const testo =
-      item.paragraph ??
+      item.paragraph ||
       ("articleParagraph" in collegato ? collegato.articleParagraph : null);
     const immagine =
       item.image ??
       ("articleImage" in collegato ? collegato.articleImage : null);
+    const tipo = "articleType" in collegato ? collegato.articleType : null;
+    const attivita = isActivityType(tipo);
+    const tag = "tags" in collegato ? collegato.tags : [];
     return {
       id: item.id,
       title: titolo,
       paragraph: testo,
       image: immagine,
+      badge: articleTypeLabel(tipo),
+      dateTime:
+        attivita || !("dateShown" in collegato)
+          ? null
+          : (collegato.dateShown ?? collegato.articleFirstPublishedAt ?? null),
+      topics: attivita
+        ? []
+        : tag.map((t) => t.name).filter((name): name is string => !!name),
+      topicLinks: attivita ? {} : topicLinks(tag, lang),
       linkTo: linkResolver(collegato.id, lang),
     };
   })

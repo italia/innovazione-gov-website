@@ -1,5 +1,6 @@
 ---
 import { ButtonLink } from "@components/atoms/Button";
+import { DateTime } from "@components/atoms/DateTime";
 import { Image } from "@components/atoms/Image";
 import type { ImageProps } from "@components/atoms/Image/types";
 import { SectionContainer } from "@components/organisms/SectionContainer";
@@ -13,6 +14,10 @@ type Slide = {
   title: string;
   paragraph?: string | null;
   image?: ImageProps | null;
+  badge?: string | null;
+  dateTime?: string | null;
+  topics?: string[];
+  topicLinks?: Record<string, string>;
   linkTo: string;
 };
 
@@ -71,7 +76,9 @@ const etichette = {
           items.map((slide, indice) => (
             <div class="splide__slide">
               <div class="highlight-carousel__slide row align-items-center">
-                <div class="col-12 col-lg-6">
+                <div
+                  class:list={["col-12", slide.image ? "col-lg-6" : "col-lg-8"]}
+                >
                   {eyebrow && (
                     <p
                       class="highlight-carousel__eyebrow"
@@ -80,12 +87,47 @@ const etichette = {
                       {eyebrow}
                     </p>
                   )}
+                  {(slide.badge || slide.dateTime) && (
+                    <div class="highlight-carousel__meta">
+                      {slide.badge && (
+                        <span class="highlight-carousel__badge">
+                          <span class="visually-hidden">{t["card.type"]}</span>
+                          {slide.badge}
+                        </span>
+                      )}
+                      {slide.dateTime && (
+                        <DateTime
+                          className="highlight-carousel__date"
+                          value={slide.dateTime}
+                        />
+                      )}
+                    </div>
+                  )}
                   <h2 class="highlight-carousel__title">{slide.title}</h2>
                   {slide.paragraph && (
                     <div
                       class="highlight-carousel__text"
                       set:html={slide.paragraph}
                     />
+                  )}
+                  {slide.topics && slide.topics.length > 0 && (
+                    <div class="highlight-carousel__chips">
+                      <span class="visually-hidden">{t["card.topic"]}</span>
+                      {slide.topics.map((argomento) =>
+                        slide.topicLinks?.[argomento] ? (
+                          <a
+                            class="chip chip-simple chip-link"
+                            href={slide.topicLinks[argomento]}
+                          >
+                            <span class="chip-label">{argomento}</span>
+                          </a>
+                        ) : (
+                          <div class="chip chip-simple">
+                            <span class="chip-label">{argomento}</span>
+                          </div>
+                        ),
+                      )}
+                    </div>
                   )}
                   <div class="highlight-carousel__cta">
                     <ButtonLink
@@ -269,6 +311,42 @@ const etichette = {
 
   .highlight-carousel__text :global(p:last-child) {
     margin-bottom: 0;
+  }
+
+  .highlight-carousel__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .highlight-carousel__badge {
+    border-radius: 4px;
+    background: var(--color-background-secondary, #5c6f82);
+    padding: 0.125rem 0.75rem;
+    color: #fff;
+    text-transform: uppercase;
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  .highlight-carousel__date {
+    margin: 0;
+    color: var(--highlight-carousel-text);
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .highlight-carousel__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
   }
 
   .highlight-carousel__cta {
