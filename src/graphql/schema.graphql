@@ -669,7 +669,6 @@ input ArticleModelFilter {
   articleType: StringFilter
   attachments: LinksFilter
   content: StructuredTextFilter
-  contentType: StringFilter
   dateShown: DateTimeFilter
   description: TextFilter
   descriptionTitle: StringFilter
@@ -719,8 +718,6 @@ enum ArticleModelOrderBy {
   archived_DESC
   articleType_ASC
   articleType_DESC
-  contentType_ASC
-  contentType_DESC
   dateShown_ASC
   dateShown_DESC
   descriptionTitle_ASC
@@ -879,7 +876,6 @@ type ArticleRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): ArticleModelContentField
-  contentType: String
   dateShown: DateTime
   description(
     """Process content as markdown"""

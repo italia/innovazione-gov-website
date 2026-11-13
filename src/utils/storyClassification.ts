@@ -14,13 +14,6 @@ export function articleTypeLabel(type?: string | null): string {
   return ARTICLE_TYPE_LABELS[type] ?? type;
 }
 
-export function contentLabel(
-  type?: string | null,
-  override?: string | null,
-): string {
-  return (override ?? "").trim() || articleTypeLabel(type);
-}
-
 const ARTICLE_TYPES_WITHOUT_CARD_IMAGE = ["focus"];
 
 export function showsImageInCard(type?: string | null): boolean {

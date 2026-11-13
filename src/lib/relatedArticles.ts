@@ -4,7 +4,7 @@ import type { SiteLocale } from "@graphql/types";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { linkResolver } from "@utils/linkResolver";
 import {
-  contentLabel,
+  articleTypeLabel,
   isActivityType,
   isEditorialType,
   showsImageInCard,
@@ -33,7 +33,7 @@ export function schedaCorrelata(
     image: showsImageInCard(article.articleType)
       ? (article.image ?? undefined)
       : undefined,
-    badge: contentLabel(article.articleType, article.contentType),
+    badge: articleTypeLabel(article.articleType),
     dateTime: attivita
       ? undefined
       : (article.dateShown ?? article.firstPublishedAt ?? undefined),

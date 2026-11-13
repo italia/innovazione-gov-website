@@ -13,7 +13,7 @@ import type { SiteLocale } from "@graphql/types";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { linkResolver } from "@utils/linkResolver";
 import { announcementCategoryLabel } from "@utils/announcementCategory";
-import { contentLabel, showsImageInCard } from "@utils/storyClassification";
+import { articleTypeLabel, showsImageInCard } from "@utils/storyClassification";
 import { topicLinks } from "@utils/topicRoutes";
 import { createDownloadUrl } from "@utils/createDownloadUrl";
 
@@ -90,7 +90,7 @@ export const mapArticleToCardEditorialNewsProps = (
     image: showsImageInCard(article.articleType)
       ? (article.image ?? undefined)
       : undefined,
-    badge: contentLabel(article.articleType, article.contentType),
+    badge: articleTypeLabel(article.articleType),
     dateTime: article.dateShown ?? article.firstPublishedAt ?? undefined,
     category: tags,
     categoryLinks: topicLinks(article.tags, lang),

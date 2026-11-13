@@ -16,7 +16,7 @@ import {
   getSearchRenderOptions,
 } from "@utils/indexing/blockContentMappers";
 import { getBreadcrumbs, linkResolver } from "@utils/linkResolver";
-import { contentLabel } from "@utils/storyClassification";
+import { articleTypeLabel } from "@utils/storyClassification";
 import { render } from "datocms-structured-text-to-plain-text";
 
 export const getSectionLabel = (
@@ -64,7 +64,7 @@ export const getMapArticle = (
   return {
     type: "article",
     id: article.id,
-    category: contentLabel(article.articleType, article.contentType),
+    category: articleTypeLabel(article.articleType),
     internalLink: linkResolver(article.id, lang),
     title: getLocaleValue(article.allTitleLocales, lang, ""),
     description: getLocaleValue(article.allParagraphLocales, lang, ""),

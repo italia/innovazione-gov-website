@@ -30,7 +30,6 @@ export const ArticleIndexingFragment = graphql(
     fragment ArticleIndexingFragment on ArticleRecord @_unmask {
       id
       articleType
-      contentType
       ...AllArticlesSlugFragment
       ...ArticleLocalesFragment
       allParagraphLocales: _allParagraphLocales {

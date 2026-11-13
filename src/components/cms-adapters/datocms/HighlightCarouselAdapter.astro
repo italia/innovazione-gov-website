@@ -3,7 +3,7 @@ import { HighlightCarousel } from "@components/organisms/HighlightCarousel";
 import type { HighlightCarouselFragmentType } from "@graphql/fragment/sectionFragments";
 import { toSectionBackground } from "@utils/background";
 import { linkResolver } from "@utils/linkResolver";
-import { contentLabel, isActivityType } from "@utils/storyClassification";
+import { articleTypeLabel, isActivityType } from "@utils/storyClassification";
 import { topicLinks } from "@utils/topicRoutes";
 
 type Props = {
@@ -36,10 +36,7 @@ const slides = (block.items ?? [])
       title: titolo,
       paragraph: testo,
       image: immagine,
-      badge: contentLabel(
-        tipo,
-        "contentType" in collegato ? collegato.contentType : null,
-      ),
+      badge: articleTypeLabel(tipo),
       dateTime:
         attivita || !mostraData || !("dateShown" in collegato)
           ? null
