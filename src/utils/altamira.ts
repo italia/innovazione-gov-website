@@ -13,6 +13,15 @@ function recruitmentBaseUrl(): string | null {
   return value?.trim().replace(/\/+$/, "") || null;
 }
 
+/**
+ * Slug del career site per un annuncio: titolo + area, ogni sequenza di
+ * caratteri che non sono lettere o cifre diventa "-", accenti compresi
+ * ("Unità" resta "Unità"). Verificato sugli annunci pubblicati.
+ */
+export function altamiraSlug(value: string): string {
+  return value.replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-+|-+$/g, "");
+}
+
 let warned = false;
 
 /**
