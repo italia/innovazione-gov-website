@@ -4,7 +4,11 @@ import { graphql } from "@graphql/graphql";
 import type { SiteLocale } from "@graphql/types";
 import { executeQuery } from "@lib/datocms";
 import { linkResolver } from "@utils/linkResolver";
-import { articleTypeLabel, showsImageInCard } from "@utils/storyClassification";
+import {
+  articleTypeLabel,
+  contentLabel,
+  showsImageInCard,
+} from "@utils/storyClassification";
 import { topicLinks } from "@utils/topicRoutes";
 
 type Options = {
@@ -42,6 +46,7 @@ const LastArticlesQuery = graphql(
         id
         title
         description
+        contentType
         paragraph
         dateShown
         duration
@@ -183,7 +188,7 @@ export async function getLastItems(
           ? []
           : (r.tags ?? []).map((t) => t.name).filter((v): v is string => !!v),
         categoryLinks: senzaMetadati ? {} : topicLinks(r.tags, locale),
-        badge: articleTypeLabel(articleType),
+        badge: contentLabel(articleType, r.contentType),
         filterCategories: isProject
           ? (r.tags ?? []).map((t) => t.name).filter((v): v is string => !!v)
           : filterCategoriesOf(r.tags),

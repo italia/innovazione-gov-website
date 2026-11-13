@@ -8,7 +8,7 @@ import { executeQuery } from "@lib/datocms";
 import { DatoBlockModel } from "@utils/cmsMapper";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { linkResolver } from "@utils/linkResolver";
-import { articleTypeLabel, showsImageInCard } from "@utils/storyClassification";
+import { contentLabel, showsImageInCard } from "@utils/storyClassification";
 import { removeLang } from "@utils/pathHelper";
 import rawLinkMap from "@data/linkMap.json";
 import type { SiteMap } from "@utils/linkResolver";
@@ -194,7 +194,10 @@ export async function buildTopicPaths(locales: SiteLocale[]) {
               })
               .map((voce) => ({
                 id: voce.data.id,
-                tipo: articleTypeLabel(voce.data.articleType),
+                tipo: contentLabel(
+                  voce.data.articleType,
+                  voce.data.contentType,
+                ),
                 title: getLocaleValue(voce.data.allTitleLocales, lingua, ""),
                 paragraph: getLocaleValue(
                   voce.data.allParagraphLocales,

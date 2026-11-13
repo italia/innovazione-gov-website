@@ -215,6 +215,8 @@ export const AllArticlesRecordFragment = graphql(
         id
       }
       hideRelated
+      contentType
+      showHeroDownload
       allContentLocales: _allContentLocales {
         locale
         value {

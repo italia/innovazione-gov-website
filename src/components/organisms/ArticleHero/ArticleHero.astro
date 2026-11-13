@@ -62,6 +62,10 @@ const shownParagraph = paginaDiAttivita
 const shownImage =
   (paginaDiAttivita ? (logo ?? image) : isFocus ? (image ?? logo) : image) ??
   null;
+const etichettaDownload =
+  articleType === "press_release"
+    ? t["article.downloadRelease"]
+    : t["link.download"];
 const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
   ...item,
   label: index === arr.length - 1 ? lastLabel : item.label,
@@ -129,7 +133,7 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
             downloadFile && (
               <p class="article-hero__download">
                 <ButtonLink
-                  label={`${t["article.downloadRelease"]}${downloadFile.meta ? ` — ${downloadFile.meta}` : ""}`}
+                  label={`${etichettaDownload}${downloadFile.meta ? ` — ${downloadFile.meta}` : ""}`}
                   linkTo={downloadFile.href}
                   icon="it-download"
                   download

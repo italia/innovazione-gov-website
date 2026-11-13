@@ -669,6 +669,7 @@ input ArticleModelFilter {
   articleType: StringFilter
   attachments: LinksFilter
   content: StructuredTextFilter
+  contentType: StringFilter
   dateShown: DateTimeFilter
   description: TextFilter
   descriptionTitle: StringFilter
@@ -682,6 +683,7 @@ input ArticleModelFilter {
   relatedArticles: LinksFilter
   relatedProjects: LinksFilter
   seo: SeoFilter
+  showHeroDownload: BooleanFilter
   showSidebar: BooleanFilter
   slug: SlugFilter
   tags: LinksFilter
@@ -717,6 +719,8 @@ enum ArticleModelOrderBy {
   archived_DESC
   articleType_ASC
   articleType_DESC
+  contentType_ASC
+  contentType_DESC
   dateShown_ASC
   dateShown_DESC
   descriptionTitle_ASC
@@ -725,6 +729,8 @@ enum ArticleModelOrderBy {
   duration_DESC
   hideRelated_ASC
   hideRelated_DESC
+  showHeroDownload_ASC
+  showHeroDownload_DESC
   showSidebar_ASC
   showSidebar_DESC
   title_ASC
@@ -873,6 +879,7 @@ type ArticleRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): ArticleModelContentField
+  contentType: String
   dateShown: DateTime
   description(
     """Process content as markdown"""
@@ -951,6 +958,7 @@ type ArticleRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): SeoField
+  showHeroDownload: BooleanType!
   showSidebar: BooleanType!
   slug(
     """The locale to use to fetch the field's content"""
@@ -11178,6 +11186,7 @@ input WebinarItemModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   _locales: LocalesFilter
+  contentType: StringFilter
   date: DateFilter
   eventBody: TextFilter
   image: FileFilter
@@ -11210,6 +11219,8 @@ enum WebinarItemModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
+  contentType_ASC
+  contentType_DESC
   date_ASC
   date_DESC
   title_ASC
@@ -11304,6 +11315,7 @@ type WebinarItemRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): [WebinarItemModelContentField!]!
+  contentType: String
   date(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale

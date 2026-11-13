@@ -906,6 +906,7 @@ export const HighlightCarouselFragment = graphql(
             ... on ArticleRecord {
               title
               articleType
+              contentType
               dateShown
               articleFirstPublishedAt: _firstPublishedAt
               tags {

@@ -45,6 +45,7 @@ export async function getStaticPaths() {
       relatedProjectIds: string[];
       relatedArticleIds: string[];
       hideRelated: boolean;
+      showHeroDownload: boolean;
       attachments: {
         id: string;
         fileTitle: string | null;
@@ -112,6 +113,7 @@ export async function getStaticPaths() {
               (articolo) => articolo.id,
             ),
             hideRelated: page.hideRelated ?? false,
+            showHeroDownload: page.showHeroDownload ?? false,
             attachments: page.attachments ?? [],
             dateTime: page.dateShown ?? null,
             topics: (page.tags ?? [])
@@ -149,6 +151,7 @@ const {
   relatedProjectIds,
   relatedArticleIds,
   hideRelated,
+  showHeroDownload,
   attachments,
   dateTime,
   topics,
@@ -187,14 +190,12 @@ const relatedItems = hideRelated
         articleType,
         locale: lang,
       });
-const primoAllegato = attachments.find((allegato) => allegato.file)?.file;
-const downloadFile =
-  articleType === "press_release" && primoAllegato
-    ? {
-        href: createDownloadUrl(primoAllegato),
-        meta: fileMeta(primoAllegato),
-      }
-    : null;
+const primoAllegato = showHeroDownload
+  ? attachments.find((allegato) => allegato.file)?.file
+  : undefined;
+const downloadFile = primoAllegato
+  ? { href: createDownloadUrl(primoAllegato), meta: fileMeta(primoAllegato) }
+  : null;
 
 const jsonLd: JsonLdPageData = {
   pageType: ["content"],

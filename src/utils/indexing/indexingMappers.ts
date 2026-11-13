@@ -16,18 +16,19 @@ import {
   getSearchRenderOptions,
 } from "@utils/indexing/blockContentMappers";
 import { getBreadcrumbs, linkResolver } from "@utils/linkResolver";
-import { articleTypeLabel } from "@utils/storyClassification";
+import { contentLabel } from "@utils/storyClassification";
 import { render } from "datocms-structured-text-to-plain-text";
 
 export const getSectionLabel = (
   id: string,
   lang: SiteLocale,
-  fallback?: string | null,
+  override?: string | null,
 ): string => {
+  const scelta = (override ?? "").trim();
+  if (scelta) return scelta;
   const breadcrumb = getBreadcrumbs(id, lang);
   const sezione = breadcrumb.length > 1 ? breadcrumb[1] : null;
-  if (sezione && sezione.id !== id) return sezione.title.trim();
-  return (fallback ?? "").trim();
+  return sezione && sezione.id !== id ? sezione.title.trim() : "";
 };
 
 export const getMapAnnouncement = (
@@ -63,7 +64,7 @@ export const getMapArticle = (
   return {
     type: "article",
     id: article.id,
-    category: articleTypeLabel(article.articleType),
+    category: contentLabel(article.articleType, article.contentType),
     internalLink: linkResolver(article.id, lang),
     title: getLocaleValue(article.allTitleLocales, lang, ""),
     description: getLocaleValue(article.allParagraphLocales, lang, ""),
@@ -99,7 +100,7 @@ export const getMapWebinar = (
   return {
     type: "webinar",
     id: webinar.id,
-    category: getSectionLabel(webinar.id, lang),
+    category: getSectionLabel(webinar.id, lang, webinar.contentType),
     internalLink: linkResolver(webinar.id, lang),
     title: getLocaleValue(webinar.allTitleLocales, lang, ""),
     description: getLocaleValue(webinar.allParagraphLocales, lang, ""),
