@@ -91,7 +91,7 @@ const jsonLd: JsonLdPageData = {
   faq: extractFaqItems(content ?? []),
   listItems: extractListItems(
     content ?? [],
-    Astro.site || process.env.SITE_URL || "",
+    Astro.site || process.env.SITE_URL || Astro.url.origin,
     lang,
   ),
 };

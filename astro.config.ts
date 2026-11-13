@@ -2,8 +2,14 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 import { defineConfig } from "astro/config";
+import { config as loadDotenv } from "dotenv";
 import { resolve } from "path";
 import { pathToFileURL } from "node:url";
+
+// `astro dev` does not put .env into process.env while it reads this file, so
+// SITE_URL and SHOW_ALL_PAGES (baked in below) would be missing locally.
+// Load it without overriding what the shell, run-env.ts or Vercel already set.
+loadDotenv({ quiet: true });
 
 const scssAliases: Record<string, string> = {
   "@styles": resolve("./src/styles"),
