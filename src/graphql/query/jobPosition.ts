@@ -2,7 +2,7 @@ import {
   AllJobPositionsRecordFragment,
   AllJobPositionsSlugFragment,
 } from "@graphql/fragment/jobPosition";
-import { TagFragment } from "@graphql/fragment/commonFragments";
+import { ImageFragment, TagFragment } from "@graphql/fragment/commonFragments";
 import { SeoFieldFragment } from "@graphql/fragment/seoFragments";
 import { graphql } from "@graphql/graphql";
 
@@ -44,4 +44,44 @@ export const JobPositionsSeoQuery = graphql(
     }
   `,
   [TagFragment, SeoFieldFragment],
+);
+
+/**
+ * Posizioni collegate a un annuncio Altamira (JobID valorizzato): alimentano
+ * le card "Ultime posizioni aperte". Stato, lingua e ordinamento si applicano
+ * in getOpenPositions, con le stesse regole dell'archivio.
+ */
+export const AltamiraJobPositionsQuery = graphql(
+  `
+    query AltamiraJobPositions {
+      allJobPositions(
+        first: 500
+        filter: { altamiraJobId: { isPresent: true } }
+      ) {
+        id
+        locales: _locales
+        positionStatus
+        openDate
+        closeDate
+        sortDate
+        altamiraJobId
+        image {
+          ...ImageFragment
+        }
+        allSlugLocales: _allSlugLocales {
+          locale
+          value
+        }
+        allTitleLocales: _allTitleLocales {
+          locale
+          value
+        }
+        allAbstractLocales: _allAbstractLocales {
+          locale
+          value
+        }
+      }
+    }
+  `,
+  [ImageFragment],
 );

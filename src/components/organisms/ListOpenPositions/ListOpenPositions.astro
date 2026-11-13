@@ -14,6 +14,8 @@ export type OpenPositionItemProps = {
   description?: string;
   image?: ImageProps;
   linkTo: string;
+  /** Link al career site Altamira: si apre in un nuovo tab. */
+  external?: boolean;
 };
 
 type Props = {
@@ -64,12 +66,12 @@ const textColorClass = isDark ? "text-white" : "";
       }
     </div>
 
-    <div class="col-12 col-lg-6">
-      <h3 class:list={["open-positions__label", textColorClass]}>
-        {t["position.latestOpen"]}
-      </h3>
-      {
-        items.length > 0 ? (
+    {
+      items.length > 0 && (
+        <div class="col-12 col-lg-6">
+          <h3 class:list={["open-positions__label", textColorClass]}>
+            {t["position.latestOpen"]}
+          </h3>
           <ul class="open-positions__list">
             {items.map((item) => (
               <li>
@@ -81,8 +83,17 @@ const textColorClass = isDark ? "text-white" : "";
                   )}
                   <div class="open-positions__body">
                     <h4 class="open-positions__title">
-                      <a href={item.linkTo}>
+                      <a
+                        href={item.linkTo}
+                        target={item.external ? "_blank" : undefined}
+                        rel={item.external ? "noreferrer" : undefined}
+                      >
                         {item.title}
+                        {item.external && (
+                          <span class="visually-hidden">
+                            {` (${t["link.external"]})`}
+                          </span>
+                        )}
                         <svg
                           class="open-positions__icon"
                           width="26"
@@ -107,13 +118,9 @@ const textColorClass = isDark ? "text-white" : "";
               </li>
             ))}
           </ul>
-        ) : (
-          <p class:list={["open-positions__empty", textColorClass]}>
-            {t["position.noOpen"]}
-          </p>
-        )
-      }
-    </div>
+        </div>
+      )
+    }
   </div>
 </SectionContainer>
 
@@ -192,10 +199,5 @@ const textColorClass = isDark ? "text-white" : "";
     color: #1c1c1c;
     font-size: 16px;
     line-height: 1.6;
-  }
-
-  .open-positions__empty {
-    margin: 0;
-    color: #5b6f82;
   }
 </style>

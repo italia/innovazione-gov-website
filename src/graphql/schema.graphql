@@ -5346,6 +5346,7 @@ input JobPositionModelFilter {
   _isValid: BooleanFilter
   _locales: LocalesFilter
   abstract: TextFilter
+  altamiraJobId: StringFilter
   closeDate: DateFilter
   compensation: StringFilter
   image: FileFilter
@@ -5382,6 +5383,8 @@ enum JobPositionModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
+  altamiraJobId_ASC
+  altamiraJobId_DESC
   closeDate_ASC
   closeDate_DESC
   compensation_ASC
@@ -5497,6 +5500,7 @@ type JobPositionRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): String
+  altamiraJobId: String
   closeDate: Date
   compensation(
     """The locale to use to fetch the field's content"""
