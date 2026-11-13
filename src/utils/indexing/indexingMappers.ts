@@ -1,4 +1,5 @@
 import type {
+  AnnouncementIndexingFragmentType,
   ArticleIndexingFragmentType,
   InsightIndexingFragmentType,
   NewsIndexingFragmentType,
@@ -15,26 +16,40 @@ import {
   getSearchRenderOptions,
 } from "@utils/indexing/blockContentMappers";
 import { getBreadcrumbs, linkResolver } from "@utils/linkResolver";
+import { articleTypeLabel } from "@utils/storyClassification";
 import { render } from "datocms-structured-text-to-plain-text";
 
-/**
- * Category of a routed record (article, insight, webinar, page), taken from
- * its own breadcrumb in the link map: the sections between the homepage and
- * the record itself, e.g. "Attività, Infrastrutture e Connettività".
- * The search UI splits on "," and renders one badge per section.
- *
- * Kept here, not in getCategory.ts: that module is also imported by the
- * link-map generator, which must not depend on the JSON it produces.
- */
-export const getCategoryFromBreadcrumb = (
+export const getSectionLabel = (
   id: string,
   lang: SiteLocale,
+  fallback?: string | null,
 ): string => {
-  return getBreadcrumbs(id, lang)
-    .slice(1, -1)
-    .map((step) => step.title.trim())
-    .filter(Boolean)
-    .join(", ");
+  const breadcrumb = getBreadcrumbs(id, lang);
+  const sezione = breadcrumb.length > 1 ? breadcrumb[1] : null;
+  if (sezione && sezione.id !== id) return sezione.title.trim();
+  return (fallback ?? "").trim();
+};
+
+export const getMapAnnouncement = (
+  announcement: AnnouncementIndexingFragmentType,
+  lang: SiteLocale,
+  category: string,
+) => {
+  const contentData = getLocaleValue(
+    announcement.allContentLocales,
+    lang,
+    null,
+  );
+
+  return {
+    type: "announcement",
+    id: announcement.id,
+    category,
+    internalLink: linkResolver(announcement.id, lang),
+    title: getLocaleValue(announcement.allTitleLocales, lang, ""),
+    description: getLocaleValue(announcement.allAbstractLocales, lang, ""),
+    content: flattenBlocks(contentData ?? []),
+  };
 };
 
 export const getMapArticle = (
@@ -48,7 +63,7 @@ export const getMapArticle = (
   return {
     type: "article",
     id: article.id,
-    category: getCategoryFromBreadcrumb(article.id, lang),
+    category: articleTypeLabel(article.articleType),
     internalLink: linkResolver(article.id, lang),
     title: getLocaleValue(article.allTitleLocales, lang, ""),
     description: getLocaleValue(article.allParagraphLocales, lang, ""),
@@ -66,7 +81,7 @@ export const getMapInsight = (
   return {
     type: "insight",
     id: insight.id,
-    category: getCategoryFromBreadcrumb(insight.id, lang),
+    category: getSectionLabel(insight.id, lang, insight.contentType),
     internalLink: linkResolver(insight.id, lang),
     title: getLocaleValue(insight.allTitleLocales, lang, ""),
     description: getLocaleValue(insight.allAbstractLocales, lang, ""),
@@ -84,7 +99,7 @@ export const getMapWebinar = (
   return {
     type: "webinar",
     id: webinar.id,
-    category: getCategoryFromBreadcrumb(webinar.id, lang),
+    category: getSectionLabel(webinar.id, lang),
     internalLink: linkResolver(webinar.id, lang),
     title: getLocaleValue(webinar.allTitleLocales, lang, ""),
     description: getLocaleValue(webinar.allParagraphLocales, lang, ""),
@@ -153,7 +168,7 @@ export const getMapPages = (
   return {
     type: "page",
     id: page.id,
-    category: getCategoryFromBreadcrumb(page.id, lang),
+    category: getSectionLabel(page.id, lang, page.contentType),
     internalLink: linkResolver(page.id, lang),
     title: getLocaleValue(page.allTitleLocales, lang, ""),
     description: "",

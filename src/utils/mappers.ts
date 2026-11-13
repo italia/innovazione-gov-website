@@ -6,11 +6,13 @@ import type {
   ResourceFragmentType,
   WebinarItemFragmentType,
 } from "@graphql/fragment/commonFragments";
+import type { AllAnnouncementsRecordFragmentType } from "@graphql/fragment/announcement";
 import type { MeasureFragmentType } from "@graphql/fragment/measure";
 import type { ArticleCard } from "@graphql/query/articleCards";
 import type { SiteLocale } from "@graphql/types";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { linkResolver } from "@utils/linkResolver";
+import { announcementCategoryLabel } from "@utils/announcementCategory";
 import { articleTypeLabel, showsImageInCard } from "@utils/storyClassification";
 import { topicLinks } from "@utils/topicRoutes";
 import { createDownloadUrl } from "@utils/createDownloadUrl";
@@ -32,6 +34,38 @@ export const mapNewsToCardEditorialNewsProps = (
     action: link ? new URL(link).host : "",
     lang: lang,
     isExternal: true,
+  };
+};
+
+export const mapAnnouncementToCardEditorialNewsProps = (
+  announcement: AllAnnouncementsRecordFragmentType,
+  lang: SiteLocale,
+): CardEditorialNewsProps => {
+  const topics = getLocaleValue(announcement.allTopicsLocales, lang, []) ?? [];
+  const names = topics
+    .map((topic) => topic.name)
+    .filter((name): name is string => !!name);
+  const filterCategories = topics
+    .filter((topic) => topic.isHighlighted)
+    .map((topic) => topic.name)
+    .filter((name): name is string => !!name);
+  return {
+    id: announcement.id,
+    title: getLocaleValue(announcement.allTitleLocales, lang, "") ?? "",
+    description:
+      getLocaleValue(announcement.allAbstractLocales, lang, "") ?? "",
+    badge: announcementCategoryLabel(announcement.announcementCategory, lang),
+    dateTime:
+      announcement.sortDate ??
+      announcement.openDate ??
+      announcement.publishedAt ??
+      undefined,
+    category: names,
+    categoryLinks: topicLinks(topics, lang),
+    filterCategories,
+    linkTo: linkResolver(announcement.id, lang),
+    lang: lang,
+    isExternal: false,
   };
 };
 

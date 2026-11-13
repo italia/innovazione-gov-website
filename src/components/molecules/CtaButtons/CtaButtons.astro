@@ -1,0 +1,36 @@
+---
+import { ButtonLink } from "@components/atoms/Button";
+import type { CtaButtonsProps } from "./types";
+
+type Props = CtaButtonsProps;
+
+const { items } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <div class="cta-buttons">
+      {items.map((item) => (
+        <ButtonLink
+          label={item.label}
+          linkTo={item.linkTo}
+          variant={item.outline ? "outline-light" : "light"}
+          openInNewTab={item.isExternal}
+        />
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-block: 2rem;
+  }
+
+  .cta-buttons :global(.btn) {
+    min-height: 44px;
+  }
+</style>

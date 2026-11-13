@@ -16,6 +16,8 @@ import type { SiteLocale } from "@graphql/types";
 import Layout from "@layouts/Layout.astro";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { type JsonLdPageData } from "@utils/JsonLD/seoJsonLd";
+import { createDownloadUrl } from "@utils/createDownloadUrl";
+import { fileMeta } from "@utils/fileMeta";
 import { linkResolver } from "@utils/linkResolver";
 import { removeLang } from "@utils/pathHelper";
 import { getCollection, getEntry } from "astro:content";
@@ -42,6 +44,17 @@ export async function getStaticPaths() {
       duration: string | null;
       relatedProjectIds: string[];
       relatedArticleIds: string[];
+      hideRelated: boolean;
+      attachments: {
+        id: string;
+        fileTitle: string | null;
+        file: {
+          url: string;
+          filename: string;
+          format: string;
+          size: number;
+        } | null;
+      }[];
       dateTime: string | null;
       topics: string[];
       topicLinks: Record<string, string>;
@@ -98,6 +111,8 @@ export async function getStaticPaths() {
             relatedArticleIds: (page.relatedArticles ?? []).map(
               (articolo) => articolo.id,
             ),
+            hideRelated: page.hideRelated ?? false,
+            attachments: page.attachments ?? [],
             dateTime: page.dateShown ?? null,
             topics: (page.tags ?? [])
               .map((tag) => tag.name)
@@ -133,6 +148,8 @@ const {
   duration,
   relatedProjectIds,
   relatedArticleIds,
+  hideRelated,
+  attachments,
   dateTime,
   topics,
   topicLinks,
@@ -160,8 +177,9 @@ const attivitaCollegate = relatedProjectIds
     title: getLocaleValue(scheda.allTitleLocales, lang, ""),
     linkTo: linkResolver(scheda.id, lang),
   }));
-const relatedItems =
-  scelteAMano.length > 0
+const relatedItems = hideRelated
+  ? []
+  : scelteAMano.length > 0
     ? scelteAMano
     : getRelatedArticles(tutteLeSchede, {
         currentId: id,
@@ -169,6 +187,15 @@ const relatedItems =
         articleType,
         locale: lang,
       });
+const primoAllegato = attachments.find((allegato) => allegato.file)?.file;
+const downloadFile =
+  articleType === "press_release" && primoAllegato
+    ? {
+        href: createDownloadUrl(primoAllegato),
+        meta: fileMeta(primoAllegato),
+      }
+    : null;
+
 const jsonLd: JsonLdPageData = {
   pageType: ["content"],
   seo: seo || undefined,
@@ -193,6 +220,7 @@ const jsonLd: JsonLdPageData = {
     archived={archived}
     duration={duration}
     relatedProjects={attivitaCollegate}
+    downloadFile={downloadFile}
   />
   {
     content && (

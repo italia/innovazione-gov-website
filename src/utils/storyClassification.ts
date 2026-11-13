@@ -5,7 +5,7 @@ export const ARTICLE_TYPE_LABELS: Record<string, string> = {
   participation: "Intervento",
   focus: "Focus",
   guida: "Guida",
-  project: "Attività",
+  project: "Progetto",
   international: "Attività internazionali",
 };
 

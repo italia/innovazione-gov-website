@@ -1,3 +1,7 @@
+import {
+  AllAnnouncementsSlugFragment,
+  AnnouncementContentFragment,
+} from "@graphql/fragment/announcement";
 import { ArticleContentFragment } from "@graphql/fragment/article";
 import {
   DownloadLinkFragment,
@@ -25,6 +29,7 @@ export const ArticleIndexingFragment = graphql(
   `
     fragment ArticleIndexingFragment on ArticleRecord @_unmask {
       id
+      articleType
       ...AllArticlesSlugFragment
       ...ArticleLocalesFragment
       allParagraphLocales: _allParagraphLocales {
@@ -51,6 +56,7 @@ export const InsightIndexingFragment = graphql(
   `
     fragment InsightIndexingFragment on InsightRecord @_unmask {
       id
+      contentType
       ...AllInsightsSlugFragment
       ...InsightLocalesFragment
       allAbstractLocales: _allAbstractLocales {
@@ -189,6 +195,7 @@ export const PageIndexingFragment = graphql(
   `
     fragment PageIndexingFragment on PageRecord @_unmask {
       id
+      contentType
       ...AllPagesSlugFragment
       ...PageLocalesFragment
       allContentLocales: _allContentLocales {
@@ -225,4 +232,30 @@ export const HomepageIndexingFragment = graphql(
 
 export type HomepageIndexingFragmentType = FragmentOf<
   typeof HomepageIndexingFragment
+>;
+
+export const AnnouncementIndexingFragment = graphql(
+  `
+    fragment AnnouncementIndexingFragment on AnnouncementRecord @_unmask {
+      id
+      announcementCategory
+      ...AllAnnouncementsSlugFragment
+      allAbstractLocales: _allAbstractLocales {
+        locale
+        value
+      }
+
+      allContentLocales: _allContentLocales {
+        locale
+        value {
+          ...AnnouncementContentFragment
+        }
+      }
+    }
+  `,
+  [AllAnnouncementsSlugFragment, AnnouncementContentFragment],
+);
+
+export type AnnouncementIndexingFragmentType = FragmentOf<
+  typeof AnnouncementIndexingFragment
 >;

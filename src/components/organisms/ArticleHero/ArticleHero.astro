@@ -1,4 +1,5 @@
 ---
+import { ButtonLink } from "@components/atoms/Button";
 import { DateTime } from "@components/atoms/DateTime";
 import { Image } from "@components/atoms/Image";
 import type { ImageProps } from "@components/atoms/Image/types";
@@ -21,6 +22,7 @@ type Props = {
   archived?: boolean;
   duration?: string | null;
   relatedProjects?: { title: string; linkTo: string }[];
+  downloadFile?: { href: string; meta: string } | null;
 };
 
 const {
@@ -37,6 +39,7 @@ const {
   archived = false,
   duration,
   relatedProjects = [],
+  downloadFile = null,
 } = Astro.props;
 const { recordId, lang } = Astro.locals;
 const t = getI18n(lang);
@@ -119,6 +122,18 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
                   // prettier-ignore
                   <a class="article-hero__meta-link" href={progetto.linkTo}>{progetto.title}</a>,
                 )}
+              </p>
+            )
+          }
+          {
+            downloadFile && (
+              <p class="article-hero__download">
+                <ButtonLink
+                  label={`${t["article.downloadRelease"]}${downloadFile.meta ? ` — ${downloadFile.meta}` : ""}`}
+                  linkTo={downloadFile.href}
+                  icon="it-download"
+                  download
+                />
               </p>
             )
           }
@@ -255,6 +270,10 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
     color: #1a1a1a;
     font-size: 1.125rem;
     line-height: 1.75rem;
+  }
+  .article-hero__download {
+    margin-top: 1.5rem;
+    margin-bottom: 0;
   }
   .article-hero__topics {
     margin-top: 1.5rem;

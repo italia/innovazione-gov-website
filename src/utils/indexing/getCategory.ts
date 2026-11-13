@@ -6,17 +6,15 @@ import { getLocaleValue } from "@utils/getLocaleValue";
 type tabType = { type: string; title: string };
 type catalogueMapCategory = { type: tabType[]; title?: string };
 
-export const getTitleByTypeNews = (
+export const getTabTitleByType = (
   catalogues: catalogueMapCategory[],
   searchType: string,
 ): string | undefined => {
   const catalogueMatch = catalogues.find((item) =>
     item.type.some((t) => t.type === searchType),
   );
-  if (!catalogueMatch) return undefined;
 
-  const specificType = catalogueMatch.type.find((t) => t.type === searchType);
-  return `${catalogueMatch?.title}, ${specificType?.title}`;
+  return catalogueMatch?.type.find((t) => t.type === searchType)?.title;
 };
 
 export const getTitleByTypeResourse = (

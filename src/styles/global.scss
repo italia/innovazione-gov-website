@@ -521,7 +521,7 @@ main#main {
   overflow-x: clip;
 }
 
-.article-body--focus .attachments-box {
+.article-body--focus .attachments-box--default {
   margin-block: 2.5rem;
   border-radius: 0;
   background: transparent;
@@ -529,7 +529,7 @@ main#main {
   color: var(--color-text-base, #1a1a1a);
 }
 
-.article-body--focus .attachments-box .attachments-box__title {
+.article-body--focus .attachments-box--default .attachments-box__title {
   margin-bottom: 1.5rem;
   color: var(--color-text-base, #1a1a1a);
   font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
@@ -538,30 +538,30 @@ main#main {
   line-height: 40px;
 }
 
-.article-body--focus .attachments-box .attachments-box__item {
+.article-body--focus .attachments-box--default .attachments-box__item {
   align-items: center;
   padding: 1rem 0;
   border-top: 0;
   border-bottom: 1px solid #d4d8dc;
 }
 
-.article-body--focus .attachments-box .attachments-box__icon svg {
+.article-body--focus .attachments-box--default .attachments-box__icon svg {
   fill: var(--color-text-primary, #06c);
 }
 
-.article-body--focus .attachments-box .attachments-box__link {
+.article-body--focus .attachments-box--default .attachments-box__link {
   color: var(--color-text-primary, #06c);
   font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
   font-weight: 600;
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 18px;
+  line-height: 28px;
   text-decoration-line: underline;
   text-decoration-style: solid;
   text-decoration-skip-ink: none;
   text-underline-position: from-font;
 }
 
-.article-body--focus .attachments-box .attachments-box__meta {
+.article-body--focus .attachments-box--default .attachments-box__meta {
   color: var(--color-secondary, #2f475e);
   font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
   font-size: 14px;
@@ -571,12 +571,16 @@ main#main {
 .it-card .it-card-title {
   font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
   font-weight: 700;
-  font-size: 32px;
-  line-height: 40px;
+  font-size: 21px;
+  line-height: 28px;
 }
 
 .it-card .it-card-title a {
   color: var(--color-text-primary, #06c);
+}
+
+.it-card .it-card-title a,
+.it-card .it-card-title > span:not(.visually-hidden) {
   text-decoration-line: underline;
   text-decoration-style: solid;
   text-decoration-skip-ink: none;

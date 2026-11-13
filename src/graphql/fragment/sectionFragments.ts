@@ -6,6 +6,7 @@ import {
   ArticleCardPreviewFragment,
   AuthorListFragment,
   CalloutFragment,
+  CtaButtonGroupFragment,
   NoteBoxFragment,
   CardLinkFragment,
   ChannelFragment,
@@ -439,12 +440,16 @@ export const StructuredTextFragment = graphql(
         ... on StatisticBlockRecord {
           ...StatisticBlockFragment
         }
+        ... on CtaButtonGroupRecord {
+          ...CtaButtonGroupFragment
+        }
       }
     }
   `,
   [
     StatisticBlockFragment,
     AccordionBlockFragment,
+    CtaButtonGroupFragment,
     ListCardEditorialWithIconFragment,
     ExternalLinkFragment,
     InternalLinkFragment,
@@ -884,6 +889,8 @@ export const HighlightCarouselFragment = graphql(
       title
       backgroundColor
       paragraph(markdown: true)
+      hideDate
+      hideTopics
       items {
         ... on HighlightItemRecord {
           id

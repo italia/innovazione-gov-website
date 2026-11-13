@@ -2,7 +2,7 @@ import type { SiteLocale } from "@graphql/types";
 import { getI18n } from "@i18n/microcopy";
 import {
   getCataloguesMapCategory,
-  getTitleByTypeNews,
+  getTabTitleByType,
   getTitleByTypeResourse,
 } from "@utils/indexing/getCategory";
 import * as Mappers from "@utils/indexing/indexingMappers";
@@ -40,6 +40,7 @@ export const GET: APIRoute = async ({ params }) => {
   if (!response)
     return new Response("No documents to indexing", { status: 400 });
 
+  const announcements = response.allAnnouncements;
   const articles = response.allArticles;
   const insights = response.allInsights;
   const newsItems = response.allNewsItems;
@@ -52,11 +53,8 @@ export const GET: APIRoute = async ({ params }) => {
     lang,
   );
 
-  // Routed records (pages, articles, insights, webinars) take their category
-  // from their own breadcrumb inside the mapper. Only the external ones
-  // (news, resources) still need a per-type label from the catalogues.
   const newsCategory =
-    getTitleByTypeNews(cataloguesMapCategory, newsItems[0]?.modelApiKey) || "";
+    getTabTitleByType(cataloguesMapCategory, newsItems[0]?.modelApiKey) || "";
   const resourseCategory =
     getTitleByTypeResourse(cataloguesMapCategory, resourses[0]?.modelApiKey) ||
     "";
@@ -65,6 +63,9 @@ export const GET: APIRoute = async ({ params }) => {
     ...pages.map((item) => Mappers.getMapPages(item, lang)),
     ...newsItems.map((item) => Mappers.getMapNews(item, lang, newsCategory)),
     ...articles.map((item) => Mappers.getMapArticle(item, lang)),
+    ...announcements.map((item) =>
+      Mappers.getMapAnnouncement(item, lang, t["announcement.section"]),
+    ),
     ...insights.map((item) => Mappers.getMapInsight(item, lang)),
     ...webinars.map((item) => Mappers.getMapWebinar(item, lang)),
     ...resourses

@@ -1,0 +1,30 @@
+---
+import { CtaButtons } from "@components/molecules/CtaButtons";
+import type { CtaButtonItem } from "@components/molecules/CtaButtons";
+import type { CtaButtonGroupFragmentType } from "@graphql/fragment/commonFragments";
+import { linkResolver } from "@utils/linkResolver";
+
+type Props = {
+  block: CtaButtonGroupFragmentType;
+};
+
+const { block } = Astro.props;
+const { lang } = Astro.locals;
+
+const items: CtaButtonItem[] = (block.buttons ?? [])
+  .map((button) => {
+    const risolto = button.link ? linkResolver(button.link.id, lang) : null;
+    const interno = risolto && risolto !== "#" ? risolto : null;
+    const linkTo = interno || button.externalUrl || "";
+    return {
+      id: button.id,
+      label: button.label ?? "",
+      linkTo,
+      isExternal: !interno && !!button.externalUrl,
+      outline: button.style === "outline",
+    };
+  })
+  .filter((item) => item.label && item.linkTo);
+---
+
+<CtaButtons items={items} />

@@ -1,3 +1,4 @@
+import { AllAnnouncementsContentQuery } from "@graphql/query/announcement";
 import { AllArticleCardsQuery } from "@graphql/query/articleCards";
 import { LayoutQuery } from "@graphql/query/layout";
 import { AllMeasuresQuery } from "@graphql/query/measure";
@@ -17,6 +18,16 @@ export const getNews = async (isPreview: boolean) => {
     return wrap(res?.allNewsItems ?? []);
   }
   return await getCollection("news_item");
+};
+
+export const getAnnouncements = async (isPreview: boolean) => {
+  if (isPreview) {
+    const res = await executeAutoPagingQuery(AllAnnouncementsContentQuery, {
+      includeDrafts: true,
+    });
+    return wrap(res?.allAnnouncements ?? []);
+  }
+  return await getCollection("announcement");
 };
 
 const fetchArticleCards = async (includeDrafts: boolean) => {

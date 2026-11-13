@@ -23,6 +23,7 @@ const {
   locales,
   homeRecordId,
   logoSelect,
+  hideHeaderSocial,
   _allUtilityLocales,
   search,
   allMetaNavigation,
@@ -42,13 +43,15 @@ const logo = logoSelect
   ? { url: logoSelect, width: null, height: null }
   : undefined;
 
-const social: SocialLink[] = getLocaleValue(_allUtilityLocales, lang, [])
-  .filter((util) => util.componentName === DatoBlockModel.SupportingBrand)
-  .map((util) => ({
-    icon: util.brandLogo,
-    label: util.label,
-    url: util.url,
-  }));
+const social: SocialLink[] = hideHeaderSocial
+  ? []
+  : getLocaleValue(_allUtilityLocales, lang, [])
+      .filter((util) => util.componentName === DatoBlockModel.SupportingBrand)
+      .map((util) => ({
+        icon: util.brandLogo,
+        label: util.label,
+        url: util.url,
+      }));
 
 const mainNavigation = getLocaleValue(allMainNavigation, lang, []);
 const secondaryNavigation = getLocaleValue(allSecondaryNavigation, lang, []);

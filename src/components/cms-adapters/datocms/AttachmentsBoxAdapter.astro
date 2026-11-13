@@ -3,6 +3,7 @@ import { AttachmentsBox } from "@components/organisms/AttachmentsBox";
 import type { AttachmentsBoxBackground } from "@components/organisms/AttachmentsBox";
 import type { AttachmentsBoxFragmentType } from "@graphql/fragment/commonFragments";
 import { createDownloadUrl } from "@utils/createDownloadUrl";
+import { fileMeta } from "@utils/fileMeta";
 
 type Props = {
   block: AttachmentsBoxFragmentType;
@@ -10,20 +11,13 @@ type Props = {
 
 const { block } = Astro.props;
 
-const dettagli = (doc: { format?: string | null; size?: number | null }) => {
-  const estensione = (doc.format ?? "").toUpperCase();
-  const megabyte = doc.size ? (doc.size / 1024 / 1024).toFixed(1) : null;
-  if (!estensione && !megabyte) return "";
-  return megabyte ? `${estensione} (${megabyte}mb)` : estensione;
-};
-
 const items = (block.downloads ?? [])
   .filter((download) => download.doc)
   .map((download) => ({
     id: download.id,
     label: download.label ?? download.doc!.filename,
     href: createDownloadUrl(download.doc!),
-    meta: dettagli(download.doc!),
+    meta: fileMeta(download.doc!),
   }));
 ---
 

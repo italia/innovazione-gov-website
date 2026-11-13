@@ -1,5 +1,6 @@
 import {
   allDocumentsLoader,
+  announcementsLoader,
   articleContentLoader,
   cataloguesLoader,
   errorPageLoader,
@@ -23,6 +24,7 @@ import {
 } from "@collections/loader";
 import {
   allDocumentsSchema,
+  announcementSchema,
   articleSchema,
   catalogueSchema,
   errorPageSchema,
@@ -94,6 +96,10 @@ export const collections = {
   insight: defineCollection({
     schema: insightSchema,
     loader: insightContentLoader,
+  }),
+  announcement: defineCollection({
+    schema: announcementSchema,
+    loader: announcementsLoader,
   }),
   job_position: defineCollection({
     schema: jobPositionSchema,

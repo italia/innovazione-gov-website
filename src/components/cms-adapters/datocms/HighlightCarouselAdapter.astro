@@ -13,6 +13,9 @@ type Props = {
 const { block } = Astro.props;
 const { lang } = Astro.locals;
 
+const mostraData = !block.hideDate;
+const mostraArgomenti = !block.hideTopics;
+
 const slides = (block.items ?? [])
   .filter((item) => item.pointsTo)
   .map((item) => {
@@ -35,13 +38,14 @@ const slides = (block.items ?? [])
       image: immagine,
       badge: articleTypeLabel(tipo),
       dateTime:
-        attivita || !("dateShown" in collegato)
+        attivita || !mostraData || !("dateShown" in collegato)
           ? null
           : (collegato.dateShown ?? collegato.articleFirstPublishedAt ?? null),
-      topics: attivita
-        ? []
-        : tag.map((t) => t.name).filter((name): name is string => !!name),
-      topicLinks: attivita ? {} : topicLinks(tag, lang),
+      topics:
+        attivita || !mostraArgomenti
+          ? []
+          : tag.map((t) => t.name).filter((name): name is string => !!name),
+      topicLinks: attivita || !mostraArgomenti ? {} : topicLinks(tag, lang),
       linkTo: linkResolver(collegato.id, lang),
     };
   })

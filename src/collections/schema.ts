@@ -1,3 +1,4 @@
+import type { AllAnnouncementsRecordFragmentType } from "@graphql/fragment/announcement";
 import type { AllArticlesRecordFragmentType } from "@graphql/fragment/article";
 import type { AllCataloguesRecordFragmentType } from "@graphql/fragment/catalogue";
 import type {
@@ -9,6 +10,7 @@ import type {
 import type { ErrorRecordFragmentType } from "@graphql/fragment/globalSettings";
 import type { HomepageRecordFragmentType } from "@graphql/fragment/homepage";
 import type {
+  AnnouncementIndexingFragmentType,
   ArticleIndexingFragmentType,
   CatalogueIndexingFragmentType,
   InsightIndexingFragmentType,
@@ -55,6 +57,9 @@ export const webinarContentSchema = z.custom<AllWebinarRecordFragmentType>();
 export const insightSchema = z.custom<AllInsightsRecordFragmentType>();
 
 export const articleSchema = z.custom<AllArticlesRecordFragmentType>();
+
+export const announcementSchema =
+  z.custom<AllAnnouncementsRecordFragmentType>();
 
 export const jobPositionSchema = z.custom<AllJobPositionsRecordFragmentType>();
 
@@ -125,6 +130,7 @@ export const globalSeoSchema = z.object({
 
 export const allDocumentsSchema = z.object({
   id: z.string(),
+  allAnnouncements: z.array(z.custom<AnnouncementIndexingFragmentType>()),
   allArticles: z.array(z.custom<ArticleIndexingFragmentType>()),
   allInsights: z.array(z.custom<InsightIndexingFragmentType>()),
   allNewsItems: z.array(z.custom<NewsIndexingFragmentType>()),

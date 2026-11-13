@@ -1,6 +1,7 @@
 import {
   AccordionBlockFragment,
   CalloutFragment,
+  CtaButtonGroupFragment,
   NoteBoxFragment,
   DownloadLinkFragment,
   AttachmentsBoxFragment,
@@ -104,11 +105,15 @@ export const ArticleContentFragment = graphql(
         ... on AccordionBlockRecord {
           ...AccordionBlockFragment
         }
+        ... on CtaButtonGroupRecord {
+          ...CtaButtonGroupFragment
+        }
       }
     }
   `,
   [
     AccordionBlockFragment,
+    CtaButtonGroupFragment,
     ListCardEditorialWithIconFragment,
     InternalLinkFragment,
     ExternalLinkFragment,
@@ -209,6 +214,7 @@ export const AllArticlesRecordFragment = graphql(
       relatedArticles {
         id
       }
+      hideRelated
       allContentLocales: _allContentLocales {
         locale
         value {

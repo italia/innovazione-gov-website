@@ -1,4 +1,5 @@
 import {
+  AnnouncementIndexingFragment,
   ArticleIndexingFragment,
   CatalogueIndexingFragment,
   InsightIndexingFragment,
@@ -18,6 +19,17 @@ export const ArticlesIdxQuery = graphql(
     }
   `,
   [ArticleIndexingFragment],
+);
+
+export const AnnouncementsIdxQuery = graphql(
+  `
+    query AnnouncementsIdx {
+      allAnnouncements(first: 2500) {
+        ...AnnouncementIndexingFragment
+      }
+    }
+  `,
+  [AnnouncementIndexingFragment],
 );
 
 export const InsightsIdxQuery = graphql(

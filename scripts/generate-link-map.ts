@@ -6,6 +6,7 @@ import {
   SingletonLinksQuery,
   WebinarsLinksQuery,
 } from "@graphql/query/settings";
+import { AnnouncementsLinksQuery } from "@graphql/query/announcement";
 import { JobPositionsLinksQuery } from "@graphql/query/jobPosition";
 import type { SiteLocale } from "@graphql/types";
 import { executeAutoPagingQuery, executeQuery } from "@lib/datocms";
@@ -42,6 +43,7 @@ async function generateLinkMap() {
     webinarsRes,
     cataloguesRes,
     jobPositionsRes,
+    announcementsRes,
     singletonsRes,
   ] = await Promise.all([
     executeAutoPagingQuery(PagesLinksQuery),
@@ -50,6 +52,7 @@ async function generateLinkMap() {
     executeAutoPagingQuery(WebinarsLinksQuery),
     executeAutoPagingQuery(CataloguesLinksQuery),
     executeAutoPagingQuery(JobPositionsLinksQuery),
+    executeAutoPagingQuery(AnnouncementsLinksQuery),
     executeQuery(SingletonLinksQuery),
   ]);
 
@@ -146,6 +149,12 @@ async function generateLinkMap() {
   // tutti i livelli come per le pagine.
   processItemsPages(
     publishedOnly(jobPositionsRes.allJobPositions),
+    linkMap,
+    home,
+  );
+
+  processItemsPages(
+    publishedOnly(announcementsRes.allAnnouncements),
     linkMap,
     home,
   );

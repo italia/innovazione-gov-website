@@ -3,6 +3,7 @@ import { SplitContent } from "@components/layout/SplitContent";
 import { TabContent, Tabs } from "@components/molecules/Tabs";
 import { PaginatedCollection } from "@components/react/PaginatedCollection/PaginatedCollection";
 import {
+  getAnnouncements,
   getArticles,
   getMeasures,
   getNews,
@@ -10,8 +11,10 @@ import {
   getWebinars,
 } from "@lib/dataFetcher";
 import { isDraftModeEnabled } from "@lib/draftMode";
+import { ANNOUNCEMENT_TAB_TYPE } from "@utils/announcementCategory";
 import {
   getOrderedMeasureCategories,
+  mapAnnouncementToCardEditorialNewsProps,
   mapArticleToCardEditorialNewsProps,
   mapMeasureToCardMeasureProps,
   mapNewsToCardEditorialNewsProps,
@@ -43,8 +46,22 @@ const webinars = await getWebinars(isPreview);
 const resources = await getResources(isPreview);
 const measures = await getMeasures(isPreview);
 const articles = await getArticles(isPreview);
+const announcements = await getAnnouncements(isPreview);
 
 const resolvedTabs = tabs.map((tab) => {
+  if (tab.newsPageTabType === ANNOUNCEMENT_TAB_TYPE) {
+    const items = sortFeedItems(
+      announcements
+        .filter((a) =>
+          a.data.allTitleLocales?.some((item) => item.locale === lang),
+        )
+        .map((a) => mapAnnouncementToCardEditorialNewsProps(a.data, lang)),
+      tab.sortMode,
+      lang,
+    );
+    return { articleType: null, items };
+  }
+
   const articleType = articleTypeForTabType(tab.newsPageTabType);
   if (!articleType) return { articleType: null, items: null };
 
@@ -131,15 +148,15 @@ function getFilteredItems(tabType: ElementType, sortMode?: string) {
         tabs.map((tab, index) => {
           const tabType = tab.newsPageTabType;
           const resolved = resolvedTabs[index];
-          const useArticles = !!resolved.articleType;
+          const useCards = resolved.items !== null;
 
-          if (!useArticles && !isValidTabType(tabType)) return null;
+          if (!useCards && !isValidTabType(tabType)) return null;
 
-          const items = useArticles
+          const items = useCards
             ? resolved.items
             : getFilteredItems(tabType as ElementType, tab.sortMode);
 
-          const renderType: ElementType = useArticles
+          const renderType: ElementType = useCards
             ? "news_item"
             : (tabType as ElementType);
 

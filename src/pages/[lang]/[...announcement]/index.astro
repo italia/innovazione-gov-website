@@ -1,0 +1,223 @@
+---
+import StructuredTextAdapter from "@components/cms-adapters/datocms/StructuredTextAdapter.astro";
+import { ArticleToc } from "@components/organisms/ArticleToc";
+import { PositionHero } from "@components/organisms/PositionHero";
+import type { PositionMeta } from "@components/organisms/PositionHero/types";
+import { SectionContainer } from "@components/organisms/SectionContainer";
+import type { AnnouncementContentFragmentType } from "@graphql/fragment/announcement";
+import type { TagFragmentType } from "@graphql/fragment/commonFragments";
+import type { SeoFieldFragmentType } from "@graphql/fragment/seoFragments";
+import type { SiteLocale } from "@graphql/types";
+import { getI18n } from "@i18n/microcopy";
+import Layout from "@layouts/Layout.astro";
+import { announcementCategoryLabel } from "@utils/announcementCategory";
+import { DatoBlockModel } from "@utils/cmsMapper";
+import { extractHeadings } from "@utils/extractHeadings";
+import { getLocaleValue } from "@utils/getLocaleValue";
+import { extractFaqItems, type JsonLdPageData } from "@utils/JsonLD/seoJsonLd";
+import { linkResolver } from "@utils/linkResolver";
+import { removeLang } from "@utils/pathHelper";
+import { effectivePositionStatus } from "@utils/positionStatus";
+import { getCollection, getEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  type PathItem = {
+    params: {
+      announcement: string;
+      lang: SiteLocale;
+    };
+    props: {
+      seoMeta: TagFragmentType[];
+      seo: SeoFieldFragmentType | null;
+      content: AnnouncementContentFragmentType[];
+      id: string;
+      title: string;
+      abstract: string;
+      office: string;
+      announcementCategory: string;
+      announcementStatus: string;
+      openDate: string | null;
+      closeDate: string | null;
+      showSidebar: boolean;
+      topics: string[];
+      publishedAt: string;
+      updatedAt: string;
+    };
+  };
+
+  const response = await getCollection("announcement");
+
+  const pathsPromises =
+    response?.flatMap((item) => {
+      const announcement = item.data;
+      return announcement.locales.map(async (lang) => {
+        const seoResCollection = await getEntry(
+          "global_seo",
+          `${announcement.id}_${lang}`,
+        );
+        const seoRes = seoResCollection?.data;
+
+        const fullPath = linkResolver(announcement.id, lang);
+
+        const slug = removeLang(fullPath, lang);
+
+        return {
+          params: {
+            announcement: slug,
+            lang: lang,
+          },
+          props: {
+            seoMeta: seoRes?.metaTags || [],
+            seo: seoRes?.seo ?? null,
+            id: announcement.id,
+            title: getLocaleValue(announcement.allTitleLocales, lang, ""),
+            abstract:
+              getLocaleValue(announcement.allAbstractLocales, lang, "") ?? "",
+            office:
+              getLocaleValue(announcement.allOfficeLocales, lang, "") ?? "",
+            announcementCategory: announcement.announcementCategory,
+            announcementStatus: announcement.announcementStatus,
+            openDate: announcement.openDate,
+            closeDate: announcement.closeDate,
+            showSidebar: announcement.showSidebar,
+            topics: (
+              getLocaleValue(announcement.allTopicsLocales, lang, []) ?? []
+            )
+              .map((topic) => topic.name)
+              .filter((name): name is string => Boolean(name)),
+            publishedAt: announcement.publishedAt,
+            updatedAt: seoRes?.updatedAt || announcement.updatedAt,
+            content: getLocaleValue(announcement.allContentLocales, lang, null),
+          },
+        };
+      });
+    }) || [];
+
+  const paths = await Promise.all(pathsPromises);
+
+  return paths.filter(
+    (path): path is PathItem =>
+      !!path.params.lang && !!path.params.announcement,
+  );
+}
+
+const {
+  id,
+  content,
+  seo,
+  seoMeta,
+  title,
+  abstract,
+  office,
+  announcementCategory,
+  announcementStatus,
+  openDate,
+  closeDate,
+  showSidebar,
+  topics,
+  publishedAt,
+  updatedAt,
+} = Astro.props;
+const { lang } = Astro.params;
+
+Astro.locals.lang = lang;
+Astro.locals.recordId = id;
+
+const t = getI18n(lang);
+
+const dataEstesa = (valore: string | null) =>
+  valore
+    ? new Intl.DateTimeFormat(lang, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }).format(new Date(valore))
+    : "";
+
+const statoEffettivo = effectivePositionStatus(announcementStatus, closeDate);
+const etichettaStato =
+  t[`announcement.status.${statoEffettivo}` as keyof typeof t] ??
+  t["announcement.status.closed"];
+
+const meta: PositionMeta[] = [
+  {
+    label: t["announcement.category"],
+    value: announcementCategoryLabel(announcementCategory, lang),
+  },
+  { label: t["position.openDate"], value: dataEstesa(openDate) },
+  { label: t["position.state"], value: etichettaStato },
+  { label: t["position.closeDate"], value: dataEstesa(closeDate) },
+  { label: t["position.office"], value: office },
+].filter((voce) => voce.value);
+
+const testo = (content ?? []).find(
+  (block) => block.componentName === DatoBlockModel.StructuredText,
+);
+const contenuto = testo && "textContent" in testo ? testo.textContent : null;
+
+const tocItems = contenuto
+  ? extractHeadings(contenuto.value, [3]).map((heading) => ({
+      id: heading.id,
+      label: heading.text,
+    }))
+  : [];
+const conIndice = showSidebar && tocItems.length > 0;
+
+const jsonLd: JsonLdPageData = {
+  pageType: ["content"],
+  seo: seo || undefined,
+  articleType: "Article",
+  publishedAt,
+  updatedAt,
+  faq: extractFaqItems(content ?? []),
+};
+---
+
+<Layout pageSeo={seoMeta} datePublished={publishedAt} jsonLd={jsonLd}>
+  <PositionHero
+    title={title}
+    paragraph={abstract}
+    meta={meta}
+    topics={topics}
+  />
+  {
+    contenuto && conIndice && (
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-lg-4 px-lg-0 pb-lg-5 border-end announcement-menu">
+            <ArticleToc header={t["toc.title"]} items={tocItems} />
+          </div>
+          <div class="col-12 col-lg-8 px-lg-0">
+            <SectionContainer className="structured-text-container ps-lg-4">
+              <StructuredTextAdapter block={contenuto} />
+            </SectionContainer>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  {
+    contenuto && !conIndice && (
+      <SectionContainer className="structured-text-container">
+        <StructuredTextAdapter block={contenuto} />
+      </SectionContainer>
+    )
+  }
+</Layout>
+
+<style>
+  .announcement-menu {
+    padding-top: 3rem;
+  }
+  @media (min-width: 992px) {
+    .announcement-menu {
+      padding-top: 5rem;
+    }
+  }
+</style>
+
+<style is:global>
+  .structured-text-container :is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 7rem;
+  }
+</style>

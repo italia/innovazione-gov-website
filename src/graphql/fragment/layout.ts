@@ -49,6 +49,7 @@ export const HeaderFragment = graphql(
         }
       }
       logoSelect
+      hideHeaderSocial
       _allUtilityLocales {
         locale
         value {

@@ -2,6 +2,7 @@
 import { AttachmentsBox } from "@components/organisms/AttachmentsBox";
 import { getI18n } from "@i18n/microcopy";
 import { createDownloadUrl } from "@utils/createDownloadUrl";
+import { fileMeta } from "@utils/fileMeta";
 
 type Attachment = {
   id: string;
@@ -22,20 +23,13 @@ const { attachments = [] } = Astro.props;
 const { lang } = Astro.locals;
 const t = getI18n(lang);
 
-const dettagli = (file: NonNullable<Attachment["file"]>) => {
-  const estensione = (file.format ?? "").toUpperCase();
-  const megabyte = file.size ? (file.size / 1024 / 1024).toFixed(1) : null;
-  if (!estensione && !megabyte) return "";
-  return megabyte ? `${estensione} (${megabyte}mb)` : estensione;
-};
-
 const items = attachments
   .filter((attachment) => attachment.file)
   .map((attachment) => ({
     id: attachment.id,
     label: attachment.fileTitle ?? attachment.file!.filename,
     href: createDownloadUrl(attachment.file!),
-    meta: dettagli(attachment.file!),
+    meta: fileMeta(attachment.file!),
   }));
 ---
 

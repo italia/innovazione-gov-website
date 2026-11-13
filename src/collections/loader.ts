@@ -1,3 +1,7 @@
+import {
+  AllAnnouncementsContentQuery,
+  AnnouncementsSeoQuery,
+} from "@graphql/query/announcement";
 import { AllArticlesContentQuery } from "@graphql/query/article";
 import {
   AllCataloguesContentQuery,
@@ -6,6 +10,7 @@ import {
 import { ErrorPageQuery } from "@graphql/query/errorPage";
 import { HomepageQuery } from "@graphql/query/homepage";
 import {
+  AnnouncementsIdxQuery,
   ArticlesIdxQuery,
   CataloguesIdxQuery,
   InsightsIdxQuery,
@@ -177,6 +182,11 @@ export const insightContentLoader = async () => {
   return publishedOnly(response?.allInsights || []);
 };
 
+export const announcementsLoader = async () => {
+  const response = await executeAutoPagingQuery(AllAnnouncementsContentQuery);
+  return publishedOnly(response?.allAnnouncements || []);
+};
+
 export const jobPositionsLoader = async () => {
   const response = await executeAutoPagingQuery(AllJobPositionsContentQuery);
   return publishedOnly(response?.allJobPositions || []);
@@ -266,6 +276,7 @@ export const globalSeoLoader = async () => {
     locales.map(async (locale) => {
       const [
         homepageRes,
+        announcementsRes,
         articlesRes,
         insightsRes,
         jobPositionsRes,
@@ -275,6 +286,9 @@ export const globalSeoLoader = async () => {
         searchRes,
       ] = await Promise.all([
         executeQuery(HomepageSeoQuery, { variables: { locale } }),
+        executeAutoPagingQuery(AnnouncementsSeoQuery, {
+          variables: { locale },
+        }),
         executeAutoPagingQuery(ArticlesSeoQuery, { variables: { locale } }),
         executeAutoPagingQuery(InsightsSeoQuery, { variables: { locale } }),
         executeAutoPagingQuery(JobPositionsSeoQuery, { variables: { locale } }),
@@ -295,6 +309,7 @@ export const globalSeoLoader = async () => {
 
       return [
         ...(homepageRes?.homepage ? [mapEntry(homepageRes.homepage)] : []),
+        ...(announcementsRes?.allAnnouncements?.map(mapEntry) || []),
         ...(articlesRes?.allArticles?.map(mapEntry) || []),
         ...(insightsRes?.allInsights?.map(mapEntry) || []),
         ...(jobPositionsRes?.allJobPositions?.map(mapEntry) || []),
@@ -311,6 +326,7 @@ export const globalSeoLoader = async () => {
 
 export const allDocumentsLoader = async () => {
   const [
+    announcementsRes,
     articlesRes,
     insightsRes,
     newsRes,
@@ -319,6 +335,7 @@ export const allDocumentsLoader = async () => {
     cataloguesRes,
     pagesRes,
   ] = await Promise.all([
+    executeAutoPagingQuery(AnnouncementsIdxQuery),
     executeAutoPagingQuery(ArticlesIdxQuery),
     executeAutoPagingQuery(InsightsIdxQuery),
     executeAutoPagingQuery(NewsIdxQuery),
@@ -333,6 +350,7 @@ export const allDocumentsLoader = async () => {
   return [
     {
       id: "all-documents",
+      allAnnouncements: publishedOnly(announcementsRes.allAnnouncements || []),
       allArticles: publishedOnly(articlesRes.allArticles || []),
       allInsights: publishedOnly(insightsRes.allInsights || []),
       allNewsItems: publishedOnly(newsRes.allNewsItems || []),

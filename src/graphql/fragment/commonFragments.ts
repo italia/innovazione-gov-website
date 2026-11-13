@@ -91,6 +91,37 @@ export const LinkBlockFragment = graphql(`
 
 export type LinkBlockFragmentType = FragmentOf<typeof LinkBlockFragment>;
 
+export const CtaButtonGroupFragment = graphql(`
+  fragment CtaButtonGroupFragment on CtaButtonGroupRecord @_unmask {
+    buttons {
+      ... on CtaButtonRecord {
+        id
+        label
+        style
+        externalUrl
+        link {
+          ... on ArticleRecord {
+            id
+          }
+          ... on IndexPageRecord {
+            id
+          }
+          ... on PageRecord {
+            id
+          }
+          ... on InsightRecord {
+            id
+          }
+        }
+      }
+    }
+  }
+`);
+
+export type CtaButtonGroupFragmentType = FragmentOf<
+  typeof CtaButtonGroupFragment
+>;
+
 export const BrandFragment = graphql(
   `
     fragment BrandFragment on BrandRecord @_unmask {

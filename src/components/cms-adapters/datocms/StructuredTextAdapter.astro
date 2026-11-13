@@ -3,6 +3,7 @@ import AccordionAdapter from "@components/cms-adapters/datocms/AccordionAdapter.
 import ArticleIntroAdapter from "@components/cms-adapters/datocms/ArticleIntroAdapter.astro";
 import CalloutAdapter from "@components/cms-adapters/datocms/CalloutAdapter.astro";
 import CardServiceAdapter from "@components/cms-adapters/datocms/CardServiceAdapter.astro";
+import CtaButtonsAdapter from "@components/cms-adapters/datocms/CtaButtonsAdapter.astro";
 import DownloadLinkAdapter from "@components/cms-adapters/datocms/DownloadLinkAdapter.astro";
 import ExternalLinkAdapter from "@components/cms-adapters/datocms/ExternalLinkAdapter.astro";
 import HeadingAdapter from "@components/cms-adapters/datocms/HeadingAdapter.astro";
@@ -59,6 +60,7 @@ const { block } = Astro.props;
     AccordionBlockRecord: AccordionAdapter,
     StatisticBlockRecord: StatisticInTextAdapter,
     IconListBlockRecord: IconListAdapter,
+    CtaButtonGroupRecord: CtaButtonsAdapter,
   }}
   nodeOverrides={{ link: LinkInlineAdapter, heading: HeadingAdapter }}
 />
