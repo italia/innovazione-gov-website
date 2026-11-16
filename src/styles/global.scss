@@ -534,8 +534,8 @@ main#main {
   color: var(--color-text-base, #1a1a1a);
   font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
   font-weight: 700;
-  font-size: 32px;
-  line-height: 40px;
+  font-size: 28px;
+  line-height: 32px;
 }
 
 .article-body--focus .attachments-box--default .attachments-box__item {
@@ -568,10 +568,52 @@ main#main {
   line-height: 24px;
 }
 
+h1,
+.h1 {
+  font-size: 2.5rem;
+  line-height: 3rem;
+}
+
+.it-hero-wrapper .it-hero-text-wrapper h1,
+.it-hero-wrapper .it-hero-text-wrapper .h1 {
+  font-size: 2.5rem;
+  line-height: 3rem;
+}
+
+h2,
+.h2 {
+  font-size: 2rem;
+  line-height: 2.5rem;
+}
+
+h3,
+.h3 {
+  font-size: 1.75rem;
+  line-height: 2rem;
+}
+
+h4,
+.h4 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+h5,
+.h5 {
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+}
+
+h6,
+.h6 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 .it-card .it-card-title {
   font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
   font-weight: 700;
-  font-size: 21px;
+  font-size: 20px;
   line-height: 28px;
 }
 
