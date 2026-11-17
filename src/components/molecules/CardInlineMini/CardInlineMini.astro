@@ -27,7 +27,8 @@ const categories = Array.isArray(category)
   : category
     ? [category]
     : [];
-const shouldShowFooter = categories.length > 0 || !!badge || !!dateTime;
+const shouldShowFooter =
+  categories.length > 0 || !!badge || !!dateTime || !!status || !!deadline;
 const cardTitleId = `card-title-${id}`;
 const { lang } = Astro.locals;
 const t = getI18n(lang);
@@ -38,106 +39,153 @@ const ariaLabel = isExternal ? t["link.external"] : t["link.internal"];
 <article
   class:list={[
     "it-card",
-    "it-card-height-full",
     "card-inline-mini",
-    "rounded",
-    "shadow-sm",
-    "border",
-    image && "it-card-inline it-card-inline-mini it-card-image",
+    image && "card-inline-mini--with-image",
   ]}
   aria-labelledby={cardTitleId}
 >
-  <h3
-    class="d-flex flex-column it-card-title justify-content-center mt-0"
-    id={cardTitleId}
-  >
-    <a href={linkTo}
-      >{title}
-      <span class="visually-hidden">{ariaLabel}</span>
-    </a>
-  </h3>
-
   {
     image && (
-      <div class="it-card-image-wrapper">
-        <div class="ratio ratio-16x9">
-          <figure class="figure img-full">
-            <Image {...image} />
-          </figure>
-        </div>
+      <div class="card-inline-mini__media">
+        <Image {...image} />
       </div>
     )
   }
-
-  {
-    (status || deadline || description) && (
-      <div class="it-card-body">
-        <AnnouncementMeta status={status} deadline={deadline} />
-        {description && <p class="it-card-text">{description}</p>}
-      </div>
-    )
-  }
-
-  {
-    shouldShowFooter && (
-      <footer class="it-card-related it-card-footer">
-        {categories.length > 0 && (
-          <div class="it-card-taxonomy">
-            {categories.map((voce) => (
-              <ChipLink
-                linkTo={""}
-                label={voce}
-                visuallyHidden={t["card.topic"]}
-                disabled
-              />
-            ))}
-          </div>
-        )}
-        {(badge || dateTime) && (
-          <div class="it-card-meta">
+  <div class="card-inline-mini__body">
+    <h3 class="it-card-title card-inline-mini__title" id={cardTitleId}>
+      <a href={linkTo}
+        >{title}
+        <span class="visually-hidden">{ariaLabel}</span>
+      </a>
+    </h3>
+    {description && <p class="card-inline-mini__text">{description}</p>}
+    {
+      shouldShowFooter && (
+        <div class="card-inline-mini__footer">
+          {categories.length > 0 && (
+            <div class="card-inline-mini__taxonomy">
+              {categories.map((voce) => (
+                <ChipLink
+                  linkTo={""}
+                  label={voce}
+                  visuallyHidden={t["card.topic"]}
+                  disabled
+                />
+              ))}
+            </div>
+          )}
+          <div class="card-inline-mini__meta">
             {badge && (
               <span class="it-card-badge">
                 <span class="visually-hidden">{t["card.type"]}</span>
                 {badge}
               </span>
             )}
-            {dateTime && <DateTime className="it-card-date" value={dateTime} />}
+            <AnnouncementMeta status={status} deadline={deadline} />
+            {dateTime && (
+              <DateTime className="card-inline-mini__date" value={dateTime} />
+            )}
           </div>
-        )}
-      </footer>
-    )
-  }
+        </div>
+      )
+    }
+  </div>
 </article>
 
 <style>
-  .card-inline-mini .it-card-body {
-    padding-top: 0;
+  .card-inline-mini {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid var(--color-border-subtle, #c5c7c9);
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 4px 4px 0 rgb(0 0 0 / 15%);
   }
 
-  .card-inline-mini .it-card-body :global(.announcement-meta) {
-    margin-bottom: 0.5rem;
+  .card-inline-mini__media {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #fff;
   }
 
-  .card-inline-mini .it-card-taxonomy {
+  .card-inline-mini__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .card-inline-mini__body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem;
+  }
+
+  .card-inline-mini .card-inline-mini__title {
+    margin: 0;
+  }
+
+  .card-inline-mini__text {
+    margin: 0;
+    color: var(--color-text-secondary, #2f475e);
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .card-inline-mini__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: auto;
+  }
+
+  .card-inline-mini__taxonomy {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
   }
 
-  .card-inline-mini .it-card-taxonomy :global(.chip) {
+  .card-inline-mini__taxonomy :global(.chip) {
     height: auto;
     min-height: 2rem;
   }
 
-  .card-inline-mini .it-card-taxonomy :global(.chip .chip-label) {
+  .card-inline-mini__taxonomy :global(.chip .chip-label) {
     white-space: normal;
   }
 
-  .card-inline-mini .it-card-meta {
+  .card-inline-mini__meta {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem 1rem;
+    gap: 0.25rem 0.75rem;
+  }
+
+  .card-inline-mini :global(.card-inline-mini__date) {
+    margin-left: auto;
+    color: var(--color-text-secondary, #5b6f82);
+    font-size: 0.875rem;
+  }
+
+  @media (min-width: 768px) {
+    .card-inline-mini--with-image {
+      flex-direction: row;
+      align-items: stretch;
+    }
+
+    .card-inline-mini--with-image .card-inline-mini__media {
+      flex: 0 0 14rem;
+      aspect-ratio: auto;
+      align-self: stretch;
+    }
   }
 </style>

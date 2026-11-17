@@ -699,6 +699,8 @@ export const WideLinkCardFragment = graphql(
       title
       paragraph
       category
+      hideCategory
+      hideDate
       imageBackground
       image {
         ...ImageFragment

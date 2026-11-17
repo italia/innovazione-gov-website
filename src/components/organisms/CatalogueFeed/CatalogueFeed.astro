@@ -229,11 +229,12 @@ function getFilteredItems(tabType: ElementType, sortMode?: string) {
     margin-bottom: 0.5rem;
   }
 
-  .archive-item__status,
   .archive-item__badge {
     display: inline-block;
     border-radius: 4px;
     padding: 0.125rem 0.75rem;
+    background: #e8f1fb;
+    color: #0b3e74;
     font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
     font-size: 14px;
     font-weight: 600;
@@ -241,19 +242,11 @@ function getFilteredItems(tabType: ElementType, sortMode?: string) {
     text-transform: uppercase;
   }
 
-  .archive-item__status--open {
-    background: #00703c;
-    color: #fff;
-  }
-
-  .archive-item__status--closed {
-    background: #5c6f82;
-    color: #fff;
-  }
-
-  .archive-item__badge {
-    background: #e8f1fb;
-    color: #0b3e74;
+  .archive-item__status {
+    color: #1a1a1a;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 24px;
   }
 
   .archive-item__deadline {

@@ -29,10 +29,13 @@ const image =
   (isCompact ? (article?.logo ?? article?.image) : article?.image) ??
   undefined;
 const fitImage = block.image ? "contain" : "cover";
-const category = block.category || article?.tags?.[0]?.name || null;
-const dateTime = article
-  ? (article.dateShown ?? article.firstPublishedAt ?? null)
-  : null;
+const category = block.hideCategory
+  ? null
+  : block.category || article?.tags?.[0]?.name || null;
+const dateTime =
+  article && !block.hideDate
+    ? (article.dateShown ?? article.firstPublishedAt ?? null)
+    : null;
 ---
 
 <WideLinkCard

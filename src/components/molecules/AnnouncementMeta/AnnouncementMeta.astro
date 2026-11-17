@@ -14,70 +14,33 @@ const t = getI18n(lang);
 ---
 
 {
-  (status?.label || deadline) && (
-    <p class="announcement-meta">
-      {status?.label && (
-        <span
-          class:list={[
-            "announcement-meta__status",
-            status.open
-              ? "announcement-meta__status--open"
-              : "announcement-meta__status--closed",
-          ]}
-        >
-          <span class="visually-hidden">
-            {t["announcement.status.label"]}:{" "}
-          </span>
-          {status.label}
-        </span>
-      )}
-      {deadline && (
-        <span class="announcement-meta__deadline">
-          {t["announcement.deadline"]}{" "}
-          <DateTime className="announcement-meta__date" value={deadline} />
-        </span>
-      )}
-    </p>
+  status?.label && (
+    <span class="announcement-meta__status">
+      <span class="visually-hidden">{t["announcement.status.label"]}: </span>
+      {status.label}
+    </span>
+  )
+}
+{
+  deadline && (
+    <span class="announcement-meta__deadline">
+      {t["announcement.deadline"]}{" "}
+      <DateTime className="announcement-meta__date" value={deadline} />
+    </span>
   )
 }
 
 <style>
-  .announcement-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem 0.75rem;
-    margin: 0;
-  }
-
   .announcement-meta__status {
-    display: inline-block;
-    border-radius: 4px;
-    padding: 0.125rem 0.75rem;
-    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 24px;
-    text-transform: uppercase;
-  }
-
-  .announcement-meta__status--open {
-    background: #00703c;
-    color: #fff;
-  }
-
-  .announcement-meta__status--closed {
-    background: #5c6f82;
-    color: #fff;
+    color: var(--color-text-base, #1a1a1a);
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.5rem;
   }
 
   .announcement-meta__deadline {
-    color: #2f475e;
-    font-size: 14px;
-    line-height: 24px;
-  }
-
-  .announcement-meta :global(.announcement-meta__date) {
-    font-weight: 600;
+    color: var(--color-text-secondary, #2f475e);
+    font-size: 0.875rem;
+    line-height: 1.5rem;
   }
 </style>

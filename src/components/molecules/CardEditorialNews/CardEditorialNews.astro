@@ -31,7 +31,8 @@ const categories = Array.isArray(category)
   : category
     ? [category]
     : [];
-const shouldShowFooter = categories.length > 0 || !!badge || !!dateTime;
+const shouldShowFooter =
+  categories.length > 0 || !!badge || !!dateTime || !!status || !!deadline;
 const hasLink = !!linkTo && linkTo !== "#";
 const cardTitleId = `card-title-${id}`;
 const { lang } = Astro.locals;
@@ -76,7 +77,6 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
     )
   }
   <div class="it-card-body">
-    <AnnouncementMeta status={status} deadline={deadline} />
     <p class="it-card-text">{description}</p>
   </div>
   {
@@ -98,7 +98,7 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
             )}
           </div>
         )}
-        {(badge || dateTime) && (
+        {(badge || dateTime || status || deadline) && (
           <div class="it-card-meta">
             {badge && (
               <span class="it-card-badge">
@@ -106,6 +106,7 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
                 {badge}
               </span>
             )}
+            <AnnouncementMeta status={status} deadline={deadline} />
             {dateTime && <DateTime className="it-card-date" value={dateTime} />}
           </div>
         )}
@@ -126,8 +127,11 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
     object-fit: contain !important;
   }
 
-  .it-card-body :global(.announcement-meta) {
-    margin-bottom: 0.75rem;
+  .it-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.75rem;
   }
 
   .it-card-taxonomy .chip:not(.chip-link) {

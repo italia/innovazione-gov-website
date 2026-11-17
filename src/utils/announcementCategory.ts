@@ -27,7 +27,7 @@ export function effectiveAnnouncementStatus(
 ): string {
   if (status !== "open") return status;
   const oggi = new Date().toISOString().slice(0, 10);
-  return closeDate && closeDate < oggi ? "expired" : "open";
+  return closeDate && closeDate < oggi ? "closed" : "open";
 }
 
 export function announcementStatus(

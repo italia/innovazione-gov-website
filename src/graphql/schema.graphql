@@ -5883,7 +5883,6 @@ type LayoutRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): [FooterColumnRecord!]!
-  footerLogo: AltFileField
   heading(
     """Process content as markdown"""
     markdown: Boolean
@@ -11500,6 +11499,8 @@ type WideLinkCardRecord implements RecordInterface {
   _updatedAt: DateTime!
   article: ArticleRecord
   category: String
+  hideCategory: BooleanType!
+  hideDate: BooleanType!
   id: ItemId!
   image: FileField
   imageBackground: String

@@ -30,7 +30,7 @@ const {
   _allFooterColumnsLocales,
   _allMailingListFormLocales,
   showSitemapLink,
-  footerLogo,
+  _allOrganizationsLocales,
   logoSelect,
   siteName,
   homeRecordId,
@@ -45,6 +45,8 @@ const mailingList = getLocaleValue(_allMailingListFormLocales, lang, null);
 const contactTitle = getLocaleValue(_allContactTitleLocales, lang, null);
 const contactAddress = getLocaleValue(_allContactAddressLocales, lang, null);
 const footerColumns = getLocaleValue(_allFooterColumnsLocales, lang, null);
+const organizations = getLocaleValue(_allOrganizationsLocales, lang, null);
+const marchio = organizations?.[0]?.logo ?? null;
 
 const escapeHtml = (text: string) =>
   text
@@ -121,7 +123,7 @@ const mailingListForm: MailingListFormProps | undefined = mailingList
     logo: logoSelect
       ? { url: logoSelect, width: null, height: null }
       : undefined,
-    wordmark: footerLogo ?? null,
+    wordmark: marchio,
     name: siteName ?? "",
     linkTo: linkResolver(homeRecordId, lang),
   }}

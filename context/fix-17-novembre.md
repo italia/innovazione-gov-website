@@ -168,21 +168,16 @@ su nessuno dei 740 contenuti, quindi online non si vede.
 
 **Mi serve sapere quale delle tre volete.**
 
-### 4.3 Logo del Dipartimento nel footer — manca il file
+### 4.3 Logo del Dipartimento nel footer — risolto (vedi anche il secondo giro)
 
-Il footer usa l'emblema della Repubblica più il nome scritto in testo. Tu chiedi
-il marchio grafico per esteso, come su Developers Italia.
+Il footer usava l'emblema della Repubblica più il nome scritto in testo. Adesso
+usa il marchio per esteso.
 
-Lato sito è pronto: c'è un campo nuovo **Logo del footer** sul modello Layout,
-e appena ci carichi un'immagine questa prende il posto dell'emblema e del testo.
+Il file c'era già e avevi ragione tu: è `ddt.svg`, quello della **prima
+organisation**. Avevo cercato fra i media filtrando per nome e mi era sfuggito.
 
-Il problema è il file. Ho cercato fra i media già caricati su DatoCMS e il
-marchio per esteso non c'è: i due file che sembravano buoni
-(`ministero-dtd-logo-white.svg` e `ministero_dtd_logo_white_v2.svg`) sono
-entrambi il solo emblema con il quadrato, senza la dicitura.
-
-**Mi serve il file del marchio per esteso, in bianco, preferibilmente SVG.**
-Lo carichi tu nel campo o me lo mandi e lo carico io.
+Il motivo per cui su staging non si vedeva nessuna delle due organisations è
+un altro, ed è spiegato nel secondo giro qui sotto.
 
 ---
 
@@ -263,7 +258,7 @@ me. Dimmi anche se le vuoi a rotazione o se ce n'è una sola da mettere su tutti
 | 3.4 | Card orizzontale ridisegnata                       | Fatto                   |
 | 4.1 | Link interni nei Collegamenti utili                | Fatto                   |
 | 4.2 | Download PDF del comunicato                        | **Serve una decisione** |
-| 4.3 | Logo del footer                                    | **Serve il file**       |
+| 4.3 | Logo del footer                                    | Fatto                   |
 | 5   | Breadcrumb                                         | Fatto                   |
 | 6   | Argomenti invisibili in testata                    | Fatto                   |
 | 6b  | Due errori di accessibilità trovati strada facendo | Fatto                   |
@@ -272,9 +267,9 @@ me. Dimmi anche se le vuoi a rotazione o se ce n'è una sola da mettere su tutti
 ### Cosa serve da voi
 
 1. La scelta su come deve funzionare il download del comunicato (punto 4.2).
-2. Il file del marchio per esteso per il footer (punto 4.3).
-3. Le 3 immagini per i comunicati stampa (punto 7).
-4. Due clic nel CMS sul blocco in fondo a Novità (punto 2.6).
+2. Le 3 immagini per i comunicati stampa (punto 7).
+3. Due clic nel CMS sul blocco in fondo a Novità (punto 2.6).
+4. Cancellare la seconda organisation dal footer, se la volete via (punto 8.1).
 
 ### Nota sulle migrazioni
 
@@ -284,4 +279,109 @@ Quattro modifiche allo schema DatoCMS, già applicate all'ambiente
 - `1795300000_announcementInLastItems` — «Avvisi pubblici» fra i contenuti automatici
 - `1795400000_showRelatedArticles` — flag invertito e campo «Focus in evidenza»
 - `1795500000_internalLinksInUsefulList` — link interni nei Collegamenti utili
-- `1795600000_footerLogo` — campo «Logo del footer»
+- `1795600000_footerLogo` — campo «Logo del footer», poi rimosso dalla 1795800000
+- `1795700000_wideCardMeta` — «Nascondi la categoria» e «Nascondi la data» sulla scheda larga
+- `1795800000_dropFooterLogoField` — campo rimosso, il marchio arriva da «Organizations»
+
+---
+
+# Secondo giro — 17 novembre, pomeriggio
+
+## 8. Le due organisations nel footer — chiarito e risolto
+
+### 8.1 Perché su staging non se ne vedeva nessuna
+
+Non ne sbagliavi una: nel CMS ci sono davvero due organisations, la prima col
+marchio del Dipartimento (`ddt.svg`) e la seconda con quello della Commissione
+europea. Su staging però non compariva né l'una né l'altra, e il motivo è che
+**il footer non ha mai letto quel campo**. Il dato veniva richiesto a DatoCMS e
+poi buttato via: è un residuo del sito «Risultati del PNRR», da cui il progetto
+è partito. Al suo posto il footer disegnava l'emblema della Repubblica più il
+nome del sito scritto in testo — quello che vedevi.
+
+Quindi non è che staging ne mostrasse una sola: non ne mostrava nessuna.
+
+### 8.2 Cosa ho fatto
+
+Il footer adesso legge il campo e usa il **primo** marchio dell'elenco, al posto
+dell'emblema e del nome scritto. Nel caso vostro è esattamente il logo del
+Dipartimento che indicavi tu.
+
+Il campo nel CMS si chiama adesso **Marchio del footer** (prima «Organizations»)
+e il testo di aiuto dice che viene usato solo il primo. La seconda organisation
+non si vede più, quindi non fa danni: potete cancellarla con comodo. Non l'ho
+cancellata io perché è contenuto pubblicato.
+
+Il campo **Logo del footer** che avevo aggiunto stamattina non serve più e l'ho
+tolto: avere due posti diversi per la stessa cosa è il modo migliore per
+ritrovarsi col logo sbagliato fra sei mesi.
+
+---
+
+## 9. Card inline — le correzioni chieste
+
+### 9.1 L'etichetta di stato non è più una pastiglia
+
+Avevi ragione: stato e categoria erano due pastiglie grigie identiche, con due
+significati diversi. Ho preso l'alternativa che indicavi come preferibile, il
+testo in grassetto, e l'ho messa **accanto all'etichetta della categoria**:
+
+`[AVVISI PUBBLICI]  Chiuso`
+
+Quando l'avviso è aperto, dopo lo stato compare anche la scadenza:
+`[AVVISI PUBBLICI]  Aperto  Scade il 12 dicembre 2026`.
+
+Le etichette di stato sono passate da maiuscolo a normale («Chiuso» invece di
+«CHIUSO»): da pastiglia aveva senso, da testo corrente no. Il cambio vale anche
+per la scheda del dettaglio, dove la riga «Stato» si legge meglio.
+
+Una cosa correlata: un avviso segnato «aperto» nel CMS ma con la scadenza già
+passata adesso si legge **Chiuso** ovunque. Stamattina negli elenchi diceva
+«Scaduto» e nel dettaglio «Chiuso»: era la stessa cosa detta in due modi.
+
+### 9.2 Il contenuto spostato in alto
+
+Veniva dalla gabbia a tre colonne di Bootstrap Italia, che quella card si
+portava dietro: titolo, testo ed etichette finivano in tre colonne affiancate,
+con il contenuto appiccicato in alto e il vuoto sotto.
+
+La card è stata rifatta da zero: titolo, descrizione e riga delle etichette
+impilati, la riga delle etichette ancorata in fondo, così due card affiancate
+di altezza diversa restano allineate in basso.
+
+### 9.3 La card inline con immagine
+
+È lo stesso problema, nella versione peggiore: l'immagine entrava in una
+colonna strettissima e veniva schiacciata, il titolo andava a capo ogni due
+parole e il paragrafo restava in alto con tutto bianco sotto.
+
+Adesso, da tablet in su, la card è **immagine a sinistra** (larghezza fissa,
+l'immagine ci sta dentro intera senza deformarsi) e **contenuto a destra**
+impilato. Su telefono l'immagine va sopra, in formato 16:9.
+
+### 9.4 Argomento e data sulla scheda larga
+
+Due interruttori nuovi sul blocco **Wide link card**:
+
+- **Nascondi la categoria** — toglie la pastiglia con l'argomento
+- **Nascondi la data** — toglie la data dell'articolo collegato
+
+Sono spenti di partenza, quindi le schede che esistono già non cambiano: li
+accendi solo dove danno fastidio.
+
+---
+
+## Riepilogo del secondo giro
+
+| #   | Punto                                         | Stato               |
+| --- | --------------------------------------------- | ------------------- |
+| 8.1 | Perché le organisations non si vedevano       | Chiarito            |
+| 8.2 | Marchio del Dipartimento nel footer           | Fatto               |
+| 8.3 | Seconda organisation da cancellare            | **Da fare nel CMS** |
+| 9.1 | Stato in grassetto accanto alla categoria     | Fatto               |
+| 9.2 | Contenuto spostato in alto                    | Fatto               |
+| 9.3 | Card inline con immagine schiacciata          | Fatto               |
+| 9.4 | Argomento e data opzionali sulla scheda larga | Fatto               |
+
+Dopo le modifiche: `astro check` a zero errori, axe a zero violazioni sulle
+quattro pagine di controllo.

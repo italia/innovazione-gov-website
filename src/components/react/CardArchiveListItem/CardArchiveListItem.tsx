@@ -46,12 +46,9 @@ export function CardArchiveListItem({
         <span>
           {hasMeta && (
             <span className="archive-item__badges">
+              {badge && <span className="archive-item__badge">{badge}</span>}
               {status?.label && (
-                <span
-                  className={`archive-item__status archive-item__status--${
-                    status.open ? "open" : "closed"
-                  }`}
-                >
+                <span className="archive-item__status">
                   <span className="visually-hidden">
                     {t["announcement.status.label"]}:{" "}
                   </span>
@@ -64,7 +61,6 @@ export function CardArchiveListItem({
                   <DateTime value={deadline} className="" lang={lang} />
                 </span>
               )}
-              {badge && <span className="archive-item__badge">{badge}</span>}
             </span>
           )}
           <h3 className="mb-0 archive-item__title">{title}</h3>

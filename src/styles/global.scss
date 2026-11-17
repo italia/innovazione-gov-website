@@ -494,14 +494,13 @@ $sfondi-sezione:
   display: flex;
   flex: 1 0 100%;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
   gap: 0.5rem 1rem;
   margin-top: 0.75rem;
 }
 
 .it-card-badge {
-  margin-inline-end: auto;
   border-radius: 4px;
   background: var(--color-background-secondary, #5c6f82);
   padding: 0.125rem 0.75rem;
@@ -515,6 +514,7 @@ $sfondi-sezione:
 
 .it-card .it-card-meta .it-card-date {
   margin: 0;
+  margin-inline-start: auto;
 }
 
 main#main {
