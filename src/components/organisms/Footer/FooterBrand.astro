@@ -1,27 +1,32 @@
 ---
-import { getI18n } from "@i18n/microcopy";
 import type { FooterBrandProps } from "./types";
 
 type Props = FooterBrandProps;
 
-const { logo, name, linkTo, nameInLogo = false } = Astro.props;
-const { lang } = Astro.locals;
-const t = getI18n(lang);
+const { logo, name, linkTo, wordmark } = Astro.props;
 ---
 
 <section class="px-0">
   <div class="it-brand-wrapper">
-    <a href={linkTo} aria-label={t["header.logo"]} class="footer-brand">
+    <a href={linkTo} class="footer-brand">
       {
-        logo?.url && (
+        wordmark?.url ? (
           <img
-            src={logo.url}
-            alt={nameInLogo ? name : (logo.alt ?? "")}
-            class="footer-brand__logo"
+            src={wordmark.url}
+            alt={wordmark.alt ?? name}
+            width={wordmark.width ?? undefined}
+            height={wordmark.height ?? undefined}
+            class="footer-brand__wordmark"
           />
+        ) : (
+          <>
+            {logo?.url && (
+              <img src={logo.url} alt="" class="footer-brand__logo" />
+            )}
+            <span class="footer-brand__name">{name}</span>
+          </>
         )
       }
-      {!nameInLogo && <span class="footer-brand__name">{name}</span>}
     </a>
   </div>
 </section>
@@ -36,14 +41,20 @@ const t = getI18n(lang);
   }
 
   .footer-brand__logo {
-    height: 44px;
     width: auto;
+    height: 44px;
+  }
+
+  .footer-brand__wordmark {
+    width: auto;
+    max-width: 100%;
+    height: 56px;
   }
 
   .footer-brand__name {
     font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
     font-size: 18px;
-    line-height: 28px;
     font-weight: 400;
+    line-height: 28px;
   }
 </style>

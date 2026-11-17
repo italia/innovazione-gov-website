@@ -386,7 +386,7 @@ const flattenOrderedList = (record: OrderedListFragmentType): string => {
   return cleanJoin(parts);
 };
 const flattenListExternalLinkSection = (record: {
-  links: ExternalLinkFragmentType[];
+  links: { label?: string | null; description?: string | null }[];
 }): string => {
   const parts: string[] = [];
 

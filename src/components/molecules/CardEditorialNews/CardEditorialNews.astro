@@ -1,6 +1,7 @@
 ---
 import { DateTime } from "@components/atoms/DateTime";
 import { Image } from "@components/atoms/Image";
+import { AnnouncementMeta } from "@components/molecules/AnnouncementMeta";
 import { getI18n } from "@i18n/microcopy";
 import ItExternalLink from "@static/assets/ItExternalLink.astro";
 import type { CardEditorialNewsProps } from "./types";
@@ -16,6 +17,8 @@ const {
   category,
   badge,
   dateTime,
+  deadline,
+  status,
   action,
   categoryLinks = {},
   fullHeight = true,
@@ -73,6 +76,7 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
     )
   }
   <div class="it-card-body">
+    <AnnouncementMeta status={status} deadline={deadline} />
     <p class="it-card-text">{description}</p>
   </div>
   {
@@ -120,6 +124,10 @@ const rel = isExternal ? "noopener noreferrer" : undefined;
 
   .it-card-image-wrapper--logo :global(figure img) {
     object-fit: contain !important;
+  }
+
+  .it-card-body :global(.announcement-meta) {
+    margin-bottom: 0.75rem;
   }
 
   .it-card-taxonomy .chip:not(.chip-link) {

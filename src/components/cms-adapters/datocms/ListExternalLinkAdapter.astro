@@ -1,35 +1,56 @@
 ---
 import type { ListLinkItemProps } from "@components/molecules/ListLink/types";
 import { QuickLinkCard } from "@components/molecules/QuickLinkCard";
-import type { ExternalLinkFragmentType } from "@graphql/fragment/commonFragments";
+import type {
+  ExternalLinkFragmentType,
+  ListInternalLinkFragmentType,
+} from "@graphql/fragment/commonFragments";
 import { getI18n } from "@i18n/microcopy";
+import { linkResolver } from "@utils/linkResolver";
 
-type DatoRecord = ExternalLinkFragmentType[] & {
-  __typename: string;
-  id: string;
-};
+type VoceDellaLista =
+  | (ExternalLinkFragmentType & { componentName?: string })
+  | (ListInternalLinkFragmentType["links"][number] & {
+      componentName?: string;
+    });
 
 type Props = {
-  block: { title?: string | null; links: DatoRecord };
+  block: { title?: string | null; links: VoceDellaLista[] };
 };
 
 const { block } = Astro.props;
 const { lang } = Astro.locals;
 
 const t = getI18n(lang);
-
 const externalLinkLabel = t["link.external"];
 
-const links: ListLinkItemProps[] = block.links.map((link) => {
-  return {
-    linkTo: link.url || "#",
-    text: link.label,
-    description: link.description || undefined,
-    iconRight: "it-external-link",
-    openInNewTab: true,
-    ariaLabelLink: `${externalLinkLabel} ${link.description || ""} ${link.label}`,
-  };
-});
+const links: ListLinkItemProps[] = block.links
+  .map((voce): ListLinkItemProps | null => {
+    if ("linkTo" in voce && voce.linkTo) {
+      const path = linkResolver(voce.linkTo.id, lang);
+      const anchor = "anchor" in voce ? voce.anchor?.trim() : null;
+      return {
+        linkTo: anchor && path !== "#" ? `${path}#${anchor}` : path,
+        text: voce.label,
+        openInNewTab: false,
+      };
+    }
+
+    if ("url" in voce && voce.url) {
+      const description = "description" in voce ? voce.description : null;
+      return {
+        linkTo: voce.url,
+        text: voce.label,
+        description: description || undefined,
+        iconRight: "it-external-link",
+        openInNewTab: true,
+        ariaLabelLink: `${externalLinkLabel} ${description || ""} ${voce.label}`,
+      };
+    }
+
+    return null;
+  })
+  .filter((voce): voce is ListLinkItemProps => voce !== null);
 ---
 
 <QuickLinkCard

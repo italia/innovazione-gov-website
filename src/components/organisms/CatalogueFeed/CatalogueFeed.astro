@@ -59,11 +59,11 @@ const resolvedTabs = tabs.map((tab) => {
       tab.sortMode,
       lang,
     );
-    return { articleType: null, items };
+    return { articleType: null, items, elenco: true };
   }
 
   const articleType = articleTypeForTabType(tab.newsPageTabType);
-  if (!articleType) return { articleType: null, items: null };
+  if (!articleType) return { articleType: null, items: null, elenco: false };
 
   const undersecretaryOnly = isUndersecretaryOwner(tab.filterOwnerLabel);
 
@@ -79,7 +79,15 @@ const resolvedTabs = tabs.map((tab) => {
     tab.sortMode,
     lang,
   );
-  return { articleType, items };
+  const elenco = articleType === "press_release";
+
+  return {
+    articleType,
+    items: elenco
+      ? items.map((voce) => ({ ...voce, badge: undefined }))
+      : items,
+    elenco,
+  };
 });
 
 function isValidTabType(val: string): val is ElementType {
@@ -160,7 +168,7 @@ function getFilteredItems(tabType: ElementType, sortMode?: string) {
             ? "news_item"
             : (tabType as ElementType);
 
-          const listLayout = resolved.articleType === "press_release";
+          const listLayout = resolved.elenco;
 
           const categoriesOrder =
             renderType === "measures"
@@ -211,5 +219,46 @@ function getFilteredItems(tabType: ElementType, sortMode?: string) {
     color: #2f475e;
     font-size: 1rem;
     line-height: 1.5rem;
+  }
+
+  .archive-item__badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .archive-item__status,
+  .archive-item__badge {
+    display: inline-block;
+    border-radius: 4px;
+    padding: 0.125rem 0.75rem;
+    font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 24px;
+    text-transform: uppercase;
+  }
+
+  .archive-item__status--open {
+    background: #00703c;
+    color: #fff;
+  }
+
+  .archive-item__status--closed {
+    background: #5c6f82;
+    color: #fff;
+  }
+
+  .archive-item__badge {
+    background: #e8f1fb;
+    color: #0b3e74;
+  }
+
+  .archive-item__deadline {
+    color: #2f475e;
+    font-size: 14px;
+    line-height: 24px;
   }
 </style>

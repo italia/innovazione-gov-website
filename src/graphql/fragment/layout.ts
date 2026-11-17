@@ -1,4 +1,5 @@
 import {
+  AltImageFragment,
   BrandFragment,
   ExternalLinkFragment,
   InternalLinkFragment,
@@ -181,9 +182,13 @@ export const FooterFragment = graphql(
         }
       }
       showSitemapLink
+      footerLogo {
+        ...AltImageFragment
+      }
     }
   `,
   [
+    AltImageFragment,
     ExternalLinkFragment,
     InternalLinkFragment,
     BrandFragment,

@@ -6,10 +6,14 @@ import { ListOpenPositions } from "@components/organisms/ListOpenPositions";
 import { ListWideCards } from "@components/organisms/ListWideCards";
 import type { CardLinkListFragmentType } from "@graphql/fragment/sectionFragments";
 import type { SiteLocale } from "@graphql/types";
+import { getAnnouncements } from "@lib/dataFetcher";
 import { isDraftModeEnabled } from "@lib/draftMode";
 import { getLastItems } from "@lib/lastItems";
 import { getOpenPositions } from "@lib/openPositions";
+import { ANNOUNCEMENT_TAB_TYPE } from "@utils/announcementCategory";
 import type { SectionBackground } from "@utils/background";
+import { sortFeedItems } from "@utils/feedSort";
+import { mapAnnouncementToCardEditorialNewsProps } from "@utils/mappers";
 import { getCtaFields } from "@utils/getCtaFields";
 import { linkResolver } from "@utils/linkResolver";
 
@@ -27,8 +31,10 @@ const onlyOneCategory = categoryIds.length > 0;
 const showCategoryFilter = block.showFilterOnCategory ?? false;
 
 const TUTTE = 1000;
+const SCHEDE_ORIZZONTALI = 2;
+const schedeOrizzontali = block.showInlineCard ?? false;
 const quanteSchede = block.cardsCount ?? null;
-const limite =
+const limiteRichiesto =
   quanteSchede === 0
     ? TUTTE
     : quanteSchede !== null
@@ -36,12 +42,16 @@ const limite =
       : onlyOneCategory || showCategoryFilter
         ? 60
         : 3;
+const limite = schedeOrizzontali
+  ? Math.min(limiteRichiesto, SCHEDE_ORIZZONTALI)
+  : limiteRichiesto;
 
 const cardOrizzontali = (block.listContent ?? []).filter(
   (item) => item.componentName === "WideLinkCardRecord",
 );
 
 const mostraPosizioniAperte = block.lastItems === "job_position";
+const mostraAvvisi = block.lastItems === ANNOUNCEMENT_TAB_TYPE;
 
 const posizioniAperte = mostraPosizioniAperte
   ? await getOpenPositions(lang as SiteLocale)
@@ -56,6 +66,22 @@ if (mostraPosizioniAperte) {
   items = [];
 } else if (cardOrizzontali.length > 0) {
   items = [];
+} else if (mostraAvvisi) {
+  const avvisi = await getAnnouncements(isPreview);
+  items = sortFeedItems(
+    avvisi
+      .filter((avviso) =>
+        avviso.data.allTitleLocales?.some((voce) => voce.locale === lang),
+      )
+      .map((avviso) =>
+        mapAnnouncementToCardEditorialNewsProps(
+          avviso.data,
+          lang as SiteLocale,
+        ),
+      ),
+    "date_desc",
+    lang as SiteLocale,
+  ).slice(0, limite);
 } else if (block.lastItems) {
   items = await getLastItems(block.lastItems, {
     locale: lang as SiteLocale,
@@ -139,10 +165,14 @@ const { labelButton, linkTo, openInNewTab } = getCtaFields(
         items={senzaCategoriaFissata(items)}
         paragraph={block.paragraph || undefined}
         background={block.backgroundColor as SectionBackground}
-        showInline={block.showInlineCard ?? undefined}
+        showInline={schedeOrizzontali}
         showCategoryFilter={showCategoryFilter}
         visibleCount={
-          onlyOneCategory || cardScelteAMano ? items.length : undefined
+          schedeOrizzontali
+            ? SCHEDE_ORIZZONTALI
+            : onlyOneCategory || cardScelteAMano
+              ? items.length
+              : undefined
         }
         labelButton={labelButton}
         linkTo={linkTo}

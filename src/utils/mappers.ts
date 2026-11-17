@@ -12,7 +12,11 @@ import type { ArticleCard } from "@graphql/query/articleCards";
 import type { SiteLocale } from "@graphql/types";
 import { getLocaleValue } from "@utils/getLocaleValue";
 import { linkResolver } from "@utils/linkResolver";
-import { announcementCategoryLabel } from "@utils/announcementCategory";
+import {
+  announcementDeadline,
+  announcementSectionLabel,
+  announcementStatus,
+} from "@utils/announcementCategory";
 import { articleTypeLabel, showsImageInCard } from "@utils/storyClassification";
 import { topicLinks } from "@utils/topicRoutes";
 import { createDownloadUrl } from "@utils/createDownloadUrl";
@@ -42,9 +46,6 @@ export const mapAnnouncementToCardEditorialNewsProps = (
   lang: SiteLocale,
 ): CardEditorialNewsProps => {
   const topics = getLocaleValue(announcement.allTopicsLocales, lang, []) ?? [];
-  const names = topics
-    .map((topic) => topic.name)
-    .filter((name): name is string => !!name);
   const filterCategories = topics
     .filter((topic) => topic.isHighlighted)
     .map((topic) => topic.name)
@@ -54,14 +55,25 @@ export const mapAnnouncementToCardEditorialNewsProps = (
     title: getLocaleValue(announcement.allTitleLocales, lang, "") ?? "",
     description:
       getLocaleValue(announcement.allAbstractLocales, lang, "") ?? "",
-    badge: announcementCategoryLabel(announcement.announcementCategory, lang),
-    dateTime:
+    badge: announcementSectionLabel(lang),
+    status: announcementStatus(
+      announcement.announcementStatus,
+      announcement.closeDate,
+      lang,
+    ),
+    deadline: announcementDeadline(
+      announcement.announcementStatus,
+      announcement.closeDate,
+      announcement.showDateAfterClosed,
+    ),
+    dateTime: undefined,
+    sortDate:
       announcement.sortDate ??
       announcement.openDate ??
       announcement.publishedAt ??
       undefined,
-    category: names,
-    categoryLinks: topicLinks(topics, lang),
+    category: [],
+    categoryLinks: {},
     filterCategories,
     linkTo: linkResolver(announcement.id, lang),
     lang: lang,

@@ -36,4 +36,10 @@ const t = getI18n(lang);
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  @media (min-width: 768px) {
+    .breadcrumb-container .breadcrumb :global(.breadcrumb-item.active) {
+      max-width: 40ch;
+    }
+  }
 </style>

@@ -3,6 +3,7 @@ import { DateTime } from "@components/react/DateTime";
 import { Image } from "@components/react/Image";
 import type { SiteLocale } from "@graphql/types";
 import { getI18n } from "@i18n/microcopy";
+import type { AnnouncementStatusProps } from "@utils/announcementCategory";
 
 export type CardEditorialNewsProps = {
   id?: string;
@@ -15,6 +16,9 @@ export type CardEditorialNewsProps = {
   filterCategories?: string[];
   badge?: string;
   dateTime?: string;
+  sortDate?: string;
+  deadline?: string;
+  status?: AnnouncementStatusProps;
   action?: string;
   fullHeight?: boolean;
   lang: SiteLocale;

@@ -428,7 +428,16 @@ export const StructuredTextFragment = graphql(
         ... on ListExternalLinkRecord {
           title
           links {
-            ...ExternalLinkFragment
+            ... on RecordInterface {
+              id
+              componentName: __typename
+            }
+            ... on ExternalLinkRecord {
+              ...ExternalLinkFragment
+            }
+            ... on InternalLinkRecord {
+              ...InternalLinkFragment
+            }
           }
         }
         ... on DownloadLinkRecord {

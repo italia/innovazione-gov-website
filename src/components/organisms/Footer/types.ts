@@ -22,10 +22,9 @@ export type FooterProps = {
 
 export type FooterBrandProps = {
   logo?: Pick<ImageProps, "url" | "width" | "height" | "alt">;
+  wordmark?: Pick<ImageProps, "url" | "width" | "height" | "alt"> | null;
   name: string;
   linkTo: string;
-  /** Il logo contiene già il nome (lockup): niente testo accanto, nome nell'alt. */
-  nameInLogo?: boolean;
 };
 
 export type FooterContactsProps = {

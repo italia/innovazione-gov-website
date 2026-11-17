@@ -1,11 +1,16 @@
 import { DateTime } from "@components/react/DateTime";
 import type { SiteLocale } from "@graphql/types";
+import { getI18n } from "@i18n/microcopy";
+import type { AnnouncementStatusProps } from "@utils/announcementCategory";
 
 export type CardArchiveListItemProps = {
   id?: string;
   title: string;
   description?: string;
   dateTime?: string;
+  deadline?: string;
+  status?: AnnouncementStatusProps;
+  badge?: string;
   linkTo: string;
   lang: SiteLocale;
 };
@@ -14,9 +19,15 @@ export function CardArchiveListItem({
   title,
   description,
   dateTime,
+  deadline,
+  status,
+  badge,
   linkTo,
   lang,
 }: CardArchiveListItemProps) {
+  const t = getI18n(lang);
+  const hasMeta = !!status || !!deadline || !!badge;
+
   return (
     <li>
       <a
@@ -33,10 +44,38 @@ export function CardArchiveListItem({
           />
         </svg>
         <span>
+          {hasMeta && (
+            <span className="archive-item__badges">
+              {status?.label && (
+                <span
+                  className={`archive-item__status archive-item__status--${
+                    status.open ? "open" : "closed"
+                  }`}
+                >
+                  <span className="visually-hidden">
+                    {t["announcement.status.label"]}:{" "}
+                  </span>
+                  {status.label}
+                </span>
+              )}
+              {deadline && (
+                <span className="archive-item__deadline">
+                  {t["announcement.deadline"]}{" "}
+                  <DateTime value={deadline} className="" lang={lang} />
+                </span>
+              )}
+              {badge && <span className="archive-item__badge">{badge}</span>}
+            </span>
+          )}
           <h3 className="mb-0 archive-item__title">{title}</h3>
           <p className="fw-normal d-block mb-3 mt-1 archive-item__meta">
             {dateTime && <DateTime value={dateTime} className="" lang={lang} />}
-            {description && <span> — {description}</span>}
+            {description && (
+              <span>
+                {dateTime ? " — " : ""}
+                {description}
+              </span>
+            )}
           </p>
         </span>
       </a>

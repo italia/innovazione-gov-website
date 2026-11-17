@@ -1,4 +1,5 @@
 import type { ImageProps } from "@components/atoms/Image/types";
+import type { AnnouncementStatusProps } from "@utils/announcementCategory";
 
 export type CardEditorialNewsProps = {
   id?: string;
@@ -11,6 +12,9 @@ export type CardEditorialNewsProps = {
   filterCategories?: string[];
   badge?: string;
   dateTime?: string;
+  sortDate?: string;
+  deadline?: string;
+  status?: AnnouncementStatusProps;
   action?: string;
   fullHeight?: boolean;
   imageFit?: "cover" | "contain";

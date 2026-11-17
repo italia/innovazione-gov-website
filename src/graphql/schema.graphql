@@ -673,16 +673,17 @@ input ArticleModelFilter {
   description: TextFilter
   descriptionTitle: StringFilter
   duration: StringFilter
-  hideRelated: BooleanFilter
   image: FileFilter
   links: LinksFilter
   logo: FileFilter
   paragraph: TextFilter
   parentPage: LinkFilter
   relatedArticles: LinksFilter
+  relatedFocus: LinksFilter
   relatedProjects: LinksFilter
   seo: SeoFilter
   showHeroDownload: BooleanFilter
+  showRelated: BooleanFilter
   showSidebar: BooleanFilter
   slug: SlugFilter
   tags: LinksFilter
@@ -724,10 +725,10 @@ enum ArticleModelOrderBy {
   descriptionTitle_DESC
   duration_ASC
   duration_DESC
-  hideRelated_ASC
-  hideRelated_DESC
   showHeroDownload_ASC
   showHeroDownload_DESC
+  showRelated_ASC
+  showRelated_DESC
   showSidebar_ASC
   showSidebar_DESC
   title_ASC
@@ -899,7 +900,6 @@ type ArticleRecord implements RecordInterface {
     fallbackLocales: [SiteLocale!]
   ): String
   duration: String
-  hideRelated: BooleanType!
   id: ItemId!
   image(
     """The locale to use to fetch the field's content"""
@@ -944,6 +944,7 @@ type ArticleRecord implements RecordInterface {
   ): ArticleModelParentPageField
   position: IntType
   relatedArticles: [ArticleRecord!]!
+  relatedFocus: [ArticleRecord!]!
   relatedProjects: [ArticleRecord!]!
   seo(
     """The locale to use to fetch the field's content"""
@@ -955,6 +956,7 @@ type ArticleRecord implements RecordInterface {
     fallbackLocales: [SiteLocale!]
   ): SeoField
   showHeroDownload: BooleanType!
+  showRelated: BooleanType!
   showSidebar: BooleanType!
   slug(
     """The locale to use to fetch the field's content"""
@@ -5881,6 +5883,7 @@ type LayoutRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): [FooterColumnRecord!]!
+  footerLogo: AltFileField
   heading(
     """Process content as markdown"""
     markdown: Boolean
@@ -6326,6 +6329,8 @@ type ListCollectionRecord implements RecordInterface {
   title: String!
 }
 
+union ListExternalLinkModelLinksField = ExternalLinkRecord | InternalLinkRecord
+
 """Block of type List external link (list_external_link)"""
 type ListExternalLinkRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -6347,7 +6352,7 @@ type ListExternalLinkRecord implements RecordInterface {
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
   id: ItemId!
-  links: [ExternalLinkRecord!]!
+  links: [ListExternalLinkModelLinksField!]!
   title: String
 }
 

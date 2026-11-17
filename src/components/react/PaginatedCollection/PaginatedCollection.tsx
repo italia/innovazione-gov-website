@@ -173,6 +173,9 @@ export function PaginatedCollection({
                     title={item.title}
                     description={item.description}
                     dateTime={item.dateTime}
+                    deadline={item.deadline}
+                    status={item.status}
+                    badge={item.badge}
                     linkTo={item.linkTo}
                     lang={lang}
                   />

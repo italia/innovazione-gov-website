@@ -5,7 +5,7 @@ import { Image } from "@components/atoms/Image";
 import type { ImageProps } from "@components/atoms/Image/types";
 import { Breadcrumb } from "@components/molecules/Breadcrumb";
 import { getI18n } from "@i18n/microcopy";
-import { createBreadcrumb } from "@utils/createBreadcrumb";
+import { compactBreadcrumb, createBreadcrumb } from "@utils/createBreadcrumb";
 import { isActivityType } from "@utils/storyClassification";
 
 type Props = {
@@ -51,7 +51,6 @@ const isFocus = articleType === "focus";
 const focusDiSezione = isFocus && sectionPage;
 const paginaDiAttivita = isActivityType(articleType);
 const paginaSenzaMetadati = paginaDiAttivita || isFocus;
-const lastLabel = paginaSenzaMetadati ? title : t["article.detail"];
 const shownTopics = paginaSenzaMetadati ? [] : topics;
 const shownDate = paginaSenzaMetadati ? null : dateTime;
 const shownParagraph = paginaDiAttivita
@@ -66,10 +65,7 @@ const etichettaDownload =
   articleType === "press_release"
     ? t["article.downloadRelease"]
     : t["link.download"];
-const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
-  ...item,
-  label: index === arr.length - 1 ? lastLabel : item.label,
-}));
+const breadcrumbItems = compactBreadcrumb(rawBreadcrumb, title);
 ---
 
 <section
@@ -283,12 +279,17 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
     margin-top: 1.5rem;
   }
   .article-hero .it-hero-text-wrapper .article-hero__topics-label {
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    font-size: 0.875rem;
     margin-bottom: 0.75rem;
     color: #1a1a1a;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .article-hero.article-hero--focus
+    .it-hero-text-wrapper
+    .article-hero__topics-label {
+    color: #fff;
   }
   .article-hero__chips {
     list-style: none;
@@ -298,29 +299,43 @@ const breadcrumbItems = rawBreadcrumb.map((item, index, arr) => ({
     flex-wrap: wrap;
     gap: 0.75rem;
   }
-  .article-hero__tag {
+  .article-hero .it-hero-text-wrapper .article-hero__tag {
     display: inline-flex;
     align-items: center;
-    padding: 0.375rem 1.25rem;
+    margin-bottom: 0;
     border: 1px solid #06c;
     border-radius: 999px;
+    padding: 0.375rem 1.25rem;
     background: transparent;
     color: #06c;
-    font-weight: 600;
     font-size: 0.9375rem;
+    font-weight: 600;
     line-height: 1.4;
   }
-  a.article-hero__tag {
+  .article-hero .it-hero-text-wrapper a.article-hero__tag {
     text-decoration: none;
   }
-  a.article-hero__tag:hover,
-  a.article-hero__tag:focus-visible {
+  .article-hero .it-hero-text-wrapper a.article-hero__tag:hover,
+  .article-hero .it-hero-text-wrapper a.article-hero__tag:focus-visible {
     background: #06c;
     color: #fff;
   }
-  a.article-hero__tag:focus-visible {
+  .article-hero .it-hero-text-wrapper a.article-hero__tag:focus-visible {
     outline: 3px solid #06c;
     outline-offset: 2px;
+  }
+  .article-hero.article-hero--focus .it-hero-text-wrapper .article-hero__tag {
+    border-color: #fff;
+    color: #fff;
+  }
+  .article-hero.article-hero--focus
+    .it-hero-text-wrapper
+    a.article-hero__tag:hover,
+  .article-hero.article-hero--focus
+    .it-hero-text-wrapper
+    a.article-hero__tag:focus-visible {
+    background: #fff;
+    color: #004d99;
   }
   .article-hero__image {
     margin-top: 2rem;

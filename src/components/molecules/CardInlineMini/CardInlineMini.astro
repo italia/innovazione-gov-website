@@ -2,6 +2,7 @@
 import { ChipLink } from "@components/atoms/Chip";
 import { DateTime } from "@components/atoms/DateTime";
 import { Image } from "@components/atoms/Image";
+import { AnnouncementMeta } from "@components/molecules/AnnouncementMeta";
 import { getI18n } from "@i18n/microcopy";
 import type { CardInlineMiniProps } from "./types";
 
@@ -10,17 +11,23 @@ type Props = CardInlineMiniProps;
 const {
   id = "",
   title,
+  description,
   image,
   linkTo,
   category,
+  badge,
   dateTime,
+  deadline,
+  status,
   isExternal = true,
 } = Astro.props;
 
-const categoryLabel = Array.isArray(category)
-  ? category.filter(Boolean).join(", ")
-  : category;
-const shouldShowFooter = categoryLabel || dateTime;
+const categories = Array.isArray(category)
+  ? category.filter(Boolean)
+  : category
+    ? [category]
+    : [];
+const shouldShowFooter = categories.length > 0 || !!badge || !!dateTime;
 const cardTitleId = `card-title-${id}`;
 const { lang } = Astro.locals;
 const t = getI18n(lang);
@@ -29,7 +36,15 @@ const ariaLabel = isExternal ? t["link.external"] : t["link.internal"];
 ---
 
 <article
-  class="it-card it-card-inline it-card-inline-mini it-card-image it-card-height-full rounded shadow-sm border"
+  class:list={[
+    "it-card",
+    "it-card-height-full",
+    "card-inline-mini",
+    "rounded",
+    "shadow-sm",
+    "border",
+    image && "it-card-inline it-card-inline-mini it-card-image",
+  ]}
   aria-labelledby={cardTitleId}
 >
   <h3
@@ -55,20 +70,74 @@ const ariaLabel = isExternal ? t["link.external"] : t["link.internal"];
   }
 
   {
+    (status || deadline || description) && (
+      <div class="it-card-body">
+        <AnnouncementMeta status={status} deadline={deadline} />
+        {description && <p class="it-card-text">{description}</p>}
+      </div>
+    )
+  }
+
+  {
     shouldShowFooter && (
       <footer class="it-card-related it-card-footer">
-        {categoryLabel && (
+        {categories.length > 0 && (
           <div class="it-card-taxonomy">
-            <ChipLink
-              linkTo={""}
-              label={categoryLabel}
-              visuallyHidden={t["card.topic"]}
-              disabled
-            />
+            {categories.map((voce) => (
+              <ChipLink
+                linkTo={""}
+                label={voce}
+                visuallyHidden={t["card.topic"]}
+                disabled
+              />
+            ))}
           </div>
         )}
-        {dateTime && <DateTime className="it-card-date" value={dateTime} />}
+        {(badge || dateTime) && (
+          <div class="it-card-meta">
+            {badge && (
+              <span class="it-card-badge">
+                <span class="visually-hidden">{t["card.type"]}</span>
+                {badge}
+              </span>
+            )}
+            {dateTime && <DateTime className="it-card-date" value={dateTime} />}
+          </div>
+        )}
       </footer>
     )
   }
 </article>
+
+<style>
+  .card-inline-mini .it-card-body {
+    padding-top: 0;
+  }
+
+  .card-inline-mini .it-card-body :global(.announcement-meta) {
+    margin-bottom: 0.5rem;
+  }
+
+  .card-inline-mini .it-card-taxonomy {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .card-inline-mini .it-card-taxonomy :global(.chip) {
+    height: auto;
+    min-height: 2rem;
+  }
+
+  .card-inline-mini .it-card-taxonomy :global(.chip .chip-label) {
+    white-space: normal;
+  }
+
+  .card-inline-mini .it-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+  }
+</style>

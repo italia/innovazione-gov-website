@@ -84,7 +84,16 @@ export const ArticleContentFragment = graphql(
         ... on ListExternalLinkRecord {
           title
           links {
-            ...ExternalLinkFragment
+            ... on RecordInterface {
+              id
+              componentName: __typename
+            }
+            ... on ExternalLinkRecord {
+              ...ExternalLinkFragment
+            }
+            ... on InternalLinkRecord {
+              ...InternalLinkFragment
+            }
           }
         }
         ... on DownloadLinkRecord {
@@ -214,7 +223,10 @@ export const AllArticlesRecordFragment = graphql(
       relatedArticles {
         id
       }
-      hideRelated
+      relatedFocus {
+        id
+      }
+      showRelated
       showHeroDownload
       allContentLocales: _allContentLocales {
         locale

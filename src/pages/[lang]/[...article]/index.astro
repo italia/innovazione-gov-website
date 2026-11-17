@@ -44,7 +44,8 @@ export async function getStaticPaths() {
       duration: string | null;
       relatedProjectIds: string[];
       relatedArticleIds: string[];
-      hideRelated: boolean;
+      relatedFocusIds: string[];
+      showRelated: boolean;
       showHeroDownload: boolean;
       attachments: {
         id: string;
@@ -112,7 +113,8 @@ export async function getStaticPaths() {
             relatedArticleIds: (page.relatedArticles ?? []).map(
               (articolo) => articolo.id,
             ),
-            hideRelated: page.hideRelated ?? false,
+            relatedFocusIds: (page.relatedFocus ?? []).map((focus) => focus.id),
+            showRelated: page.showRelated ?? false,
             showHeroDownload: page.showHeroDownload ?? false,
             attachments: page.attachments ?? [],
             dateTime: page.dateShown ?? null,
@@ -150,7 +152,8 @@ const {
   duration,
   relatedProjectIds,
   relatedArticleIds,
-  hideRelated,
+  relatedFocusIds,
+  showRelated,
   showHeroDownload,
   attachments,
   dateTime,
@@ -180,7 +183,7 @@ const attivitaCollegate = relatedProjectIds
     title: getLocaleValue(scheda.allTitleLocales, lang, ""),
     linkTo: linkResolver(scheda.id, lang),
   }));
-const relatedItems = hideRelated
+const relatedItems = !showRelated
   ? []
   : scelteAMano.length > 0
     ? scelteAMano
@@ -190,6 +193,14 @@ const relatedItems = hideRelated
         articleType,
         locale: lang,
       });
+const FOCUS_IN_EVIDENZA = 2;
+const focusInEvidenza = showRelated
+  ? relatedFocusIds
+      .slice(0, FOCUS_IN_EVIDENZA)
+      .map(trovaScheda)
+      .filter((scheda) => scheda !== undefined)
+      .map((scheda) => schedaCorrelata(scheda, lang))
+  : [];
 const primoAllegato = showHeroDownload
   ? attachments.find((allegato) => allegato.file)?.file
   : undefined;
@@ -233,5 +244,9 @@ const jsonLd: JsonLdPageData = {
       />
     )
   }
-  <ArticleRelated items={relatedItems} articleType={articleType} />
+  <ArticleRelated
+    items={relatedItems}
+    focusItems={focusInEvidenza}
+    articleType={articleType}
+  />
 </Layout>

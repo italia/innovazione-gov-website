@@ -13,6 +13,7 @@ const DEFAULT_SORT_MODE: FeedSortMode = "date_desc";
 type Sortable = {
   title?: string | null;
   dateTime?: string | null;
+  sortDate?: string | null;
 };
 
 function resolveSortMode(sortMode: string | null | undefined): FeedSortMode {
@@ -60,10 +61,12 @@ export function sortFeedItems<T extends Sortable>(
     return sorted;
   }
 
-  // date_asc | date_desc
   sorted.sort((a, b) => {
-    const timeA = a.dateTime ? new Date(a.dateTime).getTime() : 0;
-    const timeB = b.dateTime ? new Date(b.dateTime).getTime() : 0;
+    const quando = (voce: Sortable) => voce.sortDate ?? voce.dateTime ?? null;
+    const dataA = quando(a);
+    const dataB = quando(b);
+    const timeA = dataA ? new Date(dataA).getTime() : 0;
+    const timeB = dataB ? new Date(dataB).getTime() : 0;
     const ascending = timeA - timeB;
     return mode === "date_desc" ? -ascending : ascending;
   });

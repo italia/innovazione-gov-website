@@ -30,6 +30,7 @@ const {
   _allFooterColumnsLocales,
   _allMailingListFormLocales,
   showSitemapLink,
+  footerLogo,
   logoSelect,
   siteName,
   homeRecordId,
@@ -120,6 +121,7 @@ const mailingListForm: MailingListFormProps | undefined = mailingList
     logo: logoSelect
       ? { url: logoSelect, width: null, height: null }
       : undefined,
+    wordmark: footerLogo ?? null,
     name: siteName ?? "",
     linkTo: linkResolver(homeRecordId, lang),
   }}
