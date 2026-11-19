@@ -58,13 +58,14 @@ const shownParagraph = paginaDiAttivita
   : isFocus
     ? description?.trim()
     : null;
-const shownImage =
-  (paginaDiAttivita ? (logo ?? image) : isFocus ? (image ?? logo) : image) ??
-  null;
-const etichettaDownload =
-  articleType === "press_release"
-    ? t["article.downloadRelease"]
-    : t["link.download"];
+const isPressRelease = articleType === "press_release";
+const shownImage = isPressRelease
+  ? null
+  : ((paginaDiAttivita ? (logo ?? image) : isFocus ? (image ?? logo) : image) ??
+    null);
+const etichettaDownload = isPressRelease
+  ? t["article.downloadRelease"]
+  : t["link.download"];
 const breadcrumbItems = compactBreadcrumb(rawBreadcrumb, title);
 ---
 

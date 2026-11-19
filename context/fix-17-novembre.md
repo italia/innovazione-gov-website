@@ -227,17 +227,24 @@ Dopo i fix: **zero violazioni** su tutte e quattro le pagine.
 
 ---
 
-## 7. Immagini nei comunicati stampa — mi servono i file
+## 7. Immagini nei comunicati stampa — fatto
 
-Confermo il problema: **tutti e 87 i comunicati stampa sono senza immagine**,
-quindi nelle schede esce solo testo.
+Erano tutti senza immagine: nelle schede usciva solo testo. Avete scelto
+un'immagine sola al posto di tre, così ho messo quella su tutti.
 
-Sì, si fa in blocco: è uno script che assegna le immagini a rotazione per data,
-così non escono tre schede identiche di fila. Un quarto d'ora di lavoro una
-volta che ho i file.
+L'immagine arrivata è un SVG da 351×197; l'ho rasterizzata a 1404×788 PNG,
+perché l'SVG non si presta alle versioni responsive che il sito genera per le
+schede. È caricata su DatoCMS una volta sola e assegnata a tutti i **92**
+comunicati (87 pubblicati, 5 in bozza). È marcata come decorativa, cioè i
+lettori di schermo la saltano e leggono direttamente il titolo: è il
+comportamento corretto quando la stessa immagine si ripete su tutte le schede.
 
-**Mi servono le 3 immagini scelte giovedì** — caricate su DatoCMS o mandate a
-me. Dimmi anche se le vuoi a rotazione o se ce n'è una sola da mettere su tutti.
+Dove compare: in home, in «Potrebbe interessarti» e nei blocchi di schede. Dove
+**non** compare: nell'elenco dei comunicati dentro Novità e nella pagina
+Comunicati stampa, che sono liste senza immagini, e in cima alla pagina del
+singolo comunicato. Quest'ultimo punto è una modifica al codice: lo stesso
+campo alimentava anche la testata del dettaglio, e un'immagine generica uguale
+su 92 pagine lì non ha senso.
 
 ---
 
@@ -262,14 +269,13 @@ me. Dimmi anche se le vuoi a rotazione o se ce n'è una sola da mettere su tutti
 | 5   | Breadcrumb                                         | Fatto                   |
 | 6   | Argomenti invisibili in testata                    | Fatto                   |
 | 6b  | Due errori di accessibilità trovati strada facendo | Fatto                   |
-| 7   | Immagini dei comunicati                            | **Servono i file**      |
+| 7   | Immagini dei comunicati                            | Fatto                   |
 
 ### Cosa serve da voi
 
 1. La scelta su come deve funzionare il download del comunicato (punto 4.2).
-2. Le 3 immagini per i comunicati stampa (punto 7).
-3. Due clic nel CMS sul blocco in fondo a Novità (punto 2.6).
-4. Cancellare la seconda organisation dal footer, se la volete via (punto 8.1).
+2. Due clic nel CMS sul blocco in fondo a Novità (punto 2.6).
+3. Cancellare la seconda organisation dal footer, se la volete via (punto 8.1).
 
 ### Nota sulle migrazioni
 
