@@ -7375,6 +7375,7 @@ input PageModelFilter {
   seo: SeoFilter
   showSectionsNav: BooleanFilter
   slug: SlugFilter
+  tags: LinksFilter
   title: StringFilter
   OR: [PageModelFilter]
   AND: [PageModelFilter]
@@ -7490,6 +7491,7 @@ type PageRecord implements RecordInterface {
     """
     fallbackLocales: [SiteLocale!]
   ): String!
+  tags: [TagRecord!]!
   title(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale

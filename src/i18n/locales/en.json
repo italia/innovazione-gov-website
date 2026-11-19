@@ -99,6 +99,8 @@
   "language.analyzer": "english",
   "language.short": "ENG",
   "link.download": "Download file",
+  "link.email": "Send an email",
+  "link.phone": "Call this number",
   "link.external": "Opens in a new tab",
   "link.internal": "Go to page",
   "links.title": "Useful links",

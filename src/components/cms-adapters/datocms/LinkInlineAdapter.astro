@@ -1,19 +1,38 @@
 ---
 import { getI18n } from "@i18n/microcopy";
 
+type LinkMeta = { id: string; value: string };
+type Props = { node: { url: string; meta?: LinkMeta[] | null } };
+
 const { node } = Astro.props;
 const { url, meta } = node;
 
 const lang = Astro.locals.lang || "it";
 const t = getI18n(lang);
 
-const target = meta?.find((m: any) => m.id === "target")?.value;
+const target = meta?.find((voce) => voce.id === "target")?.value;
 
 const isExternal = target === "_blank";
-const finalLabel = isExternal ? t["link.external"] : t["link.internal"];
+const isEmail = url.startsWith("mailto:");
+const isPhone = url.startsWith("tel:");
+const finalLabel = isEmail
+  ? t["link.email"]
+  : isPhone
+    ? t["link.phone"]
+    : isExternal
+      ? t["link.external"]
+      : t["link.internal"];
 ---
 
-<a href={url} target={target} rel={isExternal ? "noopener noreferrer" : ""}>
-  <slot />
-  <span class="visually-hidden">{finalLabel}</span>
-</a>
+<a
+  href={url}
+  target={target}
+  rel={isExternal ? "noopener noreferrer" : undefined}
+  ><slot /><span class="visually-hidden"> {finalLabel}</span></a
+>
+
+<style>
+  a {
+    overflow-wrap: anywhere;
+  }
+</style>
